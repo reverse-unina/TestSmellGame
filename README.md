@@ -106,7 +106,7 @@ docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esp
 ```
 ## - Docker Compose
 ```
-docker compose-up -d
+docker-compose up -d
 ```
 
 
