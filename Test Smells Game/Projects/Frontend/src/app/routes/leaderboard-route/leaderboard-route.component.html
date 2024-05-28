@@ -1,0 +1,15 @@
+<div *ngFor="let solution of solutions; let i = index">
+  <app-solution playerName="{{solution.playerName}}"
+                [comments]="solution.commentList"
+                exerciseCode="{{testingCode}}"
+                editedCode="{{solution.refactoredCode}}"
+                [solutionId]=solution.solutionId
+                creationTimestamp="{{solution.creationTimestamp}}"
+                [upVotes]=solution.upVotes
+                [downVotes]=solution.downVotes
+                [score]="solution.score"
+                [refactoringResult]="solution.refactoringResult"
+                [smells] = "solution.smells"
+                [isAutoValutative] = "this.isAutoValutative">
+  </app-solution>
+</div>

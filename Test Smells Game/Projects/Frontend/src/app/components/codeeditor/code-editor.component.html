@@ -1,0 +1,30 @@
+<div class="container">
+  <div #editor style="position: static;">
+    <ngx-codemirror #codemirror
+                    [options]="codeMirrorOptions"
+                    [(ngModel)]="injectedCode"
+                    (ngModelChange)="setEditorContent($event)">
+    </ngx-codemirror>
+    <mat-progress-spinner *ngIf="isLoading && editable"
+                          mode="indeterminate"
+                          style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    </mat-progress-spinner>
+    <button *ngIf="injectedCode.split('\n').length >= 15 || (editable && isFullScreen)"
+            (click)="toggleFullScreen()"
+            [style.position]="'absolute'"
+            [style.top.px]="5"
+            [style.right.px]="5"
+            [style.zIndex]="isFullScreen ? 10000 : 9000">
+      {{ isFullScreen ? ('Close' | translate) : ('Fullscreen' | translate) }}
+    </button>
+    <button *ngIf="editable"
+            (click)="resetEditor()"
+            [disabled]="!resettable"
+            [style.position]="'absolute'"
+            [style.bottom.px]="5"
+            [style.right.px]="5"
+            [style.zIndex]="isFullScreen ? 10000 : 9000">
+      {{ 'Reset' | translate }}
+    </button>
+  </div>
+</div>

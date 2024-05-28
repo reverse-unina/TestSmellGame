@@ -1,0 +1,21 @@
+<div *ngFor="let assignment of assignments" style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+  <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.nome }}</h2>
+  <p style="font-size: 16px; color: #666; margin-bottom: 12px;">Data: {{ assignment.data }}</p>
+  <ul style="list-style-type: none; padding: 0;">
+    <ng-container *ngFor="let student of assignment.studenti">
+      <ng-container *ngIf="student.nome === currentUser?.userName">
+        <li *ngIf="isAssignmentActive(assignment.data, student.inizio, student.fine)" style="margin-bottom: 8px;">
+          <a [routerLink]="['/assignments', assignment.nome, student.esercizio]" style="text-decoration: none; color: #007bff;">
+            {{ student.esercizio }}
+          </a>
+          ({{ student.inizio }} - {{ student.fine }})
+        </li>
+        <li *ngIf="!isAssignmentActive(assignment.data, student.inizio, student.fine)" style="margin-bottom: 8px;">
+          <span style="color: red;">{{ 'The assignment is unavailable' | translate }}</span>
+        </li>
+      </ng-container>
+    </ng-container>
+  </ul>
+</div>
+
+

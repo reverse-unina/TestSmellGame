@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+  <a class="navbar-brand" routerLink="/home" >{{ 'Thesis' | translate }}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active" routerLinkActive="active" *ngIf="isAuthenticated">
+        <a class="nav-link" routerLink="/home">Home</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="!isAuthenticated">
+        <a class="nav-link" routerLink="/auth">{{ 'Auth' | translate }}</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
+        <a class="nav-link" routerLink="/refactor-game" >Refactoring Game</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
+        <a class="nav-link" routerLink="/check-game" >Check Game</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
+        <a class="nav-link" routerLink="/assignments" >{{ 'Assignments' | translate }}</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" routerLink="/settings">{{ 'Settings' | translate }}</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
+      <a class="nav-link" (click)="onLogout()" >{{ 'Logout' | translate }}</a>
+      </li>
+    </ul>
+  </div>
+</nav>

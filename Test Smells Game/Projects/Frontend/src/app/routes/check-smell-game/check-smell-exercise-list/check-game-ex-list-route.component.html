@@ -1,0 +1,17 @@
+<h1>Check Smell Game Mode</h1>
+
+<mat-spinner *ngIf="waitingForServer"></mat-spinner>
+
+<div class="alert alert-success" role="alert">
+  {{ 'You are actually using Cloud Retrieve mode' | translate }}
+</div>
+
+<div *ngIf="serverProblems" class="alert alert-danger" role="alert">
+  {{ 'Exercise server has problems' | translate }}
+</div>
+
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let item of exercises; let i = index">
+    <a routerLink="/check-game/{{item}}" >{{item}}</a>
+  </li>
+</ul>

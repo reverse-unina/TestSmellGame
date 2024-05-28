@@ -1,0 +1,97 @@
+<mat-accordion *ngIf="!this.isAutoValutative else competitive">
+  <mat-expansion-panel [expanded]=true>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div>{{playerName}}</div>
+      </mat-panel-title>
+      <mat-panel-description>
+        <div style="position: absolute; right: 5%; text-align:right;">{{creationTimestamp | date:'full':'+0200'}}</div>
+        <div>
+          <h3>{{ 'Score' | translate }} : {{score}}</h3>
+        </div>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div class="row">
+      <div class="col">
+        <app-codeeditor injectedCode="{{exerciseCode}}" #code [editable]="false"></app-codeeditor>
+      </div>
+      <div class="col">
+        <app-codeeditor injectedCode="{{editedCode}}" #code [editable]="false"></app-codeeditor>
+      </div>
+    </div>
+
+    <h3>{{ 'Refactoring result' | translate }} : {{refactoringResult}}</h3>
+    <h3>Smells : </h3>
+    <div *ngFor="let smell of smellList; let i = index">
+      <h3 style="margin-left:10px">{{smell}}</h3>
+      <div *ngFor="let method of methodList[i];">
+        <h4 style="margin-left:40px">{{method}}</h4>
+      </div>
+    </div>
+
+    <div style="margin-top: 10px;">
+      <label>
+        <mat-icon *ngIf="!this.voteUp" style="cursor: pointer" (click)="vote(1)">thumb_up</mat-icon>
+        <mat-icon *ngIf="this.voteUp" style="cursor: pointer; color: green" (click)="vote(1)">thumb_up</mat-icon>
+        {{upVotes}}
+      </label>
+
+      <label style="margin-left: 20px;">
+        <mat-icon *ngIf="!this.voteDown" style="cursor: pointer" (click)="vote(2)">thumb_down</mat-icon>
+        <mat-icon *ngIf="this.voteDown" style="cursor: pointer; color: red" (click)="vote(2)">thumb_down</mat-icon>
+        {{downVotes}}
+      </label>
+    </div>
+
+    <h2>{{ 'Comments' | translate }}</h2>
+
+    <mat-expansion-panel *ngFor="let comment of comments; let i = index">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3 style="font-style: italic"> {{comment.commentAuthor}}</h3>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{comment.creationTimestamp | date:'full':'+0200'}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      {{comment.commentText}}
+    </mat-expansion-panel>
+
+
+    <form #commentForm="ngForm" (ngSubmit)="writeComment(commentForm)">
+      <div class="form-group">
+        <div>
+          <label for="comment">Write a comment</label>
+          <textarea
+            id="comment"
+            class="form-control"
+            ngModel
+            name="comment"
+            rows="3"
+            required></textarea>
+        </div>
+      </div>
+      <div>
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >
+          {{ 'Submit' | translate }}
+        </button>
+      </div>
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #competitive>
+  <ul class="list-group">
+    <li class="list-group-item">
+      <div>{{playerName}}</div>
+      <div style="position: absolute; right: 5%; text-align:right;">{{creationTimestamp | date:'full':'+0200'}}</div>
+      <div>
+        <h3>{{ 'Score' | translate }} : {{score}}</h3>
+      </div>
+    </li>
+  </ul>
+</ng-template>
