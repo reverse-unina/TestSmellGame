@@ -1,0 +1,18 @@
+{
+  "nome": "Esperimento1",
+  "data": "2024-05-28",
+  "studenti": [
+    {
+      "nome": "loriszn",
+      "esercizio": "Calculator",
+      "inizio": "12:00",
+      "fine": "22:30"
+    },
+    {
+      "nome": "maradona10",
+      "esercizio": "Range",
+      "inizio": "12:00",
+      "fine": "13:00"
+    }
+  ]
+}

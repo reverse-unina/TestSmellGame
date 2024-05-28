@@ -1,0 +1,18 @@
+{
+  "nome": "Esperimento2",
+  "data": "2024-05-19",
+  "studenti": [
+    {
+      "nome": "loriszn",
+      "esercizio": "ByteVector",
+      "inizio": "16:00",
+      "fine": "16:30"
+    },
+    {
+      "nome": "maradona10",
+      "esercizio": "FTPFile",
+      "inizio": "16:00",
+      "fine": "16:30"
+    }
+  ]
+}
