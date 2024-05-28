@@ -30,7 +30,7 @@ docker build -t exercise_service .
 ```
 ## - Docker Push
 ```
-docker tag exercise_service loriszn/server-setup:exercise-service
+docker tag exercise_service loriszn/server-setup:exercise_service
 ```
 ```
 docker push loriszn/server-setup:exercise_service
