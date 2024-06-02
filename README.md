@@ -7,7 +7,7 @@ Di seguito sono elencate le operazioni per installare il software.
 
 ## - Docker Image Build 
 ```
-docker build . -t compiler_service
+docker build -t compiler_service .
 ```
 ## - Docker Push
 ```
