@@ -104,6 +104,8 @@ docker build -f Dockerfile.assignments -t assignments-image .
 ```
 docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/" 
 ```
+La popolazione del volume per gli assignment, dunque, avviene copiando i file json nell'immagine "assignments-image" (con il comando "COPY nome_file.json /assignments/" nel file "Dockerfile.assignments" ed eseguento il comando "docker run" citato sopra, dando come parametri i nomi dei file json appena inseriti.
+
 ## - Docker Compose
 ```
 docker-compose up -d
