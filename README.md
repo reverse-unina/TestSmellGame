@@ -101,10 +101,12 @@ docker volume create assignments
 docker build -f Dockerfile.assignments -t assignments-image .
 ```
 ## - Docker Volume Populate
+
+La popolazione del volume per gli assignment, dunque, avviene copiando i file json nell'immagine "assignments-image" (con il comando "COPY nome_file.json /assignments/" nel file "Dockerfile.assignments") ed eseguendo il comando "docker run" citato sopra, dando come parametri i nomi dei file json appena inseriti. Inoltre, bisogna aggiungere manualmente il nome del file json nel metodo "getAssignments()" della classe "AssignmentsService" all'interno del frontend.
+
 ```
 docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/" 
 ```
-La popolazione del volume per gli assignment, dunque, avviene copiando i file json nell'immagine "assignments-image" (con il comando "COPY nome_file.json /assignments/" nel file "Dockerfile.assignments") ed eseguento il comando "docker run" citato sopra, dando come parametri i nomi dei file json appena inseriti. Inoltre, bisogna aggiungere manualmente il nome del file json nel metodo "getAssignments()" della classe "AssignmentsService" all'interno del frontend.
 
 ## - Docker Compose
 ```
