@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Assignment, Student } from '../../model/assignment/assignment.model';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -44,3 +47,4 @@ export class AssignmentsService {
          );
        }
 }
+

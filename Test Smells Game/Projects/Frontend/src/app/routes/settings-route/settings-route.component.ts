@@ -19,12 +19,12 @@ export class SettingsRouteComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private userService: UserService,
               private _snackBar: MatSnackBar,
-              private translate: TranslateService) {}
+              private translate: TranslateService) { }
 
   switchLanguage(language: string) {
     this.translate.use(language);
-    const message = this.translate.currentLang === 'en' ? 'Language changed' : 'Lingua cambiata';
-    const close_message = this.translate.currentLang === 'en' ? 'Close' : 'Chiudi';
+    const message = this.translate.currentLang === 'it' ? 'Impostazioni salvate' : 'Settings saved';
+    const close_message = this.translate.currentLang === 'it' ? 'Chiudi' : 'Close';
     this._snackBar.open(message, close_message, {
           duration: 3000
         });
@@ -56,8 +56,8 @@ export class SettingsRouteComponent implements OnInit {
     environment.leaderboardServiceUrl = environmentForm.value.leaderboard_service
     environment.exerciseServiceUrl = environmentForm.value.exercise_service
 
-    const message = this.translate.currentLang === 'en' ? 'Settings saved' : 'Impostazioni salvate';
-    const close_message = this.translate.currentLang === 'en' ? 'Close' : 'Chiudi';
+    const message = this.translate.currentLang === 'it' ? 'Impostazioni salvate' : 'Settings saved';
+    const close_message = this.translate.currentLang === 'it' ? 'Chiudi' : 'Close';
     this._snackBar.open(message, close_message, {
       duration: 3000
     });
@@ -65,10 +65,24 @@ export class SettingsRouteComponent implements OnInit {
 
   submitCompileCheckboxes(checkboxForm: NgForm) {
 
-    const message = this.translate.currentLang === 'en' ? 'Settings saved' : 'Impostazioni salvate';
-    const close_message = this.translate.currentLang === 'en' ? 'Close' : 'Chiudi';
+    const message = this.translate.currentLang === 'it' ? 'Impostazioni salvate' : 'Settings saved';
+    const close_message = this.translate.currentLang === 'it' ? 'Chiudi' : 'Close';
     this._snackBar.open(message, close_message, {
         duration: 3000
     });
   }
+
+  clearLocalStorage() {
+    const confirmMessage = this.translate.currentLang === 'it' ? 'Sei sicuro di voler eliminare tutti i dati presenti nel Local Storage?' : 'Are you sure you want to clear all data in Local Storage?';
+    const confirmed = window.confirm(confirmMessage);
+
+    if (confirmed) {
+      localStorage.clear();
+        const message = this.translate.currentLang === 'it' ? 'Local Storage svuotato' : 'Local Storage cleared';
+        const close_message = this.translate.currentLang === 'en' ? 'Close' : 'Chiudi';
+        this._snackBar.open(message, close_message, {
+             duration: 3000
+        });
+      }
+    }
 }

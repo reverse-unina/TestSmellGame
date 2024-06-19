@@ -1,3 +1,10 @@
+<div *ngIf="solutions.length === 0">
+  <br><br><br><br><br><br><br><br>
+  <h1 style="font-size: 20px; text-align: center;">
+    {{ 'There are currently no solutions for this exercise' | translate }}
+  </h1>
+</div>
+
 <div *ngFor="let solution of solutions; let i = index">
   <app-solution playerName="{{solution.playerName}}"
                 [comments]="solution.commentList"

@@ -165,7 +165,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       if (this.exerciseSuccess) {
           const studentName = this.currentStudent?.nome;
           this.downloadFile(`${studentName}_ClassCode.java`, this.userCode);
-          this.downloadFile(`${studentName}_TestCode.java`, this.testingCode);
+          this.downloadFile(`${studentName}_TestCode.java`, this.testing.injectedCode);
           this.downloadFile(`${studentName}_ShellCode.java`, this.shellCode);
           this.showPopUp("Solution submitted");
           this.stopLoading();
@@ -194,7 +194,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   downloadCodeFiles() {
     this.downloadFile(`${this.exerciseName}.java`, this.userCode);
-    this.downloadFile(`${this.exerciseName}Test.java`, this.testingCode);
+    this.downloadFile(`${this.exerciseName}Test.java`, this.testing.injectedCode);
     this.downloadFile(`ShellOutput.txt`, this.shellCode);
   }
 
@@ -321,7 +321,6 @@ async initSmellDescriptions() {
     console.log('End time for assignment:', endTime);
     this.checkInterval = setInterval(() => {
       const currentTime = new Date();
-      console.log('Current time:', currentTime);
       if (currentTime >= endTime) {
         this.zone.run(() => {
           this._snackBar.open('Tempo scaduto! Sarai reindirizzato alla home.', 'OK', {

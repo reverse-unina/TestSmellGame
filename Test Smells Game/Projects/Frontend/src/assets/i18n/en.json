@@ -88,7 +88,15 @@
   "(File di configurazione)": "(Configuration file)",
   "Esperimenti": "Assignments",
   "Consegna": "Submit",
-  "Se non si consegna entro l'orario di chiusura, l'esperimento sarà fallito.": "If you don't submit by the end time, the assignment will be failed.",
+  "Se non si termina entro l'orario di chiusura, l'esperimento sarà fallito": "If you don't finish by the end time, the assignment will be failed",
   "Orario di chiusura": "End time",
-  "L'esperimento non è disponibile": "The assignment is unavailable"
+  "L'esperimento non è disponibile": "The assignment is unavailable",
+  "Ridimensiona": "Resize",
+  "Termina": "Finish",
+  "Al momento non esistono esperimenti a cui partecipi": "There are currently no assignments you are participating in",
+  "Soluzioni": "Solution Repository",
+  "Salva in Soluzioni": "Save in Solution Repository",
+  "Al momento non esistono soluzioni per questo esercizio": "There are currently no solutions for this exercise",
+  "Svuota Local Storage": "Clear Local Storage",
+  "Errore durante il caricamento degli esperimenti": "Error loading assignments"
 }

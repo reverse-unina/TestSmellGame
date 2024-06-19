@@ -1,12 +1,9 @@
-import {Component, NgZone, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {FormBuilder, NgForm} from "@angular/forms";
-import {environment} from "../../../../environments/environment.prod";
-import {AssignmentsService} from "../../../services/assignments/assignments.service";
-import {Assignment} from '../../../model/assignment/assignment.model';
-import {UserService} from "../../../services/user/user.service"
-import {User} from '../../../model/user/user.model'
-import {Student} from '../../../model/assignment/assignment.model';
+import { Component, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { AssignmentsService } from "../../../services/assignments/assignments.service";
+import { UserService } from "../../../services/user/user.service";
+import { User } from '../../../model/user/user.model';
+import { Assignment, Student } from '../../../model/assignment/assignment.model';
 
 @Component({
   selector: 'app-assignments-list',
@@ -17,7 +14,7 @@ export class AssignmentsListRoute implements OnInit {
 
   assignments: Assignment[] = [];
   currentUser!: User;
-  currentStudent!: Student;
+  loadingError = false; // Flag per gestire l'errore di caricamento
 
   constructor(private _router: Router,
               private assignmentsService: AssignmentsService,
@@ -25,36 +22,52 @@ export class AssignmentsListRoute implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.assignmentsService.getAssignments().subscribe(assignments => {
-      this.assignments = assignments;
-    });
     this.userService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
+      if (this.currentUser) {
+        this.loadAssignments();
+      }
     });
-    if (this.currentUser)
-      this.loadAssignments();
   }
 
   loadAssignments() {
-      this.assignmentsService.getAssignmentsForStudent(this.currentUser!.userName).subscribe(assignments => {
+    this.assignmentsService.getAssignmentsForStudent(this.currentUser!.userName).subscribe(
+      assignments => {
         this.assignments = assignments;
-      });
-    }
+        this.loadingError = false; // Azzera il flag errori se il caricamento va a buon fine
+      },
+      error => {
+        console.error('Errore durante il recupero degli esperimenti:', error);
+        this.loadingError = true; // Imposta il flag errori in caso di errore
+      }
+    );
+  }
 
   isAssignmentActive(assignmentDate: string, startTime: string, endTime: string): boolean {
-      const assignmentDateObj = new Date(assignmentDate);
-      const [startHour, startMinute] = startTime.split(':').map(Number);
-      const [endHour, endMinute] = endTime.split(':').map(Number);
+    const assignmentDateObj = new Date(assignmentDate);
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
 
-      const startDateTime = new Date(assignmentDateObj);
-      startDateTime.setHours(startHour, startMinute, 0, 0);
+    const startDateTime = new Date(assignmentDateObj);
+    startDateTime.setHours(startHour, startMinute, 0, 0);
 
-      const endDateTime = new Date(assignmentDateObj);
-      endDateTime.setHours(endHour, endMinute, 0, 0);
+    const endDateTime = new Date(assignmentDateObj);
+    endDateTime.setHours(endHour, endMinute, 0, 0);
 
-      const currentTime = new Date();
+    const currentTime = new Date();
 
-      return currentTime >= startDateTime && currentTime <= endDateTime;
-    }
+    return currentTime >= startDateTime && currentTime <= endDateTime;
+  }
 
+  checkAssignmentPresence(): number {
+    let count = 0;
+    this.assignments.forEach(assignment => {
+      if (assignment.studenti.some(student => student.nome === this.currentUser?.userName)) {
+        count++;
+      }
+    });
+    return count;
+  }
 }
+
+

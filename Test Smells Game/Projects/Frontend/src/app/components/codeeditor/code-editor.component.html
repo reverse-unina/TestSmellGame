@@ -15,7 +15,7 @@
             [style.top.px]="5"
             [style.right.px]="5"
             [style.zIndex]="isFullScreen ? 10000 : 9000">
-      {{ isFullScreen ? ('Close' | translate) : ('Fullscreen' | translate) }}
+      {{ isFullScreen ? ('Resize' | translate) : ('Fullscreen' | translate) }}
     </button>
     <button *ngIf="editable"
             (click)="resetEditor()"

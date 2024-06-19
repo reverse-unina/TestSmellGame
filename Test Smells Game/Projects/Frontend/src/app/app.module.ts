@@ -93,6 +93,7 @@ export function HttpLoaderFactory(http:HttpClient) {
     MatTooltipModule,
     MatCheckboxModule,
     TranslateModule.forRoot({
+      defaultLanguage: 'en',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,

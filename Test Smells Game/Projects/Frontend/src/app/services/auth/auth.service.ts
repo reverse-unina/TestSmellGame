@@ -37,6 +37,10 @@ export class AuthService {
   }
 
   handleAuthentication(email: string, token: string){
+    const storedEmail = localStorage.getItem("email");
+    if (storedEmail && storedEmail !== email)
+      localStorage.clear();
+
     this.http.post<User>(environment.userServiceUrl + '/users/userData', {
       email: email,
       token: token
@@ -64,9 +68,6 @@ export class AuthService {
   logout() {
     // @ts-ignore
     this.userService.user.next(null);
-    localStorage.clear()
     this.router.navigate(['/auth']);
   }
-
-
 }

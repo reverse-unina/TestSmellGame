@@ -90,7 +90,7 @@
 
 <div class="card">
   <div class="card-header">
-    {{ 'Compile mode' | translate }}
+    Compile mode
   </div>
   <div class="card-body">
     <form #checkboxForm="ngForm" (submit)="submitCompileCheckboxes(checkboxForm)">
@@ -121,31 +121,15 @@
 
 <div class="card">
   <div class="card-header">
-    {{ 'Exercise retrieval' | translate }}
+    Local Storage
   </div>
   <div class="card-body">
-    <form #checkboxForm="ngForm">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" disabled name="exampleRadios" id="LocalExercises" value="LocalExercises">
-        <label class="form-check-label" for="LocalExercises">
-          GitHub
-          <p style="color: red">{{ 'To use GitHub you need to execute the Electron App' | translate }}</p>
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="CloudExercises" value="CloudExercises" checked>
-        <label class="form-check-label" for="CloudExercises">
-          Exercise Service
-        </label>
-      </div>
-      <button
-        class="btn btn-primary"
-        type="submit"
-      >
-        OK
+    <form #localStorageForm="ngForm">
+      <button class="btn btn-primary btn-sm bg-light d-flex align-items-center" style="width: 32px; height: 32px;" type="button" (click)="clearLocalStorage()">
+        <img src="assets/icons/clear_local_storage.png" alt="Clear Local Storage Icon" style="max-width: 16px; max-height: 16px; margin-right: 8px;">
+        <span>Local Storage</span>
       </button>
     </form>
   </div>
 </div>
-
 

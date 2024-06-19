@@ -34,7 +34,7 @@
         <mat-divider></mat-divider>
         <div style="margin-top: 20px">
           <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="this.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
-          <button style="margin-left: 20px;" type="button" class="btn btn-primary" [disabled]="this.progressBarMode == 'query'" (click)="publishSolutionToLeaderboard()">{{ 'Save in Leaderboard' | translate }}</button>
+          <button style="margin-left: 20px;" type="button" class="btn btn-primary" [disabled]="this.progressBarMode == 'query'" (click)="publishSolutionToLeaderboard()">{{ 'Save in Solution Repository' | translate }}</button>
         </div>
         <mat-divider></mat-divider>
         <div class="col" style="margin-top: 20px">
@@ -87,7 +87,7 @@
 
           </div>
         </div>
-        <button type="button" class="btn btn-primary" routerLink="/refactor-game/leaderboard/{{exerciseName}}">Leaderboard</button>
+        <button type="button" class="btn btn-primary" routerLink="/refactor-game/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
       </div>
     </div>
 </div>

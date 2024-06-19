@@ -6,7 +6,7 @@
     </div>
   </div>
   <div class="note" style="margin-top: 20px;">
-    <p>{{ 'If you don\'t submit by the end time, the assignment will be failed.' | translate }}</p>
+    <p>{{ 'If you don\'t finish by the end time, the assignment will be failed' | translate }}</p>
   </div>
   <hr>
   <h1>{{exerciseName}}</h1>
@@ -43,7 +43,7 @@
       <mat-divider></mat-divider>
       <div style="margin-top: 20px">
         <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="this.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
-        <button style="margin-left: 20px;" type="button" class="btn btn-primary" [disabled]="progressBarMode == 'query'" (click)="submitAssignment(); saveResultsFile()">{{ 'Submit' | translate }}</button>
+        <button style="margin-left: 20px;" type="button" class="btn btn-primary" [disabled]="progressBarMode == 'query'" (click)="submitAssignment(); saveResultsFile()">{{ 'Finish' | translate }}</button>
       </div>
       <mat-divider></mat-divider>
       <div class="col" style="margin-top: 20px">
