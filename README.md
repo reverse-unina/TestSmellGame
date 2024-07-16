@@ -9,12 +9,9 @@ Di seguito sono elencate le operazioni per installare il software.
 ```
 docker build -t compiler_service .
 ```
-## - Docker Push
+## - Docker Tag
 ```
 docker tag compiler_service loriszn/server-setup:compiler_service
-```
-```
-docker push loriszn/server-setup:compiler_service
 ```
 
 
@@ -28,12 +25,9 @@ mvn clean install
 ```
 docker build -t exercise_service .
 ```
-## - Docker Push
+## - Docker Tag
 ```
 docker tag exercise_service loriszn/server-setup:exercise_service
-```
-```
-docker push loriszn/server-setup:exercise_service
 ```
 
 
@@ -43,12 +37,9 @@ docker push loriszn/server-setup:exercise_service
 ```
 docker build -t frontend .
 ```
-## - Docker Push
+## - Docker Tag
 ```
 docker tag frontend loriszn/server-setup:frontend
-```
-```
-docker push loriszn/server-setup:frontend
 ```
 
 
@@ -62,12 +53,9 @@ mvn clean install
 ```
 docker build -t leaderboard_service .
 ```
-## - Docker Push
+## - Docker Tag
 ```
 docker tag leaderboard_service loriszn/server-setup:leaderboard_service
-```
-```
-docker push loriszn/server-setup:leaderboard_service
 ```
 
 
@@ -81,12 +69,9 @@ mvn clean install
 ```
 docker build -t user_service .
 ```
-## - Docker Push
+## - Docker Tag
 ```
 docker tag user_service loriszn/server-setup:user_service
-```
-```
-docker push loriszn/server-setup:user_service
 ```
 
 
