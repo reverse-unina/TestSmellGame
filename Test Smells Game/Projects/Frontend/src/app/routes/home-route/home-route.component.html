@@ -1,0 +1,64 @@
+<mat-tab-group>
+  <mat-tab label="{{ 'News' | translate }}">
+    <app-logviewer></app-logviewer>
+  </mat-tab>
+  <mat-tab label="To Do">
+    <app-logtodo></app-logtodo>
+  </mat-tab>
+  <mat-tab label="{{ 'Known Issues' | translate }}">
+    <app-logknownissues></app-logknownissues>
+  </mat-tab>
+  <mat-tab label="Smells">
+    <p>{{ 'For the definition of smells, please refer to the following page:' | translate }}</p>
+    <a href="https://testsmells.org/pages/testsmells.html">https://testsmells.org/pages/testsmells.html</a>
+  </mat-tab>
+  <mat-tab label="{{ 'Server installation' | translate }}">
+    <div [innerHTML]="readmeContent"></div>
+  </mat-tab>
+  <mat-tab label="{{ 'Client installation' | translate }}">
+    <p>{{ 'To install the client locally you need to clone the following repository or download the latest release from the following address:' | translate }}</p>
+    <a href="https://github.com/DarioTin/Tesi-Client-Setup/releases">https://github.com/DarioTin/Tesi-Client-Setup/releases</a>
+    <p>{{ 'After extracting everything, you need to open a terminal inside the created directory and send inside the terminal' | translate }}</p>
+    <p style="font-style: italic">npm install</p>
+    <p>{{ 'In this case, since the installation is independent of the operating system, the name of the folder and the extension of the executable that will be created will vary based on the platform on which the command will be started.' | translate }}</p>
+    <p>{{ 'At the end of the installation, the application will be installed locally in the "DarioTintore-Tesi-..." directory, which can be started with the following procedure:' | translate }}</p>
+    <ol type="1">
+      <li>{{ 'Open a terminal inside the “DarioTintore-Tesi-...” directory' | translate }}</li>
+      <li>{{ 'Run the startup command for the executable created inside the "DarioTintore-Tesi" directory' | translate }}</li>
+      <li>{{ 'Start playing' | translate }} 🙂</li>
+    </ol>
+  </mat-tab>
+  <mat-tab label="{{ 'Add exercises' | translate }}">
+    <p>{{ 'Adding exercises can be done on two platforms, on GitHub or via the exercise service.' | translate }}</p>
+    <p>{{ 'The exercises that can be recovered from github can only be recovered via the desktop application, while the exercises inserted on the exercise service can be recovered from all versions of the application, but require the “exercise service” microservice to be active.' | translate }}</p>
+    <p>{{ 'Both in the case of adding exercises on the GitHub repository and adding exercises on the microservice, the rules to follow are identical, the only thing that changes is the place where the exercises reside.' | translate }}</p>
+    <h1>GitHub</h1>
+    <p>{{ 'To add a new exercise that can be recovered via github it is necessary to create a new repository, in which each exercise is associated with a folder, and in each folder there are 3 files, where the java files must have the same name as the exercise in question.' | translate }}</p>
+    <h1>ExerciseRepository</h1>
+    <p>{{ 'To add a new exercise that can be recovered via the Exercise Repository microservice, it is necessary to create a folder inside the ExerciseDB folder, in which each exercise is associated with a folder, and in each folder there are 3 files, where the java files must have the same name of the financial year in question.' | translate }}</p>
+    <h1>{{ 'Exercise structure' | translate }}</h1>
+    <p>{{ 'For example, if we are considering adding a new exercise called “StringFormatter” we will have a structure like this' | translate }}</p>
+    <p>{{ 'To add an exercise to the ExerciseRepository microservice is required' | translate }}</p>
+    {{ 'StringTester (Folder name)' | translate }}
+    <ul>
+      <li>{{ 'StringFormatter.Java (Production file name)' | translate }}</li>
+      <li>{{ 'StringFormatterTest.java (Original testing file name)' | translate }}</li>
+      <li>{{ 'StringFormatterConfig.json (Configuration file name)' | translate }}</li>
+    </ul>
+    <p>{{ 'So a configuration like this is required:' | translate }}</p>
+    <p>{{ '{' }} {{ 'Exercise name' | translate }} {{ '}' }} (Directory)</p>
+    <ul>
+      <li>{{ '{' }} {{ 'Exercise name' | translate }} {{ '}' }}.java {{ '(Production java file)' | translate }} </li>
+      <li>{{ '{' }} {{ 'Exercise name' | translate }} {{ '}' }}Test.java {{ '(Test java file)' | translate }} </li>
+      <li>{{ '{' }} {{ 'Exercise name' | translate }} {{ '}' }}Config.java {{ '(Configuration file)' | translate }} </li>
+    </ul>
+    <p>{{ 'The file structure is as follows:' | translate }}</p>
+    <p>{{ 'In the production and test file there must always be the following package:' | translate }}</p>
+    <p style="font-weight: bold">package com.dariotintore.tesi;</p>
+  </mat-tab>
+  <mat-tab label="About">
+    <h2>Developed by Dario Tintore</h2>
+    <h2>Relatore Porfirio Tramontana</h2>
+    <h3>Università degli studi di Napoli Federico II</h3>
+  </mat-tab>
+</mat-tab-group>

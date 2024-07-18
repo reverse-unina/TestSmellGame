@@ -1,0 +1,135 @@
+<div class="card">
+  <div class="card-header">
+    {{ 'Language' | translate }}
+  </div>
+  <div class="card-body">
+    <form #languageForm="ngForm">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="languageRadio" value="en" [(ngModel)]="selectedLanguage">
+        <label class="form-check-label">
+          {{ 'English' | translate }}
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="languageRadio" value="it" [(ngModel)]="selectedLanguage">
+        <label class="form-check-label">
+          {{ 'Italian' | translate }}
+        </label>
+      </div>
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="switchLanguage(selectedLanguage)"
+      >
+        {{ 'Save' | translate }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div class="card">
+  <div class="card-header">
+    {{ 'Environments' | translate }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="environmentForm" (ngSubmit)="submitEnvironmentForm(environmentForm)">
+      <div class="form-group">
+        <label for="user_service">User Service Url</label>
+        <input
+          type="url"
+          id="user_service"
+          class="form-control"
+          ngModel
+          name="user_service"
+          required
+        />
+        <label for="compiler_service" >Compiler Service url</label>
+        <input
+          type="url"
+          id="compiler_service"
+          class="form-control"
+          ngModel
+          name="compiler_service"
+          required
+        />
+        <label for="exercise_service">Exercise Service url</label>
+        <input
+          type="url"
+          id="exercise_service"
+          class="form-control"
+          ngModel
+          name="exercise_service"
+          required
+        />
+        <label for="leaderboard_service">Leaderboard Service url</label>
+        <input
+          type="url"
+          id="leaderboard_service"
+          class="form-control"
+          ngModel
+          name="leaderboard_service"
+          required
+        />
+      </div>
+
+      <div>
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >
+          OK
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div class="card">
+  <div class="card-header">
+    Compile mode
+  </div>
+  <div class="card-body">
+    <form #checkboxForm="ngForm" (submit)="submitCompileCheckboxes(checkboxForm)">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" disabled name="exampleRadios" id="Local" value="Local">
+        <label class="form-check-label" for="Local">
+          {{ 'Local' | translate }}
+          <p style="color: red">{{ 'To use Local compile you need to execute the Electron App' | translate }}</p>
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="Cloud" value="Cloud" checked [disabled]="!isUserAuthenticated">
+        <label class="form-check-label" for="Cloud">
+          Cloud <p *ngIf="!isUserAuthenticated" style="color: red"> {{ 'To use cloud you need to login' | translate }} </p>
+        </label>
+      </div>
+      <button
+        class="btn btn-primary"
+        type="submit"
+      >
+        OK
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div class="card">
+  <div class="card-header">
+    Local Storage
+  </div>
+  <div class="card-body">
+    <form #localStorageForm="ngForm">
+      <button class="btn btn-primary btn-sm bg-light d-flex align-items-center" style="width: 32px; height: 32px;" type="button" (click)="clearLocalStorage()">
+        <img src="assets/icons/clear_local_storage.png" alt="Clear Local Storage Icon" style="max-width: 16px; max-height: 16px; margin-right: 8px;">
+        <span>Local Storage</span>
+      </button>
+    </form>
+  </div>
+</div>
+

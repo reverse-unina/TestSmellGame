@@ -1,0 +1,48 @@
+<div *ngIf="loadingError">
+  <br><br><br><br><br><br><br><br>
+  <h1 style="color: red; font-size: 20px; text-align: center;">{{ 'Error loading assignments' | translate }}</h1>
+</div>
+
+<div *ngIf="checkAssignmentPresence() === 0 && !loadingError">
+  <br><br><br><br><br><br><br><br>
+  <h1 style="font-size: 20px; text-align: center;">
+    {{ 'There are currently no assignments you are participating in' | translate }}
+  </h1>
+</div>
+
+<div *ngFor="let assignment of assignments">
+  <div *ngIf="checkAssignmentPresence() > 0" style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+    <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.nome }}</h2>
+    <p style="font-size: 16px; color: #666; margin-bottom: 12px;">Data: {{ assignment.data }}</p>
+    <p style="font-size: 16px; color: #666; margin-bottom: 12px;">Tipo: {{ assignment.tipo }}</p>
+
+    <ul style="list-style-type: none; padding: 0;">
+      <ng-container *ngFor="let student of assignment.studenti">
+        <ng-container *ngIf="student.nome === currentUser?.userName">
+          <ng-container *ngIf="assignment.tipo === 'competitivo' && student.consegnato === true">
+            <li style="margin-bottom: 8px;">
+              <span style="color: red;">{{ 'You have already completed the assignment' | translate }}</span>
+            </li>
+          </ng-container>
+          <ng-container *ngIf="!(assignment.tipo === 'competitivo' && student.consegnato === true)">
+            <li *ngIf="isAssignmentActive(assignment.data, student.inizio, student.fine)" style="margin-bottom: 8px;">
+              <a [routerLink]="['/assignments', assignment.nome, student.esercizio]" style="text-decoration: none; color: #007bff;">
+                {{ student.esercizio }}
+              </a>
+              ({{ student.inizio }} - {{ student.fine }})
+            </li>
+            <li *ngIf="!isAssignmentActive(assignment.data, student.inizio, student.fine)" style="margin-bottom: 8px;">
+              <span style="color: red;">{{ 'The assignment is unavailable' | translate }}</span>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+</div>
+
+
+
+
+
+

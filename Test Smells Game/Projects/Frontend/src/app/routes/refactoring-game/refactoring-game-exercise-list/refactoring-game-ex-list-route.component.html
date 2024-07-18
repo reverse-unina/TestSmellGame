@@ -1,0 +1,25 @@
+<h1>Refactoring Game Mode</h1>
+
+<mat-spinner *ngIf="waitingForServer"></mat-spinner>
+
+<div class="alert alert-success" role="alert">
+  {{ 'You are actually using Cloud Retrieve mode' | translate }}
+</div>
+
+<div *ngIf="serverProblems" class="alert alert-danger" role="alert">
+  {{ 'Exercise server has problems' | translate }}
+</div>
+
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let item of exerciseConfigurations; let i = index">
+    <a [routerLink]="isExerciseEnabled(item.refactoring_game_configuration.level) ? '/refactor-game/' + item.exerciseId.slice(0, -2) : null"
+       [style.textDecoration]="isExerciseEnabled(item.refactoring_game_configuration.level) ? 'none' : 'line-through'"
+       [style.pointerEvents]="isExerciseEnabled(item.refactoring_game_configuration.level) ? 'auto' : 'none'"
+       [style.color]="isExerciseEnabled(item.refactoring_game_configuration.level) ? 'blue' : 'red'">
+      {{ item.exerciseId.slice(0, -2) }}
+      <span *ngIf="item.refactoring_game_configuration.level === 1">⭐</span>
+      <span *ngIf="item.refactoring_game_configuration.level === 2">⭐⭐</span>
+      <span *ngIf="item.refactoring_game_configuration.level === 3">⭐⭐⭐</span>
+    </a>
+  </li>
+</ul>

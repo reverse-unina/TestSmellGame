@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~codemirror/lib/codemirror.css';
+@import '~codemirror/addon/lint/lint.css';
+@import '~codemirror/addon/hint/show-hint.css';
+@import 'codemirror/theme/dracula.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+     background: linear-gradient(to right, #d0dfff, #c1d4fb, #a8c2fb);
+}

@@ -1,0 +1,62 @@
+body {
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 40px;
+  margin: 20px;
+  border: 2px solid rgba(204, 204, 204, 0.6);
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 600px;
+}
+
+.user-info {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-name {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.user-email {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.user-level {
+  font-size: 24px;
+  color: #ff6347;
+  margin-bottom: 20px;
+}
+
+.user-exp {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}

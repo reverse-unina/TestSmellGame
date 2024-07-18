@@ -1,0 +1,15 @@
+<div id="myDIV" class="header">
+  <h2 style="font-weight:bold">{{ 'To Do List' | translate }}</h2>
+</div>
+
+<ul id="myUL">
+  <div *ngFor="let todo of todos">
+    <li *ngIf="todo.checked" class="checked">
+      {{todo.text}}
+    </li>
+    <li *ngIf="!todo.checked">
+      {{todo.text}}
+    </li>
+  </div>
+</ul>
+

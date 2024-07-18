@@ -1,0 +1,15 @@
+.container-fluid {  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.1fr 2fr;
+  grid-auto-columns: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "topbar"
+    "display";
+  width: 100%;
+}
+
+.topbar { grid-area: topbar; }
+
+.display { grid-area: display; }
