@@ -191,6 +191,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
         this._snackBar.open('Esercizio non completato', 'Close', {
                                   duration: 3000
         });
+	this.stopLoading();
         return;
       }
 
