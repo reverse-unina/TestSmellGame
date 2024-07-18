@@ -187,6 +187,13 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   submitAssignment() {
       this.startLoading();
+      if (!this.exerciseSuccess) {
+        this._snackBar.open('Esercizio non completato', 'Close', {
+                                  duration: 3000
+        });
+        return;
+      }
+
       if (this.smellList.length <= this.exerciseConfiguration.refactoring_game_configuration.smells_allowed) {
           this.userService.increaseUserExp();
           const studentName = this.currentStudent?.nome;
