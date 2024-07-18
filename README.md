@@ -2,7 +2,7 @@
 
 Di seguito sono elencate le operazioni per installare il software.
 
-All'interno della directory Thesis/Test Smells Game/Project è presente un file "setup.bat" che permette di creare l'infrastruttura server eseguendo i comandi elencati automaticamente: basta soltanto avviare il file.
+All'interno della directory Thesis/Test Smells Game/Project è presente un file "setup.bat" che, una volta avviato, crea l'infrastruttura server eseguendo i comandi elencati in modo sequenziale e automatico.
 
 # Compiler_service
 
