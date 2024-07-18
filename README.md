@@ -4,6 +4,7 @@ Di seguito sono elencate le operazioni per installare il software.
 
 All'interno della directory Thesis/Test Smells Game/Project è presente un file "setup.bat" che, una volta avviato, crea l'infrastruttura server eseguendo i comandi elencati in modo sequenziale e automatico.
 
+
 # Compiler_service
 
 ## - Docker Image Build 
