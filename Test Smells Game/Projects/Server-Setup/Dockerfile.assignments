@@ -1,0 +1,8 @@
+FROM alpine:latest
+
+RUN mkdir -p /assignments
+
+COPY esperimento1.json /assignments/
+COPY esperimento2.json /assignments/
+
+# Questa immagine non fa altro che contenere i file JSON
