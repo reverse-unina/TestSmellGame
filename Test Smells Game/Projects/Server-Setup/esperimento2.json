@@ -6,13 +6,15 @@
       "nome": "loriszn",
       "esercizio": "ByteVector",
       "inizio": "16:00",
-      "fine": "16:30"
+      "fine": "16:30",
+      "consegnato": false
     },
     {
       "nome": "maradona10",
       "esercizio": "FTPFile",
       "inizio": "16:00",
-      "fine": "16:30"
+      "fine": "16:30",
+      "consegnato": false
     }
   ],
   "tipo": "collaborativo"

@@ -1,18 +1,20 @@
 {
   "nome": "Esperimento1",
-  "data": "2024-06-20",
+  "data": "2024-07-18",
   "studenti": [
     {
       "nome": "loriszn",
       "esercizio": "Calculator",
-      "inizio": "18:00",
-      "fine": "20:00"
+      "inizio": "12:00",
+      "fine": "20:00",
+      "consegnato": false
     },
     {
       "nome": "maradona10",
       "esercizio": "Range",
       "inizio": "12:00",
-      "fine": "13:00"
+      "fine": "13:00",
+      "consegnato": false
     }
   ],
   "tipo": "competitivo"
