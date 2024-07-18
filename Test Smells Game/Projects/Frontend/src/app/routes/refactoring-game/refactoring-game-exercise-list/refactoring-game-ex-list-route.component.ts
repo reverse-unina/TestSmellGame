@@ -28,7 +28,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
       (response: any[]) => {
         this.waitingForServer = false;
         this.exerciseConfigurations = response.map(item => JSON.parse(atob(item)));
-        console.log(this.exerciseConfigurations); // Controlla che i dati siano stati decodificati correttamente
+        console.log(this.exerciseConfigurations);
       },
       error => {
         this.serverProblems = true;

@@ -7,11 +7,11 @@
 
     {
       "text": "Scenari di Gamification (missioni, premi, badge, reward & award)",
-      "checked":false
+      "checked":true
     },
     {
       "text": "Funzionalità per sessioni sperimentali",
-      "checked":false
+      "checked":true
     },
     {
       "text": "Possibilità di allargare/restringere finestre codice, miglioramento back/forward & colori",
@@ -23,7 +23,7 @@
     },
     {
       "text": "Curare la parte di configurazione esperimenti",
-      "checked":false
+      "checked":true
     },
     {
       "text": "Traduzione in inglese e/o internazionalizzazione del testo",
