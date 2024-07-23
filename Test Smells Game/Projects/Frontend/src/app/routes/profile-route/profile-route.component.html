@@ -1,13 +1,13 @@
-<div class="profile-container" *ngIf="user">
+<div class="profile-container" *ngIf="user && config">
   <div class="user-info">
     <h1 class="user-name">{{ user.userName }}</h1>
     <p class="user-email">{{ user.email }}</p>
     <p class="user-level">{{ 'Level' | translate }} : {{ userLevel }}</p>
     <p class="user-exp">{{ 'Exercises completed' | translate }} : {{ user.exp }}</p>
     <div class="badges">
-      <img *ngIf="user.exp >= 10" src="assets/icons/badge_bronze.png" alt="Bronze Badge" style="width: 70px; height: 70px; margin: 5px;" title= "{{ 'Badge obtained after completing 10 exercises' | translate }}">
-      <img *ngIf="user.exp >= 20" src="assets/icons/badge_silver.png" alt="Silver Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing 20 exercises' | translate }}">
-      <img *ngIf="user.exp >= 30" src="assets/icons/badge_gold.png" alt="Gold Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing 30 exercises' | translate }}">
+      <img *ngIf="user.exp >= config.badgeValues[0]" src="assets/icons/badge_bronze.png" alt="Bronze Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing 10 exercises' | translate }}">
+      <img *ngIf="user.exp >= config.badgeValues[1]" src="assets/icons/badge_silver.png" alt="Silver Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing 20 exercises' | translate }}">
+      <img *ngIf="user.exp >= config.badgeValues[2]" src="assets/icons/badge_gold.png" alt="Gold Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing 30 exercises' | translate }}">
     </div>
   </div>
 </div>

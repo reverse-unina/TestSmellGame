@@ -7,6 +7,8 @@ import { Answer } from "../../../model/question/answer.model";
 import { ExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { UserService } from '../../../services/user/user.service';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 
 @Component({
   selector: 'app-check-game-core',
@@ -14,6 +16,7 @@ import { UserService } from '../../../services/user/user.service';
   styleUrls: ['./check-game-core-route.component.css']
 })
 export class CheckGameCoreRouteComponent implements OnInit {
+  config!: levelConfig;
   exerciseName = this.route.snapshot.params['exercise'];
   exerciseRetrievalType!: number;
   actualQuestionNumber: number = 0;
@@ -29,8 +32,9 @@ export class CheckGameCoreRouteComponent implements OnInit {
     private codeService: CodeeditorService,
     private exerciseService: ExerciseService,
     private route: ActivatedRoute,
+    private _snackBar: MatSnackBar,
     private userService: UserService
-  ) {}
+  ) { this.initLevelConfig(); }
 
   ngOnInit(): void {
     this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
@@ -39,6 +43,13 @@ export class CheckGameCoreRouteComponent implements OnInit {
       this.setupQuestions(data);
     });
   }
+
+  async initLevelConfig() {
+                       // @ts-ignore
+                       await import('src/assets/assets/level_config.json').then((data) => {
+                         this.config = data;
+                       });
+                     }
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
@@ -71,8 +82,18 @@ export class CheckGameCoreRouteComponent implements OnInit {
   showResults() {
     this.exerciseCompleted = true;
     this.calculateScore();
-    if (this.score === this.questions.length) {
+    const percentageCorrect = (this.score / this.questions.length) * 100;
+    const message = `Hai risposto correttamente al ${percentageCorrect}% delle domande. `;
+
+    if (this.score >= (this.config.answerPercentage / 100) * this.questions.length) {
       this.userService.increaseUserExp();
+      this._snackBar.open(message + "Esercizio superato!", 'Close', {
+        duration: 3000
+      });
+    } else {
+      this._snackBar.open(message + "Esercizio fallito!", 'Close', {
+        duration: 3000
+      });
     }
   }
 
