@@ -87,13 +87,9 @@ export class CheckGameCoreRouteComponent implements OnInit {
 
     if (this.score >= (this.config.answerPercentage / 100) * this.questions.length) {
       this.userService.increaseUserExp();
-      this._snackBar.open(message + "Esercizio superato!", 'Close', {
-        duration: 3000
-      });
+      alert(message + "Esercizio superato!");
     } else {
-      this._snackBar.open(message + "Esercizio fallito!", 'Close', {
-        duration: 3000
-      });
+      alert(message + "Esercizio fallito!")
     }
   }
 
