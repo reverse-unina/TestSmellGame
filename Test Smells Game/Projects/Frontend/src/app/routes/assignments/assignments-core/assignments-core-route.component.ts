@@ -205,7 +205,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           const shellCode = this.shellCode;
           const results = this.generateResultsContent();
 
-          this.userService.increaseUserExp();
           this.exerciseService.logEvent(this.currentUser.userName, 'Completed the assignment ' + (this.assignmentName || '')).subscribe({
                 next: response => console.log('Log event response:', response),
                 error: error => console.error('Error submitting log:', error)
