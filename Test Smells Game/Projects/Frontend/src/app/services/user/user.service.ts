@@ -5,6 +5,7 @@ import { User } from "../../model/user/user.model";
 import { HttpClient } from '@angular/common/http';
 import { environment } from "../../../environments/environment.prod";
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model";
+import { ExerciseService } from "src/app/services/exercise/exercise.service"
 
 interface Config {
   expValues: number[];
@@ -19,16 +20,9 @@ export class UserService {
   private baseUrl = environment.userServiceUrl + '/users/';
 
   user = new BehaviorSubject<User>(new User());
-  constructor(private snackBar: MatSnackBar, private http: HttpClient) {
-    this.initLevelConfig();
-  }
+  constructor(private snackBar: MatSnackBar, private exerciseService: ExerciseService, private http: HttpClient) {
 
-  async initLevelConfig() {
-      // @ts-ignore
-      await import('src/assets/assets/level_config.json').then((data) => {
-        this.config = data;
-      });
-    }
+  }
 
   getCurrentUser(): Observable<User> {
     return this.user.asObservable();
@@ -39,35 +33,56 @@ export class UserService {
   }
 
   increaseUserExp(): void {
-    const currentUser = this.user.value;
-    currentUser.exp += 1;
-    this.user.next(currentUser);
+      this.exerciseService.getLevelConfig().subscribe(
+        (data: any) => {
+          this.config = data;
+          console.log('LevelConfig:', this.config);
+        },
+        error => {
+          console.error('Error fetching level config:', error);
+        }
+      );
 
-    switch (currentUser.exp) {
-      case this.config.expValues[0]:
-        this.showSnackBar('Congratulations! You have reached level 2');
-        break;
-      case this.config.expValues[1]:
-        this.showSnackBar('Congratulations! You have reached level 3');
-        break;
-      case this.config.badgeValues[0]:
-      case this.config.badgeValues[1]:
-      case this.config.badgeValues[2]:
-        this.showSnackBar('Congratulations! You have unlocked a new badge, view it on your profile page');
-        break;
-      default:
-        break;
+      const currentUser = this.user.value;
+      currentUser.exp += 1;
+      this.user.next(currentUser);
+
+      switch (currentUser.exp) {
+        case this.config.expValues[0]:
+          this.showSnackBar('Congratulations! You have reached level 2');
+          this.exerciseService.logEvent(currentUser.userName, 'Reached level 2').subscribe({
+            next: response => console.log('Log event response:', response),
+            error: error => console.error('Error submitting log:', error)
+          });
+          break;
+        case this.config.expValues[1]:
+          this.showSnackBar('Congratulations! You have reached level 3');
+          this.exerciseService.logEvent(currentUser.userName, 'Reached level 3').subscribe({
+            next: response => console.log('Log event response:', response),
+            error: error => console.error('Error submitting log:', error)
+          });
+          break;
+        default:
+          if (this.config.badgeValues.hasOwnProperty(currentUser.exp)) {
+            this.showSnackBar('Congratulations! You have unlocked a new badge, view it on your profile page');
+            this.exerciseService.logEvent(currentUser.userName, 'Unlocked a new badge').subscribe({
+              next: response => console.log('Log event response:', response),
+              error: error => console.error('Error submitting log:', error)
+            });
+          }
+          break;
+      }
+
+      this.http.post(`${this.baseUrl}updateExp`, currentUser).subscribe(
+        response => {
+          console.log('User updated successfully', response);
+        },
+        error => {
+          console.error('Error occurred during updating user', error);
+        }
+      );
     }
 
-    this.http.post(`${this.baseUrl}updateExp`, currentUser).subscribe(
-      response => {
-        console.log('User updated successfully', response);
-      },
-      error => {
-        console.error('Error occurred during updating user', error);
-      }
-    );
-  }
 
   updateUser(newUser: User): void {
     this.user.next(newUser);

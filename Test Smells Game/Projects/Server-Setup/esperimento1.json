@@ -1,21 +1,21 @@
 {
-  "nome": "esperimento1",
-  "data": "2024-07-18",
-  "studenti": [
+  "name": "esperimento1",
+  "date": "2024-07-18",
+  "students": [
     {
-      "nome": "loriszn",
-      "esercizio": "Calculator",
-      "inizio": "12:00",
-      "fine": "20:00",
-      "consegnato": false
+      "name": "loriszn",
+      "exercise": "Calculator",
+      "start": "12:00",
+      "end": "20:00",
+      "submitted": false
     },
     {
-      "nome": "maradona10",
-      "esercizio": "Range",
-      "inizio": "12:00",
-      "fine": "13:00",
-      "consegnato": false
+      "name": "maradona10",
+      "exercise": "Range",
+      "start": "12:00",
+      "end": "13:00",
+      "submitted": false
     }
   ],
-  "tipo": "competitivo"
+  "type": "competitivo"
 }

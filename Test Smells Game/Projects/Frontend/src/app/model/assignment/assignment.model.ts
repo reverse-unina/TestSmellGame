@@ -1,14 +1,14 @@
 export interface Student {
-  nome: string;
-  esercizio: string;
-  inizio: string;
-  fine: string;
-  consegnato: boolean;
+  name: string;
+  exercise: string;
+  start: string;
+  end: string;
+  submitted: boolean;
 }
 
 export interface Assignment {
-  nome: string;
-  data: string;
-  studenti: Student[];
-  tipo: string;
+  name: string;
+  date: string;
+  students: Student[];
+  type: string;
 }

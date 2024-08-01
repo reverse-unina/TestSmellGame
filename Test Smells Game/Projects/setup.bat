@@ -48,7 +48,8 @@ echo Building Docker image for assignments...
 cd ../Server-Setup
 docker build -f Dockerfile.assignments -t assignments-image .
 echo Populating Docker volume with assignment files...
-docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/"
+docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/ && mkdir -p /mnt/levelconfig && cp /assignments/levelconfig/levelConfig.json /mnt/levelconfig/ && cp /assignments/levelconfig/badge_bronze.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_silver.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_gold.png /mnt/levelconfig/"
+
 
 REM Docker Compose
 echo Starting Docker containers with docker-compose...

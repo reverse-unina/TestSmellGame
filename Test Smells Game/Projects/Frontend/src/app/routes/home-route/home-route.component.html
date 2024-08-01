@@ -2,16 +2,6 @@
   <mat-tab label="{{ 'News' | translate }}">
     <app-logviewer></app-logviewer>
   </mat-tab>
-  <mat-tab label="To Do">
-    <app-logtodo></app-logtodo>
-  </mat-tab>
-  <mat-tab label="{{ 'Known Issues' | translate }}">
-    <app-logknownissues></app-logknownissues>
-  </mat-tab>
-  <mat-tab label="Smells">
-    <p>{{ 'For the definition of smells, please refer to the following page:' | translate }}</p>
-    <a href="https://testsmells.org/pages/testsmells.html">https://testsmells.org/pages/testsmells.html</a>
-  </mat-tab>
   <mat-tab label="{{ 'Server installation' | translate }}">
     <div [innerHTML]="readmeContent"></div>
   </mat-tab>

@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Question } from "../../../model/question/question.model";
 import { Answer } from "../../../model/question/answer.model";
 import { ExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
+import { User } from "../../../model/user/user.model";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { UserService } from '../../../services/user/user.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -17,6 +18,7 @@ import { levelConfig } from "src/app/model/levelConfiguration/level.configuratio
 })
 export class CheckGameCoreRouteComponent implements OnInit {
   config!: levelConfig;
+  user!: User;
   exerciseName = this.route.snapshot.params['exercise'];
   exerciseRetrievalType!: number;
   actualQuestionNumber: number = 0;
@@ -34,7 +36,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private userService: UserService
-  ) { this.initLevelConfig(); }
+  ) { }
 
   ngOnInit(): void {
     this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
@@ -42,14 +44,17 @@ export class CheckGameCoreRouteComponent implements OnInit {
     this.exerciseService.getConfigFile(this.exerciseName).subscribe(data => {
       this.setupQuestions(data);
     });
-  }
 
-  async initLevelConfig() {
-                       // @ts-ignore
-                       await import('src/assets/assets/level_config.json').then((data) => {
-                         this.config = data;
-                       });
-                     }
+    this.exerciseService.getLevelConfig().subscribe(
+              (data: levelConfig) => {
+                this.config = data;
+                console.log('LevelConfig:', this.config);
+              },
+              error => {
+                console.error('Error fetching level config:', error);
+              }
+            );
+  }
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
@@ -86,8 +91,15 @@ export class CheckGameCoreRouteComponent implements OnInit {
     const message = `Hai risposto correttamente al ${percentageCorrect}% delle domande. `;
 
     if (this.score >= (this.config.answerPercentage / 100) * this.questions.length) {
-      this.userService.increaseUserExp();
       alert(message + "Esercizio superato!");
+      this.userService.increaseUserExp();
+      this.userService.getCurrentUser().subscribe((user: User | any) => {
+          this.user = user;
+      });
+      this.exerciseService.logEvent(this.user.userName, 'Completed ' + this.exerciseName + ' in check game mode').subscribe({
+          next: response => console.log('Log event response:', response),
+          error: error => console.error('Error submitting log:', error)
+      });
     } else {
       alert(message + "Esercizio fallito!")
     }

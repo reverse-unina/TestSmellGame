@@ -90,9 +90,9 @@ public class AssignmentController {
             Assignment assignment = objectMapper.readValue(assignmentFile, Assignment.class);
             boolean studentFound = false;
 
-            for (Student student : assignment.getStudenti()) {
-                if (student.getNome().equals(studentName)) {
-                    student.setConsegnato(true);
+            for (Student student : assignment.getStudents()) {
+                if (student.getName().equals(studentName)) {
+                    student.setSubmitted(true);
                     studentFound = true;
                     break;
                 }

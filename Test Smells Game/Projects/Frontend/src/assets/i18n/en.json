@@ -102,10 +102,13 @@
   "Hai già completato l'esperimento": "You have already completed the assignment",
   "Livello": "Level",
   "Esercizi completati": "Exercises completed",
-  "Badge ottenuto dopo aver completato 10 esercizi": "Badge obtained after completing 10 exercises",
-  "Badge ottenuto dopo aver completato 20 esercizi": "Badge obtained after completing 20 exercises",
-  "Badge ottenuto dopo aver completato 30 esercizi": "Badge obtained after completing 30 exercises",
+  "Badge ottenuto dopo aver completato": "Badge obtained after completing",
+  "esercizi": "exercises",
   "Congratulazioni! Hai raggiunto il livello 2": "Congratulations! You have reached level 2",
   "Congratulazioni! Hai raggiunto il livello 3": "Congratulations! You have reached level 3",
-  "Congratulazioni! Hai sbloccato un nuovo badge, visualizzalo nella pagina profilo": "Congratulations! You have unlocked a new badge, view it on your profile page"
+  "Congratulazioni! Hai sbloccato un nuovo badge, visualizzalo nella pagina profilo": "Congratulations! You have unlocked a new badge, view it on your profile page",
+  "Data": "Date",
+  "Tipo": "Type",
+  "competitivo": "competitive",
+  "collaborativo": "collaborative"
 }

@@ -62,7 +62,7 @@ export class AssignmentsListRoute implements OnInit {
   checkAssignmentPresence(): number {
     let count = 0;
     this.assignments.forEach(assignment => {
-      if (assignment.studenti.some(student => student.nome === this.currentUser?.userName)) {
+      if (assignment.students.some(student => student.name === this.currentUser?.userName)) {
         count++;
       }
     });

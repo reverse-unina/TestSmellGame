@@ -1,7 +1,7 @@
 <div class="container">
   <div class="assignment-header">
     <h1>{{ assignmentName }}</h1>
-    <div *ngIf="assignment && assignment.studenti && assignment.studenti.length > 0">
+    <div *ngIf="assignment && assignment.students && assignment.students.length > 0">
       <p>
         <strong style="color: #B22222;">{{ 'End time' | translate }}</strong>: <strong style="color: #B22222;">{{ this.currentStudent.fine }}</strong>
       </p>
@@ -103,7 +103,7 @@
 
         </div>
       </div>
-      <button *ngIf="assignment?.tipo === 'collaborativo' && currentStudent.consegnato === true"
+      <button *ngIf="assignment?.type === 'collaborativo' && currentStudent.submitted === true"
               type="button"
               class="btn btn-primary"
               [routerLink]="'/assignments/leaderboard/' + exerciseName">

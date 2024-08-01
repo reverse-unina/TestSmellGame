@@ -21,14 +21,15 @@ export class CheckGameExListRoute implements OnInit {
               private _router: Router,
               private fb: FormBuilder,
               private http: HttpClient
-  ) { this.initLevelConfig(); }
-
-               async initLevelConfig() {
-                     // @ts-ignore
-                     await import('src/assets/assets/level_config.json').then((data) => {
-                       this.config = data;
-                     });
-                   }
+  ) { this.exerciseService.getLevelConfig().subscribe(
+                (data: levelConfig) => {
+                  this.config = data;
+                  console.log('LevelConfig:', this.config);
+                },
+                error => {
+                  console.error('Error fetching level config:', error);
+                }
+              );}
 
   private config!: levelConfig;
   exercises = new Array<any>();
@@ -49,6 +50,8 @@ export class CheckGameExListRoute implements OnInit {
             this.waitingForServer = false;
           }
         );
+
+
 
     this.waitingForServer = true;
     this.exerciseService.getExercises().subscribe(response =>{

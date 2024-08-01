@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../model/user/user.model';
 import { HttpClient } from '@angular/common/http';
-import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import { ExerciseService } from '../../services/exercise/exercise.service'
 
 @Component({
   selector: 'app-profile-route',
@@ -15,23 +16,43 @@ export class ProfileRouteComponent implements OnInit {
   user!: User;
   userLevel!: string;
 
-  constructor(private userService: UserService, private http: HttpClient) {
-    this.initLevelConfig();
-    }
+  constructor(private userService: UserService, private exerciseService: ExerciseService, private http: HttpClient) {
 
-  async initLevelConfig() {
-        // @ts-ignore
-        await import('src/assets/assets/level_config.json').then((data) => {
-          this.config = data;
-        });
-      }
+    }
 
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe(user => {
       this.user = user;
-      this.setUserLevel();
     });
+    this.exerciseService.getLevelConfig().subscribe(
+              (data: levelConfig) => {
+                  this.config = data;
+                  this.setUserLevel();
+                  console.log('LevelConfig:', this.config);
+              },
+              error => {
+                  console.error('Error fetching level config:', error);
+          });
   }
+
+  getBadgeValue(index: number): string {
+    const keys = Object.keys(this.config.badgeValues).map(key => Number(key));
+    if (index >= 0 && index < keys.length) {
+      const key = keys[index];
+      return this.config.badgeValues[key];
+    }
+    throw new Error('Indice fuori dal range');
+  }
+
+
+  getBadgeValueKey(index: number): number {
+      const keys = Object.keys(this.config.badgeValues).map(key => Number(key));
+      return keys[index];
+    }
+
+  getBadgeUrl(badgeName: string): string {
+      return this.exerciseService.getBadgeUrl(badgeName);
+    }
 
   private setUserLevel(): void {
     if (this.user.exp < this.config.expValues[0]) {

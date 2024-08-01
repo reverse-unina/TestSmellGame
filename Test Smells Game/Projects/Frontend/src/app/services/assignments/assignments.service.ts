@@ -22,14 +22,14 @@ export class AssignmentsService {
 
   getAssignmentByName(name: string): Observable<Assignment | undefined> {
        return this.getAssignments().pipe(
-         map(assignments => assignments.find(assignment => assignment.nome === name))
+         map(assignments => assignments.find(assignment => assignment.name === name))
        );
      }
 
    getAssignmentsForStudent(studentName: string): Observable<Assignment[]> {
          return this.getAssignments().pipe(
            map(assignments => assignments.filter(assignment =>
-             assignment.studenti.some(student => student.nome === studentName)
+             assignment.students.some(student => student.name === studentName)
            ))
          );
        }
@@ -38,7 +38,7 @@ export class AssignmentsService {
          return this.getAssignmentByName(assignmentName).pipe(
            map(assignment => {
              if (assignment) {
-               return assignment.studenti.find(student => student.nome === studentName);
+               return assignment.students.find(student => student.name === studentName);
              } else {
                return undefined;
              }

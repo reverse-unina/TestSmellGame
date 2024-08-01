@@ -3,34 +3,34 @@ package com.dariotintore.tesi.exerciseservice.Assignment;
 import java.util.List;
 
 public class Assignment {
-    private String nome;
-    private String data;
-    private List<Student> studenti;
-    private String tipo;
+    private String name;
+    private String date;
+    private List<Student> students;
+    private String type;
     
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getData() {
-		return data;
+	public String getDate() {
+		return date;
 	}
-	public void setData(String data) {
-		this.data = data;
+	public void setDate(String date) {
+		this.date = date;
 	}
-	public List<Student> getStudenti() {
-		return studenti;
+	public List<Student> getStudents() {
+		return students;
 	}
-	public void setStudenti(List<Student> studenti) {
-		this.studenti = studenti;
+	public void setStudents(List<Student> students) {
+		this.students = students;
 	}
-	public String getTipo() {
-		return tipo;
+	public String getType() {
+		return type;
 	}
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setType(String type) {
+		this.type = type;
 	}
 
      

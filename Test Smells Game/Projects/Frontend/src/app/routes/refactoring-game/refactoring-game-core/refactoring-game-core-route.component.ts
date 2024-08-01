@@ -7,6 +7,7 @@ import { LeaderboardService } from "../../../services/leaderboard/leaderboard.se
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ProgressBarMode } from "@angular/material/progress-bar";
 import { SmellDescription } from "../../../model/SmellDescription/SmellDescription.model";
+import { User } from "../../../model/user/user.model";
 import { ExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
 import { UserService } from '../../../services/user/user.service';
 
@@ -22,6 +23,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
   @ViewChild('output') output: any;
 
   compiledExercise !: Exercise;
+  user!: User;
   exerciseName = this.route.snapshot.params['exercise'];
 
   progressBarMode: ProgressBarMode = 'determinate'
@@ -147,8 +149,15 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
                                            this.refactoredCoverage,
                                            this.smells).subscribe(result => {
         this.showPopUp("Solution saved");
-        this.stopLoading()
+        this.stopLoading();
+        this.userService.getCurrentUser().subscribe((user: User | any) => {
+              this.user = user;
+            });
         this.userService.increaseUserExp();
+        this.exerciseService.logEvent(this.user.userName, 'Completed ' + this.exerciseName + ' in refactoring game mode').subscribe({
+                    next: response => console.log('Log event response:', response),
+                    error: error => console.error('Error submitting log:', error)
+                  });
       },error => {
         this.showPopUp("Server has a problem");
         this.stopLoading()

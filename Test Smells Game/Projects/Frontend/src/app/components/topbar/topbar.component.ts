@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {Subscription} from "rxjs";
 import {UserService} from "../../services/user/user.service";
+import {ExerciseService} from "../../services/exercise/exercise.service";
 import {User} from "../../model/user/user.model";
 import {HttpClient} from '@angular/common/http';
 import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
@@ -18,17 +19,13 @@ export class TopbarComponent implements OnInit, OnDestroy {
 
   private userSub: Subscription | undefined;
   constructor(private userService: UserService,
+              private exerciseService: ExerciseService,
               private authService: AuthService,
               private http: HttpClient) {
-                this.initLevelConfig();
+
               }
 
-            async initLevelConfig() {
-                  // @ts-ignore
-                  await import('src/assets/assets/level_config.json').then((data) => {
-                    this.config = data;
-                  });
-                }
+
 
   ngOnInit(): void {
     this.userSub = this.userService.user.subscribe(user => {
@@ -36,6 +33,14 @@ export class TopbarComponent implements OnInit, OnDestroy {
       this.currentUser = user;
     });
     console.log("Component created");
+    this.exerciseService.getLevelConfig().subscribe(
+                              (data: levelConfig) => {
+                                  this.config = data;
+                                  console.log('LevelConfig:', this.config);
+                              },
+                              error => {
+                                  console.error('Error fetching level config:', error);
+                          });
   }
 
   ngOnDestroy(): void {

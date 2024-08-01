@@ -197,13 +197,19 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
       if (this.smellList.length <= this.exerciseConfiguration.refactoring_game_configuration.smells_allowed) {
           this.userService.increaseUserExp();
-          const studentName = this.currentStudent?.nome;
-          const assignmentName = this.assignment?.nome;
+          const studentName = this.currentStudent?.name;
+          const assignmentName = this.assignment?.name;
 
           const productionCode = this.userCode;
           const testCode = this.testing.injectedCode;
           const shellCode = this.shellCode;
           const results = this.generateResultsContent();
+
+          this.userService.increaseUserExp();
+          this.exerciseService.logEvent(this.currentUser.userName, 'Completed the assignment ' + (this.assignmentName || '')).subscribe({
+                next: response => console.log('Log event response:', response),
+                error: error => console.error('Error submitting log:', error)
+           });
 
           if (assignmentName && studentName) {
               this.assignmentsService.submitAssignment(assignmentName, studentName, productionCode, testCode, shellCode, results).subscribe({
@@ -226,7 +232,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
         this.downloadFile(`${studentName}_TestCode.java`, this.testing.injectedCode);
         this.downloadFile(`${studentName}_ShellCode.java`, this.shellCode);
         this.currentStudent.consegnato = true;
-        if (this.assignment?.tipo === 'collaborativo')
+        if (this.assignment?.type === 'collaborativo')
          this.publishSolutionToLeaderboard();
         else
           this.router.navigate(['/']);
@@ -395,7 +401,7 @@ async initSmellDescriptions() {
       console.error('Current student not found');
       return;
     }
-    const endTime = this.getAssignmentEndTime(this.assignment!.data, currentStudent.fine);
+    const endTime = this.getAssignmentEndTime(this.assignment!.date, currentStudent.end);
     console.log('End time for assignment:', endTime);
     this.checkInterval = setInterval(() => {
       const currentTime = new Date();
@@ -406,7 +412,7 @@ async initSmellDescriptions() {
           });
           if (!this.currentStudent.consegnato)
             this.submitAssignment();
-            if (this.assignment?.tipo === 'collaborativo')
+            if (this.assignment?.type === 'collaborativo')
               this.router.navigate(['/assignments/leaderboard/' + this.exerciseName]);
           else
             this.router.navigate(['/home']);

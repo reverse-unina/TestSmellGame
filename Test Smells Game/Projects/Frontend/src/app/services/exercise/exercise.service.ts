@@ -4,6 +4,7 @@ import {catchError, switchMap} from 'rxjs/operators';
 import {environment} from "../../../environments/environment.prod";
 import {ExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { Observable, forkJoin } from 'rxjs';
+import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,29 @@ export class ExerciseService {
 
     getAllConfigFiles(): Observable<any[]> {
       return this.http.get<any[]>(environment.exerciseServiceUrl + '/files/configurations');
+    }
+
+  getLevelConfig(): Observable<levelConfig> {
+      const HTTPOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+        }),
+        responseType: 'json' as 'json'
+      };
+      return this.http.get<levelConfig>(environment.exerciseServiceUrl + '/levelconfig/get-levelconfig', HTTPOptions);
+    }
+
+  getBadgeUrl(badgeName: string): string {
+      return environment.exerciseServiceUrl + '/levelconfig/badge/' + badgeName;
+    }
+
+  logEvent(player: string, eventDescription: string): Observable<any> {
+      const eventLog = {
+        player,
+        eventDescription,
+        timestamp: new Date().toISOString()
+      };
+      return this.http.post(environment.exerciseServiceUrl + '/files/log-event', eventLog, { responseType: 'json' });
     }
 
 }

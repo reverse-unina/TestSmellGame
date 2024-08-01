@@ -12,26 +12,26 @@
 
 <div *ngFor="let assignment of assignments">
   <div *ngIf="checkAssignmentPresence() > 0" style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-    <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.nome }}</h2>
-    <p style="font-size: 16px; color: #666; margin-bottom: 12px;">Data: {{ assignment.data }}</p>
-    <p style="font-size: 16px; color: #666; margin-bottom: 12px;">Tipo: {{ assignment.tipo }}</p>
+    <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.name }}</h2>
+    <p style="font-size: 16px; color: #666; margin-bottom: 12px;"> {{ 'Date' | translate }}: {{ assignment.date }}</p>
+    <p style="font-size: 16px; color: #666; margin-bottom: 12px;">{{ 'Type' | translate }}: {{ assignment.type | translate }}</p>
 
     <ul style="list-style-type: none; padding: 0;">
-      <ng-container *ngFor="let student of assignment.studenti">
-        <ng-container *ngIf="student.nome === currentUser?.userName">
-          <ng-container *ngIf="assignment.tipo === 'competitivo' && student.consegnato === true">
+      <ng-container *ngFor="let student of assignment.students">
+        <ng-container *ngIf="student.name === currentUser?.userName">
+          <ng-container *ngIf="assignment.type === 'competitivo' && student.submitted === true">
             <li style="margin-bottom: 8px;">
               <span style="color: red;">{{ 'You have already completed the assignment' | translate }}</span>
             </li>
           </ng-container>
-          <ng-container *ngIf="!(assignment.tipo === 'competitivo' && student.consegnato === true)">
-            <li *ngIf="isAssignmentActive(assignment.data, student.inizio, student.fine)" style="margin-bottom: 8px;">
-              <a [routerLink]="['/assignments', assignment.nome, student.esercizio]" style="text-decoration: none; color: #007bff;">
-                {{ student.esercizio }}
+          <ng-container *ngIf="!(assignment.type === 'competitivo' && student.submitted === true)">
+            <li *ngIf="isAssignmentActive(assignment.date, student.start, student.end)" style="margin-bottom: 8px;">
+              <a [routerLink]="['/assignments', assignment.name, student.exercise]" style="text-decoration: none; color: #007bff;">
+                {{ student.exercise }}
               </a>
-              ({{ student.inizio }} - {{ student.fine }})
+              ({{ student.start }} - {{ student.end }})
             </li>
-            <li *ngIf="!isAssignmentActive(assignment.data, student.inizio, student.fine)" style="margin-bottom: 8px;">
+            <li *ngIf="!isAssignmentActive(assignment.date, student.start, student.end)" style="margin-bottom: 8px;">
               <span style="color: red;">{{ 'The assignment is unavailable' | translate }}</span>
             </li>
           </ng-container>

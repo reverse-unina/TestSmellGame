@@ -1,0 +1,8 @@
+com\dariotintore\tesi\exerciseservice\Config\WebConfig.class
+com\dariotintore\tesi\exerciseservice\Service\FileService.class
+com\dariotintore\tesi\exerciseservice\Assignment\Assignment.class
+com\dariotintore\tesi\exerciseservice\Controller\FileController.class
+com\dariotintore\tesi\exerciseservice\Assignment\Student.class
+com\dariotintore\tesi\exerciseservice\Config\SecurityConfig.class
+com\dariotintore\tesi\exerciseservice\Controller\AssignmentController.class
+com\dariotintore\tesi\exerciseservice\ExerciseserviceApplication.class

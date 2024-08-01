@@ -1,21 +1,21 @@
 {
-  "nome": "esperimento2",
-  "data": "2024-05-19",
-  "studenti": [
+  "name": "esperimento2",
+  "date": "2024-05-19",
+  "students": [
     {
-      "nome": "loriszn",
-      "esercizio": "ByteVector",
-      "inizio": "16:00",
-      "fine": "16:30",
-      "consegnato": false
+      "name": "loriszn",
+      "exercise": "ByteVector",
+      "start": "16:00",
+      "end": "16:30",
+      "submitted": false
     },
     {
-      "nome": "maradona10",
-      "esercizio": "FTPFile",
-      "inizio": "16:00",
-      "fine": "16:30",
-      "consegnato": false
+      "name": "maradona10",
+      "exercise": "FTPFile",
+      "start": "16:00",
+      "end": "16:30",
+      "submitted": false
     }
   ],
-  "tipo": "collaborativo"
+  "type": "collaborativo"
 }

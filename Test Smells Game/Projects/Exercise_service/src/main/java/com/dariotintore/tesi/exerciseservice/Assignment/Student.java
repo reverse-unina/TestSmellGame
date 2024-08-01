@@ -2,40 +2,41 @@ package com.dariotintore.tesi.exerciseservice.Assignment;
 
 
 public class Student {
-	private String nome;
-    private String esercizio;
-    private String inizio;
-    private String fine;
-    private boolean consegnato;
-	public String getNome() {
-		return nome;
+	private String name;
+    private String exercise;
+    private String start;
+    private String end;
+    private boolean submitted;
+	
+	public String getName() {
+		return name;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public String getEsercizio() {
-		return esercizio;
+	public String getExercise() {
+		return exercise;
 	}
-	public void setEsercizio(String esercizio) {
-		this.esercizio = esercizio;
+	public void setExercise(String exercise) {
+		this.exercise = exercise;
 	}
-	public String getInizio() {
-		return inizio;
+	public String getStart() {
+		return start;
 	}
-	public void setInizio(String inizio) {
-		this.inizio = inizio;
+	public void setStart(String start) {
+		this.start = start;
 	}
-	public String getFine() {
-		return fine;
+	public String getEnd() {
+		return end;
 	}
-	public void setFine(String fine) {
-		this.fine = fine;
+	public void setEnd(String end) {
+		this.end = end;
 	}
-	public boolean isConsegnato() {
-		return consegnato;
+	public boolean isSubmitted() {
+		return submitted;
 	}
-	public void setConsegnato(boolean consegnato) {
-		this.consegnato = consegnato;
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
 	}
 
 }

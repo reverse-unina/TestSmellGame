@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import { ExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
-import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 
 @Component({
   selector: 'app-refactoring-game-exercise-list',
@@ -17,20 +17,13 @@ export class RefactoringGameExListRouteComponent implements OnInit {
               private userService: UserService,
               private zone: NgZone,
               private _router: Router,
-              private http: HttpClient) { this.initLevelConfig(); }
+              private http: HttpClient) { }
 
   private config!: levelConfig;
   exercises = new Array<any>();
   exerciseConfigurations = new Array<ExerciseConfiguration>();
   serverProblems = false;
   waitingForServer!: boolean;
-
-  async initLevelConfig() {
-        // @ts-ignore
-        await import('src/assets/assets/level_config.json').then((data) => {
-          this.config = data;
-        });
-      }
 
   ngOnInit(): void {
     this.waitingForServer = true;
@@ -46,6 +39,16 @@ export class RefactoringGameExListRouteComponent implements OnInit {
         this.waitingForServer = false;
       }
     );
+
+    this.exerciseService.getLevelConfig().subscribe(
+          (data: levelConfig) => {
+            this.config = data;
+            console.log('LevelConfig:', this.config);
+          },
+          error => {
+            console.error('Error fetching level config:', error);
+          }
+        );
 
     this.exerciseService.getExercises().subscribe(
       response => {
