@@ -462,7 +462,7 @@ async initSmellDescriptions() {
 
   saveResultsFile() {
     if (this.exerciseSuccess) {
-      const studentName = this.currentStudent ? this.currentStudent.nome : "";
+      const studentName = this.currentStudent ? this.currentStudent.name : "";
       const filename = `${studentName}_results.txt`;
       const content = this.generateResultsContent();
 
