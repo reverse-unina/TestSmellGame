@@ -3,7 +3,7 @@
     <h1>{{ assignmentName }}</h1>
     <div *ngIf="assignment && assignment.students && assignment.students.length > 0">
       <p>
-        <strong style="color: #B22222;">{{ 'End time' | translate }}</strong>: <strong style="color: #B22222;">{{ this.currentStudent.fine }}</strong>
+        <strong style="color: #B22222;">{{ 'End time' | translate }}</strong>: <strong style="color: #B22222;">{{ this.currentStudent.end }}</strong>
       </p>
     </div>
 
