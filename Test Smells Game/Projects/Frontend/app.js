@@ -10,7 +10,7 @@ function createWindow() {
         width: 1000,
         height: 800
     })
-    appWindow.loadFile('dist/frontend-online/index.html');
+    appWindow.loadFile('dist/frontend/index.html');
 
     appWindow.on('closed', function () {
         appWindow = null
