@@ -5,6 +5,8 @@ Di seguito sono elencate le operazioni per installare il software.
 All'interno della directory "Test Smells Game/Projects" è presente un file "setup.bat" che, una volta avviato, crea
 l'infrastruttura server eseguendo i comandi elencati in modo sequenziale e automatico.
 
+# N.B.
+I comandi presenti all'interno di questo file e nel file di setup permettono di installare la versione con il Frontend "Online", mentre nella directory "/Test Smells Game/Projects" è presente la cartella "Frontend Electron" che contiene l'applicativo desktop eseguibile per avviare il frontend nella modalità "Offline".
 
 # Compiler_service
 
