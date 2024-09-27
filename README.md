@@ -3,7 +3,7 @@
 Di seguito sono elencate le operazioni per installare il software.
 
 All'interno della directory "Test Smells Game/Projects" è presente un file "setup.bat" che, una volta avviato, crea
-l'infrastruttura server eseguendo i comandi elencati in modo sequenziale e automatico.
+l'infrastruttura server eseguendo i comandi elencati in questo file in modo sequenziale e automatico.
 
 # N.B.
 I comandi presenti all'interno del file di setup (build automatica) permettono di installare la versione Thin Client del sistema (frontend distribuito sul container docker) e non comprendono l'installazione della versione Electron, che è possibile installare a parte seguendo i comandi mostrati nell'apposita sezione di questo documento.
