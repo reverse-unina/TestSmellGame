@@ -134,4 +134,4 @@ npx electron-packager ./ "Test Smells Game" --platform=win32
 ```
 
 Se desideri eseguire il packaging su piattaforme diverse, quali Linux o macOS, puoi consultare la guida di Electron, disponibile al seguente link:
-https://github.com/electron/packager
+https://github.com/electron/packager.
