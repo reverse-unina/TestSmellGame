@@ -120,8 +120,7 @@ In questo scenario avremo quindi installato correttamente il server in locale.
 
 # Installazione Client Electron
 
-Per l'installazione della versione frontend Electron bisogna aprire il progetto presente in "Test Smells Game/Projects/Frontend_electron" (con un IDE appropriato) ed 
-eseguire i seguenti comandi:
+Per l'installazione della versione frontend Electron bisogna aprire il progetto presente in "Test Smells Game/Projects/Frontend_electron" ed eseguire i seguenti comandi:
 
 ## - Electron Build & Run
 ```
