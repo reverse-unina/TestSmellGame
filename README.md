@@ -6,7 +6,7 @@ All'interno della directory "Test Smells Game/Projects" è presente un file "set
 l'infrastruttura server eseguendo i comandi elencati in modo sequenziale e automatico.
 
 # N.B.
-I comandi presenti all'interno di questo file e nel file di setup permettono di installare la versione con il Frontend "Online", mentre nella directory "/Test Smells Game/Projects" è presente la cartella "Frontend Electron" che contiene l'applicativo desktop eseguibile per avviare il frontend nella modalità "Offline".
+I comandi presenti all'interno di questo file e nel file di setup permettono di installare la versione Thin Client del sistema (frontend distribuito sul container docker) e non comprendono l'installazione della versione Electron, che è possibile installare a parte seguento i comandi mostrati nell'apposita sezione di questo documento.
 
 # Compiler_service
 
@@ -99,7 +99,8 @@ docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esp
 ```
 
 La popolazione del volume per gli assignments avviene copiando i file json nell'immagine "assignments-image" (con il comando "COPY nome_file.json /assignments/" nel file "Dockerfile.assignments")
-ed eseguendo il comando "docker run" citato sopra, dando come parametri i nomi dei file json appena inseriti. Inoltre, bisogna aggiungere manualmente il nome del file json nel metodo "getAssignments()"
+ed eseguendo il comando "docker run" citato sopra, dando come parametri i nomi dei file json appena inseriti. Inoltre, bisogna aggiungere manualmente il nome del file json nel 
+metodo "getAssignments()"
 della classe "AssignmentsService" all'interno del frontend.
 
 ## - Docker Compose
@@ -115,3 +116,22 @@ In seguito all’avvio di tutti i container è possibile accedere all’applicat
 http://localhost:4200/
 
 In questo scenario avremo quindi installato correttamente il server in locale. 
+
+
+# Installazione Client Electron
+
+Per l'installazione della versione frontend Electron bisogna aprire il progetto presente in "Test Smells Game/Projects/Frontend_electron" (con un IDE appropriato) ed 
+eseguire i seguenti comandi:
+
+## - Electron Build & Run
+```
+npm run electron-build
+```
+
+## - Electron Packager
+```
+npx electron-packager ./ "Test Smells Game" --platform=win32
+```
+
+Se desideri eseguire il packaging su piattaforme diverse, quali Linux o macOS, puoi consultare la guida di Electron, disponibile al seguente link:
+https://github.com/electron/packager
