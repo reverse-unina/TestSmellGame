@@ -93,9 +93,7 @@ docker build -f Dockerfile.assignments -t assignments-image .
 ## - Docker Volume Populate
 
 ```
-docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/ && mkdir -p /mnt/levelconfig &&
- cp /assignments/levelconfig/levelConfig.json /mnt/levelconfig/
-&& cp /assignments/levelconfig/badge_bronze.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_silver.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_gold.png /mnt/levelconfig/" 
+docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/ && mkdir -p /mnt/levelconfig && cp /assignments/levelconfig/levelConfig.json /mnt/levelconfig/ && cp /assignments/levelconfig/badge_bronze.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_silver.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_gold.png /mnt/levelconfig/"
 ```
 
 La popolazione del volume per gli assignments avviene copiando i file json nell'immagine "assignments-image" (con il comando "COPY nome_file.json /assignments/" nel file "Dockerfile.assignments")
