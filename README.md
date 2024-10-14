@@ -127,8 +127,5 @@ npm run electron-build
 
 ## - Electron Packager
 ```
-npx electron-packager ./ "Test-Smells-Game" --platform=win32
+electron-packager .
 ```
-
-Se bisogna eseguire il packaging su piattaforme diverse, quali Linux o macOS, è possibile consultare la guida di Electron, disponibile al seguente link:
-https://github.com/electron/packager.
