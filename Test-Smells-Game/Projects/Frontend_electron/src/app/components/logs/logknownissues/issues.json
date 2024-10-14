@@ -1,0 +1,8 @@
+{
+  "issues":[
+    {
+      "text": "La loading bar non smette di caricarsi quando una compilazione ha esito di fallimento",
+      "checked":true
+    }
+  ]
+}

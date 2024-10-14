@@ -1,0 +1,2 @@
+-    readonly remote: Electron.Remote;
++    readonly remote: any;

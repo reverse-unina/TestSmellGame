@@ -1,0 +1,13 @@
+<div class="profile-container" *ngIf="user && config">
+  <div class="user-info">
+    <h1 class="user-name">{{ user.userName }}</h1>
+    <p class="user-email">{{ user.email }}</p>
+    <p class="user-level">{{ 'Level' | translate }} : {{ userLevel }}</p>
+    <p class="user-exp">{{ 'Exercises completed' | translate }} : {{ user.exp }}</p>
+    <div class="badges">
+      <img *ngIf="user.exp >= getBadgeValueKey(0)" [src]="getBadgeUrl(getBadgeValue(0))" alt="Bronze Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing' | translate }} {{ getBadgeValueKey(0) }} {{ 'exercises' | translate }}">
+      <img *ngIf="user.exp >= getBadgeValueKey(1)" [src]="getBadgeUrl(getBadgeValue(1))" alt="Silver Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing' | translate }} {{ getBadgeValueKey(1) }} {{ 'exercises' | translate }}">
+      <img *ngIf="user.exp >= getBadgeValueKey(2)" [src]="getBadgeUrl(getBadgeValue(2))" alt="Gold Badge" style="width: 70px; height: 70px; margin: 5px;" title="{{ 'Badge obtained after completing' | translate }} {{ getBadgeValueKey(2) }} {{ 'exercises' | translate }}">
+    </div>
+  </div>
+</div>

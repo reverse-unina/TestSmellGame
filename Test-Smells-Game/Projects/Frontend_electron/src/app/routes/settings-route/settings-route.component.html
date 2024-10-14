@@ -1,0 +1,174 @@
+<p style="color: red">
+  Posizionare il cursore sopra l'icona
+  <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Informazione">info</mat-icon>
+  per ricevere informazioni aggiuntive riguardo l'impostazione in questione
+</p>
+<div class="card">
+  <div class="card-header">
+    {{ 'Language' | translate }}
+  </div>
+  <div class="card-body">
+    <form #langageForm="ngForm">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="languageRadio" value="en" [(ngModel)]="selectedLanguage">
+        <label class="form-check-label">
+          {{ 'English' | translate }}
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="languageRadio" value="it" [(ngModel)]="selectedLanguage">
+        <label class="form-check-label">
+          {{ 'Italian' | translate }}
+        </label>
+      </div>
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="switchLanguage(selectedLanguage)"
+      >
+        {{ 'Save' | translate }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div class="card">
+  <div class="card-header">
+    {{ 'Environments' | translate }}
+  </div>
+  <div class="card-body">
+    <form [formGroup]="environmentForm" (ngSubmit)="submitEnvironmentForm(environmentForm)">
+      <div class="form-group">
+        <label for="user_service">User Service Url</label>
+        <input
+          type="url"
+          id="user_service"
+          class="form-control"
+          ngModel
+          name="user_service"
+          required
+        />
+        <label for="compiler_service" >Compiler Service url</label>
+        <input
+          type="url"
+          id="compiler_service"
+          class="form-control"
+          ngModel
+          name="compiler_service"
+          required
+        />
+        <label for="exercise_service">Exercise Service url</label>
+        <input
+          type="url"
+          id="exercise_service"
+          class="form-control"
+          ngModel
+          name="exercise_service"
+          required
+        />
+        <label for="leaderboard_service">Leaderboard Service url</label>
+        <input
+          type="url"
+          id="leaderboard_service"
+          class="form-control"
+          ngModel
+          name="leaderboard_service"
+          required
+        />
+      </div>
+
+      <div>
+        <button
+          class="btn btn-primary"
+          type="submit"
+        >
+          OK
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div class="card">
+  <div class="card-header">
+    Compile mode
+  </div>
+  <div class="card-body">
+    <form #checkboxForm="ngForm" (submit)="submitCompileCheckboxes(checkboxForm)">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="Local" [checked]="compileType == 1" value="Local" (change)="clickCompileCheckbox(1)">
+        <label class="form-check-label" for="Local">
+          Local
+        </label>
+          <mat-icon style="margin-left:10px; font-size: 12px" matTooltip="La compilazione in locale necessita che sia installato Java e Maven ed utilizza le risorse del PC del giocatore">info</mat-icon>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="Cloud" value="Cloud" [checked]="compileType == 2" [disabled]="!isUserAuthenticated" (change)="clickCompileCheckbox(2)">
+        <label class="form-check-label" for="Cloud">
+          Cloud <p *ngIf="!isUserAuthenticated" style="color: red"> To use cloud you need to login</p>
+        </label>
+        <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="La compilazione Cloud non necessita alcuna dipendenza e viene effettuata sul server di compilazione impostato negli environments">info</mat-icon>
+      </div>
+      <button
+        class="btn btn-primary"
+        type="submit"
+      >
+        OK
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div class="card">
+  <div class="card-header">
+    Exercise retrieval
+    <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Questa impostazione definisce le modalità in cui vengono recuperati gli esercizi da utilizzare per il gioco">info</mat-icon>
+  </div>
+  <div class="card-body">
+    <form #checkboxForm="ngForm" (submit)="submitExerciseCheckboxes(checkboxForm)">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="LocalExercises" value="LocalExercises" [checked]="exerciseType == 1" (change)="clickExerciseCheckbox(1)">
+        <label class="form-check-label" for="LocalExercises">
+          GitHub
+        </label>
+        <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Gli esercizi vengono scaricati in locale, recuperandoli attraverso una repository GitHub, è necessario che sul PC del giocatore sia installato Git">info</mat-icon>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="CloudExercises" value="CloudExercises" [checked]="exerciseType == 2" (change)="clickExerciseCheckbox(2)">
+        <label class="form-check-label" for="CloudExercises">
+          Exercise Service
+        </label>
+        <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Gli esercizi vengono recuperati dal server in Cloud, non è necessaria alcuna dipendenza">info</mat-icon>
+      </div>
+      <button
+        class="btn btn-primary"
+        type="submit"
+      >
+        OK
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+
+<div class="card">
+  <div class="card-header">
+    Local Storage
+  </div>
+  <div class="card-body">
+    <form #localStorageForm="ngForm">
+      <button class="btn btn-primary btn-sm bg-light d-flex align-items-center" style="width: 32px; height: 32px;" type="button" (click)="clearLocalStorage()">
+        <img src="assets/icons/clear_local_storage.png" alt="Clear Local Storage Icon" style="max-width: 16px; max-height: 16px; margin-right: 8px;">
+        <span>Local Storage</span>
+      </button>
+    </form>
+  </div>
+</div>
+

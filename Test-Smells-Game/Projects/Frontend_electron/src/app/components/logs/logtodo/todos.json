@@ -1,0 +1,33 @@
+{
+  "todos":[
+    {
+      "text": "Configurazione per esecuzione all'esterno",
+      "checked":false
+    },
+
+    {
+      "text": "Scenari di Gamification (missioni, premi, badge, reward & award)",
+      "checked":true
+    },
+    {
+      "text": "Funzionalità per sessioni sperimentali",
+      "checked":true
+    },
+    {
+      "text": "Possibilità di allargare/restringere finestre codice, miglioramento back/forward & colori",
+      "checked":true
+    },
+    {
+      "text": "Possibilità di usare tsdetect da linea di comando senza gioco",
+      "checked":false
+    },
+    {
+      "text": "Curare la parte di configurazione esperimenti",
+      "checked":true
+    },
+    {
+      "text": "Traduzione in inglese e/o internazionalizzazione del testo",
+      "checked":true
+    }
+  ]
+}

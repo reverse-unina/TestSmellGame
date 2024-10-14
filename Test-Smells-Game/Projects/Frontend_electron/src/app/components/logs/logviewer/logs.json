@@ -1,0 +1,28 @@
+{
+  "logs": [
+    {
+      "title": "Elementi di gamification",
+      "secondarytitle": "Aggiunta",
+      "description": "Aggiunta di scenari di gamification: livello giocatore, esperienza giocatore (esercizi completati), difficoltà esercizi e badges",
+      "progress" : "100"
+    },
+    {
+      "title": "Sessioni sperimentali",
+      "secondarytitle": "Aggiunta",
+      "description": "Aggiunti esperimenti competitivi e collaborativi ",
+      "progress" : "100"
+    },
+    {
+      "title": "Traduzione del testo",
+      "secondarytitle": "Aggiunta",
+      "description": "Aggiunta la possibilità di selezionare inglese o italiano tra le lingue",
+      "progress" : "100"
+    },
+    {
+      "title": "Miglioramenti grafici/tecnici",
+      "secondarytitle": "Aggiornamento",
+      "description": "Aggiornamento colore schermata, salvataggio del codice corrente dell'esercizio nel localstorage, possibilità di allargare/restringere la finestra del code editor",
+      "progress" : "100"
+    }
+  ]
+}

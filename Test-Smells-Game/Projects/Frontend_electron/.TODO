@@ -1,0 +1,19 @@
+Aggiungere un breadcumb per poter tornare indietro
+Aggiungere il punteggio alla leaderboard
+
+
+(node:15260) UnhandledPromiseRejectionWarning: Error: ENOENT: no such file or directory, scandir 'C:\Users\Dario\Desktop\Tesi-Frontend-detached11-3\DarioTintore-Tesi-win32-x64\resources\app\src/external/compiler/LocalExercises'
+    at Object.readdirSync (node:fs:1451:3)
+    at t.readdirSync (node:electron/js2c/asar_bundle:2:10837)
+    at Object.getExerciseFilesFromLocal (C:\Users\Dario\Desktop\Tesi-Frontend-detached11-3\DarioTintore-Tesi-win32-x64\resources\app\src\external\electron\repository-service.js:15:18)
+    at IpcMainImpl.<anonymous> (C:\Users\Dario\Desktop\Tesi-Frontend-detached11-3\DarioTintore-Tesi-win32-x64\resources\app\src\external\electron\app.js:89:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+(Use `DarioTintore-Tesi --trace-warnings ...` to show where the warning was created)
+(node:15260) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:15260) UnhandledPromiseRejectionWarning: Error: ENOENT: no such file or directory, scandir 'C:\Users\Dario\Desktop\Tesi-Frontend-detached11-3\DarioTintore-Tesi-win32-x64\resources\app\src/external/compiler/LocalExercises'
+    at Object.readdirSync (node:fs:1451:3)
+    at t.readdirSync (node:electron/js2c/asar_bundle:2:10837)
+    at Object.getExerciseFilesFromLocal (C:\Users\Dario\Desktop\Tesi-Frontend-detached11-3\DarioTintore-Tesi-win32-x64\resources\app\src\external\electron\repository-service.js:15:18)
+    at IpcMainImpl.<anonymous> (C:\Users\Dario\Desktop\Tesi-Frontend-detached11-3\DarioTintore-Tesi-win32-x64\resources\app\src\external\electron\app.js:89:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+(node:15260) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 2)
