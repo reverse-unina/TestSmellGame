@@ -1,0 +1,21 @@
+{
+  "name": "esperimento2",
+  "date": "2024-05-19",
+  "students": [
+    {
+      "name": "loriszn",
+      "exercise": "ByteVector",
+      "start": "16:00",
+      "end": "16:30",
+      "submitted": false
+    },
+    {
+      "name": "maradona10",
+      "exercise": "FTPFile",
+      "start": "16:00",
+      "end": "16:30",
+      "submitted": false
+    }
+  ],
+  "type": "collaborativo"
+}

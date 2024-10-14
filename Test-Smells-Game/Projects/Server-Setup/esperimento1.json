@@ -1,0 +1,21 @@
+{
+  "name": "esperimento1",
+  "date": "2024-07-18",
+  "students": [
+    {
+      "name": "loriszn",
+      "exercise": "Calculator",
+      "start": "12:00",
+      "end": "20:00",
+      "submitted": false
+    },
+    {
+      "name": "maradona10",
+      "exercise": "Range",
+      "start": "12:00",
+      "end": "13:00",
+      "submitted": false
+    }
+  ],
+  "type": "competitivo"
+}
