@@ -120,6 +120,16 @@ In questo scenario avremo quindi installato correttamente il server in locale.
 
 Per l'installazione della versione frontend Electron bisogna aprire il progetto presente in "Test Smells Game/Projects/Frontend_electron" ed eseguire i seguenti comandi:
 
+## - Npm setup
+```
+npm install
+```
+
+## - Npm update
+```
+npm update
+```
+
 ## - Electron Build & Run
 ```
 npm run electron-build
