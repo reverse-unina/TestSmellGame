@@ -47,6 +47,7 @@ export class UserService {
       currentUser.exp += 1;
       this.user.next(currentUser);
 
+      if (this.config) {
       switch (currentUser.exp) {
         case this.config.expValues[0]:
           this.showSnackBar('Congratulations! You have reached level 2');
@@ -71,6 +72,7 @@ export class UserService {
             });
           }
           break;
+      }
       }
 
       this.http.post(`${this.baseUrl}updateExp`, currentUser).subscribe(
