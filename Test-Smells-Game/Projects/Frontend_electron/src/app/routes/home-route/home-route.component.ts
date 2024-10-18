@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { marked } from 'marked';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-home-route',
@@ -19,7 +20,7 @@ export class HomeRouteComponent implements OnInit {
 
   async loadReadmeContent(): Promise<void> {
     try {
-      const data = await this.http.get('http://localhost:9090/files/readme', { responseType: 'text' }).toPromise();
+      const data = await this.http.get(environment.exerciseServiceUrl + '/files/readme', { responseType: 'text' }).toPromise();
       if (typeof data === 'string') {
         this.readmeContent = await marked(data);
       } else {
