@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { marked } from 'marked';
 import { environment } from 'src/environments/environment.prod';
 
@@ -19,8 +19,16 @@ export class HomeRouteComponent implements OnInit {
   }
 
   async loadReadmeContent(): Promise<void> {
+    const HTTPOptions = {
+      headers: new HttpHeaders({
+        'ngrok-skip-browser-warning': 'true', 
+        'Content-Type': 'text/plain' 
+      }),
+      responseType: 'text' as 'json'
+    };
+
     try {
-      const data = await this.http.get(environment.exerciseServiceUrl + '/files/readme', { responseType: 'text' }).toPromise();
+      const data = await this.http.get(environment.exerciseServiceUrl + '/files/readme', HTTPOptions).toPromise();
       if (typeof data === 'string') {
         this.readmeContent = await marked(data);
       } else {

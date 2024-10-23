@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from "rxjs";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from "../../model/user/user.model";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http'; 
 import { environment } from "../../../environments/environment.prod";
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model";
 import { ExerciseService } from "src/app/services/exercise/exercise.service"
@@ -20,8 +20,14 @@ export class UserService {
   private baseUrl = environment.userServiceUrl + '/users/';
 
   user = new BehaviorSubject<User>(new User());
-  constructor(private snackBar: MatSnackBar, private exerciseService: ExerciseService, private http: HttpClient) {
 
+  constructor(private snackBar: MatSnackBar, private exerciseService: ExerciseService, private http: HttpClient) {}
+
+  private getHttpHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'ngrok-skip-browser-warning': 'true' 
+    });
   }
 
   getCurrentUser(): Observable<User> {
@@ -33,21 +39,21 @@ export class UserService {
   }
 
   increaseUserExp(): void {
-      this.exerciseService.getLevelConfig().subscribe(
-        (data: any) => {
-          this.config = data;
-          console.log('LevelConfig:', this.config);
-        },
-        error => {
-          console.error('Error fetching level config:', error);
-        }
-      );
+    this.exerciseService.getLevelConfig().subscribe(
+      (data: any) => {
+        this.config = data;
+        console.log('LevelConfig:', this.config);
+      },
+      error => {
+        console.error('Error fetching level config:', error);
+      }
+    );
 
-      const currentUser = this.user.value;
-      currentUser.exp += 1;
-      this.user.next(currentUser);
+    const currentUser = this.user.value;
+    currentUser.exp += 1;
+    this.user.next(currentUser);
 
-      if (this.config) {
+    if (this.config) {
       switch (currentUser.exp) {
         case this.config.expValues[0]:
           this.showSnackBar('Congratulations! You have reached level 2');
@@ -73,18 +79,17 @@ export class UserService {
           }
           break;
       }
-      }
-
-      this.http.post(`${this.baseUrl}updateExp`, currentUser).subscribe(
-        response => {
-          console.log('User updated successfully', response);
-        },
-        error => {
-          console.error('Error occurred during updating user', error);
-        }
-      );
     }
 
+    this.http.post(`${this.baseUrl}updateExp`, currentUser, { headers: this.getHttpHeaders() }).subscribe(
+      response => {
+        console.log('User updated successfully', response);
+      },
+      error => {
+        console.error('Error occurred during updating user', error);
+      }
+    );
+  }
 
   updateUser(newUser: User): void {
     this.user.next(newUser);
