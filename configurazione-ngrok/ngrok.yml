@@ -1,0 +1,15 @@
+version: "2"
+authtoken: AUTH_TOKEN
+tunnels:
+  leaderboard_service:
+    addr: 8087
+    proto: http
+  exercise_service:
+    addr: 9090
+    proto: http
+  user_service:
+    addr: 8081
+    proto: http
+
+
+
