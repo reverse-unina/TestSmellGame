@@ -8,12 +8,10 @@
     </div>
   </div>
 
-  <!-- Aggiunta dell'alert per il Compile Mode -->
   <div *ngIf="this.compileType != 1 && this.compileType != 2" class="alert alert-danger" role="alert">
     {{ 'You need to set Compile Mode in Settings' | translate }}
   </div>
 
-  <!-- Mostra il Compile Mode -->
   <div *ngIf="compileType == 1" style="color: green; margin-top: 10px;">
     <h3>{{ 'You are using Local Compile Mode' | translate }}</h3>
   </div>
@@ -57,7 +55,7 @@
       <div style="margin-top: 20px">
         <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="this.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
         <button style="margin-left: 20px;" type="button" class="btn btn-primary"
-                [disabled]="progressBarMode == 'query' || !isCompiledSuccessfully || codeModified"
+                [disabled]="progressBarMode == 'query' || !isCompiledSuccessfully"
                 (click)="submitAssignment(); saveResultsFile()">
           {{ 'Finish' | translate }}
         </button>

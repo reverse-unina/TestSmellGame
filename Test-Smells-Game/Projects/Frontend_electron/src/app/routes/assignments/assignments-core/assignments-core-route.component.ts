@@ -147,7 +147,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       }
     });
 
-    // INIT CODE FROM CLOUD
     if (this.exerciseType == 1)
       this.initFilesFromLocal();
     else if (this.exerciseType == 2)
@@ -369,6 +368,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   stopLoading() {
     this.progressBarMode = 'determinate';
   }
+
 
   elaborateCompilerAnswer(data: any) {
     console.log("Dati ricevuti:", data);
