@@ -1,0 +1,46 @@
+server:
+  port : 9000
+
+logging:
+  level:
+    org:
+      springframework:
+        http:
+          HttpHeaders: TRACE
+        cloud:
+          gateway: TRACE
+        web:
+          TRACE
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE #RETAIN_LAST #RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns:
+              - https://*.trycloudflare.com
+              - https://*.telebit.io
+              - http://localhost:4200
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
+      routes:
+        - id: user-service
+          uri: ${USER_SERVICE:http://localhost:8081}
+          predicates:
+            - Path=/user-service/**
+        - id: leaderboard-service
+          uri: ${LEADERBOARD_SERVICE:http://localhost:8087}
+          predicates:
+            - Path=/leaderboard-service/**
+        - id: exercise-service
+          uri: ${EXERCISE_SERVICE:http://localhost:9090}
+          predicates:
+            - Path=/exercise-service/**
+        - id: compiler-service
+          uri: ${COMPILER_SERVICE:http://localhost:8083}
+          predicates:
+            - Path=/compiler/refactoring
