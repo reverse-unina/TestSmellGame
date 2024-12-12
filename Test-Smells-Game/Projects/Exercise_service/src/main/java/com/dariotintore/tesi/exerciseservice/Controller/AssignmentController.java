@@ -1,5 +1,11 @@
 package com.dariotintore.tesi.exerciseservice.Controller;
 
+import com.dariotintore.tesi.exerciseservice.Service.AssignmentService;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,28 +37,47 @@ public class AssignmentController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping("/get-assignments")
-    public ResponseEntity<List<Assignment>> getAssignments() {
+    public ResponseEntity<Object> getAssignments() {
         List<Assignment> assignments = new ArrayList<>();
         File dir = new File(assignmentsDirectory);
-        
+
+        //objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
+
         if (!dir.exists() || !dir.isDirectory()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        
+
         File[] files = dir.listFiles((d, name) -> name.endsWith(".json"));
         if (files == null) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            logger.error("No assignment files found");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "No assignments found"));
         }
-        
-        try {
-            for (File file : files) {
+
+        for (File file : files) {
+            try {
                 Assignment assignment = objectMapper.readValue(file, Assignment.class);
                 assignments.add(assignment);
+            } catch (UnrecognizedPropertyException e) {
+                String error = "Unrecognized field \"" + AssignmentService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + file.getName();
+                logger.error("{}: {}", error, e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+            } catch (MismatchedInputException e) {
+                String error = "Missing required property \"" + AssignmentService.extractMissingRequiredField(e.getMessage()) + "\" in file " + file.getName();
+                logger.error("{}: {}", error, e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+            } catch (IOException e) {
+                String error = "Error reading assignment file " + file.getName();
+                logger.error("{}: {}", error, e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             }
-        } catch (IOException e) {
-            logger.error("Error reading assignment files", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+
+        if (AssignmentService.hasDuplicateNames(assignments)) {
+            String error = "Duplicate assignment names found";
+            logger.error(error);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+
         return ResponseEntity.ok(assignments);
     }
 

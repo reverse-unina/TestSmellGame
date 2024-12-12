@@ -14,7 +14,8 @@ export class AssignmentsListRoute implements OnInit {
 
   assignments: Assignment[] = [];
   currentUser!: User;
-  loadingError = false;
+  errorMessage:string | undefined = undefined;
+  errorParts:string[] = [];
 
   constructor(private _router: Router,
               private assignmentsService: AssignmentsService,
@@ -34,17 +35,50 @@ export class AssignmentsListRoute implements OnInit {
     this.assignmentsService.getAssignmentsForStudent(this.currentUser!.userName).subscribe(
       assignments => {
         this.assignments = assignments;
-        this.loadingError = false;
+        this.errorMessage = undefined;
+        this.errorParts = [];
       },
       error => {
-        console.error('Errore durante il recupero degli esperimenti:', error);
-        this.loadingError = true;
+        this.errorMessage = error.error;
+        console.error(this.errorMessage);
+        this.refactorErrorMessage(this.errorMessage);
       }
     );
   }
 
-  isAssignmentActive(assignmentDate: string, startTime: string, endTime: string): boolean {
-    const assignmentDateObj = new Date(assignmentDate);
+  refactorErrorMessage(error: string | undefined) : void {
+    if (error === undefined)
+      return;
+
+    const matchRegexMissingField = error.match(/Missing required property "(.*?)" in file (.*)/);
+    const matchRegexUnrecognizedField = error.match(/Unrecognized field "(.*?)" not marked as ignorable found in file (.*)/);
+    const matchRegexReadingFile = error.match(/Error reading assignment file (.*)/);
+
+    if (matchRegexMissingField) {
+      this.errorParts = [
+        matchRegexMissingField[0].split(/ "(.*?)"/)[0],
+        `"${matchRegexMissingField[1]}"`,
+        "in file",
+        matchRegexMissingField[2]
+      ];
+      console.log("Error Parts: ", this.errorParts);
+    } else if (matchRegexUnrecognizedField) {
+      this.errorParts = [
+        matchRegexUnrecognizedField[0].split(/ "(.*?)"/)[0],
+        `"${matchRegexUnrecognizedField[1]}"`,
+        "not marked as ignorable found in file",
+        matchRegexUnrecognizedField[2]
+      ];
+    } else if (matchRegexReadingFile) {
+      this.errorParts = [
+        matchRegexReadingFile[0].split(/ "(.*?)"/)[0],
+        matchRegexReadingFile[1]
+      ];
+    } else {
+      this.errorParts[0] = error;
+    }
+  }
+
   isAssignmentActive(assignmentStartDate: string, startTime: string, assignmentEndDate: string, endTime: string): boolean {
     const [startHour, startMinute] = startTime.split(':').map(Number);
     const [endHour, endMinute] = endTime.split(':').map(Number);
@@ -69,6 +103,7 @@ export class AssignmentsListRoute implements OnInit {
     });
     return count;
   }
+
 }
 
 
