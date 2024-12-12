@@ -110,5 +110,8 @@
   "Date": "Data",
   "Type": "Tipo",
   "competitive": "competitivo",
-  "collaborative": "collaborativo"
+  "collaborative": "collaborativo",
+  "Available from": "Disponibile dal",
+  "at": "alle ore",
+  "To be delivered by": "Da consegnare entro il",
 }

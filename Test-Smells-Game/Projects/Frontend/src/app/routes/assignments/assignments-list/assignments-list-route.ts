@@ -45,13 +45,14 @@ export class AssignmentsListRoute implements OnInit {
 
   isAssignmentActive(assignmentDate: string, startTime: string, endTime: string): boolean {
     const assignmentDateObj = new Date(assignmentDate);
+  isAssignmentActive(assignmentStartDate: string, startTime: string, assignmentEndDate: string, endTime: string): boolean {
     const [startHour, startMinute] = startTime.split(':').map(Number);
     const [endHour, endMinute] = endTime.split(':').map(Number);
 
-    const startDateTime = new Date(assignmentDateObj);
+    const startDateTime = new Date(assignmentStartDate);
     startDateTime.setHours(startHour, startMinute, 0, 0);
 
-    const endDateTime = new Date(assignmentDateObj);
+    const endDateTime = new Date(assignmentEndDate);
     endDateTime.setHours(endHour, endMinute, 0, 0);
 
     const currentTime = new Date();

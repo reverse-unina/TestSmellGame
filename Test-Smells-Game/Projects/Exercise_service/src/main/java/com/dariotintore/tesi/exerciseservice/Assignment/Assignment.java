@@ -1,24 +1,28 @@
 package com.dariotintore.tesi.exerciseservice.Assignment;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.lang.NonNull;
+
 import java.util.List;
 
 public class Assignment {
     private String name;
-    private String date;
     private List<Student> students;
     private String type;
-    
+
+	@JsonCreator
+	public Assignment(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "students", required = true) @NonNull List<Student> students, @JsonProperty(value = "type", required = true) @NonNull String type) {
+		this.name = name;
+		this.students = students;
+		this.type = type;
+	}
+
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getDate() {
-		return date;
-	}
-	public void setDate(String date) {
-		this.date = date;
 	}
 	public List<Student> getStudents() {
 		return students;

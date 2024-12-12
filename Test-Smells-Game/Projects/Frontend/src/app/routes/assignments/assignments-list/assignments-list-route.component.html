@@ -25,13 +25,14 @@
             </li>
           </ng-container>
           <ng-container *ngIf="!(assignment.type === 'competitivo' && student.submitted === true)">
-            <li *ngIf="isAssignmentActive(assignment.date, student.start, student.end)" style="margin-bottom: 8px;">
+            <li *ngIf="isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
               <a [routerLink]="['/assignments', assignment.name, student.exercise]" style="text-decoration: none; color: #007bff;">
                 {{ student.exercise }}
               </a>
-              ({{ student.start }} - {{ student.end }})
+              <p style="margin-top: 12px;"> {{ 'Available from' | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.startTime }} </p>
+              <p> {{ "To be delivered by" | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.endTime }} </p>
             </li>
-            <li *ngIf="!isAssignmentActive(assignment.date, student.start, student.end)" style="margin-bottom: 8px;">
+            <li *ngIf="!isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
               <span style="color: red;">{{ 'The assignment is unavailable' | translate }}</span>
             </li>
           </ng-container>
