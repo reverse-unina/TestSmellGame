@@ -22,11 +22,12 @@ spring:
           '[/**]':
             allowedOriginPatterns:
               - https://*.trycloudflare.com
-              - https://*.telebit.io
-              - http://localhost:4200
-            allowed-methods: "*"
-            allowed-headers: "*"
+              - http://localhost:*
+              - https://*.ngrok-free.app
+            allowed-methods: "GET, POST, PUT, DELETE, OPTIONS"
+            allowed-headers: "Authorization, Content-Type, X-Requested-With"
             allow-credentials: true
+            max-age: 3600
       routes:
         - id: user-service
           uri: ${USER_SERVICE:http://localhost:8081}
