@@ -1,4 +1,8 @@
 version: "3"
+networks:
+  testSmell-network:
+    driver: bridge
+
 services:
   userservice:
     image: loriszn/server-setup:user_service
@@ -7,12 +11,16 @@ services:
       - '8081:8081'
     environment:
       - SPRING_DATASOURCE_URL=jdbc:h2:file:./database/userdb
+    networks:
+      - testSmell-network
 
   compilerservice:
     image: loriszn/server-setup:compiler_service
     container_name: compiler-service
     ports:
       - '8083:8083'
+    networks:
+      - testSmell-network
 
   leaderboardservice:
     image: loriszn/server-setup:leaderboard_service
@@ -21,6 +29,8 @@ services:
       - '8087:8087'
     environment:
       - SPRING_DATASOURCE_URL=jdbc:h2:file:./database/leaderboarddb
+    networks:
+      - testSmell-network
 
   exerciseservice:
     image: loriszn/server-setup:exercise_service
@@ -29,12 +39,31 @@ services:
       - '9090:9090'
     volumes:
       - assignments:/usr/src/app/assets/assignments
+    networks:
+      - testSmell-network
+
+  apigateway:
+    image: loriszn/server-setup:api_gateway
+    container_name: api-gateway
+    environment:
+      - USER_SERVICE=http://user-service:8081
+      - LEADERBOARD_SERVICE=http://leaderboard-service:8087
+      - EXERCISE_SERVICE=http://exercise-service:9090
+      - COMPILER_SERVICE=http://compiler-service:8083
+    ports:
+      - '9000:9000'
+    networks:
+      - testSmell-network
 
   frontend:
     image: loriszn/server-setup:frontend
     container_name: frontend
+    environment:
+      - API_GATEWAY=http://api-gateway:9000
     ports:
-      - '4200:80'
+      - '8080:8080'
+    networks:
+      - testSmell-network
 
 volumes:
   assignments:
