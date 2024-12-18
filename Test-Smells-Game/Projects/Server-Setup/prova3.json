@@ -1,0 +1,15 @@
+{
+  "name": "Esercizio3",
+  "students": [
+    {
+      "name": "michele",
+      "exercise": "XMLParser",
+      "startTime": "00:00",
+      "startDate": "2024-12-02",
+      "endTime": "23:00",
+      "endDate": "2024-12-20",
+      "submitted": false
+    }
+  ],
+  "type": "competitivo"
+}
