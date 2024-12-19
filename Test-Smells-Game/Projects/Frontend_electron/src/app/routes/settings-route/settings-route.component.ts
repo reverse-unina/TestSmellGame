@@ -25,8 +25,7 @@ export class SettingsRouteComponent implements OnInit {
               private _snackBar: MatSnackBar,
               private settingsService: SettingsService,
               private _electronService: ElectronService,
-              private zone: NgZone,
-              private translate: TranslateService) {
+              private zone: NgZone) {
       this._electronService.ipcRenderer.on('receiveDependenciesCheck', (event, data)=>{
       this.zone.run(()=>{
         if(data[0] == false)
@@ -39,24 +38,30 @@ export class SettingsRouteComponent implements OnInit {
             duration: 3000
           });
         })
-    }) 
+    })
   }
 
   switchLanguage(language: string) {
-    this.translate.use(language);
+    this.settingsService.switchLanguage(language);
     this._snackBar.open('Settings saved', 'Close', {
       duration: 3000
     });
   }
 
-  initializeTranslationService() {
-    if (!this.translate.getDefaultLang())
-      this.translate.setDefaultLang('en');
-  }
-
   ngOnInit(): void {
-    this.initializeTranslationService();
+    this.settingsService.initializeTranslationService();
+    this.selectedLanguage = this.settingsService.getSelectedLanguage();
+    this.settingsService.initializeEnvironmentUrls();
     this.fillEnvironmentForm();
+
+    const exerciseRetrieval:string | null = this.settingsService.getSelectedExerciseRetrieval();
+    if (exerciseRetrieval)
+      this.exerciseType = parseInt(exerciseRetrieval);
+
+    const compileMode:string | null = this.settingsService.getSelectedCompileMode();
+    if (compileMode)
+      this.compileType = parseInt(compileMode);
+
     this.isUserAuthenticated = this.userService.user.getValue() !== null;
   }
 
@@ -80,10 +85,7 @@ export class SettingsRouteComponent implements OnInit {
   }
 
   submitEnvironmentForm(environmentForm: any) {
-    environment.userServiceUrl = environmentForm.value.user_service
-    environment.compilerServiceUrl = environmentForm.value.compiler_service
-    environment.leaderboardServiceUrl = environmentForm.value.leaderboard_service
-    environment.exerciseServiceUrl = environmentForm.value.exercise_service
+    this.settingsService.updateEnvironmentsUrl(environmentForm);
 
     this._snackBar.open('Settings saved', 'Close', {
       duration: 3000
@@ -105,14 +107,34 @@ export class SettingsRouteComponent implements OnInit {
   }
 
   clearLocalStorage() {
-    const confirmMessage = this.translate.currentLang === 'it' ? 'Sei sicuro di voler eliminare tutti i dati presenti nel Local Storage?' : 'Are you sure you want to clear all data in Local Storage?';
+    const confirmMessage = this.settingsService.getSelectedLanguage() === 'it' ? 'Sei sicuro di voler eliminare tutti i dati presenti nel Local Storage?' : 'Are you sure you want to clear all data in Local Storage?';
     const confirmed = window.confirm(confirmMessage);
 
     if (confirmed) {
+      const savedLanguage:string | null = localStorage.getItem('selectedLanguage');
+      const userServiceUrl:string | null = localStorage.getItem("userServiceUrl");
+      const leaderboardServiceUrl:string | null = localStorage.getItem("leaderboardServiceUrl")
+      const exerciseServiceUrl:string | null = localStorage.getItem("exerciseServiceUrl");
+      const compilerServiceUrl:string | null = localStorage.getItem("compilerServiceUrl");
+
       localStorage.clear();
-        this._snackBar.open('Local Storage cleared', 'Close', {
+
+      if (savedLanguage)
+        localStorage.setItem('selectedLanguage', savedLanguage);
+      if (userServiceUrl)
+        environment.userServiceUrl = userServiceUrl;
+      if (leaderboardServiceUrl)
+        environment.leaderboardServiceUrl = leaderboardServiceUrl;
+      if (exerciseServiceUrl)
+        environment.exerciseServiceUrl = exerciseServiceUrl;
+      if (compilerServiceUrl)
+        environment.compilerServiceUrl = compilerServiceUrl;
+
+      this._snackBar.open('Local Storage cleared', 'Close', {
              duration: 3000
         });
       }
     }
+
+  protected readonly localStorage = localStorage;
 }

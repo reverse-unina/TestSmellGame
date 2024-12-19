@@ -113,5 +113,17 @@
   "collaborativo": "collaborative",
   "Stai utilizzando la modalità di compilazione Locale": "You are using Local Compile Mode",
   "Stai utilizzando la modalità di compilazione Cloud" : "You are using Cloud Compile Mode",
-  "Devi impostare la modalità di compilazione nelle impostazioni": "You need to set Compile Mode in Settings"
+  "Devi impostare la modalità di compilazione nelle impostazioni": "You need to set Compile Mode in Settings",
+
+  "Disponibile dal": "Available from",
+  "alle ore": "at",
+  "Da consegnare entro il": "To be delivered by",
+  "Per favore contatta il tuo supervisore": "Please contact your supervisor",
+  "Nessun esperimento trovato": "No assignment files found",
+  "Proprietà sconosciuta": "Unrecognized field",
+  "non contrassegnata come ignorabile trovata nel file": "not marked as ignorable found in file",
+  "Rilevata la mancanza della proprietà obbligatoria": "Missing required property",
+  "nel file": "in file",
+  "Trovati esperimenti con nome duplicato": "Duplicate assignment names found",
+  "Errore nella lettura dei file degli esperimenti": "Error reading assignment file"
 }
