@@ -2,7 +2,7 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { ExerciseService } from 'src/app/services/exercise/exercise.service';
 import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { ExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
+import { RefactoringGameExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 
@@ -21,14 +21,14 @@ export class RefactoringGameExListRouteComponent implements OnInit {
 
   private config!: levelConfig;
   exercises = new Array<any>();
-  exerciseConfigurations = new Array<ExerciseConfiguration>();
+  exerciseConfigurations = new Array<RefactoringGameExerciseConfiguration>();
   serverProblems = false;
   waitingForServer!: boolean;
 
   ngOnInit(): void {
     this.waitingForServer = true;
 
-    this.exerciseService.getAllConfigFiles().subscribe(
+    this.exerciseService.getAllRefactoringGameConfigFiles().subscribe(
       (response: any[]) => {
         this.waitingForServer = false;
         this.exerciseConfigurations = response.map(item => JSON.parse(atob(item)));
@@ -50,7 +50,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
           }
         );
 
-    this.exerciseService.getExercises().subscribe(
+    this.exerciseService.getRefactoringGameExercises().subscribe(
       response => {
         this.waitingForServer = false;
         this.exercises = response;

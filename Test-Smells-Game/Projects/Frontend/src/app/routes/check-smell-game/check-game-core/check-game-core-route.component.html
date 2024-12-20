@@ -13,7 +13,7 @@
 
         <div class="form-check">
           <ul class="list-group">
-            <mat-selection-list [multiple]="false">
+            <mat-selection-list [multiple]="true">
 
               <li *ngFor="let option of questions[actualQuestionNumber].answers" class="list-group-item">
                 <mat-checkbox #checkbox
@@ -27,13 +27,12 @@
           </ul>
         </div>
 
-
       </div>
       <div>
-        <button class="btn btn-primary" (click)="goBackward()">{{ 'Back' | translate }}</button>
-        <button class="btn btn-primary" (click)="goForward()">{{ 'Next' | translate }}</button>
+        <button class="btn btn-primary" *ngIf="this.actualQuestionNumber !== 0" (click)="goBackward()">{{ 'Back' | translate }}</button>
+        <button class="btn btn-primary" *ngIf="this.actualQuestionNumber < this.questions.length - 1" (click)="goForward()">{{ 'Next' | translate }}</button>
       </div>
-      <button *ngIf="selectedAnswers.length == questions.length" class="btn btn-primary" (click)="showResults()">{{ 'Results' | translate }}</button>
+      <button *ngIf="renderResultsButton()" class="btn btn-primary" (click)="showResults()">{{ 'Results' | translate }}</button>
     </div>
   </div>
 

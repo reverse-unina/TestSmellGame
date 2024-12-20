@@ -14,33 +14,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class FileService { 
 
-	public List<String> getAllFiles() {
-	    return Stream.of(new File("ExerciseDB/").listFiles())
+	public List<String> getAllFiles(String basePath) {
+	    return Stream.of(new File(basePath).listFiles())
 	    .filter(file -> file.isDirectory())
 	    .map(File::getName)
 	    .collect(Collectors.toList());
 	}
 
-	public byte[] getFile(String exercise, String type) throws IOException {
+	public byte[] getFile(String basePath, String exercise, String type) throws IOException {
 	    byte [] response = null;
 	    if(type.equals("Production")){
-	        response = Files.readAllBytes(Paths.get("ExerciseDB/" + exercise +  "/"+ exercise + ".java"));
+	        response = Files.readAllBytes(Paths.get(basePath + exercise +  "/"+ exercise + ".java"));
 	    }
 	    else if(type.equals("Test")){
-	        response = Files.readAllBytes(Paths.get("ExerciseDB/" + exercise +  "/"+ exercise + "Test.java"));
+	        response = Files.readAllBytes(Paths.get(basePath + exercise +  "/"+ exercise + "Test.java"));
 	    }
 	    else if(type.equals("Configuration")){
-	        response = Files.readAllBytes(Paths.get("ExerciseDB/" + exercise + "/" + exercise + "Config.json"));
+	        response = Files.readAllBytes(Paths.get(basePath + exercise + "/" + exercise + "Config.json"));
 	    }
 	    return response;
 	}
 
-	public List<byte[]> getAllConfigFiles() throws IOException {
+	public List<byte[]> getAllConfigFiles(String basePath) throws IOException {
 		List<byte[]> configFiles = new ArrayList<>();
-		List<String> exercises = getAllFiles();
+		List<String> exercises = getAllFiles(basePath);
 
 		for (String exercise : exercises) {
-			byte[] configFile = Files.readAllBytes(Paths.get("ExerciseDB/" + exercise + "/" + exercise + "Config.json"));
+			byte[] configFile = Files.readAllBytes(Paths.get(basePath + exercise + "/" + exercise + "Config.json"));
 			configFiles.add(configFile);
 		}
 

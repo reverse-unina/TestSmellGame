@@ -9,7 +9,7 @@ import { Exercise } from "../../../model/exercise/refactor-exercise.model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ProgressBarMode } from "@angular/material/progress-bar";
 import { SmellDescription } from "../../../model/SmellDescription/SmellDescription.model";
-import { ExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
+import { RefactoringGameExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
 import { AssignmentsService } from "../../../services/assignments/assignments.service";
 import { Assignment, Student } from '../../../model/assignment/assignment.model';
 import { User } from '../../../model/user/user.model';
@@ -51,7 +51,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   smellResult: string[] = [];
   smellList: string[] = [];
   methodList: string[] = [];
-  exerciseConfiguration!: ExerciseConfiguration;
+  exerciseConfiguration!: RefactoringGameExerciseConfiguration;
 
   originalProductionCode = "";
   originalTestCode = "";
@@ -120,10 +120,12 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this.testingCode = data;
       this.originalTestCode = data;
     });
-    this.exerciseService.getConfigFile(this.exerciseName).subscribe(data => {
+    this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data => {
       this.exerciseConfiguration = data;
       this.setupConfigFiles(data);
     });
+
+
 
     this.code.editor.onDidChangeModelContent(() => this.onCodeChange());
     this.testing.editor.onDidChangeModelContent(() => this.onCodeChange());

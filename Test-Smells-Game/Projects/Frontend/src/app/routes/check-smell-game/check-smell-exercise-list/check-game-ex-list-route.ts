@@ -4,7 +4,7 @@ import {UserService} from 'src/app/services/user/user.service'
 import {Router} from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import {FormBuilder, NgForm} from "@angular/forms";
-import {ExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
+import {CheckGameExerciseConfig} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import {environment} from "../../../../environments/environment.prod";
 import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
 
@@ -33,13 +33,13 @@ export class CheckGameExListRoute implements OnInit {
 
   private config!: levelConfig;
   exercises = new Array<any>();
-  exerciseConfigurations = new Array<ExerciseConfiguration>();
+  exerciseConfigurations = new Array<CheckGameExerciseConfig>();
   serverProblems = false;
   waitingForServer!: boolean;
 
 
   ngOnInit(): void {
-    this.exerciseService.getAllConfigFiles().subscribe(
+    this.exerciseService.getAllCheckGameConfigFiles().subscribe(
           (response: any[]) => {
             this.waitingForServer = false;
             this.exerciseConfigurations = response.map(item => JSON.parse(atob(item)));
@@ -54,7 +54,7 @@ export class CheckGameExListRoute implements OnInit {
 
 
     this.waitingForServer = true;
-    this.exerciseService.getExercises().subscribe(response =>{
+    this.exerciseService.getCheckGameExercises().subscribe(response =>{
       this.waitingForServer = false;
       this.exercises = response;
       }, error => {

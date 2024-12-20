@@ -4,7 +4,7 @@ import { ExerciseService } from "../../../services/exercise/exercise.service";
 import { ActivatedRoute } from "@angular/router";
 import { Question } from "../../../model/question/question.model";
 import { Answer } from "../../../model/question/answer.model";
-import { ExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
+import { CheckGameExerciseConfig } from "../../../model/exercise/ExerciseConfiguration.model";
 import { User } from "../../../model/user/user.model";
 import { MatCheckbox } from "@angular/material/checkbox";
 import { UserService } from '../../../services/user/user.service';
@@ -25,7 +25,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
 
   questions!: Question[];
   selectedAnswers: Answer[] = [];
-  exerciseConfiguration!: ExerciseConfiguration;
+  exerciseConfiguration!: CheckGameExerciseConfig;
 
   exerciseCompleted: boolean = false;
   score: number = 0;
@@ -41,7 +41,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
   ngOnInit(): void {
     this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
 
-    this.exerciseService.getConfigFile(this.exerciseName).subscribe(data => {
+    this.exerciseService.getCheckGameConfigFile(this.exerciseName).subscribe(data => {
       this.setupQuestions(data);
     });
 
@@ -67,9 +67,8 @@ export class CheckGameCoreRouteComponent implements OnInit {
   }
 
   selectAnswer(option: Answer) {
-    this.clearCheckboxes();
     this.selectedAnswers[this.actualQuestionNumber] = option;
-    option.isChecked = true;
+    option.isChecked = !option.isChecked;
   }
 
   goForward() {
@@ -82,6 +81,18 @@ export class CheckGameCoreRouteComponent implements OnInit {
     if (this.actualQuestionNumber > 0) {
       this.actualQuestionNumber -= 1;
     }
+  }
+
+  renderResultsButton():boolean {
+    if (this.actualQuestionNumber !== this.questions.length - 1)
+      return false;
+
+    let allQuestionsAnswered = true;
+    this.questions.forEach(question => {
+      allQuestionsAnswered &&= question.answers.some(answer => answer.isChecked);
+    })
+
+    return allQuestionsAnswered;
   }
 
   showResults() {
@@ -106,7 +117,8 @@ export class CheckGameCoreRouteComponent implements OnInit {
   }
 
   changeCheckbox(checkbox: MatCheckbox) {
-    checkbox.checked = true;
+    console.log("checked? ", checkbox.checked);
+    checkbox.checked = !checkbox.checked;
   }
 
   calculateScore() {
@@ -114,12 +126,6 @@ export class CheckGameCoreRouteComponent implements OnInit {
       if (answer.isCorrect) {
         this.score += 1;
       }
-    });
-  }
-
-  private clearCheckboxes() {
-    this.questions[this.actualQuestionNumber].answers.forEach(element => {
-      element.isChecked = false;
     });
   }
 }

@@ -1,6 +1,6 @@
 import {Question} from "../question/question.model";
 
-export class ExerciseConfiguration {
+export class RefactoringGameExerciseConfiguration {
   exerciseId!: string;
   refactoring_game_configuration!: {
       'dependencies': string,
@@ -8,8 +8,14 @@ export class ExerciseConfiguration {
       'smells_allowed': number,
       'level': number
     };
-    check_game_configuration!: {
-      'questions': Question[]
-    };
     auto_valutative!: boolean;
+}
+
+export class CheckGameExerciseConfig {
+  exerciseId!: string;
+  check_game_configuration!: {
+    'questions': Question[],
+    'level': number
+  };
+  auto_valutative!: boolean;
 }

@@ -8,7 +8,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ProgressBarMode } from "@angular/material/progress-bar";
 import { SmellDescription } from "../../../model/SmellDescription/SmellDescription.model";
 import { User } from "../../../model/user/user.model";
-import { ExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
+import { RefactoringGameExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
 import { UserService } from '../../../services/user/user.service';
 
 @Component({
@@ -41,8 +41,8 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
   // SMELL FORMATTING VARIABLES
   smellResult: string[] = [];
   smellList: string[] = [];
-  methodList: string[] = []
-  exerciseConfiguration!: ExerciseConfiguration
+  methodList: string[] = [];
+  exerciseConfiguration!: RefactoringGameExerciseConfiguration;
 
   originalProductionCode = ""
   originalTestCode = ""
@@ -77,7 +77,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
         this.testingCode = data
         this.originalTestCode = data
       })
-      this.exerciseService.getConfigFile(this.exerciseName).subscribe(data=>{
+      this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data=>{
         this.exerciseConfiguration = data;
         this.setupConfigFiles(data);})
     }

@@ -4,7 +4,7 @@ import {environment} from "../../../environments/environment.prod";
 import {Solution} from "../../model/solution/solution";
 import {Exercise} from "../../model/exercise/refactor-exercise.model";
 import {UserService} from "../user/user.service";
-import {ExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
+import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class LeaderboardService {
   }
 
   saveSolution(exercise: Exercise,
-               exerciseConfiguration: ExerciseConfiguration,
+               exerciseConfiguration: RefactoringGameExerciseConfiguration,
                score: number,
                refactoringResult: boolean,
                originalCoverage: number,

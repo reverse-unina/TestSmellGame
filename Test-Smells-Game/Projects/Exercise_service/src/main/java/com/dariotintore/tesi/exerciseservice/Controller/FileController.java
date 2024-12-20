@@ -45,25 +45,47 @@ public class FileController {
       }
   }
 
-  @GetMapping("/")
-  public ResponseEntity<List<String>> getListFiles() {
-    return ResponseEntity.status(HttpStatus.OK).body(storageService.getAllFiles());
+  @GetMapping("/refactoring-game")
+  public ResponseEntity<List<String>> getListRefactoringGameFiles() {
+    return ResponseEntity.status(HttpStatus.OK).body(storageService.getAllFiles("ExerciseDB/RefactoringGame/"));
   }
 
-  @GetMapping("/{exercise}/{type}")
-  public ResponseEntity<byte[]> retrieveFile(
+    @GetMapping("/check-game")
+    public ResponseEntity<List<String>> getListCheckGameFiles() {
+        return ResponseEntity.status(HttpStatus.OK).body(storageService.getAllFiles("ExerciseDB/CheckGame/"));
+    }
+
+  @GetMapping("/refactoring-game/{exercise}/{type}")
+  public ResponseEntity<byte[]> retrieveRefactoringGameFile(
             @PathVariable String exercise,
             @PathVariable String type) throws IOException {
-    byte[] file = storageService.getFile(exercise, type);
+    byte[] file = storageService.getFile("ExerciseDB/RefactoringGame/", exercise, type);
 
     return ResponseEntity.ok()
         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + exercise + "\"")
         .body(file);
   }
+
+    @GetMapping("/check-game/{exercise}/{type}")
+    public ResponseEntity<byte[]> retrieveCheckGameFile(
+            @PathVariable String exercise,
+            @PathVariable String type) throws IOException {
+        byte[] file = storageService.getFile("ExerciseDB/CheckGame/", exercise, type);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + exercise + "\"")
+                .body(file);
+    }
+
+    @GetMapping("/refactoring-game-configurations")
+    public ResponseEntity<List<byte[]>> getAllRefactoringGameConfigFiles() throws IOException {
+        List<byte[]> configFiles = storageService.getAllConfigFiles("ExerciseDB/RefactoringGame/");
+        return ResponseEntity.status(HttpStatus.OK).body(configFiles);
+    }
   
-  @GetMapping("/configurations")
-  public ResponseEntity<List<byte[]>> getAllConfigFiles() throws IOException {
-    List<byte[]> configFiles = storageService.getAllConfigFiles();
+  @GetMapping("/check-game-configurations")
+  public ResponseEntity<List<byte[]>> getAllCheckGameConfigFiles() throws IOException {
+    List<byte[]> configFiles = storageService.getAllConfigFiles("ExerciseDB/CheckGame/");
     return ResponseEntity.status(HttpStatus.OK).body(configFiles);
   }
   
