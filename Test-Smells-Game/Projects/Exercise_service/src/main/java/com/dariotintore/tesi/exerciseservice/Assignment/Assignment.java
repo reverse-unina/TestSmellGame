@@ -10,12 +10,14 @@ public class Assignment {
     private String name;
     private List<Student> students;
     private String type;
+	private String gameType;
 
 	@JsonCreator
-	public Assignment(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "students", required = true) @NonNull List<Student> students, @JsonProperty(value = "type", required = true) @NonNull String type) {
+	public Assignment(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "students", required = true) @NonNull List<Student> students, @JsonProperty(value = "type", required = true) @NonNull String type, @JsonProperty(value = "gameType", required = true) @NonNull String gameType) {
 		this.name = name;
 		this.students = students;
 		this.type = type;
+		this.gameType = gameType;
 	}
 
 	public String getName() {
@@ -37,5 +39,11 @@ public class Assignment {
 		this.type = type;
 	}
 
-     
+	public String getGameType() {
+		return gameType;
+	}
+
+	public void setGameType(String gameType) {
+		this.gameType = gameType;
+	}
 }

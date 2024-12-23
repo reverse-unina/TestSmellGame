@@ -46,6 +46,10 @@ export class AssignmentsListRoute implements OnInit {
     );
   }
 
+  filterAssignmentsByGameType(gameType: string): Assignment[] {
+    return this.assignments.filter(assignment => assignment.gameType === gameType);
+  }
+
   refactorErrorMessage(error: string | undefined) : void {
     if (error === undefined)
       return;

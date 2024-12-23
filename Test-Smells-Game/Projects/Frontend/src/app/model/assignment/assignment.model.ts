@@ -12,4 +12,5 @@ export interface Assignment {
   name: string;
   students: Student[];
   type: string;
+  gameType: string;
 }

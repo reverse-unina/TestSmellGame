@@ -45,6 +45,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { CheckCoreComponent } from './components/check-core/check-core.component';
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http);
@@ -73,6 +74,7 @@ export function HttpLoaderFactory(http:HttpClient) {
     LogelementComponent,
     AssignmentsListRoute,
     AssignmentsCoreRouteComponent
+    CheckCoreComponent
   ],
   imports: [
     BrowserModule,

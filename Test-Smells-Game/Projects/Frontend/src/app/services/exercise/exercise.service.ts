@@ -28,7 +28,7 @@ export class ExerciseService {
       }),
       responseType: 'text'
     }
-    return this.http.get<string>(environment.exerciseServiceUrl + '/files/' + exercise + "/Production", HTTPOptions);
+    return this.http.get<string>(environment.exerciseServiceUrl + '/files/refactoring-game/' + exercise + "/Production", HTTPOptions);
   }
 
   getTestClass(exercise: string){
@@ -38,7 +38,7 @@ export class ExerciseService {
       }),
       responseType: 'text'
     }
-    return this.http.get<string>(environment.exerciseServiceUrl + '/files/' + exercise + "/Test", HTTPOptions);
+    return this.http.get<string>(environment.exerciseServiceUrl + '/files/refactoring-game/' + exercise + "/Test", HTTPOptions);
 
   }
   getRefactoringGameConfigFile(exercise: string) {

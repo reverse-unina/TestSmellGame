@@ -81,8 +81,8 @@ public class AssignmentController {
         return ResponseEntity.ok(assignments);
     }
 
-    @PostMapping("/submit-assignment")
-    public ResponseEntity<String> submitAssignment(
+    @PostMapping("/submit-assignment/refactoring")
+    public ResponseEntity<String> submitRefactoringAssignment(
             @RequestParam("assignmentName") String assignmentName,
             @RequestParam("studentName") String studentName,
             @RequestParam("productionCode") MultipartFile productionCode,
@@ -104,6 +104,68 @@ public class AssignmentController {
                 productionCode.transferTo(new File(studentDirectoryPath + studentName + "_ClassCode.java"));
                 testCode.transferTo(new File(studentDirectoryPath + studentName + "_TestCode.java"));
                 shellCode.transferTo(new File(studentDirectoryPath + studentName + "_ShellCode.java"));
+                results.transferTo(new File(studentDirectoryPath + studentName + "_results.txt"));
+
+                // Update assignment status
+                String filePath = assignmentsDirectory + assignmentName + ".json";
+                File assignmentFile = new File(filePath);
+                if (!assignmentFile.exists()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Assignment not found");
+                }
+
+                Assignment assignment = objectMapper.readValue(assignmentFile, Assignment.class);
+                boolean studentFound = false;
+
+                for (Student student : assignment.getStudents()) {
+                    if (student.getName().equals(studentName)) {
+                        student.setSubmitted(true);
+                        studentFound = true;
+                        break;
+                    }
+                }
+
+                if (!studentFound) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student not found");
+                }
+
+                // Write update to file
+                objectMapper.writeValue(assignmentFile, assignment);
+                logger.info("Processing completed for student '{}'", studentName);
+                return ResponseEntity.ok("Files uploaded and assignment updated successfully");
+
+            } catch (IOException e) {
+                logger.error("Error uploading files or updating assignment", e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading files or updating assignment");
+            }
+        };
+
+        // Execute the task in the executor thread
+        try {
+            Future<ResponseEntity<String>> future = executorService.submit(task);
+            return future.get(); // Wait for the task to complete
+        } catch (Exception e) {
+            logger.error("Error processing request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing request");
+        }
+    }
+
+    @PostMapping("/submit-assignment/check-smell")
+    public ResponseEntity<String> submitCheckSmellAssignment(
+            @RequestParam("assignmentName") String assignmentName,
+            @RequestParam("studentName") String studentName,
+            @RequestParam("results") MultipartFile results) {
+
+        // Task to be executed in the background
+        Callable<ResponseEntity<String>> task = () -> {
+            String studentDirectoryPath = assignmentsDirectory + assignmentName + "/" + studentName + "/";
+            try {
+                // Create directory if it doesn't exist
+                File studentDirectory = new File(studentDirectoryPath);
+                if (!studentDirectory.exists()) {
+                    studentDirectory.mkdirs();
+                }
+
+                // Save uploaded files
                 results.transferTo(new File(studentDirectoryPath + studentName + "_results.txt"));
 
                 // Update assignment status

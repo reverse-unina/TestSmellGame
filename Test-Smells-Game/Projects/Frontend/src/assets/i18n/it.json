@@ -122,7 +122,8 @@
   "Missing required property": "Rilevata la mancanza della proprietà obbligatoria",
   "in file": "nel file",
   "Duplicate assignment names found": "Trovati esperimenti con nome duplicato",
-  "Error reading assignment file": "Errore nella lettura dei file degli esperimenti"
+  "Error reading assignment file": "Errore nella lettura dei file degli esperimenti",
 
+  "Assignment type": "Tipo di esperimento"
 
 }

@@ -17,7 +17,6 @@ interface Config {
 })
 export class UserService {
   private config!: levelConfig;
-  private baseUrl = environment.userServiceUrl + '/users/';
 
   user = new BehaviorSubject<User>(new User());
   constructor(private snackBar: MatSnackBar, private exerciseService: ExerciseService, private http: HttpClient) {
@@ -75,7 +74,9 @@ export class UserService {
       }
       }
 
-      this.http.post(`${this.baseUrl}updateExp`, currentUser).subscribe(
+      console.log("Envs: ", environment);
+    console.log("user-service: ", environment.userServiceUrl + '/users/');
+      this.http.post(`${environment.userServiceUrl}/users/updateExp`, currentUser).subscribe(
         response => {
           console.log('User updated successfully', response);
         },

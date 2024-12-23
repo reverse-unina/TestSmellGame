@@ -1,7 +1,7 @@
-import { Component, HostListener, NgZone, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {Component, HostListener, NgZone, OnInit, ViewChild, OnDestroy, Input} from '@angular/core';
 import { CodeeditorService } from "../../../services/codeeditor/codeeditor.service";
 import { ExerciseService } from 'src/app/services/exercise/exercise.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Event} from '@angular/router';
 import { Exercise } from "../../../model/exercise/refactor-exercise.model";
 import { LeaderboardService } from "../../../services/leaderboard/leaderboard.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -17,16 +17,16 @@ import { UserService } from '../../../services/user/user.service';
   styleUrls: ['./refactoring-game-core-route.component.css']
 })
 export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
-
-  @ViewChild('code') code: any;
-  @ViewChild('testing') testing: any;
-  @ViewChild('output') output: any;
+  @ViewChild('code') outerCode: any;
+  @ViewChild('testing') outerTesting: any;
+  @ViewChild('output') outerOutput: any;
 
   compiledExercise !: Exercise;
   user!: User;
   exerciseName = this.route.snapshot.params['exercise'];
-
   progressBarMode: ProgressBarMode = 'determinate'
+
+  solutionRepoRoute:string = `/refactor-game/leaderboard/${this.exerciseName}`;
 
   // RESULT
   userCode = "";
@@ -63,66 +63,18 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
       private leaderboardService: LeaderboardService,
       private _snackBar: MatSnackBar,
       private userService: UserService
-    ) { this.restoreCode(); }
+    ) { }
 
-  ngOnInit(): void {
-    this.initSmellDescriptions();
-
-      // INIT CODE FROM CLOUD
-      this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
-        this.userCode = data;
-        this.originalProductionCode = data;
-      });
-      this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
-        this.testingCode = data
-        this.originalTestCode = data
-      })
-      this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data=>{
-        this.exerciseConfiguration = data;
-        this.setupConfigFiles(data);})
-    }
-
-  @HostListener('window:beforeunload', ['$event'])
-    unloadHandler(event: Event) {
-      this.saveCode();
+  submitIsEnabled():boolean {
+    return this.progressBarMode == 'query';
   }
 
-  ngOnDestroy(): void {
-      this.saveCode();
-    }
-
-    restoreCode() {
-        const savedCode = localStorage.getItem(`refactoring-game-${this.exerciseName}`);
-        if (savedCode) {
-          const { productionCode, testCode } = JSON.parse(savedCode);
-          this.userCode = productionCode;
-          this.testingCode = testCode;
-          this.originalProductionCode = productionCode;
-        } else {
-          this.exerciseService.getMainClass(this.exerciseName).subscribe(data => {
-            this.userCode = data;
-            this.originalProductionCode = data;
-          });
-          this.exerciseService.getTestClass(this.exerciseName).subscribe(data => {
-            this.testingCode = data;
-            this.originalTestCode = data;
-          });
-        }
-      }
-
-      saveCode() {
-        const exerciseCode = {
-          productionCode: this.originalProductionCode,
-          testCode: this.testing.injectedCode
-        };
-        localStorage.setItem(`refactoring-game-${this.exerciseName}`, JSON.stringify(exerciseCode));
-      }
-
-  compile() {
+  compile: () => void = () => {
     this.resetData();
     this.startLoading()
     // @ts-ignore
-    const exercise = new Exercise(this.exerciseName,this.originalProductionCode, this.originalTestCode, this.testing.injectedCode);
+    const exercise = new Exercise(this.exerciseName,this.originalProductionCode, this.originalTestCode, this.outerTesting.testing.injectedCode);
+    console.log("Exercise: ", exercise);
     this.compiledExercise = exercise;
       this.codeService.compile(exercise,this.exerciseConfiguration).subscribe(data =>{
         this.elaborateCompilerAnswer(data);
@@ -132,13 +84,9 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
       });
   }
 
-  showPopUp(message: string){
-    this._snackBar.open(message, "Close", {
-      duration: 3000
-    });
-  }
 
-  publishSolutionToLeaderboard(){
+
+  publishSolutionToLeaderboard: (() => void) = () => {
     this.startLoading()
     if(this.exerciseSuccess){
       this.leaderboardService.saveSolution(this.compiledExercise,
@@ -168,6 +116,111 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
     }
   }
 
+
+
+
+
+  ngOnInit(): void {
+    this.initSmellDescriptions();
+
+    // INIT CODE FROM CLOUD
+    this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
+      this.userCode = data;
+      this.originalProductionCode = data;
+    });
+    this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
+      this.testingCode = data
+      this.originalTestCode = data
+    });
+    this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data=>{
+      this.exerciseConfiguration = data;
+      this.setupConfigFiles(data);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.saveCode();
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    this.saveCode();
+  }
+
+  async initSmellDescriptions() {
+    // @ts-ignore
+    await import('./smell_description.json').then((data) => {
+      this.smellDescriptions = data.smells;
+    });
+  }
+
+  setupConfigFiles(data: any){
+    this.exerciseConfiguration.refactoring_game_configuration.refactoring_limit = data.refactoring_game_configuration.refactoring_limit;
+    this.exerciseConfiguration.refactoring_game_configuration.smells_allowed = data.refactoring_game_configuration.smells_allowed;
+  }
+
+  restoreCode() {
+    const savedCode = localStorage.getItem(`refactoring-game-${this.exerciseName}`);
+    if (savedCode) {
+      const { productionCode, testCode } = JSON.parse(savedCode);
+      this.userCode = productionCode;
+      this.testingCode = testCode;
+      this.originalProductionCode = productionCode;
+    } else {
+      this.exerciseService.getMainClass(this.exerciseName).subscribe(data => {
+        this.userCode = data;
+        this.originalProductionCode = data;
+      });
+      this.exerciseService.getTestClass(this.exerciseName).subscribe(data => {
+        this.testingCode = data;
+        this.originalTestCode = data;
+      });
+    }
+  }
+
+  saveCode() {
+    const exerciseCode = {
+      productionCode: this.originalProductionCode,
+      testCode: this.outerTesting.testing.injectedCode
+    };
+    localStorage.setItem(`refactoring-game-${this.exerciseName}`, JSON.stringify(exerciseCode));
+  }
+
+  elaborateCompilerAnswer(data: any) {
+    this.shellCode = data.testResult;
+    this.smells = data.smellResult;
+    this.refactoringResult = data.similarityResponse;
+    this.exerciseSuccess = data.success;
+    this.originalCoverage = data.originalCoverage;
+    this.refactoredCoverage = data.refactoredCoverage;
+    this.stopLoading();
+    if (this.exerciseSuccess) {
+      const json = JSON.parse(this.smells);
+      this.smellList = Object.keys(json);
+      this.smellResult = Object.values(json);
+      for (let i = 0; i < this.smellResult.length; i++) {
+        this.methodList.push(JSON.parse(JSON.stringify(this.smellResult[i])).methods);
+        this.smellNumber += this.methodList[i].length;
+      }
+      this.checkConfiguration();
+    }
+  }
+
+  checkConfiguration(){
+    if(this.refactoringResult.toString() == 'false')
+      this.refactoringWarning = true
+    if(this.exerciseConfiguration.refactoring_game_configuration.smells_allowed < this.smellNumber)
+      this.smellNumberWarning = true;
+  }
+
+  startLoading(){
+    this.progressBarMode = 'query'
+  }
+
+  stopLoading() {
+    this.progressBarMode = 'determinate'
+  }
+
   resetData(){
     this.shellCode = ""
     this.smells = ""
@@ -183,51 +236,9 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
     this.refactoredCoverage = -1;
   }
 
-  startLoading(){
-    this.progressBarMode = 'query'
-  }
-
-  stopLoading() {
-    this.progressBarMode = 'determinate'
-  }
-
-  elaborateCompilerAnswer(data: any){
-    this.shellCode = data.testResult
-    this.smells = data.smellResult
-    this.refactoringResult = data.similarityResponse
-    this.exerciseSuccess = data.success
-    this.originalCoverage = data.originalCoverage;
-    this.refactoredCoverage = data.refactoredCoverage;
-    this.stopLoading()
-    if(this.exerciseSuccess){
-      const json = JSON.parse(this.smells);
-      this.smellList = Object.keys(json);
-      this.smellResult = Object.values(json);
-      for (let i=0;i<this.smellResult.length;i++){
-        this.methodList.push(JSON.parse(JSON.stringify(this.smellResult[i])).methods)
-        this.smellNumber+=this.methodList[i].length;
-      }
-      this.checkConfiguration();
-    }
-  }
-
-  checkConfiguration(){
-    if(this.refactoringResult.toString() == 'false')
-      this.refactoringWarning = true
-    if(this.exerciseConfiguration.refactoring_game_configuration.smells_allowed < this.smellNumber)
-      this.smellNumberWarning = true;
-  }
-
-  setupConfigFiles(data: any){
-    this.exerciseConfiguration.refactoring_game_configuration.refactoring_limit = data.refactoring_game_configuration.refactoring_limit;
-    this.exerciseConfiguration.refactoring_game_configuration.smells_allowed = data.refactoring_game_configuration.smells_allowed;
-  }
-
-
-  async initSmellDescriptions() {
-    // @ts-ignore
-    await import('./smell_description.json').then((data) => {
-      this.smellDescriptions = data.smells;
+  showPopUp(message: string) {
+    this._snackBar.open(message, "Close", {
+      duration: 3000
     });
   }
 

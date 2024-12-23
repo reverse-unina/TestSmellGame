@@ -10,12 +10,10 @@ import {environment} from "../../../environments/environment.prod";
 })
 
 export class AssignmentsService {
-  private baseUrl = environment.exerciseServiceUrl + '/assignments/';
-
   constructor(private http: HttpClient) { }
 
   getAssignments(): Observable<Assignment[]> {
-    return this.http.get<Assignment[]>(this.baseUrl + 'get-assignments');
+    return this.http.get<Assignment[]>(environment.exerciseServiceUrl + '/assignments/get-assignments');
   }
 
   getAssignmentByName(name: string): Observable<Assignment | undefined> {
@@ -39,9 +37,18 @@ export class AssignmentsService {
          }
        })
      );
-   }
+  }
 
-  submitAssignment(assignmentName: string, studentName: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
+  submitCheckSmellAssignment(assignmentName: string, studentName: string, results: string) {
+    const formData = new FormData();
+    formData.append('assignmentName', assignmentName);
+    formData.append('studentName', studentName);
+    formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
+
+    return this.http.post(environment.exerciseServiceUrl + '/assignments/submit-assignment/check-smell', formData);
+  }
+
+  submitRefactoringAssignment(assignmentName: string, studentName: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
      const formData = new FormData();
      formData.append('assignmentName', assignmentName);
      formData.append('studentName', studentName);
@@ -50,7 +57,7 @@ export class AssignmentsService {
      formData.append('shellCode', new Blob([shellCode], { type: 'text/plain' }), `${studentName}_ShellCode.java`);
      formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
 
-     return this.http.post(this.baseUrl + 'submit-assignment', formData);
+     return this.http.post(environment.exerciseServiceUrl + '/assignments/submit-assignment/refactoring', formData);
   }
 
 }

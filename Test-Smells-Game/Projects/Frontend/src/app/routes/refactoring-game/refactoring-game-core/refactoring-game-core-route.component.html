@@ -1,93 +1,23 @@
-<div class="container">
-    <h1>{{exerciseName}}</h1>
-    <div class="row">
-      <div class="col">
-      </div>
-      <div class="row">
-        <div class="col">
-
-          <div class="card">
-            <div class="card-header">
-              {{exerciseName}}.java
-            </div>
-            <div class="card-body">
-              <app-codeeditor #code [injectedCode]="userCode" [editable]="false"></app-codeeditor>
-            </div>
-            <mat-progress-bar [mode]="progressBarMode"></mat-progress-bar>
-          </div>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="col" style="padding-top: 20px">
-
-          <div class="card">
-            <div class="card-header">
-              {{exerciseName}}Test.java
-            </div>
-            <div class="card-body">
-              <app-codeeditor #testing [injectedCode]="testingCode"></app-codeeditor>
-            </div>
-            <mat-progress-bar [mode]="progressBarMode"></mat-progress-bar>
-          </div>
-
-
-        </div>
-        <mat-divider></mat-divider>
-        <div style="margin-top: 20px">
-          <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="this.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
-          <button style="margin-left: 20px;" type="button" class="btn btn-primary" [disabled]="this.progressBarMode == 'query'" (click)="publishSolutionToLeaderboard()">{{ 'Save in Solution Repository' | translate }}</button>
-        </div>
-        <mat-divider></mat-divider>
-        <div class="col" style="margin-top: 20px">
-          <div class="card">
-            <div class="card-header">
-              Shell
-            </div>
-            <div class="card-body">
-              <app-codeeditor #output [injectedCode]="shellCode" [editable]="false"></app-codeeditor>
-            </div>
-            <mat-progress-bar [mode]="progressBarMode"></mat-progress-bar>
-          </div>
-        </div>
-        <span *ngIf="this.exerciseSuccess && this.progressBarMode!= 'query' && !(this.refactoringWarning || this.smellNumberWarning)" class="badge rounded-pill bg-success">{{ 'Compilation Successful' | translate }}</span>
-        <span *ngIf="this.exerciseSuccess && this.progressBarMode!= 'query' && (this.refactoringWarning || this.smellNumberWarning) " class="badge rounded-pill bg-warning text-dark">{{ 'Compilation Warning' | translate }}</span>
-        <span *ngIf="!this.exerciseSuccess && this.shellCode != '' && this.progressBarMode != 'query' " class="badge rounded-pill bg-danger">{{ 'Compilation Failure' | translate }}</span>
-
-
-        <div *ngIf="this.exerciseSuccess">
-          <h4>Score : {{smellNumber}}</h4>
-          <div class="refactor-result" *ngIf="refactoringResult != undefined">
-            <label *ngIf="refactoringResult.toString() == 'false'" style="color: red">Refactoring result : {{refactoringResult}}</label>
-            <label *ngIf="refactoringResult.toString() == 'true'" style="color: green">Refactoring result : {{refactoringResult}}</label>
-            <mat-icon *ngIf="refactoringResult.toString() == 'false' || refactoringResult.toString() == 'true'" style="margin-left: 10px; font-size: 12px" matTooltip="'Refactoring result' stat refers about the difference between original code and refactored code. If your refactored code is too much different from the original code probably there's a behavioral change of the code, which is not what we want in a refactoring. Refactoring limit : {{this.exerciseConfiguration.refactoring_game_configuration.refactoring_limit}}">info</mat-icon>
-            <p style="margin-left: 20px;">{{ 'Original coverage:' | translate }} {{originalCoverage}}</p>
-            <p style="margin-left: 20px;">{{ 'Refactored coverage:' | translate }} {{refactoredCoverage}}</p>
-          </div>
-          <div class="smell-warning" *ngIf="this.smellNumberWarning">
-            <label style="color: red"> {{ 'Smells allowed:' | translate }} {{this.exerciseConfiguration.refactoring_game_configuration.smells_allowed}}</label>
-            <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Your refactored code have more smells ({{this.smellNumber}}) than the minimum accepted ({{this.exerciseConfiguration.refactoring_game_configuration.smells_allowed}})">info</mat-icon>
-          </div>
-
-          <h3>Smells : </h3>
-          <div *ngFor="let smell of smellList; let i = index">
-            <mat-expansion-panel>
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <label style="margin-left:10px">{{smell}} : {{this.methodList[i].length}}</label>
-                  <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="{{smellDescriptions[getSmellNumber(smell)].smellDescription}}">info</mat-icon>
-                </mat-panel-title>
-                <mat-panel-description>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-
-              <ul class="list-group">
-                <li *ngFor="let method of methodList[i]" style="margin-left:40px" class="list-group-item">{{method}}</li>
-              </ul>
-
-            </mat-expansion-panel>
-
-          </div>
-        </div>
-        <button type="button" class="btn btn-primary" routerLink="/refactor-game/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
-      </div>
-    </div>
-</div>
+<app-refactoring-core [exerciseName]="exerciseName"
+                      #code [userCode]="userCode"
+                      [progressBarMode]="progressBarMode"
+                      #testing [testingCode]="testingCode"
+                      #output [shellCode]="shellCode"
+                      [exerciseSuccess]="exerciseSuccess"
+                      [refactoringWarning]="refactoringWarning"
+                      [smellNumber]="smellNumber"
+                      [refactoringResult]="refactoringResult"
+                      [originalCoverage]="originalCoverage"
+                      [refactoredCoverage]="refactoredCoverage"
+                      [smellNumberWarning]="smellNumberWarning"
+                      [exerciseConfiguration]="exerciseConfiguration"
+                      [smellList]="smellList"
+                      [methodList]="methodList"
+                      [smellDescriptions]="smellDescriptions"
+                      [solutionRepoRoute]="solutionRepoRoute"
+                      [compileCode]="compile"
+                      [submitExercise]="publishSolutionToLeaderboard"
+                      [submitIsEnabled]="submitIsEnabled"
+                      [finishButtonText]="'Save in solution repository'"
+                      [endButtonText]="'Solution Repository'"
+                      />
