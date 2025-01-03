@@ -1,0 +1,89 @@
+{
+  "exerciseId": "Exam1_2",
+  "check_game_configuration": {
+    "questions": [
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_96_1112() throws Throwable{\n\tVCardBean v = new VCardBean();\nv.setFirstNAme(\"A\");\nv.setMiddleName(\"B\");\nv.setLastName(\"C\");\nv.setEmail(\"lollers\");\nv.setOrganization(\"lol r us\");\nassertTrue(v.toString().contains(\"A B C\")));\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "    @Test\n    public void testSubtract() {\n        int a = 25; int b = 20; \n        int expectedResult = 5; \n        long result = objCalcUnderTest.subtract(a, b);\n        assertEquals(expectedResult, result);\n    }\n",
+        "answers": [
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          }
+        ]
+      }
+    ],
+    "level": 1
+  },
+  "auto_valutative": true
+}

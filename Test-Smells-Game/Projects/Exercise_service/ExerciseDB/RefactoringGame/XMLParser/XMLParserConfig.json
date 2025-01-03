@@ -1,0 +1,15 @@
+{
+  "exerciseId": "XMLParser_1",
+  "refactoring_game_configuration": {
+    "dependencies": [
+      "<dependency>\n  <groupId>junit</groupId>\n  <artifactId>junit</artifactId>\n  <version>4.13.2</version>\n  <scope>test</scope>\n  </dependency>\n"
+    ],
+    "refactoring_limit": 5,
+    "smells_allowed": 7,
+    "level": 1,
+    "ignored_smells": [
+      "Lazy Test"
+    ]
+  },
+  "auto_valutative": false
+}

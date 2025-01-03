@@ -1,16 +1,5 @@
 {
-  "exerciseId": "SubjectParser_1",
-  "refactoring_game_configuration": {
-    "dependencies": [
-      "<dependency>\n  <groupId>junit</groupId>\n  <artifactId>junit</artifactId>\n  <version>4.13.2</version>\n  <scope>test</scope>\n  </dependency>\n"
-    ],
-    "refactoring_limit": 5,
-    "smells_allowed": 17,
-    "level": 1,
-    "ignored_smells": [
-      "Lazy Test"
-    ]
-  },
+  "exerciseId": "Calculator_2",
   "check_game_configuration": {
     "questions": [
       {
@@ -41,7 +30,8 @@
           }
         ]
       }
-    ]
+    ],
+    "level": 1
   },
-  "auto_valutative": false
+  "auto_valutative": true
 }
