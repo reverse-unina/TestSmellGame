@@ -1,15 +1,16 @@
 {
-  "name": "Esercizio2",
+  "name": "Check_Smell_Exam1",
   "students": [
     {
       "name": "michele",
-      "exercise": "JunitExample",
+      "exercise": "Exam1",
       "startTime": "00:00",
       "startDate": "2024-12-02",
       "endTime": "23:00",
-      "endDate": "2024-12-20",
+      "endDate": "2024-12-29",
       "submitted": false
     }
   ],
-  "type": "competitivo"
+  "type": "competitivo",
+  "gameType": "check-smell"
 }

@@ -11,5 +11,6 @@
       "submitted": false
     }
   ],
-  "type": "competitivo"
+  "type": "competitivo",
+  "gameType": "refactoring"
 }
