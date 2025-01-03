@@ -124,6 +124,7 @@
   "Duplicate assignment names found": "Trovati esperimenti con nome duplicato",
   "Error reading assignment file": "Errore nella lettura dei file degli esperimenti",
 
-  "Assignment type": "Tipo di esperimento"
-
+  "Assignment type": "Tipo di esperimento",
+  "Refactoring type assignments": "Esperimenti di tipo refactoring",
+  "Check smell type assignments": "Esperimenti di tipo Check smell"
 }
