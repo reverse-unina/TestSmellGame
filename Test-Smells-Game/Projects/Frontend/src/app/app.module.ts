@@ -21,8 +21,8 @@ import {
 } from './routes/refactoring-game/refactoring-game-exercise-list/refactoring-game-ex-list-route.component';
 import {CheckGameExListRoute} from './routes/check-smell-game/check-smell-exercise-list/check-game-ex-list-route';
 import {CheckGameCoreRouteComponent} from './routes/check-smell-game/check-game-core/check-game-core-route.component';
-import {AssignmentsListRoute} from './routes/assignments/assignments-list/assignments-list-route';
-import {AssignmentsCoreRouteComponent} from './routes/assignments/assignments-core/assignments-core-route.component';
+import {AssignmentsListRoute} from './routes/assignments-route/assignments-list/assignments-list-route';
+import {AssignmentsCoreRouteComponent} from './routes/assignments-route/assignments-core/assignments-core-route.component';
 import {SolutionComponent} from './components/solution/solution.component';
 import {LeaderboardRouteComponent} from './routes/leaderboard-route/leaderboard-route.component';
 import {LoaderComponent} from './components/loader/loader.component';
@@ -47,6 +47,12 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { RefactoringCoreComponent } from './components/refactoring-core/refactoring-core.component';
 import { CheckCoreComponent } from './components/check-core/check-core.component';
+import { RefactoringScoreComponent } from './components/refactoring/refactoring-score/refactoring-score.component';
+import { RefactoringSmellListComponent } from './components/refactoring/refactoring-smell-list/refactoring-smell-list.component';
+import { RefactoringCompilationResultsComponent } from './components/refactoring/refactoring-compilation-results/refactoring-compilation-results.component';
+import { RefactoringEditorCardComponent } from './components/refactoring/refactoring-editor-card/refactoring-editor-card.component';
+import { CheckSmellAnswerListComponent } from './components/check-smell/check-smell-answer-list/check-smell-answer-list.component';
+import { CheckSmellQuestionComponent } from './components/check-smell/check-smell-question/check-smell-question.component';
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http);
@@ -77,6 +83,12 @@ export function HttpLoaderFactory(http:HttpClient) {
     AssignmentsCoreRouteComponent,
     RefactoringCoreComponent,
     CheckCoreComponent
+    RefactoringScoreComponent,
+    RefactoringSmellListComponent,
+    RefactoringCompilationResultsComponent,
+    RefactoringEditorCardComponent,
+    CheckSmellAnswerListComponent,
+    CheckSmellQuestionComponent,
   ],
   imports: [
     BrowserModule,
