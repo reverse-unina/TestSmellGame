@@ -126,5 +126,37 @@
 
   "Assignment type": "Tipo di esperimento",
   "Refactoring type assignments": "Esperimenti di tipo refactoring",
-  "Check smell type assignments": "Esperimenti di tipo Check smell"
+  "Check smell type assignments": "Esperimenti di tipo Check smell",
+  "Missions": "Missioni",
+  "Available Missions": "Missioni disponibili",
+  "Achievement": "Badge ottenibile",
+  "Go to mission": "Vai alla missione",
+
+  "Awesome!": "Ottimo!",
+  "Level Up!": "Sei salito di livello!",
+  "Congratulation, you have levelled up!": "Congratulazioni, sei salito di livello!",
+  "Badge Unblocked!": "Badge sbloccato",
+  "You have unlocked a new badge, view it on your profile page!": "Hai sbloccato un nuovo badge, visualizzalo nella pagina profilo",
+  "Holy cow, you have completed the mission": "Stupendo! Hai completato la missione",
+  "You can see the new badge in your account page": "Puoi vedere il nuovo badge nella tua pagina profilo",
+  "Try again": "Prova ancora",
+  "Unfortunately, you failed the exercise. Don’t give up, try again!": "Sfortunatamente non hai superato l'esercizio. Non arrenderti, prova ancora!",
+  "Congratulations!": "Congratulazioni!",
+  "You have completed successfully the exercise.": "Hai completato l'esercizio con successo.",
+
+  "the mission": "la missione",
+  "Progress to next badge": "Ottenimento del badge successivo",
+  "You need": "Ha bisogno di altri",
+  "more points to achieve the": "punti per sbloccare il",
+  "badge": "",
+  "User Score": "Punteggio utente",
+  "Refactoring Score": "Punteggio Refactoring",
+  "Check Smell Score": "Punteggio Check Smell",
+  "Missions Score": "Punteggio missioni",
+  "User ranking": "Classifica utenti",
+  "Game mode rankings": "Classifica modalità di gioco",
+  "Refactoring exercise rankings": "Classifica esercizi di refacoring",
+
+  "Congratulations! You have complete the mission and unlocked the badge:": "Congratulazioni! Hai completato la missione e guadagnato il badge:"
+
 }
