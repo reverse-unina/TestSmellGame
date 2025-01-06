@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../model/user/user.model';
-import { HttpClient } from '@angular/common/http';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 import { ExerciseService } from '../../services/exercise/exercise.service'
+import {firstValueFrom} from "rxjs";
+import {MissionService} from "../../services/missions/mission.service";
+import {MissionConfiguration, MissionStatus} from "../../model/missions/mission.model";
+import {environment} from "../../../environments/environment.prod";
+import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
+import {Rank, UserRanking} from "../../model/rank/rank";
 
 @Component({
   selector: 'app-profile-route',
@@ -15,44 +20,45 @@ export class ProfileRouteComponent implements OnInit {
   config!: levelConfig;
   user!: User;
   userLevel!: string;
+  missionConfigurations!: MissionConfiguration[];
+  userMissionsStatus!: MissionStatus[];
+  userScore!: Rank;
+  userRank!: UserRanking;
 
-  constructor(private userService: UserService, private exerciseService: ExerciseService, private http: HttpClient) {
+  constructor(
+    private userService: UserService,
+    private exerciseService: ExerciseService,
+    private missionService: MissionService,
+    private leaderboardService: LeaderboardService
+  ) { }
 
-    }
-
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.userService.getCurrentUser().subscribe(user => {
       this.user = user;
     });
-    this.exerciseService.getLevelConfig().subscribe(
-              (data: levelConfig) => {
-                  this.config = data;
-                  this.setUserLevel();
-                  console.log('LevelConfig:', this.config);
-              },
-              error => {
-                  console.error('Error fetching level config:', error);
-          });
+
+    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+    this.setUserLevel();
+    console.log('LevelConfig:', this.config);
+
+    this.missionConfigurations = await firstValueFrom(this.missionService.getMissions());
+    this.userMissionsStatus = await firstValueFrom(this.userService.getUserMissionsStatus());
+
+    this.userScore = await firstValueFrom(this.leaderboardService.getScore(this.user.userId));
+    this.userRank = await firstValueFrom(this.leaderboardService.getUserRank(this.user.userId));
+
+    console.log('rank:', this.userRank);
   }
 
-  getBadgeValue(index: number): string {
-    const keys = Object.keys(this.config.badgeValues).map(key => Number(key));
-    if (index >= 0 && index < keys.length) {
-      const key = keys[index];
-      return this.config.badgeValues[key];
-    }
-    throw new Error('Indice fuori dal range');
+  isMissionCompleted(missionConfiguration: MissionConfiguration): boolean {
+    if (this.userMissionsStatus === undefined)
+      return false;
+
+    const mission = this.userMissionsStatus.find(
+      mission => mission.missionId === missionConfiguration.id
+    );
+    return mission ? mission.steps === missionConfiguration.steps.length : false;
   }
-
-
-  getBadgeValueKey(index: number): number {
-      const keys = Object.keys(this.config.badgeValues).map(key => Number(key));
-      return keys[index];
-    }
-
-  getBadgeUrl(badgeName: string): string {
-      return this.exerciseService.getBadgeUrl(badgeName);
-    }
 
   private setUserLevel(): void {
     if (this.user.exp < this.config.expValues[0]) {
@@ -63,4 +69,36 @@ export class ProfileRouteComponent implements OnInit {
       this.userLevel = '⭐⭐⭐';
     }
   }
+
+  nextBadge() {
+    for (let i = 0; i < this.config.badgeValues.length; i++) {
+      if (this.user.exp < this.config.badgeValues[i].points) {
+        return {
+          name: this.config.badgeValues[i].name,
+          pointsRequired: this.config.badgeValues[i].points,
+        };
+      }
+    }
+    return null;
+  }
+
+  getProgressPercentage(): number {
+    let nextBadge = this.nextBadge();
+
+    if (!nextBadge) return 100; // Tutti i badge ottenuti
+
+    const currentBadgeIndex = this.config.badgeValues.findIndex(badge => badge.points === nextBadge!.pointsRequired) - 1;
+    const currentBadgePoints = currentBadgeIndex >= 0 ? this.config.badgeValues[currentBadgeIndex].points : 0;
+
+    const nextBadgePoints = nextBadge!.pointsRequired;
+
+    const progress = ((this.user.exp - currentBadgePoints) / (nextBadgePoints - currentBadgePoints)) * 100;
+
+    return Math.min(Math.max(progress, 0), 100); // Clamping tra 0% e 100%
+  }
+
+
+
+  protected readonly environment = environment;
+  protected readonly Object = Object;
 }

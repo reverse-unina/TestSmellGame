@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dariotintore.tesi.exerciseservice.LevelConfig.LevelConfig;
+import com.dariotintore.tesi.exerciseservice.entity.levelConfig.LevelConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;

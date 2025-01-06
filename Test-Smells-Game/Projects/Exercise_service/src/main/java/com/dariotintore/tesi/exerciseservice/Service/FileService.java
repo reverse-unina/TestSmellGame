@@ -35,6 +35,10 @@ public class FileService {
 	    return response;
 	}
 
+	public byte[] getBadgeFile(String basePath, String filename) throws IOException {
+		return Files.readAllBytes(Paths.get(basePath + filename + ".png"));
+	}
+
 	public List<byte[]> getAllConfigFiles(String basePath) throws IOException {
 		List<byte[]> configFiles = new ArrayList<>();
 		List<String> exercises = getAllFiles(basePath);
