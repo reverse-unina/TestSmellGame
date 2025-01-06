@@ -1,0 +1,19 @@
+<div class="mission-list">
+  <h1>{{ "Available Missions" | translate }}</h1>
+  <div *ngFor="let mission of missionConfigurations" class="mission-card">
+    <div class="mission-info">
+      <h2>{{ mission.name }}</h2>
+      <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>
+      <app-mission-progress [progress]="getMissionProgress(mission)"></app-mission-progress>
+    </div>
+    <button
+      class="btn-start"
+      [ngClass]="{ 'btn-disabled': isMissionCompleted(mission) }"
+      [disabled]="isMissionCompleted(mission)"
+      [routerLink]="isMissionCompleted(mission) ? null : ['/missions', mission.id]"
+    >
+      {{ "Go to mission" | translate }}
+    </button>
+  </div>
+</div>
+

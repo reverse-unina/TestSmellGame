@@ -54,6 +54,10 @@ import { RefactoringCompilationResultsComponent } from './components/refactoring
 import { RefactoringEditorCardComponent } from './components/refactoring/refactoring-editor-card/refactoring-editor-card.component';
 import { CheckSmellAnswerListComponent } from './components/check-smell/check-smell-answer-list/check-smell-answer-list.component';
 import { CheckSmellQuestionComponent } from './components/check-smell/check-smell-question/check-smell-question.component';
+import { LearningPageRouteComponent } from './routes/learning-page-route/learning-page-route.component';
+import { MissionsListRouteComponent } from './routes/missions-route/missions-list-route/missions-list-route.component';
+import { MissionsCoreRouteComponent } from './routes/missions-route/missions-core-route/missions-core-route.component';
+import { MissionProgressComponent } from './components/mission-progress/mission-progress.component';
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http);
@@ -91,6 +95,10 @@ export function HttpLoaderFactory(http:HttpClient) {
     RefactoringEditorCardComponent,
     CheckSmellAnswerListComponent,
     CheckSmellQuestionComponent,
+    LearningPageRouteComponent,
+    MissionsListRouteComponent,
+    MissionsCoreRouteComponent,
+    MissionProgressComponent
   ],
   imports: [
     BrowserModule,

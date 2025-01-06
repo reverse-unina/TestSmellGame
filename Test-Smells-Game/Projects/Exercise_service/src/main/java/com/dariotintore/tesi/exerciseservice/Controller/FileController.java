@@ -77,20 +77,42 @@ public class FileController {
                 .body(file);
     }
 
+    @GetMapping("/learning/{id}")
+    public ResponseEntity<byte[]> retrieveLearningContent(
+            @PathVariable String id) throws IOException {
+        byte[] file = storageService.getFile("ExerciseDB/LearningContent/", id, "Configuration");
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + id + "\"")
+                .body(file);
+    }
+
     @GetMapping("/refactoring-game-configurations")
     public ResponseEntity<List<byte[]>> getAllRefactoringGameConfigFiles() throws IOException {
         List<byte[]> configFiles = storageService.getAllConfigFiles("ExerciseDB/RefactoringGame/");
         return ResponseEntity.status(HttpStatus.OK).body(configFiles);
     }
-  
-  @GetMapping("/check-game-configurations")
-  public ResponseEntity<List<byte[]>> getAllCheckGameConfigFiles() throws IOException {
+
+    @GetMapping("/check-game-configurations")
+    public ResponseEntity<List<byte[]>> getAllCheckGameConfigFiles() throws IOException {
     List<byte[]> configFiles = storageService.getAllConfigFiles("ExerciseDB/CheckGame/");
     return ResponseEntity.status(HttpStatus.OK).body(configFiles);
-  }
-  
-  @PostMapping("/log-event")
-  public ResponseEntity<String> logEvent(@RequestBody EventLog eventLog) {
+    }
+
+    /*
+    @GetMapping("/badges/{filename}")
+    public ResponseEntity<byte[]> retrieveBadgesFileByFilename(@PathVariable String filename) throws IOException {
+        byte[] file = storageService.getBadgeFile("badges/", filename);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .body(file);
+    }
+
+     */
+
+    @PostMapping("/log-event")
+    public ResponseEntity<String> logEvent(@RequestBody EventLog eventLog) {
       try {
           String logFileName = "events.log";
           String logFilePath = LOG_FILE_PATH + logFileName;

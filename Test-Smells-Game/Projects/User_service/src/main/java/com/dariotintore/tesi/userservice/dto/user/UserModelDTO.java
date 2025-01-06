@@ -1,8 +1,11 @@
 package com.dariotintore.tesi.userservice.dto.user;
 
+import com.dariotintore.tesi.userservice.entity.MissionStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * The type User model dto.
@@ -20,5 +23,8 @@ public class UserModelDTO {
     private String email;
     @JsonProperty("exp")
     private int exp;
+    @JsonProperty("missionsStatus")
+    private List<MissionStatus> missionsStatus;
+
     
 }
