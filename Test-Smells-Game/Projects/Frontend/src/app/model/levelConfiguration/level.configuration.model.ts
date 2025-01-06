@@ -1,5 +1,12 @@
 export interface levelConfig {
   expValues: number[];
-  badgeValues: { [key: number]: string };
+  badgeValues: [
+    {
+      name: string;
+      description: string;
+      points: number;
+      filename: string;
+    }
+  ];
   answerPercentage: number;
 }

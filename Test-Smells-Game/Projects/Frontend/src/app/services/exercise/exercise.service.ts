@@ -5,6 +5,7 @@ import {environment} from "../../../environments/environment.prod";
 import {RefactoringGameExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { Observable, forkJoin } from 'rxjs';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import {LearningContent} from "../../model/learningContent/learning-content";
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,10 @@ export class ExerciseService {
 
   getAllCheckGameConfigFiles(): Observable<any[]> {
     return this.http.get<any[]>(environment.exerciseServiceUrl + '/files/check-game-configurations');
+  }
+
+  getLeaningContentById(id: string): Observable<LearningContent> {
+    return this.http.get<LearningContent>(environment.exerciseServiceUrl + `/files/learning/${id}`);
   }
 
   getLevelConfig(): Observable<levelConfig> {

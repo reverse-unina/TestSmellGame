@@ -1,0 +1,7 @@
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content">
+    <h1 class="title">🎉 {{  'Congratulations!' | translate }} 🎉</h1>
+    <p class="message">{{ message | translate}}</p>
+    <button class="close-button" (click)="close()"> {{ 'Ok' }} </button>
+  </div>
+</div>

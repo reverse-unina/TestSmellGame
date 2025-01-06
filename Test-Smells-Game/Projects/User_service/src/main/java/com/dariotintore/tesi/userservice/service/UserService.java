@@ -1,8 +1,10 @@
 package com.dariotintore.tesi.userservice.service;
 
 import com.dariotintore.tesi.userservice.dto.user.AuthUserDTO;
+import com.dariotintore.tesi.userservice.dto.user.MissionStatusDTO;
 import com.dariotintore.tesi.userservice.dto.user.UserInfoDTO;
 import com.dariotintore.tesi.userservice.dto.user.UserModelDTO;
+import com.dariotintore.tesi.userservice.entity.MissionStatus;
 import com.dariotintore.tesi.userservice.entity.User;
 import com.dariotintore.tesi.userservice.repository.UserRepository;
 import com.dariotintore.tesi.userservice.utils.ResponseHelper;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +47,8 @@ public class UserService {
                 .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
                 .userName(userDTO.getUsername())
-                .exp(0)  
+                .exp(0)
+                .missions(new LinkedList<>())
                 .build()
         );
         return ResponseHelper.buildOkResponse("User created");
@@ -121,7 +125,8 @@ public class UserService {
                         .email(email)
                         .userId(u.getUserId())
                         .userName(u.getUserName())
-                        .exp(u.getExp())  
+                        .exp(u.getExp())
+                        .missionStatus(u.getMissions())
                         .build();
             }
         }
@@ -139,6 +144,24 @@ public class UserService {
             User user = optionalUser.get();
             user.setExp(userDTO.getExp());  
             userRepository.save(user); //  
+        } else {
+            throw new RuntimeException("User not found!");
+        }
+    }
+
+    public List<MissionStatus> getUserMissionsStatus(Long userId) {
+        Optional<User> user = findUserById(userId);
+        return user.map(User::getMissions).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public void updateUserMissionStatus(MissionStatusDTO missionStatusDTO) {
+        Optional<User> optionalUser = userRepository.getUserByEmail(missionStatusDTO.getEmail());
+
+        System.out.println("user is present: " + optionalUser.isPresent());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.updateMissionStatus(missionStatusDTO.getMissionStatus());
+            userRepository.save(user);
         } else {
             throw new RuntimeException("User not found!");
         }

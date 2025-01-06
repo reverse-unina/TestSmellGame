@@ -17,12 +17,11 @@ import java.util.List;
 @RequestMapping("/leaderboard")
 public class LeaderboardController {
 
-  @Autowired
-  SolutionService solutionService;
+    @Autowired
+    SolutionService solutionService;
 
-  @Autowired
-  CommentService commentService;
-
+    @Autowired
+    CommentService commentService;
 
     @GetMapping("/{exerciseId}")
     public List<Solution> getSolutionsByExercise(@PathVariable("exerciseId") String exerciseId){

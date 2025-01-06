@@ -1,0 +1,35 @@
+.mission-list {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+.mission-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+.mission-info h2 {
+  margin: 0 0 10px 0;
+}
+.btn-start {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btn-start:hover {
+  background-color: #0056b3;
+}
+.btn-disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+

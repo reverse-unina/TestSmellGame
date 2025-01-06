@@ -45,14 +45,19 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { RefactoringCoreComponent } from './components/refactoring-core/refactoring-core.component';
-import { CheckCoreComponent } from './components/check-core/check-core.component';
+import { SuccessAlertComponent } from './components/alert/success-alert/success-alert.component';
+import { FailAlertComponent } from './components/alert/fail-alert/fail-alert.component';
+import { AchievementAlertComponent } from './components/alert/achivement-alert/achievement-alert.component';
 import { RefactoringScoreComponent } from './components/refactoring/refactoring-score/refactoring-score.component';
 import { RefactoringSmellListComponent } from './components/refactoring/refactoring-smell-list/refactoring-smell-list.component';
 import { RefactoringCompilationResultsComponent } from './components/refactoring/refactoring-compilation-results/refactoring-compilation-results.component';
 import { RefactoringEditorCardComponent } from './components/refactoring/refactoring-editor-card/refactoring-editor-card.component';
 import { CheckSmellAnswerListComponent } from './components/check-smell/check-smell-answer-list/check-smell-answer-list.component';
 import { CheckSmellQuestionComponent } from './components/check-smell/check-smell-question/check-smell-question.component';
+import { LearningPageRouteComponent } from './routes/learning-page-route/learning-page-route.component';
+import { MissionsListRouteComponent } from './routes/missions-route/missions-list-route/missions-list-route.component';
+import { MissionsCoreRouteComponent } from './routes/missions-route/missions-core-route/missions-core-route.component';
+import { MissionProgressComponent } from './components/mission-progress/mission-progress.component';
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http);
@@ -81,14 +86,19 @@ export function HttpLoaderFactory(http:HttpClient) {
     LogelementComponent,
     AssignmentsListRoute,
     AssignmentsCoreRouteComponent,
-    RefactoringCoreComponent,
-    CheckCoreComponent
+    SuccessAlertComponent,
+    FailAlertComponent,
+    AchievementAlertComponent,
     RefactoringScoreComponent,
     RefactoringSmellListComponent,
     RefactoringCompilationResultsComponent,
     RefactoringEditorCardComponent,
     CheckSmellAnswerListComponent,
     CheckSmellQuestionComponent,
+    LearningPageRouteComponent,
+    MissionsListRouteComponent,
+    MissionsCoreRouteComponent,
+    MissionProgressComponent
   ],
   imports: [
     BrowserModule,
