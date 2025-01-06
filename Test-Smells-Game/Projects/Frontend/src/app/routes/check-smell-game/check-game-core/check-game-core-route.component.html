@@ -1,1 +1,39 @@
-<app-check-core />
+<div class="container">
+  <h1>{{exerciseName}}</h1>
+  <div>
+    <div *ngIf="!checkSmellService.exerciseCompleted else showResult" class="card">
+
+      <app-check-smell-question #testing [editorHeader]="exerciseName+'.java'" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
+      </app-check-smell-question>
+
+      <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers">
+      </app-check-smell-answer-list>
+
+      <div>
+        <button class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+        <button class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+      </div>
+      <button *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+
+    </div>
+  </div>
+
+  <app-success-alert #successAlert></app-success-alert>
+  <app-fail-alert #failAlert></app-fail-alert>
+  <app-achievement-alert #achievementAlert></app-achievement-alert>
+
+  <ng-template #showResult>
+    <h1>{{ 'Score' | translate }}: {{Math.round((checkSmellService.score * 100) / checkSmellService.assignmentScore) + '/100'}}</h1>
+    <div *ngFor="let question of checkSmellService.questions" class="card">
+
+      <app-check-smell-question [injectedCode]="question.questionCode">
+      </app-check-smell-question>
+
+      <app-check-smell-answer-list [questionAnswers]="question.answers"
+                                   [showBackground]="true" [disabled]="true">
+      </app-check-smell-answer-list>
+    </div>
+  </ng-template>
+
+</div>
+

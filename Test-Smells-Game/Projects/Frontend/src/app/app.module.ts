@@ -45,8 +45,9 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { RefactoringCoreComponent } from './components/refactoring-core/refactoring-core.component';
-import { CheckCoreComponent } from './components/check-core/check-core.component';
+import { SuccessAlertComponent } from './components/alert/success-alert/success-alert.component';
+import { FailAlertComponent } from './components/alert/fail-alert/fail-alert.component';
+import { AchievementAlertComponent } from './components/alert/achivement-alert/achievement-alert.component';
 import { RefactoringScoreComponent } from './components/refactoring/refactoring-score/refactoring-score.component';
 import { RefactoringSmellListComponent } from './components/refactoring/refactoring-smell-list/refactoring-smell-list.component';
 import { RefactoringCompilationResultsComponent } from './components/refactoring/refactoring-compilation-results/refactoring-compilation-results.component';
@@ -81,8 +82,9 @@ export function HttpLoaderFactory(http:HttpClient) {
     LogelementComponent,
     AssignmentsListRoute,
     AssignmentsCoreRouteComponent,
-    RefactoringCoreComponent,
-    CheckCoreComponent
+    SuccessAlertComponent,
+    FailAlertComponent,
+    AchievementAlertComponent,
     RefactoringScoreComponent,
     RefactoringSmellListComponent,
     RefactoringCompilationResultsComponent,

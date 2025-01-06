@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { RefactoringGameExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import {firstValueFrom, Observable} from "rxjs";
 
 @Component({
   selector: 'app-refactoring-game-exercise-list',
@@ -25,7 +26,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
   serverProblems = false;
   waitingForServer!: boolean;
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.waitingForServer = true;
 
     this.exerciseService.getAllRefactoringGameConfigFiles().subscribe(
@@ -40,15 +41,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
       }
     );
 
-    this.exerciseService.getLevelConfig().subscribe(
-          (data: levelConfig) => {
-            this.config = data;
-            console.log('LevelConfig:', this.config);
-          },
-          error => {
-            console.error('Error fetching level config:', error);
-          }
-        );
+    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
 
     this.exerciseService.getRefactoringGameExercises().subscribe(
       response => {

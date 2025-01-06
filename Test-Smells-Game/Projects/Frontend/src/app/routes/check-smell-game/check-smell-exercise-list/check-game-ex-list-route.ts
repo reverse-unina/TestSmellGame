@@ -7,6 +7,7 @@ import {FormBuilder, NgForm} from "@angular/forms";
 import {CheckGameExerciseConfig} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import {environment} from "../../../../environments/environment.prod";
 import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import {firstValueFrom, Observable} from "rxjs";
 
 @Component({
   selector: 'app-check-smell-game-exercise-list',
@@ -17,28 +18,20 @@ export class CheckGameExListRoute implements OnInit {
 
   constructor(private exerciseService: ExerciseService,
               private userService: UserService,
-              private zone:NgZone,
-              private _router: Router,
-              private fb: FormBuilder,
-              private http: HttpClient
-  ) { this.exerciseService.getLevelConfig().subscribe(
-                (data: levelConfig) => {
-                  this.config = data;
-                  console.log('LevelConfig:', this.config);
-                },
-                error => {
-                  console.error('Error fetching level config:', error);
-                }
-              );}
+  ) {
 
-  private config!: levelConfig;
+  }
+
+  config!: levelConfig;
   exercises = new Array<any>();
   exerciseConfigurations = new Array<CheckGameExerciseConfig>();
   serverProblems = false;
   waitingForServer!: boolean;
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+
     this.exerciseService.getAllCheckGameConfigFiles().subscribe(
           (response: any[]) => {
             this.waitingForServer = false;
@@ -50,8 +43,6 @@ export class CheckGameExListRoute implements OnInit {
             this.waitingForServer = false;
           }
         );
-
-
 
     this.waitingForServer = true;
     this.exerciseService.getCheckGameExercises().subscribe(response =>{

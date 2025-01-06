@@ -98,14 +98,8 @@ export class AssignmentsListRoute implements OnInit {
     return currentTime >= startDateTime && currentTime <= endDateTime;
   }
 
-  checkAssignmentPresence(): number {
-    let count = 0;
-    this.assignments.forEach(assignment => {
-      if (assignment.students.some(student => student.name === this.currentUser?.userName)) {
-        count++;
-      }
-    });
-    return count;
+  hasStudentAssignments(gameType: string): boolean{
+    return this.assignments.filter(assignment => assignment.gameType === gameType).length > 0;
   }
 
 }
