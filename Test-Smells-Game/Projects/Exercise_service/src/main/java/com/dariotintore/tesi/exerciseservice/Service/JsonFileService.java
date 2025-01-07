@@ -1,6 +1,7 @@
 package com.dariotintore.tesi.exerciseservice.Service;
 
 import com.dariotintore.tesi.exerciseservice.entity.assignment.Assignment;
+import com.dariotintore.tesi.exerciseservice.entity.mission.Mission;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -8,12 +9,23 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class AssignmentService {
+public class JsonFileService {
 
-    public static boolean hasDuplicateNames(List<Assignment> assignments) {
+    public static boolean assignmentsHaveDuplicateNames(List<Assignment> assignments) {
         Set<String> nameSet = new HashSet<>();
         for (Assignment assignment : assignments) {
             if (!nameSet.add(assignment.getName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean missionsHaveDuplicateIds(List<Mission> missions) {
+        Set<String> nameSet = new HashSet<>();
+        for (Mission mission : missions) {
+            if (!nameSet.add(mission.getId())) {
                 return true;
             }
         }

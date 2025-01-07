@@ -1,5 +1,22 @@
 <div class="mission-list">
   <h1>{{ "Available Missions" | translate }}</h1>
+
+  <div *ngIf="errorMessage !== undefined">
+    <br><br><br><br><br><br><br><br>
+    <h1 style="color: red; font-size: 20px; text-align: center;">{{ 'Error loading missions' | translate }}</h1>
+    <h2 style="color: red; font-size: 20px; text-align: center;">
+      <span *ngFor="let error of errorParts">{{ error | translate }} </span>
+    </h2>
+    <h2 style="color: red; font-size: 20px; text-align: center;">{{ "Please contact your supervisor" | translate }}</h2>
+  </div>
+
+  <div *ngIf="errorMessage === undefined && missionConfigurations.length === 0">
+    <br><br><br><br><br><br><br><br>
+    <h1 style="font-size: 20px; text-align: center;">
+      {{ "No missions available" | translate }}
+    </h1>
+  </div>
+
   <div *ngFor="let mission of missionConfigurations" class="mission-card">
     <div class="mission-info">
       <h2>{{ mission.name }}</h2>

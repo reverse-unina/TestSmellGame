@@ -78,7 +78,7 @@
         <ul class="ranking-list" *ngIf="userRank?.refactoringExerciseRankings && Object.keys(userRank.refactoringExerciseRankings).length > 0">
           <li *ngFor="let exercise of userRank.refactoringExerciseRankings | keyvalue" class="ranking-item">
             <span class="ranking-key">{{ exercise.key }}</span>
-            <span class="ranking-value">{{ exercise.value }}{{'° position'}}</span>
+            <span class="ranking-value">{{ exercise.value }}{{'° position' | translate }}</span>
           </li>
         </ul>
       </div>

@@ -1,6 +1,6 @@
 package com.dariotintore.tesi.exerciseservice.Controller;
 
-import com.dariotintore.tesi.exerciseservice.Service.AssignmentService;
+import com.dariotintore.tesi.exerciseservice.Service.JsonFileService;
 import com.dariotintore.tesi.exerciseservice.entity.mission.Mission;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
@@ -47,11 +47,11 @@ public class MissionController {
                 Mission mission = objectMapper.readValue(file, Mission.class);
                 missions.add(mission);
             } catch (UnrecognizedPropertyException e) {
-                String error = "Unrecognized field \"" + AssignmentService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + file.getName();
+                String error = "Unrecognized field \"" + JsonFileService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + file.getName();
                 logger.error("{}: {}", error, e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             } catch (MismatchedInputException e) {
-                String error = "Missing required property \"" + AssignmentService.extractMissingRequiredField(e.getMessage()) + "\" in file " + file.getName();
+                String error = "Missing required property \"" + JsonFileService.extractMissingRequiredField(e.getMessage()) + "\" in file " + file.getName();
                 logger.error("{}: {}", error, e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             } catch (IOException e) {
@@ -61,13 +61,11 @@ public class MissionController {
             }
         }
 
-        /*
-        if (AssignmentService.hasDuplicateNames(missions)) {
+        if (JsonFileService.missionsHaveDuplicateIds(missions)) {
             String error = "Duplicate assignment names found";
             logger.error(error);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
-         */
 
         return ResponseEntity.ok(missions);
     }
@@ -95,11 +93,11 @@ public class MissionController {
                     break;
                 }
             } catch (UnrecognizedPropertyException e) {
-                String error = "Unrecognized field \"" + AssignmentService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + file.getName();
+                String error = "Unrecognized field \"" + JsonFileService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + file.getName();
                 logger.error("{}: {}", error, e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             } catch (MismatchedInputException e) {
-                String error = "Missing required property \"" + AssignmentService.extractMissingRequiredField(e.getMessage()) + "\" in file " + file.getName();
+                String error = "Missing required property \"" + JsonFileService.extractMissingRequiredField(e.getMessage()) + "\" in file " + file.getName();
                 logger.error("{}: {}", error, e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             } catch (IOException e) {
@@ -108,15 +106,6 @@ public class MissionController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             }
         }
-
-        /*
-        if (AssignmentService.hasDuplicateNames(missions)) {
-            String error = "Duplicate assignment names found";
-            logger.error(error);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-        }
-
-         */
 
         if (selectedMission == null) {
             String error = "Mission with id \"" + id + "\" not found";

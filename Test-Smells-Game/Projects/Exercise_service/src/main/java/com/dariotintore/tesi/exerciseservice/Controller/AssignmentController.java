@@ -1,6 +1,6 @@
 package com.dariotintore.tesi.exerciseservice.Controller;
 
-import com.dariotintore.tesi.exerciseservice.Service.AssignmentService;
+import com.dariotintore.tesi.exerciseservice.Service.JsonFileService;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.slf4j.Logger;
@@ -55,11 +55,11 @@ public class AssignmentController {
                 Assignment assignment = objectMapper.readValue(file, Assignment.class);
                 assignments.add(assignment);
             } catch (UnrecognizedPropertyException e) {
-                String error = "Unrecognized field \"" + AssignmentService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + file.getName();
+                String error = "Unrecognized field \"" + JsonFileService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + file.getName();
                 logger.error("{}: {}", error, e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             } catch (MismatchedInputException e) {
-                String error = "Missing required property \"" + AssignmentService.extractMissingRequiredField(e.getMessage()) + "\" in file " + file.getName();
+                String error = "Missing required property \"" + JsonFileService.extractMissingRequiredField(e.getMessage()) + "\" in file " + file.getName();
                 logger.error("{}: {}", error, e.getMessage());
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
             } catch (IOException e) {
@@ -69,7 +69,7 @@ public class AssignmentController {
             }
         }
 
-        if (AssignmentService.hasDuplicateNames(assignments)) {
+        if (JsonFileService.assignmentsHaveDuplicateNames(assignments)) {
             String error = "Duplicate assignment names found";
             logger.error(error);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);

@@ -24,7 +24,7 @@
   "Per utilizzare il cloud è necessario effettuare l'accesso": "To use cloud you need to login",
   "Per utilizzare GitHub è necessario eseguire l'applicazione Electron": "To use GitHub you need to execute the Electron App",
   "Problemi noti": "Known Issues",
-  "Stai utilizzando la modalità di recupero Cloud":"You are actually using Cloud Retrieve mode",
+  "Stai utilizzando la modalità di recupero Cloud": "You are actually using Cloud Retrieve mode",
   "Il server degli esercizi ha problemi": "Exercise server has problems",
   "Schermo intero": "Fullscreen",
   "Ripristina": "Reset",
@@ -114,7 +114,6 @@
   "Disponibile dal": "Available from",
   "alle ore": "at",
   "Da consegnare entro il": "To be delivered by",
-
   "Per favore contatta il tuo supervisore": "Please contact your supervisor",
   "Nessun esperimento trovato": "No assignment files found",
   "Proprietà sconosciuta": "Unrecognized field",
@@ -123,7 +122,6 @@
   "nel file": "in file",
   "Trovati esperimenti con nome duplicato": "Duplicate assignment names found",
   "Errore nella lettura dei file degli esperimenti": "Error reading assignment file",
-
   "Tipo di esperimento": "Assignment type",
   "Esperimenti di tipo refactoring": "Refactoring type assignments",
   "Esperimenti di tipo Check smell": "Check smell type assignments",
@@ -131,7 +129,6 @@
   "Missioni disponibili": "Available Missions",
   "Badge ottenibile": "Achievement",
   "Vai alla missione": "Go to mission",
-
   "Ottimo!": "Awesome!",
   "Sei salito di livello!": "Level Up!",
   "Congratulazioni, sei salito di livello!": "Congratulation, you have levelled up!",
@@ -143,7 +140,6 @@
   "Sfortunatamente non hai superato l'esercizio. Non arrenderti, prova ancora!": "Unfortunately, you failed the exercise. Don’t give up, try again!",
   "Congratulazioni!": "Congratulations!",
   "Hai completato l'esercizio con successo.": "You have completed successfully the exercise.",
-
   "la missione": "the mission",
   "Ottenimento del badge successivo": "Progress to next badge",
   "Ha bisogno di altri": "You need",
@@ -156,7 +152,10 @@
   "Classifica utenti": "User ranking",
   "Classifica modalità di gioco": "Game mode rankings",
   "Classifica esercizi di refacoring": "Refactoring exercise rankings",
-
-  "Congratulazioni! Hai completato la missione e guadagnato il badge:": "Congratulations! You have complete the mission and unlocked the badge:"
+  "° posizione": "° position",
+  "Nessuna missione disponibile": "No missions available",
+  "Congratulazioni! Hai completato la missione e guadagnato il badge:": "Congratulations! You have complete the mission and unlocked the badge:",
+  "Errore durante il caricamento delle missioni": "Error loading missions"
 }
+
 

@@ -64,6 +64,14 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this._snackBar,
       this.userService
     );
+
+    this.checkSmellService = new CheckSmellService(
+      this.exerciseService,
+      this.userService,
+      this.leaderboardService
+    );
+
+    this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
   }
 
   ngOnInit(): void {
@@ -82,7 +90,8 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           this.startCheckInterval();
         }
 
-        if (this.assignment?.gameType === "refactoring") {
+        console.log("LOADING: ", this.assignment!.gameType === "refactoring");
+        if (this.assignment!.gameType === "refactoring") {
           this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
             isModified => {
               this.codeModified = isModified;
@@ -95,10 +104,8 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           this.code.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
           this.testing.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
 
-          this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
-
           console.log("userCode; ", this.refactoringService.userCode);
-        } else if (this.assignment?.gameType === "check-smell"){
+        } else if (this.assignment!.gameType === "check-smell"){
           this.checkSmellService.initQuestions(this.exerciseName);
         }
       },
@@ -111,6 +118,10 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.codeModifiedSubscription)
       this.codeModifiedSubscription.unsubscribe();
+
+    if (this.assignment!.gameType === "refactoring")
+      this.refactoringService.saveCode("assignment-refactoring", this.exerciseName, this.testing.editorComponent);
+
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
     }
@@ -134,7 +145,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           });
           if (!this.currentStudent.consegnato)
             this.submitAssignment();
-          if (this.assignment?.type === 'collaborativo')
+          if (this.assignment!.type === 'collaborativo')
             this.router.navigate(['/assignments/leaderboard/' + this.exerciseName]);
           else
             this.router.navigate(['/home']);
@@ -166,7 +177,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   submitCheckSmellAssignment: ((studentScore: number, assignmentScore: number, questions: Question[]) => void) =
     (studentScore: number, assignmentScore: number, questions: Question[]): void => {
     const studentName = this.currentStudent?.name;
-    const assignmentName = this.assignment?.name;
+    const assignmentName = this.assignment!.name;
     const results: string = this.generateCheckSmellReport(studentScore, assignmentScore, questions);
 
     if (assignmentName && studentName) {
@@ -239,7 +250,8 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: Event) {
-    this.refactoringService.saveCode('assignment-refactoring', this.exerciseName, this.testing.editorComponent);
+    if (this.assignment!.gameType === "refactoring")
+      this.refactoringService.saveCode('assignment-refactoring', this.exerciseName, this.testing.editorComponent);
   }
 
   submitRefactoringAssignment: (() => void) = () => {
@@ -274,7 +286,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     if (this.refactoringService.smellList.length <= this.refactoringService.exerciseConfiguration.refactoring_game_configuration.smells_allowed) {
       this.userService.increaseUserExp();
       const studentName = this.currentStudent?.name;
-      const assignmentName = this.assignment?.name;
+      const assignmentName = this.assignment!.name;
 
       const productionCode = this.refactoringService.userCode;
       const testCode = this.testing.editorComponent.injectedCode;
@@ -308,7 +320,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this.downloadFile(`${studentName}_ShellCode.java`, this.refactoringService.shellCode);
       this.currentStudent.consegnato = true;
 
-      if (this.assignment?.type === 'collaborativo')
+      if (this.assignment!.type === 'collaborativo')
        this.publishSolutionToLeaderboard();
       else
         this.router.navigate(['/']);

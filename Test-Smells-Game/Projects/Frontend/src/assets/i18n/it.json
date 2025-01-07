@@ -156,7 +156,9 @@
   "User ranking": "Classifica utenti",
   "Game mode rankings": "Classifica modalità di gioco",
   "Refactoring exercise rankings": "Classifica esercizi di refacoring",
+  "° position": "° posizione",
 
-  "Congratulations! You have complete the mission and unlocked the badge:": "Congratulazioni! Hai completato la missione e guadagnato il badge:"
-
+  "No missions available": "Nessuna missione disponibile",
+  "Congratulations! You have complete the mission and unlocked the badge:": "Congratulazioni! Hai completato la missione e guadagnato il badge:",
+  "Error loading missions": "Errore durante il caricamento delle missioni"
 }
