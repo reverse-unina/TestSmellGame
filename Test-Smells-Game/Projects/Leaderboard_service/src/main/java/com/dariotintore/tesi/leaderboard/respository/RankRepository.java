@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface RankRepository extends JpaRepository<Rank, Long> {
-    @Query("SELECT r FROM Rank r WHERE r.userId = :userId")
     Optional<Rank> findByUserId(Long userId);
 
 }
