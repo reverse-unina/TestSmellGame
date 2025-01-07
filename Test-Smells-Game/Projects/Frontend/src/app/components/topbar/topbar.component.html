@@ -20,6 +20,9 @@
       <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
         <a class="nav-link" routerLink="/assignments">{{ 'Assignments' | translate }}</a>
       </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
+        <a class="nav-link" routerLink="/missions">{{ 'Missions' | translate }}</a>
+      </li>
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/settings">{{ 'Settings' | translate }}</a>
       </li>
