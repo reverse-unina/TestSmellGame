@@ -1,0 +1,20 @@
+{
+  "id": "TestMission1",
+  "name": "Missione di prova 1",
+  "badge": "Climbing",
+  "badge_filename": "climbing",
+  "steps": [
+    {
+      "id": "learning1",
+      "type": "learning"
+    },
+    {
+      "id": "Calculator",
+      "type": "refactoring"
+    },
+    {
+      "id": "Exam1",
+      "type": "check-smell"
+    }
+  ]
+}

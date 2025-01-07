@@ -1,14 +1,14 @@
 ## Docker Volume Create
 ```
-docker volume create assignments
+docker volume create assets
 ```
 ## Docker Image Build 
 ```
-docker build -f Dockerfile.assignments -t assignments-image .
+docker build -f Dockerfile.assets -t assets-image .
 ```
 ## Docker Volume Populate
 ```
-docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/" 
+docker run --rm -v assets:/mnt assets-image sh -c "cp /assets/esperimento1.json /mnt/ && cp /assets/esperimento2.json /mnt/" 
 ```
 ## Docker Compose
 ```

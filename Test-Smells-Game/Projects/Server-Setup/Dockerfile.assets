@@ -1,0 +1,24 @@
+FROM alpine:latest
+
+RUN mkdir -p /assignments
+RUN mkdir -p /assignments/levelconfig
+RUN mkdir -p /badges
+RUN mkdir -p /missions
+
+COPY /assignments/prova1.json /assignments/
+COPY /assignments/prova2.json /assignments/
+COPY /assignments/prova3.json /assignments/
+COPY /assignments/levelconfig/levelConfig.json /assignments/levelconfig/
+
+COPY /badges/achieving-goal.png /badges/
+COPY /badges/badge_bronze.png /badges/
+COPY /badges/badge_gold.png /badges/
+COPY /badges/badge_silver.png /badges/
+COPY /badges/climbing.png /badges/
+COPY /badges/mission-statement.png /badges/
+COPY /badges/objective.png /badges/
+
+COPY /missions/mission1.json /missions/
+COPY /missions/mission2.json /missions/
+
+

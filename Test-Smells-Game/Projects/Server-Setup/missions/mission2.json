@@ -1,0 +1,12 @@
+{
+  "id": "TestMission2",
+  "name": "Missione di prova 2",
+  "badge": "Climbing 2",
+  "badge_filename": "achieving-goal",
+  "steps": [
+    {
+      "id": "learning1",
+      "type": "learning"
+    }
+  ]
+}

@@ -1,13 +1,13 @@
 {
-  "name": "Esercizio1",
+  "name": "Esercizio_2",
   "students": [
     {
       "name": "michele",
-      "exercise": "Calculator",
+      "exercise": "XMLParser",
       "startTime": "00:00",
-      "startDate": "2024-12-10",
-      "endTime": "17:45",
-      "endDate": "2024-12-30",
+      "startDate": "2024-12-02",
+      "endTime": "23:00",
+      "endDate": "2024-12-20",
       "submitted": false
     }
   ],

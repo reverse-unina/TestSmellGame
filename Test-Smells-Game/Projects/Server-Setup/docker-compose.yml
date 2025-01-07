@@ -38,7 +38,7 @@ services:
     ports:
       - '9090:9090'
     volumes:
-      - assignments:/usr/src/app/assets/assignments
+      - assets:/usr/src/app/assets
     networks:
       - testSmell-network
 
@@ -66,7 +66,7 @@ services:
       - testSmell-network
 
 volumes:
-  assignments:
+  assets:
     external: true
 
 
