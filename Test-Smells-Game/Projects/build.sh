@@ -48,13 +48,31 @@ docker build -t api_gateway .
 echo Tagging Docker image for api_gateway...
 docker tag api_gateway loriszn/server-setup:api_gateway
 
-# Server-Setup
-echo Creating Docker volume for assignments...
-docker volume create assignments
-echo Building Docker image for assignments...
+# Server_Setup
+echo Creating Docker volume for assets...
+docker volume create assets
+echo Building Docker image for assets...
 cd ../Server-Setup
-docker build -f Dockerfile.assignments -t assignments-image .
-echo Populating Docker volume with assignment files...
-docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/prova1.json /mnt/ && cp /assignments/prova2.json /mnt/ && cp /assignments/prova3.json /mnt/ && mkdir -p /mnt/levelconfig && cp /assignments/levelconfig/levelConfig.json /mnt/levelconfig/ && cp /assignments/levelconfig/badge_bronze.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_silver.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_gold.png /mnt/levelconfig/"
+docker build -f Dockerfile.assets -t assets-image .
+echo Populating Docker volume with assets files...
+docker run --rm -v assets:/mnt assets-image sh -c "
+  mkdir -p /mnt/assignments &&
+  cp /assignments/prova1.json /mnt/assignments/ &&
+  cp /assignments/prova2.json /mnt/assignments/ &&
+  cp /assignments/prova3.json /mnt/assignments/ &&
+  mkdir -p /mnt/assignments/levelconfig &&
+  cp /assignments/levelconfig/levelConfig.json /mnt/assignments/levelconfig/ &&
+  mkdir -p /mnt/badges &&
+  cp /badges/achieving-goal.png /mnt/badges/ &&
+  cp /badges/badge_bronze.png /mnt/badges/ &&
+  cp /badges/badge_gold.png /mnt/badges/ &&
+  cp /badges/badge_silver.png /mnt/badges/ &&
+  cp /badges/climbing.png /mnt/badges/ &&
+  cp /badges/mission-statement.png /mnt/badges/ &&
+  cp /badges/objective.png /mnt/badges/ &&
+  mkdir -p /mnt/missions &&
+  cp /missions/mission1.json /mnt/missions/ &&
+  cp /missions/mission2.json /mnt/missions/
+"
 
 echo Build process complete.
