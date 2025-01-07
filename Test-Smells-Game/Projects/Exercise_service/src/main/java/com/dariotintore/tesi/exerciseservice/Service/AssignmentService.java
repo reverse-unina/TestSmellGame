@@ -1,6 +1,6 @@
 package com.dariotintore.tesi.exerciseservice.Service;
 
-import com.dariotintore.tesi.exerciseservice.Assignment.Assignment;
+import com.dariotintore.tesi.exerciseservice.entity.assignment.Assignment;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

@@ -1,9 +1,6 @@
 package com.dariotintore.tesi.exerciseservice.Controller;
 
 import com.dariotintore.tesi.exerciseservice.Service.AssignmentService;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.slf4j.Logger;
@@ -13,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dariotintore.tesi.exerciseservice.Assignment.Assignment;
-import com.dariotintore.tesi.exerciseservice.Assignment.Student;
+import com.dariotintore.tesi.exerciseservice.entity.assignment.Assignment;
+import com.dariotintore.tesi.exerciseservice.entity.assignment.Student;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;

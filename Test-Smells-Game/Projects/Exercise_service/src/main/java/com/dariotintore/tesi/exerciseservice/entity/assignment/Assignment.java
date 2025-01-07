@@ -1,4 +1,4 @@
-package com.dariotintore.tesi.exerciseservice.Assignment;
+package com.dariotintore.tesi.exerciseservice.entity.assignment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
