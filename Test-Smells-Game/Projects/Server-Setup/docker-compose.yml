@@ -5,7 +5,7 @@ networks:
 
 services:
   userservice:
-    image: loriszn/server-setup:user_service
+    image: mick0974/testsmellsgame:user_service
     container_name: user-service
     ports:
       - '8081:8081'
@@ -15,7 +15,7 @@ services:
       - testSmell-network
 
   compilerservice:
-    image: loriszn/server-setup:compiler_service
+    image: mick0974/testsmellsgame:compiler_service
     container_name: compiler-service
     ports:
       - '8083:8083'
@@ -23,7 +23,7 @@ services:
       - testSmell-network
 
   leaderboardservice:
-    image: loriszn/server-setup:leaderboard_service
+    image: mick0974/testsmellsgame:leaderboard_service
     container_name: leaderboard-service
     ports:
       - '8087:8087'
@@ -33,7 +33,7 @@ services:
       - testSmell-network
 
   exerciseservice:
-    image: loriszn/server-setup:exercise_service
+    image: mick0974/testsmellsgame:exercise_service
     container_name: exercise-service
     ports:
       - '9090:9090'
@@ -43,7 +43,7 @@ services:
       - testSmell-network
 
   apigateway:
-    image: loriszn/server-setup:api_gateway
+    image: mick0974/testsmellsgame:api_gateway
     container_name: api-gateway
     environment:
       - USER_SERVICE=http://user-service:8081
@@ -56,7 +56,7 @@ services:
       - testSmell-network
 
   frontend:
-    image: loriszn/server-setup:frontend
+    image: mick0974/testsmellsgame:frontend
     container_name: frontend
     environment:
       - API_GATEWAY=http://api-gateway:9000
