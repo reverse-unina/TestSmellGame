@@ -124,4 +124,6 @@ I restanti servizi possono essere compilati e serviti come descritto nel punto p
 
 ### Endpoint Servizi
 
+Grazie all’utilizzo di Nginx e di un API Gateway, è stata implementata una configurazione di reverse proxy, consentendo di accedere a tutti i servizi tramite un unico punto di ingresso sulla porta `8080`. Di seguito, per completezza, sono riportati gli endpoint di tutti i servizi:
+
 ![endpoints](https://github.com/user-attachments/assets/b74ce769-944f-4c83-b84b-abffed51ae91)
