@@ -1,141 +1,127 @@
-# Istruzioni
+## Installazione
 
-Di seguito sono elencate le operazioni per installare il software.
-
-All'interno della directory "Test Smells Game/Projects" è presente un file "setup.bat" che, una volta avviato, crea
-l'infrastruttura server eseguendo i comandi elencati in questo file in modo sequenziale e automatico.
-
-# N.B.
-I comandi presenti all'interno del file di setup (build automatica) permettono di installare la versione Thin Client del sistema (frontend distribuito sul container docker) e non comprendono l'installazione della versione Electron, che è possibile installare a parte seguendo i comandi mostrati nell'apposita sezione di questo documento.
-
-# Compiler_service
-
-## - Docker Image Build 
-```
-docker build -t compiler_service .
-```
-## - Docker Tag
-```
-docker tag compiler_service loriszn/server-setup:compiler_service
-```
+TestSmellGame prevede due modalità di installazione:
+- Thin Clien, basato su un Frontend web dove tutti i servizi vengono eseguiri su container docker;
+- Thick Client, dove Frontend e Compiler Service cono embeddati in un applicativo locale generato tramite Electron, mentre i restanti servizi vengono forniti tramite con.
 
 
-# Exercise_service
+### Installazione Thin Client
+L'installazione Thin Client può essere automatizzata tramite l'utilizzo degli scritp di build e deploy, situati all'interno della directory `Test Smells Game/Projects`. I passi da eseguire se si opta per questa opzione sono i seguenti:
+1. Compilazione e generazione delle immagini docker:
+    - Su Linux:
+       ```bash
+       ./build.sh
+       ```
+    - Su Windows:
+       ```
+       build.bat
+       ```
+    Lo script di build si occupa di compilare i servizi che compongono il tool e generare le immagini associate.
+2. Deployment dei container:
+    - Su Linux:
+       ```bash
+       ./deploy.sh
+       ```
+    - Su Windows:
+       ```
+       deploy.bat
+       ```
+    Lo scritp di deploy si occupa di generare i container a partire dalle immagini dei servizi e creare la rete locale con cui i container comunicheranno.
 
-## - Maven Build
-```
-mvn clean install
-```
-## - Docker Image Build
-```
-docker build -t exercise_service .
-```
-## - Docker Tag
-```
-docker tag exercise_service loriszn/server-setup:exercise_service
-```
+**Nota bene**: lo script di deploy è eseguibile indipendentemente dallo script di build. Se le immagini non sono presenti localmente, lo script di deploy le scaricherà da dockerhub.
+
+2. **Compilare i servizi e generare le immagini Docker**
+   - Su Linux/MacOS:
+     ```bash
+     ./build.sh
+     ```
+   - Su Windows:
+     ```
+     build.bat
+     ```
+   Questo script compila ciascun servizio del tool e genera le relative immagini Docker.
+
+Se si opta per build e deploy manuali, i passi da eseguire sono i seguenti:
+1. Generazione delle immagini:
+    - Compiler Service
+        ```bash
+        docker build -t compiler_service .
+        docker tag compiler_service mick0974/testsmellsgame:compiler_service
+        ```
+    - Exercise Service
+        ```bash
+        docker build -t compiler_service .
+        mvn clean install -f pom.xml
+        docker build -t exercise_service .
+        docker tag exercise_service mick0974/testsmellsgame:exercise_service
+        ```
+    - Frontend
+        ```bash
+        docker build -t frontend .
+        docker tag frontend mick0974/testsmellsgame:frontend
+        ```    
+    - Leaderboard Service
+        ```bash
+        mvn clean install -f pom.xml
+        docker build -t leaderboard_service .
+        docker tag leaderboard_service mick0974/testsmellsgame:leaderboard_service
+        ``` 
+    - User Service
+        ```bash
+        mvn clean install -f pom.xml
+        docker build -t user_service .
+        docker tag user_service mick0974/testsmellsgame:user_service
+        ``` 
+    - Api Gateway
+       ```bash
+        mvn clean install -f pom.xml
+        docker build -t api_gateway .
+        docker tag api_gateway mick0974/testsmellsgame:api_gateway
+        ```
+
+2. Caricamento dati iniziali:
+  ```bash
+    docker volume create assets
+    docker build -f Dockerfile.assets -t assets-image .
+    docker run --rm -v assets:/mnt assets-image sh -c "
+    mkdir -p /mnt/assignments &&
+    cp /assignments/prova1.json /mnt/assignments/ &&
+    cp /assignments/prova2.json /mnt/assignments/ &&
+    cp /assignments/prova3.json /mnt/assignments/ &&
+    mkdir -p /mnt/assignments/levelconfig &&
+    cp /assignments/levelconfig/levelConfig.json /mnt/assignments/levelconfig/ &&
+    mkdir -p /mnt/badges &&
+    cp /badges/achieving-goal.png /mnt/badges/ &&
+    cp /badges/badge_bronze.png /mnt/badges/ &&
+    cp /badges/badge_gold.png /mnt/badges/ &&
+    cp /badges/badge_silver.png /mnt/badges/ &&
+    cp /badges/climbing.png /mnt/badges/ &&
+    cp /badges/mission-statement.png /mnt/badges/ &&
+    cp /badges/objective.png /mnt/badges/ &&
+    mkdir -p /mnt/missions &&
+    cp /missions/mission1.json /mnt/missions/ &&
+    cp /missions/mission2.json /mnt/missions/
+  "
+  ```
+3. Generazione dei container e della rete interna:
+  ```bash
+  docker-compose up -d
+  ```
 
 
-# Frontend 
-
-## - Docker Image Build 
-```
-docker build -t frontend .
-```
-## - Docker Tag
-```
-docker tag frontend loriszn/server-setup:frontend
-```
-
-
-# Leaderboard_service
-
-## - Maven Build
-```
-mvn clean install
-```
-## - Docker Image Build
-```
-docker build -t leaderboard_service .
-```
-## - Docker Tag
-```
-docker tag leaderboard_service loriszn/server-setup:leaderboard_service
-```
-
-
-# User_service
-
-## - Maven Build
-```
-mvn clean install
-```
-## - Docker Image Build 
-```
-docker build -t user_service .
-```
-## - Docker Tag
-```
-docker tag user_service loriszn/server-setup:user_service
-```
-
-
-# Server-Setup
-
-## - Docker Volume Create
-```
-docker volume create assignments
-```
-## - Docker Image Build 
-```
-docker build -f Dockerfile.assignments -t assignments-image .
-```
-## - Docker Volume Populate
-
-```
-docker run --rm -v assignments:/mnt assignments-image sh -c "cp /assignments/esperimento1.json /mnt/ && cp /assignments/esperimento2.json /mnt/ && mkdir -p /mnt/levelconfig && cp /assignments/levelconfig/levelConfig.json /mnt/levelconfig/ && cp /assignments/levelconfig/badge_bronze.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_silver.png /mnt/levelconfig/ && cp /assignments/levelconfig/badge_gold.png /mnt/levelconfig/"
-```
-
-La popolazione del volume per gli assignments avviene copiando i file json nell'immagine "assignments-image" (con il comando "COPY nome_file.json /assignments/" nel file "Dockerfile.assignments")
-ed eseguendo il comando "docker run" citato sopra, dando come parametri i nomi dei file json appena inseriti. Inoltre, bisogna aggiungere manualmente il nome del file json nel 
-metodo "getAssignments()"
-della classe "AssignmentsService" all'interno del frontend.
-
-## - Docker Compose
-```
-docker-compose up -d
-```
-
-
-Con il comando compose avverrà la creazione di tutti i container necessari alla creazione dell’infrastruttura che permette di ospitare una sessione di gioco.
-
-In seguito all’avvio di tutti i container è possibile accedere all’applicativo, partendo dal calcolatore server, al seguente indirizzo:
-
-http://localhost:4200/
-
-In questo scenario avremo quindi installato correttamente il server in locale. 
-
-
-# Installazione Client Electron
-
-Per l'installazione della versione frontend Electron bisogna aprire il progetto presente in "Test Smells Game/Projects/Frontend_electron" ed eseguire i seguenti comandi:
-
-## - Npm Setup
-```
+### Installazione Thick Client 
+L'installazione Thick Client richiede la compilazione in locale dell'eseguibile Electron:
+```bash
+cd TestSmellGame/Projects/Frontend_electron
 npm install
-```
-
-## - Npm Update
-```
 npm update
-```
-
-## - Electron Build & Run
-```
 npm run electron-build
-```
-
-## - Electron Packager
-```
 electron-packager .
 ```
+
+I restanti servizi possono essere compilati e serviti come descritto nel punto precedente.
+
+
+### Endpoint Servizi
+
+![endpoints](https://github.com/user-attachments/assets/b74ce769-944f-4c83-b84b-abffed51ae91)
