@@ -27,7 +27,7 @@
         {{ 'badge' | translate }}.
       </p>
       <p *ngIf="nextBadge() === null">{{ 'You have unlocked all the badges, awesome!' | translate }}</p>
-      <div class="progress-bar">
+      <div *ngIf="nextBadge() !== null" class="progress-bar">
         <div
           class="progress-fill"
           [style.width.%]="getProgressPercentage()"
@@ -44,7 +44,7 @@
         {{ 'more experience points to level up' | translate }}.
       </p>
       <p *ngIf="nextLevelExpRequired() === -1">{{ 'You have reached the maximum level, awesome!' | translate }}</p>
-      <div class="progress-bar">
+      <div *ngIf="nextLevelExpRequired() !== -1" class="progress-bar">
         <div
           class="progress-fill"
           [style.width.%]="getProgressPercentage()"
