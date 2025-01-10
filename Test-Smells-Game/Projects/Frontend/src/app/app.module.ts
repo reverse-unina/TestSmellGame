@@ -58,6 +58,9 @@ import { LearningPageRouteComponent } from './routes/learning-page-route/learnin
 import { MissionsListRouteComponent } from './routes/missions-route/missions-list-route/missions-list-route.component';
 import { MissionsCoreRouteComponent } from './routes/missions-route/missions-core-route/missions-core-route.component';
 import { MissionProgressComponent } from './components/mission-progress/mission-progress.component';
+import { ErrorComponent } from './components/error/error.component';
+import { PodiumComponent } from './components/podium/podium.component';
+import { RankComponent } from './components/rank/rank.component';
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http);
@@ -98,7 +101,10 @@ export function HttpLoaderFactory(http:HttpClient) {
     LearningPageRouteComponent,
     MissionsListRouteComponent,
     MissionsCoreRouteComponent,
-    MissionProgressComponent
+    MissionProgressComponent,
+    ErrorComponent,
+    PodiumComponent,
+    RankComponent
   ],
   imports: [
     BrowserModule,

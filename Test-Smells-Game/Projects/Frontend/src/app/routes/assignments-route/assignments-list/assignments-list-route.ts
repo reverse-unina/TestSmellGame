@@ -3,7 +3,8 @@ import { Router } from "@angular/router";
 import { AssignmentsService } from "../../../services/assignments/assignments.service";
 import { UserService } from "../../../services/user/user.service";
 import { User } from '../../../model/user/user.model';
-import { Assignment, Student } from '../../../model/assignment/assignment.model';
+import { AssignmentConfiguration, Student } from '../../../model/assignment/assignment.model';
+import {CheckGameExerciseConfig} from "../../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-assignments-list',
@@ -12,10 +13,9 @@ import { Assignment, Student } from '../../../model/assignment/assignment.model'
 })
 export class AssignmentsListRoute implements OnInit {
 
-  assignments: Assignment[] = [];
+  assignments: AssignmentConfiguration[] = [];
   currentUser!: User;
-  errorMessage:string | undefined = undefined;
-  errorParts:string[] = [];
+  serverError:string | undefined = undefined;
 
   constructor(private _router: Router,
               private assignmentsService: AssignmentsService,
@@ -32,55 +32,21 @@ export class AssignmentsListRoute implements OnInit {
   }
 
   loadAssignments() {
-    this.assignmentsService.getAssignmentsForStudent(this.currentUser!.userName).subscribe(
-      assignments => {
-        this.assignments = assignments;
-        this.errorMessage = undefined;
-        this.errorParts = [];
+    this.assignmentsService.getAssignmentsForStudent(this.currentUser!.userName).subscribe({
+      next: (response: AssignmentConfiguration[]) => {
+        //this.waitingForServer = false;
+        this.serverError = undefined;
+        this.assignments = response;
       },
-      error => {
-        this.errorMessage = error.error;
-        console.error(this.errorMessage);
-        this.refactorErrorMessage(this.errorMessage);
+      error: (err) => {
+        //this.waitingForServer = false;
+        this.serverError = err.error.message || 'An unexpected error occurred';
       }
-    );
+    });
   }
 
-  filterAssignmentsByGameType(gameType: string): Assignment[] {
+  filterAssignmentsByGameType(gameType: string): AssignmentConfiguration[] {
     return this.assignments.filter(assignment => assignment.gameType === gameType);
-  }
-
-  refactorErrorMessage(error: string | undefined) : void {
-    if (error === undefined)
-      return;
-
-    const matchRegexMissingField = error.match(/Missing required property "(.*?)" in file (.*)/);
-    const matchRegexUnrecognizedField = error.match(/Unrecognized field "(.*?)" not marked as ignorable found in file (.*)/);
-    const matchRegexReadingFile = error.match(/Error reading assignment file (.*)/);
-
-    if (matchRegexMissingField) {
-      this.errorParts = [
-        matchRegexMissingField[0].split(/ "(.*?)"/)[0],
-        `"${matchRegexMissingField[1]}"`,
-        "in file",
-        matchRegexMissingField[2]
-      ];
-      console.log("Error Parts: ", this.errorParts);
-    } else if (matchRegexUnrecognizedField) {
-      this.errorParts = [
-        matchRegexUnrecognizedField[0].split(/ "(.*?)"/)[0],
-        `"${matchRegexUnrecognizedField[1]}"`,
-        "not marked as ignorable found in file",
-        matchRegexUnrecognizedField[2]
-      ];
-    } else if (matchRegexReadingFile) {
-      this.errorParts = [
-        matchRegexReadingFile[0].split(/ "(.*?)"/)[0],
-        matchRegexReadingFile[1]
-      ];
-    } else {
-      this.errorParts[0] = error;
-    }
   }
 
   isAssignmentActive(assignmentStartDate: string, startTime: string, assignmentEndDate: string, endTime: string): boolean {

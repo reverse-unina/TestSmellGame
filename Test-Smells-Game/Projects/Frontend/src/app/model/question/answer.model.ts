@@ -1,5 +1,5 @@
 export class Answer{
   answerText!: string;
-  isCorrect!: boolean;
+  correct!: boolean;
   isChecked: boolean = false;
 }

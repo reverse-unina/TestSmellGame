@@ -10,6 +10,7 @@ import {UserService} from "../user/user.service";
 import {Exercise} from "../../model/exercise/refactor-exercise.model";
 import {User} from "../../model/user/user.model";
 import {ProgressBarMode} from "@angular/material/progress-bar";
+import {firstValueFrom} from "rxjs";
 
 export class RefactoringService {
   compiledExercise !: Exercise;
@@ -51,23 +52,28 @@ export class RefactoringService {
     private userService: UserService
   ) {}
 
-  initCodeFromCloud(exerciseName: string): void {
-    // INIT CODE FROM CLOUD
-    this.exerciseService.getMainClass(exerciseName).subscribe( data=> {
-      this.userCode = data;
-      this.originalProductionCode = data;
-    });
-    this.exerciseService.getTestClass(exerciseName).subscribe( data => {
-      this.testingCode = data
-      this.originalTestCode = data
-    });
-    this.exerciseService.getRefactoringGameConfigFile(exerciseName).subscribe(data=>{
-      this.exerciseConfiguration = data;
+  async initCodeFromCloud(exerciseName: string): Promise<string | undefined> {
+    try {
+      const mainClassData = await firstValueFrom(this.exerciseService.getMainClass(exerciseName));
+      this.userCode = mainClassData;
+      this.originalProductionCode = mainClassData;
+
+      const testClassData = await firstValueFrom(this.exerciseService.getTestClass(exerciseName));
+      this.testingCode = testClassData;
+      this.originalTestCode = testClassData;
+
+      const refactoringConfigData = await firstValueFrom(this.exerciseService.getRefactoringGameConfigFile(exerciseName));
+      this.exerciseConfiguration = refactoringConfigData;
 
       // Setup config files
-      this.exerciseConfiguration.refactoring_game_configuration.refactoring_limit = data.refactoring_game_configuration.refactoring_limit;
-      this.exerciseConfiguration.refactoring_game_configuration.smells_allowed = data.refactoring_game_configuration.smells_allowed;
-    });
+      this.exerciseConfiguration.refactoringGameConfiguration.refactoringLimit = refactoringConfigData.refactoringGameConfiguration.refactoringLimit;
+      this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed = refactoringConfigData.refactoringGameConfiguration.smellsAllowed;
+
+      return undefined;
+    } catch (error) {
+      // @ts-ignore
+      return error.error.message;
+    }
   }
 
   async initSmellDescriptions() {
@@ -133,7 +139,7 @@ export class RefactoringService {
     });
   }
 
-  compileExercise(exerciseName: string, testing: any): Promise<boolean> {
+  compileExercise(testing: any): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.resetData();
       this.startLoading();
@@ -141,7 +147,7 @@ export class RefactoringService {
       console.log("testingCode: ", testing.injectedCode);
 
       // @ts-ignore
-      const exercise = new Exercise(exerciseName, this.originalProductionCode, this.originalTestCode, testing.injectedCode);
+      const exercise = new Exercise(this.exerciseConfiguration.className, this.originalProductionCode, this.originalTestCode, testing.injectedCode);
       this.compiledExercise = exercise;
 
       this.codeService.compile(exercise, this.exerciseConfiguration).subscribe(
@@ -161,10 +167,13 @@ export class RefactoringService {
 
   publishSolution(exerciseName: string): void {
     this.startLoading()
-    if(this.exerciseIsCompiledSuccessfully){
+
+    const score: number = Math.abs(this.smellNumber - this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed);
+
+    if(this.exerciseIsCompiledSuccessfully && this.isExercisePassed()){
       this.leaderboardService.saveSolution(this.compiledExercise,
         this.exerciseConfiguration,
-        Math.abs(this.smellNumber - this.exerciseConfiguration.refactoring_game_configuration.smells_allowed),
+        score,
         Boolean(this.refactoringResult),
         this.originalCoverage,
         this.refactoredCoverage,
@@ -175,13 +184,14 @@ export class RefactoringService {
             this.userService.getCurrentUser().subscribe((user: User | any) => {
               this.user = user;
             });
-            this.userService.increaseUserExp();
 
-            this.leaderboardService.updateScore(this.user.userId, "refactoring", 1).subscribe(
+            this.userService.increaseUserExp(score);
+
+            this.leaderboardService.updateScore(this.user.userName, "refactoring", score).subscribe(
               (data) => {
                 console.log("Updated exercise score: ", data);
 
-                this.leaderboardService.updateBestRefactoringScore(this.user.userId, exerciseName, this.smellNumber).subscribe(
+                this.leaderboardService.updateBestRefactoringScore(this.user.userName, exerciseName, score).subscribe(
                   (data) => {
                     console.log("Updated score: ", data);
                   }
@@ -201,6 +211,10 @@ export class RefactoringService {
       this.showPopUp("To save your solution in solutions repository you have to complete the exercise");
       this.stopLoading()
     }
+  }
+
+  isExercisePassed(): boolean {
+    return this.smellNumber <= this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed;
   }
 
   elaborateCompilerAnswer(data: any): void {
@@ -227,7 +241,7 @@ export class RefactoringService {
   checkConfiguration(): void {
     if (this.refactoringResult.toString() === 'false')
       this.refactoringWarning = true;
-    if (this.exerciseConfiguration.refactoring_game_configuration.smells_allowed < this.smellNumber)
+    if (this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed < this.smellNumber)
       this.smellNumberWarning = true;
   }
 }

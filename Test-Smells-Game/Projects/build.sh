@@ -60,8 +60,8 @@ docker run --rm -v assets:/mnt assets-image sh -c "
   cp /assignments/prova1.json /mnt/assignments/ &&
   cp /assignments/prova2.json /mnt/assignments/ &&
   cp /assignments/prova3.json /mnt/assignments/ &&
-  mkdir -p /mnt/assignments/levelconfig &&
-  cp /assignments/levelconfig/levelConfig.json /mnt/assignments/levelconfig/ &&
+  mkdir -p /mnt/levelconfig &&
+  cp /levelconfig/levelConfig.json /mnt/levelconfig/ &&
   mkdir -p /mnt/badges &&
   cp /badges/achieving-goal.png /mnt/badges/ &&
   cp /badges/badge_bronze.png /mnt/badges/ &&

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./services/auth/auth.service";
 import {environment} from "../environments/environment";
 import {SettingsService} from "./services/settings/settings.service";
+import {NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,11 @@ import {SettingsService} from "./services/settings/settings.service";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
+  title = 'Tesi';
+
   constructor(private authService: AuthService,
-              private settingsService: SettingsService) { }
+              private settingsService: SettingsService,
+              private router: Router) { }
 
   ngOnInit(): void {
     console.log(environment.userServiceUrl);
@@ -18,6 +22,5 @@ export class AppComponent implements OnInit{
     this.settingsService.initializeEnvironmentUrls();
     this.authService.autoLogin();
   }
-  title = 'Tesi';
 
 }

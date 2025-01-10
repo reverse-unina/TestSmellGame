@@ -154,16 +154,16 @@ public class UserService {
         return user.map(User::getMissions).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public void updateUserMissionStatus(MissionStatusDTO missionStatusDTO) {
+    public User updateUserMissionStatus(MissionStatusDTO missionStatusDTO) {
         Optional<User> optionalUser = userRepository.getUserByEmail(missionStatusDTO.getEmail());
 
-        System.out.println("user is present: " + optionalUser.isPresent());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.updateMissionStatus(missionStatusDTO.getMissionStatus());
             userRepository.save(user);
+            return user;
         } else {
-            throw new RuntimeException("User not found!");
+            return null;
         }
     }
 }

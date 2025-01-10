@@ -31,17 +31,22 @@ export class CheckSmellService {
     private leaderboardService: LeaderboardService
   ) { }
 
-  async initQuestions(exerciseName: string): Promise<void> {
-    this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
+  async initQuestions(exerciseName: string): Promise<string | undefined> {
+    try {
+      this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
 
-    // Setup question
-    this.exerciseService.getCheckGameConfigFile(exerciseName).subscribe(data => {
+      const data = await firstValueFrom(this.exerciseService.getCheckGameConfigFile(exerciseName));
       this.exerciseConfiguration = data;
-      this.questions = data.check_game_configuration.questions;
-    });
+      this.questions = data.checkGameConfiguration.questions;
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+      this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+      return undefined;
+    } catch (error) {
+      // @ts-ignore
+      return error.error.message;
+    }
   }
+
 
   goBackward() {
     if (this.actualQuestionNumber > 0) {
@@ -55,23 +60,17 @@ export class CheckSmellService {
     }
   }
 
-  async showResults(exerciseName: string): Promise<void> {
+  async logResult(exerciseName: string, gameType: string): Promise<void> {
     this.exerciseCompleted = true;
 
     if (this.isExercisePassed()) {
-      await this.userService.increaseUserExp();
-
       this.userService.getCurrentUser().subscribe((user: User | any) => {
         this.user = user;
       });
-      this.exerciseService.logEvent(this.user.userName, 'Completed ' + exerciseName + ' in check game mode').subscribe({
+      this.exerciseService.logEvent(this.user.userName, 'Completed ' + exerciseName + ' in ' + gameType + ' mode' ).subscribe({
         next: response => console.log('Log event response:', response),
         error: error => console.error('Error submitting log:', error)
       });
-
-      this.leaderboardService.updateScore(this.user.userId, "check-smell", 1).subscribe(
-        data => {console.log("Rank: ", data)}
-      )
     }
   }
 
@@ -81,11 +80,11 @@ export class CheckSmellService {
     this.questions.forEach(question => {
       let currentCorrectAnswers = 0;
       let givenAnswersScore = 0;
-      question.answers.forEach(ans => {
-        ans.isCorrect? currentCorrectAnswers++ : 0;
 
+      question.answers.forEach(ans => {
+        ans.correct? currentCorrectAnswers++ : 0;
         if (ans.isChecked) {
-          if (ans.isCorrect)
+          if (ans.correct)
             givenAnswersScore++;
           else
             givenAnswersScore -= 0.5;

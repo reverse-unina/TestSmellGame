@@ -28,6 +28,7 @@ export class MissionsCoreRouteComponent implements OnInit {
   mission!: MissionConfiguration;
   currentStep!: number;
   isLoading: boolean = true;
+  serverError: string | undefined;
 
   @ViewChild('achievementAlert') achievementAlert!: AchievementAlertComponent;
   @ViewChild('failAlert') failAlert!: FailAlertComponent;
@@ -52,6 +53,7 @@ export class MissionsCoreRouteComponent implements OnInit {
     private leaderboardService: LeaderboardService,
     private snackBar: MatSnackBar
   ) {
+    this.missionId = this.route.snapshot.params["missionId"];
     this.checkSmellService = new CheckSmellService(
       this.exerciseService,
       this.userService,
@@ -70,28 +72,32 @@ export class MissionsCoreRouteComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.missionId = this.route.snapshot.paramMap.get('id')!;
+    try {
+      this.mission = await firstValueFrom(this.missionService.getMissionById(this.missionId));
+      console.log("Mission: ", this.mission);
 
-    this.mission = await firstValueFrom(this.missionService.getMissionById(this.missionId));
-    console.log("Mission: ", this.mission);
+      const userMissionsStatus: MissionStatus[] = await firstValueFrom(this.userService.getUserMissionsStatus());
+      console.log("Mission status: ", userMissionsStatus);
 
-    const userMissionsStatus: MissionStatus[] = await firstValueFrom(this.userService.getUserMissionsStatus());
-    console.log("Mission status: ", userMissionsStatus);
-
-    if (userMissionsStatus) {
-      const missionStatus = userMissionsStatus.find(mission => mission.missionId === this.mission.id);
-      if (missionStatus) {
-        this.currentStep = missionStatus.steps;
+      if (userMissionsStatus) {
+        const missionStatus = userMissionsStatus.find(mission => mission.missionId === this.mission.id);
+        if (missionStatus) {
+          this.currentStep = missionStatus.steps;
+        }
       }
+
+      if (this.currentStep === undefined) {
+        this.currentStep = 0;
+      }
+
+      this.updateServices();
+
+      this.isLoading = false;
+      this.serverError = undefined;
+    } catch (error: any) {
+      this.isLoading = false;
+      this.serverError = error.error.message;
     }
-
-    if (this.currentStep === undefined) {
-      this.currentStep = 0;
-    }
-
-    this.updateServices();
-
-    this.isLoading = false;
   }
 
   nextStep() {
@@ -105,7 +111,14 @@ export class MissionsCoreRouteComponent implements OnInit {
     if (this.currentStep !== this.mission.steps.length)
       return;
 
-    this.leaderboardService.updateScore(this.userService.user.value.userId, "mission", 1).subscribe(
+    let points: number = 0;
+    this.mission.steps.forEach((step) => {
+      step.type === "refactoring" || step.type === "check-smell"? points++ : null;
+    });
+
+    console.log("points", points);
+
+    this.leaderboardService.updateScore(this.userService.user.value.userName, "missions", points).subscribe(
       data => {
         console.log("Updated score: ", data);
       }
@@ -114,7 +127,7 @@ export class MissionsCoreRouteComponent implements OnInit {
     this.achievementAlert.show("Holy cow, you have completed the mission", "You can see the new badge in your account page")
   }
 
-  updateServices(): void {
+  async updateServices(): Promise<void> {
     if (this.currentStep === this.mission.steps.length)
       return;
 
@@ -125,7 +138,7 @@ export class MissionsCoreRouteComponent implements OnInit {
           this.exerciseService
         );
 
-        this.learningService.initLearningContent(this.mission.steps[this.currentStep].id);
+        this.serverError = await this.learningService.initLearningContent(this.mission.steps[this.currentStep].id);
         break;
       case "refactoring":
         console.log("refactoring");
@@ -138,7 +151,7 @@ export class MissionsCoreRouteComponent implements OnInit {
         );
 
         this.refactoringService.initSmellDescriptions();
-        this.refactoringService.initCodeFromCloud(this.mission.steps[this.currentStep].id);
+        this.serverError = await this.refactoringService.initCodeFromCloud(this.mission.steps[this.currentStep].id);
         break;
       case "check-smell":
         this.checkSmellService = new CheckSmellService(
@@ -146,27 +159,25 @@ export class MissionsCoreRouteComponent implements OnInit {
           this.userService,
           this.leaderboardService
         );
-        this.checkSmellService.initQuestions(this.mission.steps[this.currentStep].id);
+
+        this.serverError = await this.checkSmellService.initQuestions(this.mission.steps[this.currentStep].id);
         console.log("checkService: ", this.checkSmellService.actualQuestionNumber);
     }
   }
 
   updateProgress() {
-    this.userService.updateUserMissionStatus(this.missionId, this.currentStep);
+    this.userService.updateUserMissionStatus(this.missionId, this.currentStep).subscribe(
+      success => console.log(success),
+      error => console.log(error)
+    )
   }
 
   async submitExercise(): Promise<void> {
     this.checkSmellService.calculateScore();
-    this.checkSmellService.showResults(this.mission.steps[this.currentStep].id).then(
+    this.checkSmellService.logResult(this.mission.steps[this.currentStep].id, "mission").then(
       () => {
         if (this.isExercisePassed()) {
           this.successAlert.show();
-
-          if (this.userService.hasUserLevelledUp())
-            this.achievementAlert.show("Level Up!", "Congratulation, you have levelled up!");
-
-          if (this.userService.hasUserUnlockedBadge())
-            this.achievementAlert.show("Badge Unblocked!", "You have unlocked a new badge, view it on your profile page!");
         } else {
           this.failAlert.show();
         }
@@ -175,7 +186,7 @@ export class MissionsCoreRouteComponent implements OnInit {
   }
 
   compile(): void {
-    this.refactoringService.compileExercise(this.mission.steps[this.currentStep].id, this.testing.editorComponent).then(
+    this.refactoringService.compileExercise(this.testing.editorComponent).then(
       () => {
         if (this.isExercisePassed())
           this.successAlert.show();
@@ -188,7 +199,7 @@ export class MissionsCoreRouteComponent implements OnInit {
   isExercisePassed(): boolean {
     switch (this.mission.steps[this.currentStep].type) {
       case "refactoring":
-         return this.refactoringService.exerciseIsCompiledSuccessfully && this.refactoringService.smellList.length <= this.refactoringService.exerciseConfiguration.refactoring_game_configuration.smells_allowed;
+         return this.refactoringService.exerciseIsCompiledSuccessfully && this.refactoringService.smellList.length <= this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed;
       case "check-smell":
          return this.checkSmellService.isExercisePassed();
       default:

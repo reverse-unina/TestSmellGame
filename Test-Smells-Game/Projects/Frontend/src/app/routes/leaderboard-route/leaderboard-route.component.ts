@@ -48,7 +48,7 @@ export class LeaderboardRouteComponent implements OnInit {
   }
   setupConfigFiles(data:any){
     this.exerciseConfiguration = data;
-    this.isAutoValutative = this.exerciseConfiguration.auto_valutative;
+    this.isAutoValutative = this.exerciseConfiguration.autoValutative;
     this.leaderboardService.getSolutionsByExerciseName(this.exerciseConfiguration.exerciseId).subscribe(data=>{
       this.solutions = data;
     })

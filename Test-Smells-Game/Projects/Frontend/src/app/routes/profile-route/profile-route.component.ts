@@ -8,7 +8,7 @@ import {MissionService} from "../../services/missions/mission.service";
 import {MissionConfiguration, MissionStatus} from "../../model/missions/mission.model";
 import {environment} from "../../../environments/environment.prod";
 import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
-import {Rank, UserRanking} from "../../model/rank/rank";
+import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
 
 @Component({
   selector: 'app-profile-route',
@@ -22,8 +22,12 @@ export class ProfileRouteComponent implements OnInit {
   userLevel!: string;
   missionConfigurations!: MissionConfiguration[];
   userMissionsStatus!: MissionStatus[];
-  userScore!: Rank;
+  userScore!: Score;
   userRank!: UserRanking;
+  topGameModeUsers!: PodiumRanking;
+  topRefactoringUsers!: PodiumRanking;
+  serverError: string | undefined;
+
 
   constructor(
     private userService: UserService,
@@ -41,13 +45,24 @@ export class ProfileRouteComponent implements OnInit {
     this.setUserLevel();
     console.log('LevelConfig:', this.config);
 
-    this.missionConfigurations = await firstValueFrom(this.missionService.getMissions());
-    this.userMissionsStatus = await firstValueFrom(this.userService.getUserMissionsStatus());
+    try {
+      this.missionConfigurations = await firstValueFrom(this.missionService.getMissions());
+      this.userMissionsStatus = await firstValueFrom(this.userService.getUserMissionsStatus());
+      this.serverError = undefined;
+    } catch (error) {
+      console.log(error);
+      // @ts-ignore
+      this.serverError = error.error.message || 'An unexpected error occurred';
+    }
 
-    this.userScore = await firstValueFrom(this.leaderboardService.getScore(this.user.userId));
-    this.userRank = await firstValueFrom(this.leaderboardService.getUserRank(this.user.userId));
+    this.userScore = await firstValueFrom(this.leaderboardService.getScore(this.user.userName));
+    this.userRank = await firstValueFrom(this.leaderboardService.getUserRank(this.user.userName));
 
-    console.log('rank:', this.userRank);
+    this.topGameModeUsers = await firstValueFrom(this.leaderboardService.getGameModePodium(3));
+    this.topRefactoringUsers = await firstValueFrom(this.leaderboardService.getRefactoringExercisePodium(3));
+
+    console.log('userRank:', this.userRank);
+    console.log('topGameModeUsers', this.topGameModeUsers);
   }
 
   isMissionCompleted(missionConfiguration: MissionConfiguration): boolean {
@@ -82,10 +97,20 @@ export class ProfileRouteComponent implements OnInit {
     return null;
   }
 
+  nextLevelExpRequired(): number {
+    for (let i = 0; i < this.config.expValues.length; i++) {
+      if (this.user.exp < this.config.expValues[i]) {
+        return this.config.expValues[i];
+      }
+    }
+
+    return -1;
+  }
+
   getProgressPercentage(): number {
     let nextBadge = this.nextBadge();
 
-    if (!nextBadge) return 100; // Tutti i badge ottenuti
+    if (!nextBadge) return 100;
 
     const currentBadgeIndex = this.config.badgeValues.findIndex(badge => badge.points === nextBadge!.pointsRequired) - 1;
     const currentBadgePoints = currentBadgeIndex >= 0 ? this.config.badgeValues[currentBadgeIndex].points : 0;
@@ -94,7 +119,7 @@ export class ProfileRouteComponent implements OnInit {
 
     const progress = ((this.user.exp - currentBadgePoints) / (nextBadgePoints - currentBadgePoints)) * 100;
 
-    return Math.min(Math.max(progress, 0), 100); // Clamping tra 0% e 100%
+    return Math.min(Math.max(progress, 0), 100);
   }
 
 

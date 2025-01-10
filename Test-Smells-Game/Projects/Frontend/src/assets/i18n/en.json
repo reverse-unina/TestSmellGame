@@ -101,7 +101,7 @@
   "Errore durante il caricamento degli esperimenti": "Error loading assignments",
   "Hai già completato l'esperimento": "You have already completed the assignment",
   "Livello": "Level",
-  "Esercizi completati": "Exercises completed",
+  "Punti esperienza": "Experience points",
   "Badge ottenuto dopo aver completato": "Badge obtained after completing",
   "esercizi": "exercises",
   "Congratulazioni! Hai raggiunto il livello 2": "Congratulations! You have reached level 2",
@@ -129,6 +129,7 @@
   "Missioni disponibili": "Available Missions",
   "Badge ottenibile": "Achievement",
   "Vai alla missione": "Go to mission",
+
   "Ottimo!": "Awesome!",
   "Sei salito di livello!": "Level Up!",
   "Congratulazioni, sei salito di livello!": "Congratulation, you have levelled up!",
@@ -140,6 +141,7 @@
   "Sfortunatamente non hai superato l'esercizio. Non arrenderti, prova ancora!": "Unfortunately, you failed the exercise. Don’t give up, try again!",
   "Congratulazioni!": "Congratulations!",
   "Hai completato l'esercizio con successo.": "You have completed successfully the exercise.",
+
   "la missione": "the mission",
   "Ottenimento del badge successivo": "Progress to next badge",
   "Ha bisogno di altri": "You need",
@@ -153,9 +155,22 @@
   "Classifica modalità di gioco": "Game mode rankings",
   "Classifica esercizi di refacoring": "Refactoring exercise rankings",
   "° posizione": "° position",
+  "Ottenimento del livello sucessivo": "Progress to next level",
+  "punti esperienza per salire di livello": "more experience points to level up",
+  "Hai sbloccato tutti i badge disponibili, stupendo!": "You have unlocked all the badges, awesome!",
+  "Hai raggiunto il livello massimo, stupendo!": "You have reached the maximum level, awesome!",
+
   "Nessuna missione disponibile": "No missions available",
   "Congratulazioni! Hai completato la missione e guadagnato il badge:": "Congratulations! You have complete the mission and unlocked the badge:",
-  "Errore durante il caricamento delle missioni": "Error loading missions"
+  "Errore durante il caricamento delle missioni": "Error loading missions",
+
+  "Errore durante caricamento degli esercizi di refactoring": "Error loading refactoring exercises",
+  "Errore durante caricamento degli esercizi di check-smell": "Error loading check-smell exercises",
+
+  "Errore nel caricamento dell'esperimento": "Error loading assignment",
+  "Errore durante l'esecuzione della missione": "Error during the execution of the mission"
+
+
 }
 
 

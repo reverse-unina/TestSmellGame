@@ -27,10 +27,10 @@
         <a class="nav-link" routerLink="/settings">{{ 'Settings' | translate }}</a>
       </li>
       <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
-        <a class="nav-link" (click)="onLogout()">{{ 'Logout' | translate }}</a>
+        <a class="nav-link" routerLink="/auth" (click)="onLogout()">{{ 'Logout' | translate }}</a>
       </li>
     </ul>
-    <ul class="navbar-nav" *ngIf="isAuthenticated && currentUser" style="position: absolute; top: 0; right: 0; margin: 0px;">
+    <ul class="navbar-nav" *ngIf="isAuthenticated && currentUser && config" style="position: absolute; top: 0; right: 0; margin: 0px;">
       <li class="nav-item text-center">
         <a class="nav-link" routerLink="/profile">
           <i class="fas fa-user"></i>

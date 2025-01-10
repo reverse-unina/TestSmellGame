@@ -1,5 +1,5 @@
-import {Component, HostListener, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Event} from '@angular/router';
+import {Component, HostListener, OnInit, ViewChild, OnDestroy, ChangeDetectorRef} from '@angular/core';
+import {ActivatedRoute, Event, Router} from '@angular/router';
 import {RefactoringService} from "../../../services/refactoring/refactoring.service";
 import {CodeeditorService} from "../../../services/codeeditor/codeeditor.service";
 import {ExerciseService} from "../../../services/exercise/exercise.service";
@@ -19,6 +19,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
 
   exerciseName!: string;
   protected refactoringService!: RefactoringService;
+  serverError: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,9 +27,9 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
     private exerciseService: ExerciseService,
     private leaderboardService: LeaderboardService,
     private snackBar: MatSnackBar,
-    private userService: UserService)
-  {
-    this.exerciseName = this.route.snapshot.params['exercise'];
+    private userService: UserService,
+    private router: Router,
+  ) {
     this.refactoringService = new RefactoringService(
       this.codeService,
       this.exerciseService,
@@ -36,16 +37,20 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
       this.snackBar,
       this.userService
     );
+    this.exerciseName = this.route.snapshot.params['exercise'];
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.refactoringService.initSmellDescriptions();
+    this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
     this.refactoringService.restoreCode("refactoring-game", this.exerciseName);
   }
 
-  ngOnInit(): void {
-    this.refactoringService.initSmellDescriptions();
-    this.refactoringService.initCodeFromCloud(this.exerciseName);
-  }
-
   ngOnDestroy(): void {
-    this.refactoringService.saveCode("refactoring-game", this.exerciseName, this.testing.editorComponent);
+    if (this.testing)
+      this.refactoringService.saveCode("refactoring-game", this.exerciseName, this.testing.editorComponent);
+
+    //this.router.navigate(['refactoring-game']);
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -58,7 +63,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
   }
 
   compile(): void {
-    this.refactoringService.compileExercise(this.exerciseName, this.testing.editorComponent)
+    this.refactoringService.compileExercise(this.testing.editorComponent)
   }
 
 

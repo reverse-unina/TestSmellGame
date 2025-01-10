@@ -1,36 +1,37 @@
 <div class="mission-list">
   <h1>{{ "Available Missions" | translate }}</h1>
 
-  <div *ngIf="errorMessage !== undefined">
-    <br><br><br><br><br><br><br><br>
-    <h1 style="color: red; font-size: 20px; text-align: center;">{{ 'Error loading missions' | translate }}</h1>
-    <h2 style="color: red; font-size: 20px; text-align: center;">
-      <span *ngFor="let error of errorParts">{{ error | translate }} </span>
-    </h2>
-    <h2 style="color: red; font-size: 20px; text-align: center;">{{ "Please contact your supervisor" | translate }}</h2>
+  <div *ngIf="serverError !== undefined; else checkIfMissions">
+    <app-error [title]="'Error loading missions'" [error]="serverError"></app-error>
   </div>
 
-  <div *ngIf="errorMessage === undefined && missionConfigurations.length === 0">
-    <br><br><br><br><br><br><br><br>
-    <h1 style="font-size: 20px; text-align: center;">
-      {{ "No missions available" | translate }}
-    </h1>
-  </div>
-
-  <div *ngFor="let mission of missionConfigurations" class="mission-card">
-    <div class="mission-info">
-      <h2>{{ mission.name }}</h2>
-      <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>
-      <app-mission-progress [progress]="getMissionProgress(mission)"></app-mission-progress>
+  <ng-template #checkIfMissions>
+    <div *ngIf="missions">
+      <div *ngIf="missions.length === 0; else renderList">
+        <br><br><br><br><br><br><br><br>
+        <h1 style="font-size: 20px; text-align: center;">
+          {{ "No missions available" | translate }}
+        </h1>
+      </div>
     </div>
-    <button
-      class="btn-start"
-      [ngClass]="{ 'btn-disabled': isMissionCompleted(mission) }"
-      [disabled]="isMissionCompleted(mission)"
-      [routerLink]="isMissionCompleted(mission) ? null : ['/missions', mission.id]"
-    >
-      {{ "Go to mission" | translate }}
-    </button>
-  </div>
+  </ng-template>
+
+  <ng-template #renderList>
+    <div *ngFor="let mission of missions" class="mission-card">
+      <div class="mission-info">
+        <h2>{{ mission.name }}</h2>
+        <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>
+        <app-mission-progress [progress]="getMissionProgress(mission)"></app-mission-progress>
+      </div>
+      <button
+        class="btn-start"
+        [ngClass]="{ 'btn-disabled': isMissionCompleted(mission) }"
+        [disabled]="isMissionCompleted(mission)"
+        [routerLink]="isMissionCompleted(mission) ? null : ['/missions', mission.id]"
+      >
+        {{ "Go to mission" | translate }}
+      </button>
+    </div>
+  </ng-template>
 </div>
 

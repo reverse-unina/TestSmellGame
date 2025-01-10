@@ -5,7 +5,7 @@ import {Solution} from "../../model/solution/solution";
 import {Exercise} from "../../model/exercise/refactor-exercise.model";
 import {UserService} from "../user/user.service";
 import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
-import {Rank, UserRanking} from "../../model/rank/rank";
+import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -79,30 +79,47 @@ export class LeaderboardService {
 
 
   /* Rank methods */
-  getScore(userId: number): Observable<Rank> {
-    return this.http.get<Rank>(`${environment.leaderboardServiceUrl}/rank/${userId}`);
+  createNewScore(userName: string): Observable<Score> {
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}`, {});
+  }
+
+  getScore(userName: string): Observable<Score> {
+    return this.http.get<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}`);
   }
 
 
-  updateScore(userId: number, gameMode: string, score: number): Observable<Rank> {
+  updateScore(userName: string, gameMode: string, score: number): Observable<Score> {
     const params = new HttpParams()
       .set('gameMode', gameMode)
       .set('score', score.toString());
 
-    return this.http.post<Rank>(`${environment.leaderboardServiceUrl}/rank/${userId}/score`, {}, { params });
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/score`, {}, { params });
   }
 
-  updateBestRefactoringScore(userId: number, exerciseId: string, score: number): Observable<Rank> {
+  updateBestRefactoringScore(userName: string, exerciseId: string, score: number): Observable<Score> {
     const params = new HttpParams()
       .set('exerciseId', exerciseId)
       .set('score', score.toString());
 
-    return this.http.post<Rank>(`${environment.leaderboardServiceUrl}/rank/${userId}/refactoring`, {}, { params });
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/refactoring`, {}, { params });
   }
 
+  getUserRank(userName: string): Observable<UserRanking> {
+    return this.http.get<UserRanking>(`${environment.leaderboardServiceUrl}/rank/${userName}/ranking`);
+  }
 
-  getUserRank(userId: number): Observable<UserRanking> {
-    return this.http.get<UserRanking>(`${environment.leaderboardServiceUrl}/rank/${userId}/ranking`);
+  getGameModePodium(podiumDimension: number): Observable<PodiumRanking> {
+    const params = new HttpParams()
+      .set('podiumDimension', podiumDimension);
+
+    return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/gamemode`, { params });
+  }
+
+  getRefactoringExercisePodium(podiumDimension: number): Observable<PodiumRanking> {
+    const params = new HttpParams()
+      .set('podiumDimension', podiumDimension);
+
+    return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/refactoring`, { params });
   }
 
 }

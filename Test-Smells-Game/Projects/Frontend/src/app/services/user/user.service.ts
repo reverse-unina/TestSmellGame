@@ -33,7 +33,7 @@ export class UserService {
     return this.user.value.exp;
   }
 
-  async increaseUserExp(): Promise<void> {
+  async increaseUserExp(exp: number): Promise<void> {
     this.userHasLevelledUp = false;
     this.userHasUnlockedBadge = false;
 
@@ -45,7 +45,7 @@ export class UserService {
     }
 
     // Increase user exp
-    currentUser.exp += 1;
+    currentUser.exp += exp;
     this.user.next(currentUser);
 
     console.log('Envs:', environment);
@@ -90,13 +90,8 @@ export class UserService {
     return this.http.get<MissionStatus[]>(`${environment.userServiceUrl}/users/${this.user.value.userId}/missions`);
   }
 
-  async updateUserMissionStatus(missionId: string, steps: number): Promise<void> {
+  updateUserMissionStatus(missionId: string, steps: number): Observable<any> {
     const currentUser = this.user.value;
-
-    if (!currentUser) {
-      console.error('No user found!');
-      return;
-    }
 
     // Update frontend mission status
     if (currentUser.missionsStatus) {
@@ -121,14 +116,7 @@ export class UserService {
       "missionStatus": {missionId: missionId, steps: steps}
     };
 
-    try {
-      const response = await firstValueFrom(
-        this.http.put(`${environment.userServiceUrl}/users/missions`, updatedUser)
-      );
-      console.log('User updated successfully:', response);
-    } catch (error) {
-      console.error('Error occurred during updating user:', error);
-    }
+    return this.http.put(`${environment.userServiceUrl}/users/missions`, updatedUser);
   }
 
 

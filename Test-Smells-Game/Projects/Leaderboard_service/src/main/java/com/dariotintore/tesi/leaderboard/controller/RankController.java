@@ -1,47 +1,80 @@
 package com.dariotintore.tesi.leaderboard.controller;
 
-import com.dariotintore.tesi.leaderboard.entity.Rank;
-import com.dariotintore.tesi.leaderboard.service.RankService;
+import com.dariotintore.tesi.leaderboard.dto.PodiumDTO;
+import com.dariotintore.tesi.leaderboard.entity.Score;
+import com.dariotintore.tesi.leaderboard.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rank")
 public class RankController {
 
     @Autowired
-    private RankService rankService;
+    private ScoreService scoreService;
 
-    @GetMapping("/{userId}/ranking")
-    public ResponseEntity<Map<String, Object>> getUserRanking(@PathVariable Long userId) {
-        Map<String, Object> ranking = rankService.getUserRank(userId);
-        return ResponseEntity.ok(ranking);
+    @PostMapping("/{username}")
+    public ResponseEntity<Score> createNewUserScore(@PathVariable(name = "username") String userName) {
+        this.scoreService.createNewRank(userName);
+        Optional<Score> score = this.scoreService.getScore(userName);
+        return score.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.internalServerError().build());
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Rank> getUserScore(@PathVariable Long userId) {
-        Rank rank = rankService.getScore(userId).isPresent() ? rankService.getScore(userId).get() : null;
-        return ResponseEntity.ok(rank);
+    @GetMapping("/{username}/ranking")
+    public ResponseEntity<Map<String, Object>> getUserRanking(@PathVariable(name = "username") String userName) {
+        Map<String, Object> ranking = scoreService.getUserRank(userName);
+
+        if (!ranking.isEmpty())
+            return ResponseEntity.ok(ranking);
+        else
+            return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/{userId}/score")
-    public ResponseEntity<Rank> updateUserScore(
-            @PathVariable Long userId,
+    @GetMapping("/{username}")
+    public ResponseEntity<Score> getUserScore(@PathVariable(name = "username") String userName) {
+        Optional<Score> score = scoreService.getScore(userName);
+
+        if (score.isPresent()) {
+            return ResponseEntity.ok(score.get());
+        } else {
+            Score emptyScore = new Score();
+            emptyScore.setUserName(userName);
+            return ResponseEntity.ok(emptyScore);
+        }
+    }
+
+    @GetMapping("/podium/gamemode")
+    public ResponseEntity<Map<String, List<PodiumDTO>>> getPodiumGameMode(@RequestParam int podiumDimension) {
+        Map<String, List<PodiumDTO>> podiumDTOMap = scoreService.getGameModePodium(podiumDimension);
+        return ResponseEntity.ok(podiumDTOMap);
+    }
+
+    @GetMapping("/podium/refactoring")
+    public ResponseEntity<Map<String, List<PodiumDTO>>> getPodiumRefactoringExercises(@RequestParam int podiumDimension) {
+        Map<String, List<PodiumDTO>> podiumDTOMap = scoreService.getRefactoringExercisePodium(podiumDimension);
+        return ResponseEntity.ok(podiumDTOMap);
+    }
+
+    @PostMapping("/{username}/score")
+    public ResponseEntity<Score> updateUserScore(
+            @PathVariable(name = "username") String userName,
             @RequestParam String gameMode,
             @RequestParam int score) {
-        Rank rank = rankService.updateScore(userId, gameMode, score);
-        return ResponseEntity.ok(rank);
+        Score updatedScore = scoreService.updateScore(userName, gameMode, score);
+        return ResponseEntity.ok(updatedScore);
     }
 
-    @PostMapping("/{userId}/refactoring")
-    public ResponseEntity<Rank> updateBestRefactoringScore(
-            @PathVariable Long userId,
+    @PostMapping("/{username}/refactoring")
+    public ResponseEntity<Score> updateBestRefactoringScore(
+            @PathVariable(name = "username") String userName,
             @RequestParam String exerciseId,
             @RequestParam int score) {
-        Rank rank = rankService.updateBestRefactoringScore(userId, exerciseId, score);
-        return ResponseEntity.ok(rank);
+        Score updatedScore = scoreService.updateBestRefactoringScore(userName, exerciseId, score);
+        return ResponseEntity.ok(updatedScore);
     }
 }

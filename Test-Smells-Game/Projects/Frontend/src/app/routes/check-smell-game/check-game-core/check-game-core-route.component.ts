@@ -38,12 +38,15 @@ export class CheckGameCoreRouteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.checkSmellService.initQuestions(this.exerciseName);
+    this.route.params.subscribe(params => {
+      this.exerciseName = params['exercise'];
+      this.checkSmellService.initQuestions(this.exerciseName);
+    });
   }
 
   async submitExercise(): Promise<void> {
     this.checkSmellService.calculateScore();
-    this.checkSmellService.showResults(this.exerciseName).then(
+    this.checkSmellService.logResult(this.exerciseName, "check game").then(
       () => {
         if (this.checkSmellService.isExercisePassed()) {
           this.successAlert.show();
@@ -53,6 +56,12 @@ export class CheckGameCoreRouteComponent implements OnInit {
 
           if (this.userService.hasUserUnlockedBadge())
             this.achievementAlert.show("Badge Unblocked!", "You have unlocked a new badge, view it on your profile page!");
+
+          this.leaderboardService.updateScore(this.userService.user.value.userName, "check-smell", 1).subscribe(
+            data => {console.log("Rank: ", data)}
+          );
+
+          this.userService.increaseUserExp(1);
         } else {
           this.failAlert.show();
         }

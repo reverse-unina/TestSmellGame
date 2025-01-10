@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { RefactoringGameExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
-import {firstValueFrom, Observable} from "rxjs";
+import {firstValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-refactoring-game-exercise-list',
@@ -15,53 +15,40 @@ import {firstValueFrom, Observable} from "rxjs";
 export class RefactoringGameExListRouteComponent implements OnInit {
 
   constructor(private exerciseService: ExerciseService,
-              private userService: UserService,
-              private zone: NgZone,
-              private _router: Router,
-              private http: HttpClient) { }
+              protected userService: UserService,
+              ) { }
 
-  private config!: levelConfig;
-  exercises = new Array<any>();
-  exerciseConfigurations = new Array<RefactoringGameExerciseConfiguration>();
-  serverProblems = false;
+  protected config!: levelConfig;
+  exercises: RefactoringGameExerciseConfiguration[] = [];
+  serverError: string | undefined;
   waitingForServer!: boolean;
 
   async ngOnInit(): Promise<void> {
     this.waitingForServer = true;
 
-    this.exerciseService.getAllRefactoringGameConfigFiles().subscribe(
-      (response: any[]) => {
+    this.exerciseService.getRefactoringGameExercises().subscribe({
+      next: (response: RefactoringGameExerciseConfiguration[]) => {
         this.waitingForServer = false;
-        this.exerciseConfigurations = response.map(item => JSON.parse(atob(item)));
-        console.log(this.exerciseConfigurations);
+        this.serverError = undefined;
+        this.exercises = response;
+        console.log(this.exercises);
       },
-      error => {
-        this.serverProblems = true;
+      error: (err) => {
         this.waitingForServer = false;
+        this.serverError = err.error.message || 'An unexpected error occurred';
       }
-    );
+    });
 
     this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
-
-    this.exerciseService.getRefactoringGameExercises().subscribe(
-      response => {
-        this.waitingForServer = false;
-        this.exercises = response;
-      },
-      error => {
-        this.serverProblems = true;
-        this.waitingForServer = false;
-      }
-    );
   }
 
   isExerciseEnabled(level: number): boolean {
-      if (this.userService.getUserExp() < this.config.expValues[0]) {
-        return level === 1;
-      } else if (this.userService.getUserExp() < this.config.expValues[1]) {
-        return level <= 2;
-      } else {
-        return true;
-      }
+    if (this.userService.getUserExp() < this.config.expValues[0]) {
+      return level === 1;
+    } else if (this.userService.getUserExp() < this.config.expValues[1]) {
+      return level <= 2;
+    } else {
+      return true;
     }
+  }
 }

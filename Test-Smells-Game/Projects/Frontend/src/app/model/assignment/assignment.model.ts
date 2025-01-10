@@ -8,7 +8,7 @@ export interface Student {
   submitted: boolean;
 }
 
-export interface Assignment {
+export interface AssignmentConfiguration {
   name: string;
   students: Student[];
   type: string;

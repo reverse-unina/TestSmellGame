@@ -1,13 +1,8 @@
-<div *ngIf="errorMessage !== undefined">
-  <br><br><br><br><br><br><br><br>
-  <h1 style="color: red; font-size: 20px; text-align: center;">{{ 'Error loading assignments' | translate }}</h1>
-  <h2 style="color: red; font-size: 20px; text-align: center;">
-    <span *ngFor="let error of errorParts">{{ error | translate }} </span>
-  </h2>
-  <h2 style="color: red; font-size: 20px; text-align: center;">{{ "Please contact your supervisor" | translate }}</h2>
+<div *ngIf="serverError !== undefined">
+  <app-error [title]="'Error loading assignments'" [error]="serverError" ></app-error>
 </div>
 
-<div *ngIf="!(hasStudentAssignments('refactoring') || hasStudentAssignments('check-smell')) && errorMessage === undefined">
+<div *ngIf="!(hasStudentAssignments('refactoring') || hasStudentAssignments('check-smell')) && serverError === undefined">
   <br><br><br><br><br><br><br><br>
   <h1 style="font-size: 20px; text-align: center;">
     {{ 'There are currently no assignments you are participating in' | translate }}

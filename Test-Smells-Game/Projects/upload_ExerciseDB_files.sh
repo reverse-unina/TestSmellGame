@@ -19,8 +19,8 @@ if [ -d "$SOURCE_DIR/RefactoringGame" ]; then
   docker cp "$SOURCE_DIR/RefactoringGame"/. "$CONTAINER_NAME":"$DEST_DIR/RefactoringGame"
 fi
 
-if [ -d "$SOURCE_DIR/CheckGame" ]; then
-  docker cp "$SOURCE_DIR/CheckGame"/. "$CONTAINER_NAME":"$DEST_DIR/CheckGame"
+if [ -d "$SOURCE_DIR/CheckSmellGame" ]; then
+  docker cp "$SOURCE_DIR/CheckSmellGame"/. "$CONTAINER_NAME":"$DEST_DIR/CheckSmellGame"
 fi
 
 if [ $? -eq 0 ]; then

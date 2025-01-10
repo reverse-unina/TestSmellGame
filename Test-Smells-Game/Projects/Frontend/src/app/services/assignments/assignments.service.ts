@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {Assignment, Student} from '../../model/assignment/assignment.model';
+import {AssignmentConfiguration, Student} from '../../model/assignment/assignment.model';
 import {environment} from "../../../environments/environment.prod";
 
 @Injectable({
@@ -12,16 +12,16 @@ import {environment} from "../../../environments/environment.prod";
 export class AssignmentsService {
   constructor(private http: HttpClient) { }
 
-  getAssignments(): Observable<Assignment[]> {
-    return this.http.get<Assignment[]>(environment.exerciseServiceUrl + '/assignments/get-assignments');
+  getAssignments(): Observable<AssignmentConfiguration[]> {
+    return this.http.get<AssignmentConfiguration[]>(environment.exerciseServiceUrl + '/assignments/');
   }
 
-  getAssignmentByName(name: string): Observable<Assignment | undefined> {
+  getAssignmentByName(name: string): Observable<AssignmentConfiguration | undefined> {
     return this.getAssignments().pipe(
       map(assignments => assignments.find(assignment => assignment.name === name)));
   }
 
-  getAssignmentsForStudent(studentName: string): Observable<Assignment[]> {
+  getAssignmentsForStudent(studentName: string): Observable<AssignmentConfiguration[]> {
      return this.getAssignments().pipe(
        map(assignments => assignments.filter(assignment => assignment.students.some(student => student.name === studentName)))
      );
@@ -45,7 +45,7 @@ export class AssignmentsService {
     formData.append('studentName', studentName);
     formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
 
-    return this.http.post(environment.exerciseServiceUrl + '/assignments/submit-assignment/check-smell', formData);
+    return this.http.post(environment.exerciseServiceUrl + '/assignments/submit/checksmell', formData);
   }
 
   submitRefactoringAssignment(assignmentName: string, studentName: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
@@ -57,7 +57,7 @@ export class AssignmentsService {
      formData.append('shellCode', new Blob([shellCode], { type: 'text/plain' }), `${studentName}_ShellCode.java`);
      formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
 
-     return this.http.post(environment.exerciseServiceUrl + '/assignments/submit-assignment/refactoring', formData);
+     return this.http.post(environment.exerciseServiceUrl + '/assignments/submit/refactoring', formData);
   }
 
 }

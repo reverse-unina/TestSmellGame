@@ -13,7 +13,11 @@ public class Assignment {
 	private String gameType;
 
 	@JsonCreator
-	public Assignment(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "students", required = true) @NonNull List<Student> students, @JsonProperty(value = "type", required = true) @NonNull String type, @JsonProperty(value = "gameType", required = true) @NonNull String gameType) {
+	public Assignment(
+			@JsonProperty(value = "assignmentId", required = true) @NonNull String name,
+			@JsonProperty(value = "students", required = true) @NonNull List<Student> students,
+			@JsonProperty(value = "type", required = true) @NonNull String type,
+			@JsonProperty(value = "gameType", required = true) @NonNull String gameType) {
 		this.name = name;
 		this.students = students;
 		this.type = type;

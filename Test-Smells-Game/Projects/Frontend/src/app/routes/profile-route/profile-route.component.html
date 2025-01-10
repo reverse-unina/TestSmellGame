@@ -1,11 +1,11 @@
 <div class="main-container">
   <!-- Profile Container -->
-  <div class="profile-container" *ngIf="user && config">
+  <div class="profile-container" *ngIf="user && config && userScore">
     <div class="user-info">
       <h1 class="user-name">{{ user.userName }}</h1>
       <p class="user-email">{{ user.email }}</p>
       <p class="user-level">{{ 'Level' | translate }} : {{ userLevel }}</p>
-      <p class="user-exp">{{ 'Exercises completed' | translate }} : {{ user.exp }}</p>
+      <p class="user-exp">{{ 'Experience points' | translate }} : {{ user.exp }}</p>
       <div class="badges">
         <div *ngFor="let badge of config.badgeValues">
           <img *ngIf="user.exp >= badge.points" [src]="environment.exerciseServiceUrl+'/files/badges/'+badge.filename" alt="{{ badge.name }}" style="width: 70px; height: 70px; margin: 5px;" title="{{ badge.description }}">
@@ -17,7 +17,7 @@
     </div>
 
     <!-- Progress Box Section -->
-    <div *ngIf="config" class="progress-box">
+    <div class="progress-box">
       <h2>{{ 'Progress to next badge' | translate }}</h2>
       <p *ngIf="nextBadge()">
         {{ 'You need' | translate }}
@@ -26,6 +26,24 @@
         <strong>{{ nextBadge()!.name }}</strong>
         {{ 'badge' | translate }}.
       </p>
+      <p *ngIf="nextBadge() === null">{{ 'You have unlocked all the badges, awesome!' | translate }}</p>
+      <div class="progress-bar">
+        <div
+          class="progress-fill"
+          [style.width.%]="getProgressPercentage()"
+          [title]="getProgressPercentage() + '%'">
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="config" class="progress-box">
+      <h2>{{ 'Progress to next level' | translate }}</h2>
+      <p *ngIf="nextLevelExpRequired() !== -1">
+        {{ 'You need' | translate }}
+        <strong>{{ nextLevelExpRequired() - user.exp }}</strong>
+        {{ 'more experience points to level up' | translate }}.
+      </p>
+      <p *ngIf="nextLevelExpRequired() === -1">{{ 'You have reached the maximum level, awesome!' | translate }}</p>
       <div class="progress-bar">
         <div
           class="progress-fill"
@@ -58,8 +76,8 @@
     </div>
 
     <!-- Rank Section -->
-    <div class="user-ranking" *ngIf="userRank">
-      <h1 class="leaderboard-title">📈 {{ 'User ranking' | translate }}</h1>
+    <div class="user-ranking">
+      <!-- <h1 class="leaderboard-title">📈 {{ 'User ranking' | translate }}</h1> -->
 
       <!-- Game Mode Ranking -->
       <div class="ranking-section">
@@ -75,7 +93,7 @@
       <!-- Refactoring Exercise Ranking -->
       <div class="ranking-section">
         <h3 class="ranking-subtitle">🔨 {{ 'Refactoring exercise rankings' | translate }}</h3>
-        <ul class="ranking-list" *ngIf="userRank?.refactoringExerciseRankings && Object.keys(userRank.refactoringExerciseRankings).length > 0">
+        <ul class="ranking-list" *ngIf="userRank?.refactoringExerciseRankings && Object.keys(userRank.refactoringExerciseRankings).length > 0; else renderNoRank">
           <li *ngFor="let exercise of userRank.refactoringExerciseRankings | keyvalue" class="ranking-item">
             <span class="ranking-key">{{ exercise.key }}</span>
             <span class="ranking-value">{{ exercise.value }}{{'° position' | translate }}</span>
@@ -84,6 +102,28 @@
       </div>
     </div>
   </div>
+
+  <!-- Podium Section -->
+  <div *ngIf="topGameModeUsers" class="top-ranking-section">
+    <h3 class="ranking-subtitle">{{ 'Game Mode Podium' | translate }}</h3>
+    <app-podium [topUsers]="topGameModeUsers"></app-podium>
+
+    <div style="margin-bottom: 20px"></div>
+
+    <h3 class="ranking-subtitle">{{ 'Refactoring Exercise Podium' | translate }}</h3>
+    <div *ngIf="topRefactoringUsers && Object.keys(topRefactoringUsers).length > 0; else renderNoPodium">
+      <app-podium [topUsers]="topRefactoringUsers"></app-podium>
+    </div>
+  </div>
+
+  <ng-template #renderNoRank>
+    {{ 'You have yet to complete a refactoring type exercise' | translate }}
+  </ng-template>
+
+  <ng-template #renderNoPodium>
+    {{ 'No user has yet completed a refactoring exercise' | translate }}
+  </ng-template>
+
 </div>
 
 

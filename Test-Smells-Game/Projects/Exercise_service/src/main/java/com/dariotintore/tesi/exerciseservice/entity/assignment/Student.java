@@ -13,7 +13,7 @@ public class Student {
     private String endTime;
     private boolean submitted;
 
-	public Student(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "exercise", required = true) @NonNull String exercise, @JsonProperty(value = "startDate", required = true) @NonNull String startDate, @JsonProperty(value = "endDate", required = true) @NonNull String endDate, @JsonProperty(value = "startTime", required = true) @NonNull String startTime, @JsonProperty(value = "endTime", required = true) @NonNull String endTime, @JsonProperty(value = "submitted", required = true) boolean submitted) {
+	public Student(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "exerciseId", required = true) @NonNull String exercise, @JsonProperty(value = "startDate", required = true) @NonNull String startDate, @JsonProperty(value = "endDate", required = true) @NonNull String endDate, @JsonProperty(value = "startTime", required = true) @NonNull String startTime, @JsonProperty(value = "endTime", required = true) @NonNull String endTime, @JsonProperty(value = "submitted", required = true) boolean submitted) {
 		this.name = name;
 		this.exercise = exercise;
 		this.startDate = startDate;

@@ -1,5 +1,6 @@
 {
   "exerciseId": "XMLParser_1",
+  "class_name": "XMLParser",
   "refactoring_game_configuration": {
     "dependencies": [
       "<dependency>\n  <groupId>junit</groupId>\n  <artifactId>junit</artifactId>\n  <version>4.13.2</version>\n  <scope>test</scope>\n  </dependency>\n"

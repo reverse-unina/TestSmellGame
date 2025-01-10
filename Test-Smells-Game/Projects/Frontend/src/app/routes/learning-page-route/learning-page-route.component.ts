@@ -8,4 +8,5 @@ import {Component, Input} from '@angular/core';
 export class LearningPageRouteComponent {
   @Input() title!: string;
   @Input() content!: string;
+  @Input() externalReference?: string;
 }

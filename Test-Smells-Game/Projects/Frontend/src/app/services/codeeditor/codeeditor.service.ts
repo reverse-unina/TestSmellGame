@@ -26,7 +26,7 @@ export class CodeeditorService {
       originalProductionCode: exercise.originalProductionCode,
       originalTestCode: exercise.originalTestCode,
       refactoredTestCode: exercise.refactoredTestCode,
-      exerciseConfiguration: configuration.refactoring_game_configuration
+      exerciseConfiguration: configuration.refactoringGameConfiguration
     }
     return this.http.post(environment.compilerServiceUrl+'/compiler/refactoring',body)
   }

@@ -101,7 +101,7 @@
   "Error loading assignments": "Errore durante il caricamento degli esperimenti",
   "You have already completed the assignment": "Hai già completato l'esperimento",
   "Level": "Livello",
-  "Exercises completed": "Esercizi completati",
+  "Experience points": "Punti esperienza",
   "Badge obtained after completing": "Badge ottenuto dopo aver completato",
   "exercises": "esercizi",
   "Congratulations! You have reached level 2": "Congratulazioni! Hai raggiunto il livello 2",
@@ -157,8 +157,18 @@
   "Game mode rankings": "Classifica modalità di gioco",
   "Refactoring exercise rankings": "Classifica esercizi di refacoring",
   "° position": "° posizione",
+  "Progress to next level": "Ottenimento del livello sucessivo",
+  "more experience points to level up": "punti esperienza per salire di livello",
+  "You have unlocked all the badges, awesome!": "Hai sbloccato tutti i badge disponibili, stupendo!",
+  "You have reached the maximum level, awesome!": "Hai raggiunto il livello massimo, stupendo!",
 
   "No missions available": "Nessuna missione disponibile",
   "Congratulations! You have complete the mission and unlocked the badge:": "Congratulazioni! Hai completato la missione e guadagnato il badge:",
-  "Error loading missions": "Errore durante il caricamento delle missioni"
+  "Error loading missions": "Errore durante il caricamento delle missioni",
+
+  "Error loading refactoring exercises": "Errore durante caricamento degli esercizi di refactoring",
+  "Error loading check-smell exercises": "Errore durante caricamento degli esercizi di check-smell",
+
+  "Error loading assignment": "Errore nel caricamento dell'esperimento",
+  "Error during the execution of the mission": "Errore durante l'esecuzione della missione"
 }

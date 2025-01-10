@@ -1,21 +1,18 @@
-import { Component, HostListener, NgZone, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { CodeeditorService } from "../../../services/codeeditor/codeeditor.service";
-import { ExerciseService } from 'src/app/services/exercise/exercise.service';
-import { LeaderboardService } from "../../../services/leaderboard/leaderboard.service";
+import {Component, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {CodeeditorService} from "../../../services/codeeditor/codeeditor.service";
+import {ExerciseService} from 'src/app/services/exercise/exercise.service';
+import {LeaderboardService} from "../../../services/leaderboard/leaderboard.service";
 import {ActivatedRoute, Event, Router} from '@angular/router';
-import { Location } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { AssignmentsService } from "../../../services/assignments/assignments.service";
-import { Assignment, Student } from '../../../model/assignment/assignment.model';
-import { User } from '../../../model/user/user.model';
-import { UserService } from '../../../services/user/user.service';
+import {Location} from '@angular/common';
+import {firstValueFrom, Subscription} from 'rxjs';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {AssignmentsService} from "../../../services/assignments/assignments.service";
+import {AssignmentConfiguration, Student} from '../../../model/assignment/assignment.model';
+import {User} from '../../../model/user/user.model';
+import {UserService} from '../../../services/user/user.service';
 import {Question} from "../../../model/question/question.model";
 import {RefactoringService} from "../../../services/refactoring/refactoring.service";
 import {CheckSmellService} from "../../../services/check-smell/check-smell.service";
-import {AchievementAlertComponent} from "../../../components/alert/achivement-alert/achievement-alert.component";
-import {FailAlertComponent} from "../../../components/alert/fail-alert/fail-alert.component";
-import {SuccessAlertComponent} from "../../../components/alert/success-alert/success-alert.component";
 
 @Component({
   selector: 'app-assignments-core',
@@ -29,7 +26,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   exerciseName!: string;
   routeSplit = this.location.path().split('/');
-  assignment!: Assignment | undefined;
+  assignment!: AssignmentConfiguration | undefined;
   assignmentName = this.routeSplit[this.routeSplit.length - 2];
   checkInterval: any;
   currentUser: User | any;
@@ -39,6 +36,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   // MESSAGES
   codeModified: boolean = false;
   private codeModifiedSubscription!: Subscription;
+  serverError: string | undefined;
 
   protected refactoringService!: RefactoringService;
   protected checkSmellService!: CheckSmellService;
@@ -70,56 +68,49 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this.userService,
       this.leaderboardService
     );
-
-    this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
   }
 
-  ngOnInit(): void {
-    this.userService.getCurrentUser().subscribe(user => {
-      this.currentUser = user;
+  async ngOnInit(): Promise<void> {
+    this.currentUser = await firstValueFrom(this.userService.getCurrentUser());
+
+    this.currentStudent = await firstValueFrom(
       this.assignmentsService.getCurrentStudentForAssignment(this.assignmentName, this.currentUser.userName)
-        .subscribe(student => {
-          this.currentStudent = student;
-        });
-    });
-
-    this.assignmentsService.getAssignmentByName(this.assignmentName).subscribe(
-      assignment => {
-        this.assignment = assignment;
-        if (this.assignment) {
-          this.startCheckInterval();
-        }
-
-        console.log("LOADING: ", this.assignment!.gameType === "refactoring");
-        if (this.assignment!.gameType === "refactoring") {
-          this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
-            isModified => {
-              this.codeModified = isModified;
-            }
-          );
-
-          this.refactoringService.initSmellDescriptions();
-          this.refactoringService.initCodeFromCloud(this.exerciseName);
-
-          this.code.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
-          this.testing.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
-
-          console.log("userCode; ", this.refactoringService.userCode);
-        } else if (this.assignment!.gameType === "check-smell"){
-          this.checkSmellService.initQuestions(this.exerciseName);
-        }
-      },
-      error => {
-        console.log("ERRORE", error);
-      }
     );
+
+    this.assignment = await firstValueFrom(this.assignmentsService.getAssignmentByName(this.assignmentName));
+
+    if (this.assignment) {
+      this.startCheckInterval();
+    }
+
+    if (this.assignment!.gameType === "refactoring") {
+      this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
+        isModified => {
+          this.codeModified = isModified;
+        }
+      );
+
+      this.refactoringService.initSmellDescriptions();
+      this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
+      this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
+
+      if (this.code.editorComponent && this.code.editorComponent.editor) {
+        this.code.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
+        this.testing.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
+      }
+
+    } else if (this.assignment!.gameType === "check-smell") {
+      this.serverError = await this.checkSmellService.initQuestions(this.exerciseName);
+    }
+
   }
+
 
   ngOnDestroy(): void {
     if (this.codeModifiedSubscription)
       this.codeModifiedSubscription.unsubscribe();
 
-    if (this.assignment!.gameType === "refactoring")
+    if (this.assignment && this.testing && this.assignment!.gameType === "refactoring")
       this.refactoringService.saveCode("assignment-refactoring", this.exerciseName, this.testing.editorComponent);
 
     if (this.checkInterval) {
@@ -169,7 +160,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   // Check smell assignment type
   async submitExercise(): Promise<void> {
     this.checkSmellService.calculateScore();
-    await this.checkSmellService.showResults(this.exerciseName);
+    await this.checkSmellService.logResult(this.exerciseName, "assignment");
 
     this.submitCheckSmellAssignment(Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore), this.checkSmellService.assignmentScore, this.checkSmellService.questions);
   }
@@ -215,7 +206,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       question.answers.forEach(ans => {
         if (ans.isChecked) {
           content += `${ans.answerText}, `;
-          if (ans.isCorrect)
+          if (ans.correct)
             givenPoints += 1;
           else
             lostPoints += 0.5;
@@ -226,7 +217,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
       content += "\tCorrect answers: [";
       question.answers.forEach(ans => {
-        ans.isCorrect? content += `${ans.answerText}, ` : "";
+        ans.correct? content += `${ans.answerText}, ` : "";
         questionPoints++;
       });
       content = content.substring(0, content.length-2);
@@ -250,7 +241,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: Event) {
-    if (this.assignment!.gameType === "refactoring")
+    if (this.testing && this.assignment && this.assignment!.gameType === "refactoring")
       this.refactoringService.saveCode('assignment-refactoring', this.exerciseName, this.testing.editorComponent);
   }
 
@@ -260,7 +251,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   }
 
   async compile(): Promise<void> {
-    if (await this.refactoringService.compileExercise(this.exerciseName, this.testing.editorComponent)){
+    if (await this.refactoringService.compileExercise(this.testing.editorComponent)){
       console.log("Compile compiled");
       this.isCompiledSuccessfully = true;
       this.codeModified = false;
@@ -283,8 +274,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.refactoringService.smellList.length <= this.refactoringService.exerciseConfiguration.refactoring_game_configuration.smells_allowed) {
-      this.userService.increaseUserExp();
+    if (this.refactoringService.smellList.length <= this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed) {
       const studentName = this.currentStudent?.name;
       const assignmentName = this.assignment!.name;
 
@@ -374,7 +364,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     }
 
     if (this.refactoringService.smellNumberWarning) {
-      content += `Smells allowed: ${this.refactoringService.exerciseConfiguration.refactoring_game_configuration.smells_allowed}\n`;
+      content += `Smells allowed: ${this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed}\n`;
       content += `Your refactored code has more smells (${this.refactoringService.smellNumber}) than the minimum accepted\n\n`;
     }
 

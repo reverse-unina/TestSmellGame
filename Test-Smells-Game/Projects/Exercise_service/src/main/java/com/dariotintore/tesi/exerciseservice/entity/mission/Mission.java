@@ -2,10 +2,14 @@ package com.dariotintore.tesi.exerciseservice.entity.mission;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class Mission {
     private String id;
     private String name;
@@ -15,7 +19,7 @@ public class Mission {
 
     @JsonCreator
     public Mission(
-            @JsonProperty(value = "id", required = true) @NonNull String id,
+            @JsonProperty(value = "missionId", required = true) @NonNull String id,
             @JsonProperty(value = "name", required = true) @NonNull String name,
             @JsonProperty(value = "badge", required = true) @NonNull String badge,
             @JsonProperty(value = "badge_filename", required = true) @NonNull String badgeFilename,
@@ -27,43 +31,20 @@ public class Mission {
         this.steps = steps;
     }
 
-    public String getId() {
-        return id;
+    @Getter
+    @Setter
+    public static class MissionStep {
+        private String id;
+        private String type;
+
+        @JsonCreator
+        public MissionStep(
+                @JsonProperty(value = "id", required = true) @NonNull String id,
+                @JsonProperty(value = "type", required = true) @NonNull String type
+        ) {
+            this.id = id;
+            this.type = type;
+        }
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getBadge() {
-        return badge;
-    }
-
-    public void setBadge(String badge) {
-        this.badge = badge;
-    }
-
-    public String getBadgeFilename() {
-        return badgeFilename;
-    }
-
-    public void setBadgeFilename(String badgeFilename) {
-        this.badgeFilename = badgeFilename;
-    }
-
-    public List<MissionStep> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(List<MissionStep> steps) {
-        this.steps = steps;
-    }
 }

@@ -3,6 +3,7 @@ import {MissionService} from "../../../services/missions/mission.service";
 import {MissionConfiguration, MissionStatus} from "../../../model/missions/mission.model";
 import {UserService} from "../../../services/user/user.service";
 import {firstValueFrom} from "rxjs";
+import {CheckGameExerciseConfig} from "../../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-missions-list-route',
@@ -11,10 +12,9 @@ import {firstValueFrom} from "rxjs";
 })
 export class MissionsListRouteComponent implements OnInit {
 
-  missionConfigurations!: MissionConfiguration[];
+  missions!: MissionConfiguration[];
   userMissionsStatus!: MissionStatus[];
-  errorMessage:string | undefined = undefined;
-  errorParts:string[] = [];
+  serverError:string | undefined = undefined;
 
   constructor(
     private missionsService: MissionService,
@@ -23,17 +23,16 @@ export class MissionsListRouteComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     try {
-      this.missionsService.getMissions().subscribe(
-        data => {
-          this.missionConfigurations = data;
-          this.errorMessage = undefined;
-          this.errorParts = [];
+      this.missionsService.getMissions().subscribe({
+        next: (response: MissionConfiguration[]) => {
+          this.serverError = undefined;
+          this.missions = response;
         },
-        error => {
-          this.errorMessage = error.error;
-          console.error(this.errorMessage);
-          this.refactorErrorMessage(this.errorMessage);
-      })
+        error: (err) => {
+          console.log(err.error.message || 'An unexpected error occurred');
+          this.serverError = err.error.message || 'An unexpected error occurred';
+        }
+      });
 
       this.userMissionsStatus = await firstValueFrom(this.userService.getUserMissionsStatus());
       console.log("userMissionsStatus: ", this.userMissionsStatus);
@@ -60,39 +59,6 @@ export class MissionsListRouteComponent implements OnInit {
       mission => mission.missionId === missionConfiguration.id
     );
     return mission ? mission.steps === missionConfiguration.steps.length : false;
-  }
-
-  refactorErrorMessage(error: string | undefined) : void {
-    if (error === undefined)
-      return;
-
-    const matchRegexMissingField = error.match(/Missing required property "(.*?)" in file (.*)/);
-    const matchRegexUnrecognizedField = error.match(/Unrecognized field "(.*?)" not marked as ignorable found in file (.*)/);
-    const matchRegexReadingFile = error.match(/Error reading assignment file (.*)/);
-
-    if (matchRegexMissingField) {
-      this.errorParts = [
-        matchRegexMissingField[0].split(/ "(.*?)"/)[0],
-        `"${matchRegexMissingField[1]}"`,
-        "in file",
-        matchRegexMissingField[2]
-      ];
-      console.log("Error Parts: ", this.errorParts);
-    } else if (matchRegexUnrecognizedField) {
-      this.errorParts = [
-        matchRegexUnrecognizedField[0].split(/ "(.*?)"/)[0],
-        `"${matchRegexUnrecognizedField[1]}"`,
-        "not marked as ignorable found in file",
-        matchRegexUnrecognizedField[2]
-      ];
-    } else if (matchRegexReadingFile) {
-      this.errorParts = [
-        matchRegexReadingFile[0].split(/ "(.*?)"/)[0],
-        matchRegexReadingFile[1]
-      ];
-    } else {
-      this.errorParts[0] = error;
-    }
   }
 
 }

@@ -23,8 +23,8 @@ const appRoutes: Routes = [
   { path: 'home', component: HomeRouteComponent },
   { path: 'refactor-game', component: RefactoringGameExListRouteComponent },
   { path: 'check-game', component: CheckGameExListRoute},
-  { path: 'refactor-game/:exercise', component: RefactoringGameCoreRouteComponent},
-  { path: 'check-game/:exercise', component: CheckGameCoreRouteComponent},
+  { path: 'refactor-game/:exercise', component: RefactoringGameCoreRouteComponent },
+  { path: 'check-game/:exercise', component: CheckGameCoreRouteComponent },
   { path: 'refactor-game/leaderboard/:exercise', component: LeaderboardRouteComponent},
   { path: 'assignments/leaderboard/:exercise', component: LeaderboardRouteComponent},
   { path: 'assignments', component: AssignmentsListRoute},
@@ -32,12 +32,13 @@ const appRoutes: Routes = [
   { path: 'settings', component: SettingsRouteComponent},
   { path: 'profile', component: ProfileRouteComponent},
   { path: 'missions', component: MissionsListRouteComponent },
-  { path: 'missions/:id', component: MissionsCoreRouteComponent },
+  { path: 'missions/:missionId', component: MissionsCoreRouteComponent },
   { path: "**", redirectTo:  'home'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes)],
+  imports: [RouterModule.forRoot(appRoutes, {onSameUrlNavigation: "reload"})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
+

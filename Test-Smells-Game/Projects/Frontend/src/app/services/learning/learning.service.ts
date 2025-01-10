@@ -10,9 +10,15 @@ export class LearningService {
     private exerciseService: ExerciseService,
   ) { }
 
-  async initLearningContent(id: string): Promise<void> {
-    this.learning = await firstValueFrom(this.exerciseService.getLeaningContentById(id));
-    console.log("content: ", this.learning);
+  async initLearningContent(id: string): Promise<string | undefined> {
+    try {
+      this.learning = await firstValueFrom(this.exerciseService.getLeaningContentById(id));
+      console.log("content: ", this.learning);
+      return undefined;
+    } catch (error) {
+      // @ts-ignore
+      return error.error.message;
+    }
   }
 
 

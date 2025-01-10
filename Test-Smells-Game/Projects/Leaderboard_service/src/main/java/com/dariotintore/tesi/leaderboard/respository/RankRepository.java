@@ -1,12 +1,10 @@
 package com.dariotintore.tesi.leaderboard.respository;
 
-import com.dariotintore.tesi.leaderboard.entity.Rank;
+import com.dariotintore.tesi.leaderboard.entity.Score;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface RankRepository extends JpaRepository<Rank, Long> {
-    Optional<Rank> findByUserId(Long userId);
-
+public interface RankRepository extends JpaRepository<Score, Long> {
+    Optional<Score> findByUserName(String userName);
 }
