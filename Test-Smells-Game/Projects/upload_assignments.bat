@@ -1,15 +1,16 @@
-$volumeName = "assets"
-$sourceDir = "./assignments"
+@echo off
+set volumeName=assets
+set sourceDir=.\assignments
 
-if (-not (Test-Path -Path $sourceDir -PathType Container)) {
-    Write-Host "Error: the folder '$sourceDir' doesn't exist."
-    exit 1
-}
+if not exist "%sourceDir%" (
+    echo Error: the folder "%sourceDir%" doesn't exist.
+    exit /b 1
+)
 
-$tempContainer = docker create -v "$volumeName:/data" alpine
+for /f "tokens=*" %%i in ('docker run -d -v %volumeName%:/data alpine tail -f /dev/null') do set tempContainer=%%i
 
-docker cp "$sourceDir/." "$tempContainer:/data/assignments"
+docker cp "%sourceDir%\." %tempContainer%:/data/assignments
 
-docker rm $tempContainer
+docker rm -f %tempContainer%
 
-Write-Host "All files in '$sourceDir' have been uploaded on Docker volume '$volumeName'."
+echo All files in "%sourceDir%" have been uploaded to Docker volume "%volumeName%"!
