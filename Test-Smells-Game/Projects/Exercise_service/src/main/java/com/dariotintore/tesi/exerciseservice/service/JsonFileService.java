@@ -16,7 +16,7 @@ public class JsonFileService {
     public static boolean assignmentsHaveDuplicateNames(List<Assignment> assignments) {
         Set<String> nameSet = new HashSet<>();
         for (Assignment assignment : assignments) {
-            if (!nameSet.add(assignment.getName())) {
+            if (!nameSet.add(assignment.getAssignmentId())) {
                 return true;
             }
         }

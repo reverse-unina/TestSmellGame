@@ -6,16 +6,16 @@ import org.springframework.lang.NonNull;
 
 public class Student {
 	private String name;
-    private String exercise;
+    private String exerciseId;
 	private String startDate;
 	private String endDate;
     private String startTime;
     private String endTime;
     private boolean submitted;
 
-	public Student(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "exerciseId", required = true) @NonNull String exercise, @JsonProperty(value = "startDate", required = true) @NonNull String startDate, @JsonProperty(value = "endDate", required = true) @NonNull String endDate, @JsonProperty(value = "startTime", required = true) @NonNull String startTime, @JsonProperty(value = "endTime", required = true) @NonNull String endTime, @JsonProperty(value = "submitted", required = true) boolean submitted) {
+	public Student(@JsonProperty(value = "name", required = true) @NonNull String name, @JsonProperty(value = "exerciseId", required = true) @NonNull String exerciseId, @JsonProperty(value = "startDate", required = true) @NonNull String startDate, @JsonProperty(value = "endDate", required = true) @NonNull String endDate, @JsonProperty(value = "startTime", required = true) @NonNull String startTime, @JsonProperty(value = "endTime", required = true) @NonNull String endTime, @JsonProperty(value = "submitted", required = true) boolean submitted) {
 		this.name = name;
-		this.exercise = exercise;
+		this.exerciseId = exerciseId;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.startTime = startTime;
@@ -29,11 +29,11 @@ public class Student {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getExercise() {
-		return exercise;
+	public String getExerciseId() {
+		return exerciseId;
 	}
-	public void setExercise(String exercise) {
-		this.exercise = exercise;
+	public void setExerciseId(String exerciseId) {
+		this.exerciseId = exerciseId;
 	}
 	public String getStartTime() {
 		return startTime;

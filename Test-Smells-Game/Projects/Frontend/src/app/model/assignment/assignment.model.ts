@@ -1,6 +1,6 @@
 export interface Student {
   name: string;
-  exercise: string;
+  exerciseId: string;
   startDate: string;
   endDate: string;
   startTime: string;
@@ -9,7 +9,7 @@ export interface Student {
 }
 
 export interface AssignmentConfiguration {
-  name: string;
+  assignmentId: string;
   students: Student[];
   type: string;
   gameType: string;

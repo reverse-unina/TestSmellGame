@@ -14,7 +14,7 @@
     {{ 'Refactoring type assignments' | translate }}
   </h1>
   <div *ngFor="let assignment of filterAssignmentsByGameType('refactoring')" style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-    <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.name }}</h2>
+    <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.assignmentId }}</h2>
     <p style="font-size: 16px; color: #666; margin-bottom: 12px;"> {{ 'Assignment type' | translate }}: {{ assignment.gameType }}</p>
 
     <ul style="list-style-type: none; padding: 0;">
@@ -27,8 +27,8 @@
           </ng-container>
           <ng-container *ngIf="!(assignment.type === 'competitivo' && student.submitted)">
             <li *ngIf="isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
-              <a [routerLink]="['/assignments', assignment.name, student.exercise]" style="text-decoration: none; color: #007bff;">
-                {{ student.exercise }}
+              <a [routerLink]="['/assignments', assignment.assignmentId, student.exerciseId]" style="text-decoration: none; color: #007bff;">
+                {{ student.exerciseId }}
               </a>
               <p style="margin-top: 12px;"> {{ 'Available from' | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.startTime }} </p>
               <p> {{ "To be delivered by" | translate }} {{ student.endDate }} {{ "at" | translate}} {{ student.endTime }} </p>
@@ -48,7 +48,7 @@
     {{ 'Check smell type assignments' | translate }}
   </h1>
   <div *ngFor="let assignment of filterAssignmentsByGameType('check-smell')" style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-    <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.name }}</h2>
+    <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.assignmentId }}</h2>
     <p style="font-size: 16px; color: #666; margin-bottom: 12px;"> {{ 'Assignment type' | translate }}: {{ assignment.gameType }}</p>
 
     <ul style="list-style-type: none; padding: 0;">
@@ -61,8 +61,8 @@
           </ng-container>
           <ng-container *ngIf="!(assignment.type === 'competitivo' && student.submitted === true)">
             <li *ngIf="isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
-              <a [routerLink]="['/assignments', assignment.name, student.exercise]" style="text-decoration: none; color: #007bff;">
-                {{ student.exercise }}
+              <a [routerLink]="['/assignments', assignment.assignmentId, student.exerciseId]" style="text-decoration: none; color: #007bff;">
+                {{ student.exerciseId }}
               </a>
               <p style="margin-top: 12px;"> {{ 'Available from' | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.startTime }} </p>
               <p> {{ "To be delivered by" | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.endTime }} </p>

@@ -7,28 +7,28 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 
 public class Assignment {
-    private String name;
+    private String assignmentId;
     private List<Student> students;
     private String type;
 	private String gameType;
 
 	@JsonCreator
 	public Assignment(
-			@JsonProperty(value = "assignmentId", required = true) @NonNull String name,
+			@JsonProperty(value = "assignmentId", required = true) @NonNull String assignmentId,
 			@JsonProperty(value = "students", required = true) @NonNull List<Student> students,
 			@JsonProperty(value = "type", required = true) @NonNull String type,
 			@JsonProperty(value = "gameType", required = true) @NonNull String gameType) {
-		this.name = name;
+		this.assignmentId = assignmentId;
 		this.students = students;
 		this.type = type;
 		this.gameType = gameType;
 	}
 
-	public String getName() {
-		return name;
+	public String getAssignmentId() {
+		return assignmentId;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setAssignmentId(String assignmentId) {
+		this.assignmentId = assignmentId;
 	}
 	public List<Student> getStudents() {
 		return students;

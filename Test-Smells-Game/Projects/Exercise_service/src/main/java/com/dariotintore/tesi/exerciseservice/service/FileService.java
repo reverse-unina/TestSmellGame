@@ -195,7 +195,7 @@ public class FileService {
 					} else if (className.getName().equals(Mission.class.getName())) {
 						return ((Mission) exercise).getId().equals(fileId);
 					} else if (className.getName().equals(Assignment.class.getName())) {
-						return ((Assignment) exercise).getName().equals(fileId);
+						return ((Assignment) exercise).getAssignmentId().equals(fileId);
 					} else {
 						return false;
 					}
@@ -209,6 +209,30 @@ public class FileService {
 			logger.error(error);
 			return Map.of(HttpStatus.NOT_FOUND, error);
 		}
+	}
+
+	public Object getAssignmentFilePathById(String fileId, String directory) {
+		Object result = this.getAllJsonFilePaths(directory);
+
+		if (result instanceof Map)
+			return result;
+
+
+		List<Path> configFilePaths = (List<Path>) result;
+		logger.info("Paths: " + configFilePaths);
+
+		for (Path path : configFilePaths) {
+			Object assignment = this.deserializeJson(path, Assignment.class);
+			if (assignment instanceof Assignment) {
+				if (((Assignment) assignment).getAssignmentId().equals(fileId)) {
+					return path.toString();
+				}
+			}
+		}
+
+		String error = "File not found";
+		logger.error(error);
+		return Map.of(HttpStatus.NOT_FOUND, error);
 	}
 
 	private Object getAllJsonFilePaths(String directory) {

@@ -50,17 +50,18 @@ public class AssignmentController {
     }
 
     @PostMapping("/submit/refactoring")
-    public ResponseEntity<String> submitRefactoringAssignment(
-            @RequestParam("assignmentName") String assignmentName,
+    public ResponseEntity<Object> submitRefactoringAssignment(
+            @RequestParam("assignmentId") String assignmentId,
             @RequestParam("studentName") String studentName,
+            @RequestParam("exerciseId") String exerciseId,
             @RequestParam("productionCode") MultipartFile productionCode,
             @RequestParam("testCode") MultipartFile testCode,
             @RequestParam("shellCode") MultipartFile shellCode,
             @RequestParam("results") MultipartFile results) {
 
         // Task to be executed in the background
-        Callable<ResponseEntity<String>> task = () -> {
-            String studentDirectoryPath = assignmentDB + assignmentName + "/" + studentName + "/";
+        Callable<ResponseEntity<Object>> task = () -> {
+            String studentDirectoryPath = assignmentDB + assignmentId + "/" + exerciseId + "/" + studentName + "/";
             try {
                 // Create directory if it doesn't exist
                 File studentDirectory = new File(studentDirectoryPath);
@@ -75,10 +76,24 @@ public class AssignmentController {
                 results.transferTo(new File(studentDirectoryPath + studentName + "_results.txt"));
 
                 // Update assignment status
-                String filePath = assignmentDB + assignmentName + ".json";
+                FileService fileService = new FileService();
+                Object path = fileService.getAssignmentFilePathById(assignmentId, assignmentDB);
+
+                if (path instanceof Map) {
+                    Map<HttpStatus, String> resultMap = (Map<HttpStatus, String>) path;
+
+                    Map.Entry<HttpStatus, String> entry = resultMap.entrySet().iterator().next();
+                    HttpStatus httpStatus = entry.getKey();
+                    String error = entry.getValue();
+
+                    return ResponseEntity.status(httpStatus).body(Map.of("message", error));
+                }
+
+                String filePath = path.toString();
+                System.out.println(filePath);
                 File assignmentFile = new File(filePath);
                 if (!assignmentFile.exists()) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Assignment not found");
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Assignment not found"));
                 }
 
                 Assignment assignment = objectMapper.readValue(assignmentFile, Assignment.class);
@@ -109,7 +124,7 @@ public class AssignmentController {
 
         // Execute the task in the executor thread
         try {
-            Future<ResponseEntity<String>> future = executorService.submit(task);
+            Future<ResponseEntity<Object>> future = executorService.submit(task);
             return future.get(); // Wait for the task to complete
         } catch (Exception e) {
             logger.error("Error processing request", e);
@@ -118,14 +133,15 @@ public class AssignmentController {
     }
 
     @PostMapping("/submit/checksmell")
-    public ResponseEntity<String> submitCheckSmellAssignment(
-            @RequestParam("assignmentName") String assignmentName,
+    public ResponseEntity<Object> submitCheckSmellAssignment(
+            @RequestParam("assignmentId") String assignmentId,
             @RequestParam("studentName") String studentName,
+            @RequestParam("exerciseId") String exerciseId,
             @RequestParam("results") MultipartFile results) {
 
         // Task to be executed in the background
-        Callable<ResponseEntity<String>> task = () -> {
-            String studentDirectoryPath = assignmentDB + assignmentName + "/" + studentName + "/";
+        Callable<ResponseEntity<Object>> task = () -> {
+            String studentDirectoryPath = assignmentDB + assignmentId + "/" + exerciseId + "/" + studentName + "/";
             try {
                 // Create directory if it doesn't exist
                 File studentDirectory = new File(studentDirectoryPath);
@@ -133,11 +149,26 @@ public class AssignmentController {
                     studentDirectory.mkdirs();
                 }
 
+                // Update assignment status
+                FileService fileService = new FileService();
+                Object path = fileService.getAssignmentFilePathById(assignmentId, assignmentDB);
+
+                if (path instanceof Map) {
+                    Map<HttpStatus, String> resultMap = (Map<HttpStatus, String>) path;
+
+                    Map.Entry<HttpStatus, String> entry = resultMap.entrySet().iterator().next();
+                    HttpStatus httpStatus = entry.getKey();
+                    String error = entry.getValue();
+
+                    return ResponseEntity.status(httpStatus).body(Map.of("message", error));
+                }
+
+                String filePath = path.toString();
+
                 // Save uploaded files
                 results.transferTo(new File(studentDirectoryPath + studentName + "_results.txt"));
 
                 // Update assignment status
-                String filePath = assignmentDB + assignmentName + ".json";
                 File assignmentFile = new File(filePath);
                 if (!assignmentFile.exists()) {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Assignment not found");
@@ -171,7 +202,7 @@ public class AssignmentController {
 
         // Execute the task in the executor thread
         try {
-            Future<ResponseEntity<String>> future = executorService.submit(task);
+            Future<ResponseEntity<Object>> future = executorService.submit(task);
             return future.get(); // Wait for the task to complete
         } catch (Exception e) {
             logger.error("Error processing request", e);

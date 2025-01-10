@@ -74,7 +74,7 @@ docker run --rm -v assets:/mnt assets-image sh -c "
   cp /missions/mission1.json /mnt/missions/ &&
   cp /missions/mission2.json /mnt/missions/ &&
   cp /missions/mission3.json /mnt/missions/ &&
-  cp /missions/mission4.json /mnt/missions/ &&
+  cp /missions/mission4.json /mnt/missions/
 "
 
 echo Build process complete.

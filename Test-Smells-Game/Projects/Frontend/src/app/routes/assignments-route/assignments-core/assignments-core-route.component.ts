@@ -171,11 +171,12 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   submitCheckSmellAssignment: ((studentScore: number, assignmentScore: number, questions: Question[]) => void) =
     (studentScore: number, assignmentScore: number, questions: Question[]): void => {
     const studentName = this.currentStudent?.name;
-    const assignmentName = this.assignment!.name;
+    const assignmentName = this.assignment!.assignmentId;
+    const exerciseId = this.exerciseName!;
     const results: string = this.generateCheckSmellReport(studentScore, assignmentScore, questions);
 
     if (assignmentName && studentName) {
-      this.assignmentsService.submitCheckSmellAssignment(assignmentName, studentName, results).subscribe({
+      this.assignmentsService.submitCheckSmellAssignment(assignmentName, studentName, exerciseId, results).subscribe({
         next: () => {
           this._snackBar.open('Assignment submitted successfully', 'Close', {
             duration: 3000
@@ -279,8 +280,8 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
     if (this.refactoringService.smellList.length <= this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed) {
       const studentName = this.currentStudent?.name;
-      const assignmentName = this.assignment!.name;
-
+      const assignmentName = this.assignment!.assignmentId;
+      const exerciseId = this.exerciseName!;
       const productionCode = this.refactoringService.userCode;
       const testCode = this.testing.editorComponent.injectedCode;
       const shellCode = this.refactoringService.shellCode;
@@ -292,7 +293,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
        });
 
       if (assignmentName && studentName) {
-        this.assignmentsService.submitRefactoringAssignment(assignmentName, studentName, productionCode, testCode, shellCode, results).subscribe({
+        this.assignmentsService.submitRefactoringAssignment(assignmentName, studentName, exerciseId, productionCode, testCode, shellCode, results).subscribe({
           next: () => {
               this._snackBar.open('Assignment submitted successfully', 'Close', {
                   duration: 3000

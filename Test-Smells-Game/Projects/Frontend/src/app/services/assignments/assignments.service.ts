@@ -18,7 +18,7 @@ export class AssignmentsService {
 
   getAssignmentByName(name: string): Observable<AssignmentConfiguration | undefined> {
     return this.getAssignments().pipe(
-      map(assignments => assignments.find(assignment => assignment.name === name)));
+      map(assignments => assignments.find(assignment => assignment.assignmentId === name)));
   }
 
   getAssignmentsForStudent(studentName: string): Observable<AssignmentConfiguration[]> {
@@ -39,19 +39,21 @@ export class AssignmentsService {
      );
   }
 
-  submitCheckSmellAssignment(assignmentName: string, studentName: string, results: string) {
+  submitCheckSmellAssignment(assignmentName: string, studentName: string, exerciseId: string, results: string) {
     const formData = new FormData();
-    formData.append('assignmentName', assignmentName);
+    formData.append('assignmentId', assignmentName);
     formData.append('studentName', studentName);
+    formData.append('exerciseId', exerciseId);
     formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
 
     return this.http.post(environment.exerciseServiceUrl + '/assignments/submit/checksmell', formData);
   }
 
-  submitRefactoringAssignment(assignmentName: string, studentName: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
+  submitRefactoringAssignment(assignmentName: string, studentName: string, exerciseId: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
      const formData = new FormData();
-     formData.append('assignmentName', assignmentName);
+     formData.append('assignmentId', assignmentName);
      formData.append('studentName', studentName);
+     formData.append('exerciseId', exerciseId);
      formData.append('productionCode', new Blob([productionCode], { type: 'text/plain' }), `${studentName}_ClassCode.java`);
      formData.append('testCode', new Blob([testCode], { type: 'text/plain' }), `${studentName}_TestCode.java`);
      formData.append('shellCode', new Blob([shellCode], { type: 'text/plain' }), `${studentName}_ShellCode.java`);
