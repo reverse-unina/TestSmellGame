@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * The type User.
@@ -55,4 +56,18 @@ public class User {
     @LastModifiedDate
     private Date modificationTimestamp;
 
+    @ElementCollection
+    @CollectionTable(name = "missions_status", joinColumns = @JoinColumn(name = "userid"))
+    private List<MissionStatus> missions;
+
+    public void updateMissionStatus(MissionStatus missionStatus) {
+        for (MissionStatus mission : missions) {
+            if (mission.getMissionId().equals(missionStatus.getMissionId())) {
+                mission.setSteps(missionStatus.getSteps());
+                return;
+            }
+        }
+
+        missions.add(missionStatus);
+    }
 }

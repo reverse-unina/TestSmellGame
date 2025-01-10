@@ -118,7 +118,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
         this.exerciseConfiguration = data;
         this.setupConfigFiles(data)
       })
-    }) 
+    })
   }
 
   ngOnInit(): void {
@@ -140,12 +140,17 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           });
     });
 
-    this.assignmentsService.getAssignmentByName(this.assignmentName).subscribe(assignment => {
-      this.assignment = assignment;
-      if (this.assignment) {
-        this.startCheckInterval();
+    this.assignmentsService.getAssignmentByName(this.assignmentName).subscribe(
+      assignment => {
+        this.assignment = assignment;
+        if (this.assignment) {
+          this.startCheckInterval();
+        }
+      },
+      error => {
+        console.log("ERRORE", error);
       }
-    });
+    );
 
     if (this.exerciseType == 1)
       this.initFilesFromLocal();
@@ -227,7 +232,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     if(this.compileType == 1){
       this._electronService.ipcRenderer.send("compile", ([this.compiledExercise,
                                                                   this.exerciseConfiguration.refactoring_game_configuration]))
-                                                                  
+
     } else if(this.compileType == 2){
       this.codeEditorService.compile(this.compiledExercise, this.exerciseConfiguration).subscribe(data =>{
         this.elaborateCompilerAnswer(data);
@@ -463,7 +468,8 @@ async initSmellDescriptions() {
       console.error('Current student not found');
       return;
     }
-    const endTime = this.getAssignmentEndTime(this.assignment!.date, currentStudent.end);
+
+    const endTime = this.getAssignmentEndTime(currentStudent.endDate, currentStudent.endTime);
     console.log('End time for assignment:', endTime);
     this.checkInterval = setInterval(() => {
       const currentTime = new Date();
@@ -484,8 +490,8 @@ async initSmellDescriptions() {
     }, 1000);
   }
 
-  getAssignmentEndTime(assignmentDate: string, endTime: string): Date {
-    const assignmentDateObj = new Date(assignmentDate);
+  getAssignmentEndTime(assignmentEndDate: string, endTime: string): Date {
+    const assignmentDateObj = new Date(assignmentEndDate);
     const [endHour, endMinute] = endTime.split(':').map(Number);
     assignmentDateObj.setHours(endHour, endMinute, 0, 0);
     return assignmentDateObj;

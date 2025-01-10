@@ -1,0 +1,20 @@
+{
+  "missionId": "TestMission2",
+  "name": "Missione di esercizi check-smell",
+  "badge": "Quiz master",
+  "badge_filename": "quiz_master",
+  "steps": [
+    {
+      "id": "Calculator",
+      "type": "check-smell"
+    },
+    {
+      "id": "ConstructorInitialization",
+      "type": "learning"
+    },
+    {
+      "id": "XMLParser",
+      "type": "check-smell"
+    }
+  ]
+}

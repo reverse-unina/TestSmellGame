@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {catchError, switchMap} from 'rxjs/operators';
 import {environment} from "../../../environments/environment.prod";
-import {ExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import {LearningContent} from "../../model/learningContent/learning-content";
+import {
+  CheckGameExerciseConfig,
+  RefactoringGameExerciseConfiguration
+} from "../../model/exercise/ExerciseConfiguration.model";
 
 @Injectable({
   providedIn: 'root'
@@ -13,57 +16,69 @@ export class ExerciseService {
 
   constructor(private http: HttpClient) { }
 
-  getExercises(){
-    return this.http.get<any>(environment.exerciseServiceUrl + '/files/')
+  getRefactoringGameExercises(){
+    return this.http.get<RefactoringGameExerciseConfiguration[]>(environment.exerciseServiceUrl + '/exercises/refactoring')
   }
 
-  getMainClass(exercise: string){
+  getCheckGameExercises(){
+    return this.http.get<CheckGameExerciseConfig[]>(environment.exerciseServiceUrl + '/exercises/checksmell')
+  }
+
+  getMainClass(exerciseId: string){
     let HTTPOptions:Object = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       }),
       responseType: 'text'
     }
-    return this.http.get<string>(environment.exerciseServiceUrl + '/files/' + exercise + "/Production", HTTPOptions);
+    return this.http.get<string>(environment.exerciseServiceUrl + '/exercises/refactoring/' + exerciseId + "/Production", HTTPOptions);
   }
 
-  getTestClass(exercise: string){
+  getTestClass(exerciseId: string){
     let HTTPOptions:Object = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       }),
       responseType: 'text'
     }
-    return this.http.get<string>(environment.exerciseServiceUrl + '/files/' + exercise + "/Test", HTTPOptions);
+    return this.http.get<string>(environment.exerciseServiceUrl + '/exercises/refactoring/' + exerciseId + "/Test", HTTPOptions);
 
   }
-  getConfigFile(exercise: string) {
+
+  getRefactoringGameConfigFile(exerciseId: string) {
     let HTTPOptions:Object = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       }),
       responseType: 'json'
     }
-    return this.http.get<any>(environment.exerciseServiceUrl + '/files/' + exercise + "/Configuration", HTTPOptions);
+    return this.http.get<RefactoringGameExerciseConfiguration>(environment.exerciseServiceUrl + '/exercises/refactoring/' + exerciseId + "/Configuration", HTTPOptions);
   }
 
-    getAllConfigFiles(): Observable<any[]> {
-      return this.http.get<any[]>(environment.exerciseServiceUrl + '/files/configurations');
+  getCheckGameConfigFile(exerciseId: string) {
+    let HTTPOptions:Object = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      responseType: 'json'
     }
+    return this.http.get<CheckGameExerciseConfig>(environment.exerciseServiceUrl + '/exercises/checksmell/' + exerciseId, HTTPOptions);
+  }
+
+  getLeaningContentById(learningId: string): Observable<LearningContent> {
+    return this.http.get<LearningContent>(environment.exerciseServiceUrl + `/exercises/learning/${learningId}`);
+  }
 
   getLevelConfig(): Observable<levelConfig> {
-      const HTTPOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json'
-        }),
-        responseType: 'json' as 'json'
-      };
-      return this.http.get<levelConfig>(environment.exerciseServiceUrl + '/levelconfig/get-levelconfig', HTTPOptions);
-    }
+    const HTTPOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      responseType: 'json' as 'json'
+    };
+    return this.http.get<levelConfig>(environment.exerciseServiceUrl + '/levelconfig/', HTTPOptions);
+  }
 
-  getBadgeUrl(badgeName: string): string {
-      return environment.exerciseServiceUrl + '/levelconfig/badge/' + badgeName;
-    }
 
   logEvent(player: string, eventDescription: string): Observable<any> {
       const eventLog = {
@@ -71,7 +86,7 @@ export class ExerciseService {
         eventDescription,
         timestamp: new Date().toISOString()
       };
-      return this.http.post(environment.exerciseServiceUrl + '/files/log-event', eventLog, { responseType: 'json' });
+      return this.http.post(environment.exerciseServiceUrl + '/files/logger', eventLog, { responseType: 'json' });
     }
 
 }

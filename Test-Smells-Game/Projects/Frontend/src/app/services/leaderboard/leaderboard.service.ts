@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
 import {Solution} from "../../model/solution/solution";
 import {Exercise} from "../../model/exercise/refactor-exercise.model";
 import {UserService} from "../user/user.service";
-import {ExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
+import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
+import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export class LeaderboardService {
   }
 
   saveSolution(exercise: Exercise,
-               exerciseConfiguration: ExerciseConfiguration,
+               exerciseConfiguration: RefactoringGameExerciseConfiguration,
                score: number,
                refactoringResult: boolean,
                originalCoverage: number,
@@ -73,6 +75,51 @@ export class LeaderboardService {
 
   getVoteForUser(solutionId: number, userId: number){
     return this.http.get(environment.leaderboardServiceUrl + '/leaderboard/solution/' + solutionId + '/'+  userId);
+  }
+
+
+  /* Rank methods */
+  createNewScore(userName: string): Observable<Score> {
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}`, {});
+  }
+
+  getScore(userName: string): Observable<Score> {
+    return this.http.get<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}`);
+  }
+
+
+  updateScore(userName: string, gameMode: string, score: number): Observable<Score> {
+    const params = new HttpParams()
+      .set('gameMode', gameMode)
+      .set('score', score.toString());
+
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/score`, {}, { params });
+  }
+
+  updateBestRefactoringScore(userName: string, exerciseId: string, score: number): Observable<Score> {
+    const params = new HttpParams()
+      .set('exerciseId', exerciseId)
+      .set('score', score.toString());
+
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/refactoring`, {}, { params });
+  }
+
+  getUserRank(userName: string): Observable<UserRanking> {
+    return this.http.get<UserRanking>(`${environment.leaderboardServiceUrl}/rank/${userName}/ranking`);
+  }
+
+  getGameModePodium(podiumDimension: number): Observable<PodiumRanking> {
+    const params = new HttpParams()
+      .set('podiumDimension', podiumDimension);
+
+    return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/gamemode`, { params });
+  }
+
+  getRefactoringExercisePodium(podiumDimension: number): Observable<PodiumRanking> {
+    const params = new HttpParams()
+      .set('podiumDimension', podiumDimension);
+
+    return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/refactoring`, { params });
   }
 
 }

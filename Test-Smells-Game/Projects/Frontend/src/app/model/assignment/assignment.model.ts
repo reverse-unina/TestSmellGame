@@ -1,14 +1,16 @@
 export interface Student {
   name: string;
-  exercise: string;
-  start: string;
-  end: string;
+  exerciseId: string;
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
   submitted: boolean;
 }
 
-export interface Assignment {
-  name: string;
-  date: string;
+export interface AssignmentConfiguration {
+  assignmentId: string;
   students: Student[];
   type: string;
+  gameType: string;
 }

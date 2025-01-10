@@ -1,0 +1,7 @@
+<div class="learning-page">
+  <div class="learning-box">
+    <h1 class="learning-title">{{ title }}</h1>
+    <p class="learning-content">{{ content }}</p>
+    <a *ngIf="externalReference" href="{{externalReference}}" class="learning-link" target="_blank">{{ 'Vai alla risorsa esterna' | translate }}</a>
+  </div>
+</div>

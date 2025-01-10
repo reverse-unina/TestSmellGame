@@ -1,9 +1,13 @@
-<div *ngIf="loadingError">
+<div *ngIf="errorMessage !== undefined">
   <br><br><br><br><br><br><br><br>
   <h1 style="color: red; font-size: 20px; text-align: center;">{{ 'Error loading assignments' | translate }}</h1>
+  <h2 style="color: red; font-size: 20px; text-align: center;">
+    <span *ngFor="let error of errorParts">{{ error | translate }} </span>
+  </h2>
+  <h2 style="color: red; font-size: 20px; text-align: center;">{{ "Please contact your supervisor" | translate }}</h2>
 </div>
 
-<div *ngIf="checkAssignmentPresence() === 0 && !loadingError">
+<div *ngIf="checkAssignmentPresence() === 0 && errorMessage === undefined">
   <br><br><br><br><br><br><br><br>
   <h1 style="font-size: 20px; text-align: center;">
     {{ 'There are currently no assignments you are participating in' | translate }}
@@ -13,7 +17,7 @@
 <div *ngFor="let assignment of assignments">
   <div *ngIf="checkAssignmentPresence() > 0" style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
     <h2 style="font-size: 24px; margin-bottom: 8px;">{{ assignment.name }}</h2>
-    <p style="font-size: 16px; color: #666; margin-bottom: 12px;"> {{ 'Date' | translate }}: {{ assignment.date }}</p>
+    <!-- <p style="font-size: 16px; color: #666; margin-bottom: 12px;"> {{ 'Date' | translate }}: {{ assignment.date }}</p> -->
     <p style="font-size: 16px; color: #666; margin-bottom: 12px;">{{ 'Type' | translate }}: {{ assignment.type | translate }}</p>
 
     <ul style="list-style-type: none; padding: 0;">
@@ -25,13 +29,14 @@
             </li>
           </ng-container>
           <ng-container *ngIf="!(assignment.type === 'competitivo' && student.submitted === true)">
-            <li *ngIf="isAssignmentActive(assignment.date, student.start, student.end)" style="margin-bottom: 8px;">
+            <li *ngIf="isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
               <a [routerLink]="['/assignments', assignment.name, student.exercise]" style="text-decoration: none; color: #007bff;">
                 {{ student.exercise }}
               </a>
-              ({{ student.start }} - {{ student.end }})
+              <p style="margin-top: 12px;"> {{ 'Available from' | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.startTime }} </p>
+              <p> {{ "To be delivered by" | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.endTime }} </p>
             </li>
-            <li *ngIf="!isAssignmentActive(assignment.date, student.start, student.end)" style="margin-bottom: 8px;">
+            <li *ngIf="!isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
               <span style="color: red;">{{ 'The assignment is unavailable' | translate }}</span>
             </li>
           </ng-container>

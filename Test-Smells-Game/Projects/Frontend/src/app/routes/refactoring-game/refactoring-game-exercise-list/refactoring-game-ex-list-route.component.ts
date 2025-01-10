@@ -2,9 +2,10 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { ExerciseService } from 'src/app/services/exercise/exercise.service';
 import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { ExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
+import { RefactoringGameExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import {firstValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-refactoring-game-exercise-list',
@@ -14,61 +15,40 @@ import { levelConfig } from "src/app/model/levelConfiguration/level.configuratio
 export class RefactoringGameExListRouteComponent implements OnInit {
 
   constructor(private exerciseService: ExerciseService,
-              private userService: UserService,
-              private zone: NgZone,
-              private _router: Router,
-              private http: HttpClient) { }
+              protected userService: UserService,
+              ) { }
 
-  private config!: levelConfig;
-  exercises = new Array<any>();
-  exerciseConfigurations = new Array<ExerciseConfiguration>();
-  serverProblems = false;
+  protected config!: levelConfig;
+  exercises: RefactoringGameExerciseConfiguration[] = [];
+  serverError: string | undefined;
   waitingForServer!: boolean;
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.waitingForServer = true;
 
-    this.exerciseService.getAllConfigFiles().subscribe(
-      (response: any[]) => {
+    this.exerciseService.getRefactoringGameExercises().subscribe({
+      next: (response: RefactoringGameExerciseConfiguration[]) => {
         this.waitingForServer = false;
-        this.exerciseConfigurations = response.map(item => JSON.parse(atob(item)));
-        console.log(this.exerciseConfigurations);
-      },
-      error => {
-        this.serverProblems = true;
-        this.waitingForServer = false;
-      }
-    );
-
-    this.exerciseService.getLevelConfig().subscribe(
-          (data: levelConfig) => {
-            this.config = data;
-            console.log('LevelConfig:', this.config);
-          },
-          error => {
-            console.error('Error fetching level config:', error);
-          }
-        );
-
-    this.exerciseService.getExercises().subscribe(
-      response => {
-        this.waitingForServer = false;
+        this.serverError = undefined;
         this.exercises = response;
+        console.log(this.exercises);
       },
-      error => {
-        this.serverProblems = true;
+      error: (err) => {
         this.waitingForServer = false;
+        this.serverError = err.error.message || 'An unexpected error occurred';
       }
-    );
+    });
+
+    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
   }
 
   isExerciseEnabled(level: number): boolean {
-      if (this.userService.getUserExp() < this.config.expValues[0]) {
-        return level === 1;
-      } else if (this.userService.getUserExp() < this.config.expValues[1]) {
-        return level <= 2;
-      } else {
-        return true;
-      }
+    if (this.userService.getUserExp() < this.config.expValues[0]) {
+      return level === 1;
+    } else if (this.userService.getUserExp() < this.config.expValues[1]) {
+      return level <= 2;
+    } else {
+      return true;
     }
+  }
 }

@@ -113,5 +113,17 @@
   "Type": "Tipo",
   "competitive": "competitivo",
   "collaborative": "collaborativo",
-  "You need to set Compile Mode in Settings": "Devi impostare la modalità di compilazione nelle impostazioni"
+  "You need to set Compile Mode in Settings": "Devi impostare la modalità di compilazione nelle impostazioni",
+
+  "Available from": "Disponibile dal",
+  "at": "alle ore",
+  "To be delivered by": "Da consegnare entro il",
+  "Please contact your supervisor": "Per favore contatta il tuo supervisore",
+  "No assignment files found": "Nessun esperimento trovato",
+  "Unrecognized field": "Proprietà sconosciuta",
+  "not marked as ignorable found in file": "non contrassegnata come ignorabile trovata nel file",
+  "Missing required property": "Rilevata la mancanza della proprietà obbligatoria",
+  "in file": "nel file",
+  "Duplicate assignment names found": "Trovati esperimenti con nome duplicato",
+  "Error reading assignment file": "Errore nella lettura dei file degli esperimenti"
 }

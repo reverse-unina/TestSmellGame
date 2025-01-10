@@ -1,3 +1,5 @@
+import {MissionStatus} from "../missions/mission.model";
+
 export class User {
   userId!: number;
   email!: string;
@@ -6,6 +8,7 @@ export class User {
   lastName!: string;
   token!: string;
   exp!: number;
+  missionsStatus: MissionStatus[] = [];
 
   constructor() {}
 
@@ -18,3 +21,5 @@ export class User {
     this.token = token;
   }*/
 }
+
+

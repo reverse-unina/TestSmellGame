@@ -1,8 +1,11 @@
 package com.dariotintore.tesi.userservice.controller;
 
 import com.dariotintore.tesi.userservice.dto.user.AuthUserDTO;
+import com.dariotintore.tesi.userservice.dto.user.MissionStatusDTO;
 import com.dariotintore.tesi.userservice.dto.user.UserInfoDTO;
 import com.dariotintore.tesi.userservice.dto.user.UserModelDTO;
+import com.dariotintore.tesi.userservice.entity.MissionStatus;
+import com.dariotintore.tesi.userservice.entity.User;
 import com.dariotintore.tesi.userservice.service.UserService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -105,12 +109,39 @@ public class UserController {
      * @return HTTP response
      */
     @PostMapping("/updateExp")
-    public ResponseEntity<String> updateUserExp(@RequestBody AuthUserDTO user) {
+    public ResponseEntity<Map<String, String>> updateUserExp(@RequestBody AuthUserDTO user) {
         try {
             userService.updateUserExp(user);  
-            return ResponseEntity.ok("User exp updated successfully");
+            return ResponseEntity.ok(Map.of("message", "success"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user exp");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user exp"));
         }
+    }
+
+    /**
+     * Get user missions status.
+     *
+     * @param id the user id
+     * @return the user exp
+     */
+    @GetMapping("/{id}/missions")
+    public List<MissionStatus> getUserMissionsStatus(@PathVariable Long id) {
+        return userService.getUserMissionsStatus(id);
+    }
+
+    /**
+     * Update user mission status.
+     *
+     * @param missionStatusDTO mission DTO with updated steps' mission
+     * @return HTTP response
+     */
+    @PutMapping("/missions")
+    public ResponseEntity<Object> updateUserMissionStatus(@RequestBody MissionStatusDTO missionStatusDTO) {
+        User user = userService.updateUserMissionStatus(missionStatusDTO);
+
+        if (user != null)
+            return ResponseEntity.ok(user);
+        else
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user mission status");
     }
 }

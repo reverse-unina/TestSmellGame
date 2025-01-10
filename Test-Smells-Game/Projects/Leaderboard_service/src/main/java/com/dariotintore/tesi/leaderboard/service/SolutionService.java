@@ -46,24 +46,6 @@ public class SolutionService {
         return solutionRepository.findSolutionsByExerciseId(exerciseId);
     }
 
-    public void upVoteSolution(Long solutionId) {
-        Optional<Solution> solution = solutionRepository.findById(solutionId);
-        if(solution.isPresent()){
-            Solution s = solution.get();
-            s.setUpVotes(s.getUpVotes() + 1);
-            solutionRepository.save(s);
-        }
-    }
-
-    public void downVoteSolution(Long solutionId) {
-        Optional<Solution> solution = solutionRepository.findById(solutionId);
-        if(solution.isPresent()){
-            Solution s = solution.get();
-            s.setDownVotes(s.getDownVotes() + 1);
-            solutionRepository.save(s);
-        }
-    }
-
     public void voteSolution(Long solutionId, JSONObject body) {
         Integer i = (Integer) body.get("userId");
         Long userId = i.longValue();

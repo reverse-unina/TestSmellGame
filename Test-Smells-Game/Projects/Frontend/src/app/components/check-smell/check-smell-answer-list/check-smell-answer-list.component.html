@@ -1,0 +1,20 @@
+<div class="card-footer">
+  <div class="form-check">
+    <ul class="list-group">
+      <mat-selection-list [multiple]="true">
+
+        <li *ngFor="let option of questionAnswers" class="list-group-item">
+          <div [ngStyle]="{'background-color': showBackground ? (option.correct ? 'green' : 'red') : ''}">
+            <mat-checkbox #checkbox
+                          (click)="selectAnswer(option)"
+                          (change)="changeCheckbox(checkbox)"
+                          [checked]="this.option.isChecked"
+                          [disabled]="disabled">
+              {{option.answerText}}
+            </mat-checkbox>
+          </div>
+        </li>
+      </mat-selection-list>
+    </ul>
+  </div>
+</div>

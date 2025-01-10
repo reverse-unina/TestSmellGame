@@ -4,6 +4,7 @@ import {environment} from "../../../environments/environment.prod";
 import {UserService} from "../../services/user/user.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {TranslateService} from '@ngx-translate/core';
+import {SettingsService} from "../../services/settings/settings.service";
 
 @Component({
   selector: 'app-settings-route',
@@ -19,26 +20,24 @@ export class SettingsRouteComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private userService: UserService,
               private _snackBar: MatSnackBar,
-              private translate: TranslateService) { }
-
-  switchLanguage(language: string) {
-    this.translate.use(language);
-    const message = this.translate.currentLang === 'it' ? 'Impostazioni salvate' : 'Settings saved';
-    const close_message = this.translate.currentLang === 'it' ? 'Chiudi' : 'Close';
-    this._snackBar.open(message, close_message, {
-          duration: 3000
-        });
-  }
-
-  initializeTranslationService() {
-    if (!this.translate.getDefaultLang())
-      this.translate.setDefaultLang('en');
-  }
+              private settingsService: SettingsService) { }
 
   ngOnInit(): void {
-    this.initializeTranslationService();
+    this.settingsService.initializeTranslationService();
+    this.selectedLanguage = this.settingsService.getSelectedLanguage();
+    this.settingsService.initializeEnvironmentUrls();
     this.fillEnvironmentForm();
+
     this.isUserAuthenticated = this.userService.user.getValue() !== null;
+  }
+
+  switchLanguage(language: string) {
+    this.settingsService.switchLanguage(language);
+    const message = this.settingsService.getSelectedLanguage() === 'it' ? 'Impostazioni salvate' : 'Settings saved';
+    const close_message = this.settingsService.getSelectedLanguage() === 'it' ? 'Chiudi' : 'Close';
+    this._snackBar.open(message, close_message, {
+      duration: 3000
+    });
   }
 
   fillEnvironmentForm() {
@@ -48,41 +47,54 @@ export class SettingsRouteComponent implements OnInit {
       exercise_service: environment.exerciseServiceUrl,
       leaderboard_service: environment.leaderboardServiceUrl
     })
-
   }
-  submitEnvironmentForm(environmentForm: any) {
-    environment.userServiceUrl = environmentForm.value.user_service
-    environment.compilerServiceUrl = environmentForm.value.compiler_service
-    environment.leaderboardServiceUrl = environmentForm.value.leaderboard_service
-    environment.exerciseServiceUrl = environmentForm.value.exercise_service
 
-    const message = this.translate.currentLang === 'it' ? 'Impostazioni salvate' : 'Settings saved';
-    const close_message = this.translate.currentLang === 'it' ? 'Chiudi' : 'Close';
+  submitEnvironmentForm(environmentForm: any) {
+    this.settingsService.updateEnvironmentsUrl(environmentForm);
+    const message = this.settingsService.getSelectedLanguage() === 'it' ? 'Impostazioni salvate' : 'Settings saved';
+    const close_message = this.settingsService.getSelectedLanguage() === 'it' ? 'Chiudi' : 'Close';
     this._snackBar.open(message, close_message, {
       duration: 3000
     });
   }
 
   submitCompileCheckboxes(checkboxForm: NgForm) {
-
-    const message = this.translate.currentLang === 'it' ? 'Impostazioni salvate' : 'Settings saved';
-    const close_message = this.translate.currentLang === 'it' ? 'Chiudi' : 'Close';
+    const message = this.settingsService.getSelectedLanguage() === 'it' ? 'Impostazioni salvate' : 'Settings saved';
+    const close_message = this.settingsService.getSelectedLanguage() === 'it' ? 'Chiudi' : 'Close';
     this._snackBar.open(message, close_message, {
         duration: 3000
     });
   }
 
   clearLocalStorage() {
-    const confirmMessage = this.translate.currentLang === 'it' ? 'Sei sicuro di voler eliminare tutti i dati presenti nel Local Storage?' : 'Are you sure you want to clear all data in Local Storage?';
+    const confirmMessage = this.settingsService.getSelectedLanguage() === 'it' ? 'Sei sicuro di voler eliminare tutti i dati presenti nel Local Storage?' : 'Are you sure you want to clear all data in Local Storage?';
     const confirmed = window.confirm(confirmMessage);
 
     if (confirmed) {
+      const savedLanguage:string | null = localStorage.getItem('selectedLanguage');
+      const userServiceUrl:string | null = localStorage.getItem("userServiceUrl");
+      const leaderboardServiceUrl:string | null = localStorage.getItem("leaderboardServiceUrl")
+      const exerciseServiceUrl:string | null = localStorage.getItem("exerciseServiceUrl");
+      const compilerServiceUrl:string | null = localStorage.getItem("compilerServiceUrl");
+
       localStorage.clear();
-        const message = this.translate.currentLang === 'it' ? 'Local Storage svuotato' : 'Local Storage cleared';
-        const close_message = this.translate.currentLang === 'en' ? 'Close' : 'Chiudi';
-        this._snackBar.open(message, close_message, {
-             duration: 3000
-        });
-      }
+
+      if (savedLanguage)
+        localStorage.setItem('selectedLanguage', savedLanguage);
+      if (userServiceUrl)
+        environment.userServiceUrl = userServiceUrl;
+      if (leaderboardServiceUrl)
+        environment.leaderboardServiceUrl = leaderboardServiceUrl;
+      if (exerciseServiceUrl)
+        environment.exerciseServiceUrl = exerciseServiceUrl;
+      if (compilerServiceUrl)
+        environment.compilerServiceUrl = compilerServiceUrl;
+
+      const message = this.settingsService.getSelectedLanguage() === 'it' ? 'Local Storage svuotato' : 'Local Storage cleared';
+      const close_message = this.settingsService.getSelectedLanguage() === 'en' ? 'Close' : 'Chiudi';
+      this._snackBar.open(message, close_message, {
+           duration: 3000
+      });
     }
+  }
 }
