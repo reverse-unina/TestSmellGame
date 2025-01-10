@@ -123,10 +123,10 @@ public class FileService {
 			switch (type) {
 				case "Production":
 					parentDirectory = exercisePath.get().getParent().toFile();
-					logger.info("Parent direcotry: " + parentDirectory.getAbsolutePath());
+					logger.info("Parent directory: " + parentDirectory.getAbsolutePath());
 
 					productionFile = Arrays.stream(Objects.requireNonNull(parentDirectory.listFiles()))
-							.filter(file -> file.getName().contains(".java"))
+							.filter(file -> file.getName().contains(".java") && !file.getName().endsWith("Test.java"))
 							.findFirst();
 
 					if (productionFile.isPresent()) {
