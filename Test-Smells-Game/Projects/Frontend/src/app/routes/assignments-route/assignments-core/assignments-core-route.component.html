@@ -14,7 +14,7 @@
   <hr>
 
   <div *ngIf="currentUser && assignment">
-    <div *ngIf="assignment?.gameType === 'refactoring'">
+    <div *ngIf="assignment!.gameType === 'refactoring'">
       <div class="container">
         <h1>{{exerciseName}}</h1>
         <div *ngIf="serverError === undefined; else error" class="row">
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <div *ngIf="assignment?.gameType === 'check-smell' && checkSmellService.exerciseConfiguration">
+    <div *ngIf="assignment!.gameType === 'check-smell' && checkSmellService.exerciseConfiguration">
       <div class="container">
         <h1>{{exerciseName}}</h1>
         <div *ngIf="serverError === undefined; else error">

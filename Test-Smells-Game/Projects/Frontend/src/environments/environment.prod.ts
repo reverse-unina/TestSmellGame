@@ -11,9 +11,9 @@ export const environment = {
 
 export const environment = {
   production: true,
-  userServiceUrl: window.location.origin + "/user-service",
+  userServiceUrl: window.location.origin === "http://localhost:4200"? "http://localhost:9000/user-service" : window.location.origin + "/user-service",
   tokenServiceUrl: "http://localhost:8082",
-  compilerServiceUrl: window.location.origin,
-  exerciseServiceUrl: window.location.origin + "/exercise-service",
-  leaderboardServiceUrl: window.location.origin + "/leaderboard-service",
+  compilerServiceUrl: window.location.origin === "http://localhost:4200"? "http://localhost:9000" : window.location.origin,
+  exerciseServiceUrl: window.location.origin === "http://localhost:4200"? "http://localhost:9000/exercise-service" : window.location.origin + "/exercise-service",
+  leaderboardServiceUrl: window.location.origin === "http://localhost:4200"? "http://localhost:9000/leaderboard-service" : window.location.origin + "/leaderboard-service",
 };

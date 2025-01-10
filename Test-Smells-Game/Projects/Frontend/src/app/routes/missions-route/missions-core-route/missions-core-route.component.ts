@@ -53,7 +53,7 @@ export class MissionsCoreRouteComponent implements OnInit {
     private leaderboardService: LeaderboardService,
     private snackBar: MatSnackBar
   ) {
-    this.missionId = this.route.snapshot.params["missionId"];
+    this.missionId = decodeURIComponent(this.route.snapshot.params["missionId"]);
     this.checkSmellService = new CheckSmellService(
       this.exerciseService,
       this.userService,

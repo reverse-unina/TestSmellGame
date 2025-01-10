@@ -27,7 +27,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   exerciseName!: string;
   routeSplit = this.location.path().split('/');
   assignment!: AssignmentConfiguration | undefined;
-  assignmentName = this.routeSplit[this.routeSplit.length - 2];
+  assignmentName = decodeURI(this.routeSplit[this.routeSplit.length - 2]);
   checkInterval: any;
   currentUser: User | any;
   currentStudent: Student | any;
@@ -54,7 +54,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     private userService: UserService,
 
   ) {
-    this.exerciseName = this.route.snapshot.params['exercise'];
+    this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
     this.refactoringService = new RefactoringService(
       this.codeEditorService,
       this.exerciseService,
@@ -77,30 +77,33 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this.assignmentsService.getCurrentStudentForAssignment(this.assignmentName, this.currentUser.userName)
     );
 
+    console.log(this.assignmentName);
+
     this.assignment = await firstValueFrom(this.assignmentsService.getAssignmentByName(this.assignmentName));
 
+    console.log(this.assignment);
     if (this.assignment) {
       this.startCheckInterval();
-    }
+      console.log("assignemnt");
+      if (this.assignment!.gameType === "refactoring") {
+        this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
+          isModified => {
+            this.codeModified = isModified;
+          }
+        );
 
-    if (this.assignment!.gameType === "refactoring") {
-      this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
-        isModified => {
-          this.codeModified = isModified;
+        this.refactoringService.initSmellDescriptions();
+        this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
+        this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
+
+        if (this.code.editorComponent && this.code.editorComponent.editor) {
+          this.code.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
+          this.testing.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
         }
-      );
 
-      this.refactoringService.initSmellDescriptions();
-      this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
-      this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
-
-      if (this.code.editorComponent && this.code.editorComponent.editor) {
-        this.code.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
-        this.testing.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
+      } else if (this.assignment!.gameType === "check-smell") {
+        this.serverError = await this.checkSmellService.initQuestions(this.exerciseName);
       }
-
-    } else if (this.assignment!.gameType === "check-smell") {
-      this.serverError = await this.checkSmellService.initQuestions(this.exerciseName);
     }
 
   }

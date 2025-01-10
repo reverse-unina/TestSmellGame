@@ -1,20 +1,24 @@
 {
-  "id": "TestMission1",
-  "name": "Missione di prova 1",
-  "badge": "Climbing",
-  "badge_filename": "climbing",
+  "missionId": "TestMission1",
+  "name": "Missione di apprendimento",
+  "badge": "Neofita",
+  "badge_filename": "starting-point",
   "steps": [
     {
-      "id": "learning1",
+      "id": "AssertionRoulette",
       "type": "learning"
     },
     {
-      "id": "Calculator",
-      "type": "refactoring"
+      "id": "ConditionalTestLogic",
+      "type": "learning"
     },
     {
-      "id": "Exam1",
-      "type": "check-smell"
+      "id": "ConstructorInitialization",
+      "type": "learning"
+    },
+    {
+      "id": "DefaultTest",
+      "type": "learning"
     }
   ]
 }

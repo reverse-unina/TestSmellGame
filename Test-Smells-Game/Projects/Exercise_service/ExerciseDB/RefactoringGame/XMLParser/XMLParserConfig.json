@@ -1,5 +1,5 @@
 {
-  "exerciseId": "XMLParser_1",
+  "exerciseId": "XMLParser",
   "class_name": "XMLParser",
   "refactoring_game_configuration": {
     "dependencies": [

@@ -37,7 +37,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
       this.snackBar,
       this.userService
     );
-    this.exerciseName = this.route.snapshot.params['exercise'];
+    this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
   }
 
   async ngOnInit(): Promise<void> {

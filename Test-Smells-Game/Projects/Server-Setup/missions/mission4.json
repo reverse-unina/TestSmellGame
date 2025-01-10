@@ -1,0 +1,20 @@
+{
+  "missionId": "TestMission4",
+  "name": "Misisone mista",
+  "badge": "Peak",
+  "badge_filename": "peak",
+  "steps": [
+    {
+      "id": "AssertionRoulette",
+      "type": "learning"
+    },
+    {
+      "id": "Calculator",
+      "type": "refactoring"
+    },
+    {
+      "id": "Exam1",
+      "type": "check-smell"
+    }
+  ]
+}

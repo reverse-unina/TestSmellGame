@@ -29,7 +29,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
     private route: ActivatedRoute,
     private leaderboardService: LeaderboardService
   ) {
-    this.exerciseName = this.route.snapshot.params['exercise'];
+    this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
     this.checkSmellService = new CheckSmellService(
       this.exerciseService,
       this.userService,

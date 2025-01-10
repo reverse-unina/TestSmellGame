@@ -1,5 +1,5 @@
 {
-  "exerciseId": "SubjectParser_1",
+  "exerciseId": "SubjectParser",
   "class_name": "SubjectParser",
   "refactoring_game_configuration": {
     "dependencies": [

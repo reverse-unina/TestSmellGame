@@ -1,7 +1,7 @@
 {
-  "exerciseId": "XMLParser_1",
+  "exerciseId": "XMLParser",
   "check_game_configuration": {
-    "level": 1,
+    "level": 2,
     "questions": [
       {
         "questionTitle": "Qual è lo smell presente nel seguente metodo?",

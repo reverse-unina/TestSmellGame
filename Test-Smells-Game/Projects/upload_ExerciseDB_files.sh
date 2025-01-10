@@ -23,6 +23,10 @@ if [ -d "$SOURCE_DIR/CheckSmellGame" ]; then
   docker cp "$SOURCE_DIR/CheckSmellGame"/. "$CONTAINER_NAME":"$DEST_DIR/CheckSmellGame"
 fi
 
+if [ -d "$SOURCE_DIR/LearningContent" ]; then
+  docker cp "$SOURCE_DIR/LearningContent"/. "$CONTAINER_NAME":"$DEST_DIR/LearningContent"
+fi
+
 if [ $? -eq 0 ]; then
   echo "All files in '$SOURCE_DIR' have been uploaded in '$DEST_DIR' of container '$CONTAINER_NAME'."
 else
