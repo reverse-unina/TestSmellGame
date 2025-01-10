@@ -1,14 +1,14 @@
 FROM alpine:latest
 
 RUN mkdir -p /assignments
-RUN mkdir -p /assignments/levelconfig
+RUN mkdir -p /levelconfig
 RUN mkdir -p /levelconfig
 RUN mkdir -p /badges
 RUN mkdir -p /missions
 
-COPY /assignments/prova1.json /assignments/
-COPY /assignments/prova2.json /assignments/
-COPY /assignments/prova3.json /assignments/
+COPY /assignments/assignment1.json /assignments/
+COPY /assignments/assignment2.json /assignments/
+COPY /assignments/assignment3.json /assignments/
 
 COPY /levelconfig/levelConfig.json /levelconfig/
 
@@ -22,5 +22,7 @@ COPY /badges/starting-point.png /badges/
 
 COPY /missions/mission1.json /missions/
 COPY /missions/mission2.json /missions/
+COPY /missions/mission3.json /missions/
+COPY /missions/mission4.json /missions/
 
 
