@@ -47,6 +47,18 @@ export class CheckSmellService {
     }
   }
 
+  async initQuestionsFromLocal(exerciseName: string): Promise<string | undefined> {
+    try {
+      this.exerciseService.initProductionCodeFromLocal(exerciseName);
+      this.exerciseService.initTestingCodeFromLocal(exerciseName);
+      this.exerciseService.initCheckSmellExerciseConfigFromLocal(exerciseName);
+      return undefined;
+    } catch (error) {
+      // @ts-ignore
+      return error.error.message;
+    }
+
+  }
 
   goBackward() {
     if (this.actualQuestionNumber > 0) {

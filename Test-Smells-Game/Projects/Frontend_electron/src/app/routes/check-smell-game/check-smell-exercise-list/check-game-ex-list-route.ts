@@ -56,7 +56,7 @@ export class CheckGameExListRoute implements OnInit {
     } else if (this.exerciseType == 1){
       // GET EXERCISES LIST FROM GIT
       this.waitingForServer = false;
-      this.initExercises();
+      //this.initExercises();
       this.enableGetExercisesFromGit()
       this._electronService.ipcRenderer.on('getExerciseFilesFromLocal', (event, data)=>{
         this.zone.run(()=>{

@@ -24,15 +24,21 @@ export class ExerciseService {
   }
 
   initProductionCodeFromLocal(exercise: string) {
-    this._electronService.ipcRenderer.send('getProductionClassFromLocal', exercise);
+    this._electronService.ipcRenderer.send('getProductionClassFromLocal', exercise, "Production");
   }
 
   initTestingCodeFromLocal(exercise: string) {
-    this._electronService.ipcRenderer.send('getTestingClassFromLocal', exercise);
+    this._electronService.ipcRenderer.send('getTestingClassFromLocal', exercise, "Test");
   }
 
-  initConfigCodeFromLocal(exercise: string) {
-    this._electronService.ipcRenderer.send('getConfigFilesFromLocal', exercise);
+  initRefactoringExerciseConfigFromLocal(exercise: string) {
+    //this._electronService.ipcRenderer.send('getConfigFilesFromLocal', exercise);
+    this._electronService.ipcRenderer.send('getRefactoringExerciseConfigFromLocal', exercise, 'Config');
+  }
+
+  initCheckSmellExerciseConfigFromLocal(exercise: string) {
+    //this._electronService.ipcRenderer.send('getConfigFilesFromLocal', exercise, 'CheckGameExerciseConfig');
+    this._electronService.ipcRenderer.send('getCheckGameExerciseConfigFromLocal', exercise, 'CheckGameExerciseConfig');
   }
 
   getRefactoringGameExercises(){

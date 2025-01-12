@@ -124,6 +124,6 @@ export class ProfileRouteComponent implements OnInit {
 
 
 
-  protected readonly environment = environment;
-  protected readonly Object = Object;
+  readonly environment = environment;
+  readonly Object = Object;
 }

@@ -136,5 +136,5 @@ export class SettingsRouteComponent implements OnInit {
       }
     }
 
-  protected readonly localStorage = localStorage;
+  readonly localStorage = localStorage;
 }

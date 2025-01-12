@@ -1,5 +1,5 @@
 // core/refactoring.service.ts
-import {Injectable, ViewChild} from '@angular/core';
+import {Injectable, NgZone, ViewChild} from '@angular/core';
 import {SmellDescription} from "../../model/SmellDescription/SmellDescription.model";
 import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
 import {CodeeditorService} from "../codeeditor/codeeditor.service";
@@ -11,6 +11,7 @@ import {Exercise} from "../../model/exercise/refactor-exercise.model";
 import {User} from "../../model/user/user.model";
 import {ProgressBarMode} from "@angular/material/progress-bar";
 import {firstValueFrom} from "rxjs";
+import {ElectronService} from "ngx-electron";
 
 export class RefactoringService {
   compiledExercise !: Exercise;
@@ -49,8 +50,41 @@ export class RefactoringService {
     private exerciseService: ExerciseService,
     private leaderboardService: LeaderboardService,
     private snackBar: MatSnackBar,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private _electronService: ElectronService,
+    private zone: NgZone
+  ) {
+    this._electronService.ipcRenderer.on('refactoring-exercise-response', (event, data)=>{
+      this.zone.run(()=>{
+        this.elaborateCompilerAnswer(data);
+      })
+    });
+
+    // GET PRODUCTION CLASS FROM ELECTRON
+    this._electronService.ipcRenderer.on('receiveProductionClassFromLocal',(event,data)=>{
+      this.zone.run( ()=> {
+        this.userCode = data
+        this.originalProductionCode = data
+      })
+    });
+
+    // GET TESTING CLASS FROM ELECTRON
+    this._electronService.ipcRenderer.on('receiveTestingClassFromLocal',(event,data)=>{
+      this.zone.run( () => {
+        this.testingCode = data
+        this.originalTestCode = data
+      })
+    });
+
+    // GET CONFIG FILE FROM ELECTRON
+    this._electronService.ipcRenderer.on('receiveRefactoringGameConfigFromLocal',(event,data)=>{
+      this.zone.run( () => {
+        this.exerciseConfiguration = data;
+        this.exerciseConfiguration.refactoringGameConfiguration.refactoringLimit = data.refactoringGameConfiguration.refactoringLimit;
+        this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed = data.refactoringGameConfiguration.smellsAllowed;
+      })
+    });
+  }
 
   async initCodeFromCloud(exerciseName: string): Promise<string | undefined> {
     try {
@@ -66,9 +100,19 @@ export class RefactoringService {
       this.exerciseConfiguration = refactoringConfigData;
 
       // Setup config files
-      this.exerciseConfiguration.refactoringGameConfiguration.refactoringLimit = refactoringConfigData.refactoringGameConfiguration.refactoringLimit;
-      this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed = refactoringConfigData.refactoringGameConfiguration.smellsAllowed;
 
+      return undefined;
+    } catch (error) {
+      // @ts-ignore
+      return error.error.message;
+    }
+  }
+
+  async initCodeFromLocal(exerciseName: string): Promise<string | undefined> {
+    try {
+      this.exerciseService.initProductionCodeFromLocal(exerciseName);
+      this.exerciseService.initTestingCodeFromLocal(exerciseName);
+      this.exerciseService.initRefactoringExerciseConfigFromLocal(exerciseName);
       return undefined;
     } catch (error) {
       // @ts-ignore
@@ -178,35 +222,35 @@ export class RefactoringService {
         this.originalCoverage,
         this.refactoredCoverage,
         this.smells).subscribe(
-          result => {
-            this.showPopUp("Solution saved");
-            this.stopLoading();
-            this.userService.getCurrentUser().subscribe((user: User | any) => {
-              this.user = user;
-            });
-
-            this.userService.increaseUserExp(score);
-
-            this.leaderboardService.updateScore(this.user.userName, "refactoring", score).subscribe(
-              (data) => {
-                console.log("Updated exercise score: ", data);
-
-                this.leaderboardService.updateBestRefactoringScore(this.user.userName, exerciseName, score).subscribe(
-                  (data) => {
-                    console.log("Updated score: ", data);
-                  }
-                );
-              }
-            );
-
-            this.exerciseService.logEvent(this.user.userName, 'Completed ' + exerciseName + ' in refactoring game mode').subscribe({
-              next: response => console.log('Log event response:', response),
-              error: error => console.error('Error submitting log:', error)
-            });
-          },error => {
-            this.showPopUp("Server has a problem");
-            this.stopLoading()
+        result => {
+          this.showPopUp("Solution saved");
+          this.stopLoading();
+          this.userService.getCurrentUser().subscribe((user: User | any) => {
+            this.user = user;
           });
+
+          this.userService.increaseUserExp(score);
+
+          this.leaderboardService.updateScore(this.user.userName, "refactoring", score).subscribe(
+            (data) => {
+              console.log("Updated exercise score: ", data);
+
+              this.leaderboardService.updateBestRefactoringScore(this.user.userName, exerciseName, score).subscribe(
+                (data) => {
+                  console.log("Updated score: ", data);
+                }
+              );
+            }
+          );
+
+          this.exerciseService.logEvent(this.user.userName, 'Completed ' + exerciseName + ' in refactoring game mode').subscribe({
+            next: response => console.log('Log event response:', response),
+            error: error => console.error('Error submitting log:', error)
+          });
+        },error => {
+          this.showPopUp("Server has a problem");
+          this.stopLoading()
+        });
     }else{
       this.showPopUp("To save your solution in solutions repository you have to complete the exercise");
       this.stopLoading()
