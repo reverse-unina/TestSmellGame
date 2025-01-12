@@ -17,6 +17,8 @@ function configEnvironment(environment){
     const myEnv = dotenv.config({path: process.env.ROOT_PATH + "src/external/electron/development.env"})
     dotenvExpand.expand(myEnv)
   }
+
+  console.log(process.env);
 }
 
 function writeFile(path, content){

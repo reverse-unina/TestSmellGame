@@ -13,6 +13,7 @@ import {UserService} from '../../../services/user/user.service';
 import {Question} from "../../../model/question/question.model";
 import {RefactoringService} from "../../../services/refactoring/refactoring.service";
 import {CheckSmellService} from "../../../services/check-smell/check-smell.service";
+import {ElectronService} from "ngx-electron";
 
 @Component({
   selector: 'app-assignments-core',
@@ -38,8 +39,8 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   private codeModifiedSubscription!: Subscription;
   serverError: string | undefined;
 
-  protected refactoringService!: RefactoringService;
-  protected checkSmellService!: CheckSmellService;
+  refactoringService!: RefactoringService;
+  checkSmellService!: CheckSmellService;
 
   constructor(
     private codeEditorService: CodeeditorService,
@@ -52,7 +53,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     private assignmentsService: AssignmentsService,
     private leaderboardService: LeaderboardService,
     private userService: UserService,
-
+    private _electronService: ElectronService,
   ) {
     this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
     this.refactoringService = new RefactoringService(
@@ -60,7 +61,9 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this.exerciseService,
       this.leaderboardService,
       this._snackBar,
-      this.userService
+      this.userService,
+      this._electronService,
+      this.zone
     );
 
     this.checkSmellService = new CheckSmellService(
@@ -236,7 +239,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     return content;
   }
 
-  protected readonly Math = Math;
+  readonly Math = Math;
 
   // Refactoring assignments type methods
   submitIsDisabled(): boolean {

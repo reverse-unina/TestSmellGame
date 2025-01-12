@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {MissionService} from "../../../services/missions/mission.service";
 import {
@@ -17,6 +17,7 @@ import {LeaderboardService} from "../../../services/leaderboard/leaderboard.serv
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {firstValueFrom, Observable} from "rxjs";
 import {LearningService} from "../../../services/learning/learning.service";
+import {ElectronService} from "ngx-electron";
 
 @Component({
   selector: 'app-missions-core-route',
@@ -40,9 +41,9 @@ export class MissionsCoreRouteComponent implements OnInit {
 
   @ViewChild('question') question: any;
 
-  protected checkSmellService!: CheckSmellService;
-  protected refactoringService!: RefactoringService;
-  protected learningService!: LearningService;
+  checkSmellService!: CheckSmellService;
+  refactoringService!: RefactoringService;
+  learningService!: LearningService;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +52,9 @@ export class MissionsCoreRouteComponent implements OnInit {
     private userService: UserService,
     private codeService: CodeeditorService,
     private leaderboardService: LeaderboardService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private _electronService: ElectronService,
+    private zone: NgZone
   ) {
     this.missionId = decodeURIComponent(this.route.snapshot.params["missionId"]);
     this.checkSmellService = new CheckSmellService(
@@ -64,7 +67,9 @@ export class MissionsCoreRouteComponent implements OnInit {
       this.exerciseService,
       this.leaderboardService,
       this.snackBar,
-      this.userService
+      this.userService,
+      this._electronService,
+      this.zone
     );
     this.learningService = new LearningService(
       this.exerciseService
@@ -147,7 +152,9 @@ export class MissionsCoreRouteComponent implements OnInit {
           this.exerciseService,
           this.leaderboardService,
           this.snackBar,
-          this.userService
+          this.userService,
+          this._electronService,
+          this.zone
         );
 
         this.refactoringService.initSmellDescriptions();
@@ -207,5 +214,5 @@ export class MissionsCoreRouteComponent implements OnInit {
     }
   }
 
-  protected readonly Math = Math;
+  readonly Math = Math;
 }

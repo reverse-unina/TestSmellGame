@@ -9,5 +9,5 @@ import {PodiumRanking} from "../../model/rank/score";
 export class PodiumComponent {
   @Input() topUsers!: PodiumRanking;
 
-  protected readonly Object = Object;
+  readonly Object = Object;
 }
