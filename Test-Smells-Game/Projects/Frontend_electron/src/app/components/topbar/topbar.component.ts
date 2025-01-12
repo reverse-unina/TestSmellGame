@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {Subscription} from "rxjs";
 import {UserService} from "../../services/user/user.service";
@@ -12,7 +12,7 @@ import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.css']
 })
-export class TopbarComponent implements OnInit, OnDestroy {
+export class TopbarComponent implements OnInit {
   config!: levelConfig;
   isAuthenticated = false;
   currentUser: User | null = null;

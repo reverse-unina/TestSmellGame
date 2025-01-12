@@ -12,28 +12,33 @@ import {CheckGameCoreRouteComponent} from "./routes/check-smell-game/check-game-
 import {LeaderboardRouteComponent} from "./routes/leaderboard-route/leaderboard-route.component";
 import {SettingsRouteComponent} from "./routes/settings-route/settings-route.component";
 import {HomeRouteComponent} from "./routes/home-route/home-route.component";
-import {AssignmentsListRoute} from "./routes/assignments/assignments-list/assignments-list-route";
-import {AssignmentsCoreRouteComponent} from "./routes/assignments/assignments-core/assignments-core-route.component";
+import {AssignmentsListRoute} from "./routes/assignments-route/assignments-list/assignments-list-route";
+import {AssignmentsCoreRouteComponent} from "./routes/assignments-route/assignments-core/assignments-core-route.component";
 import {ProfileRouteComponent} from "./routes/profile-route/profile-route.component";
+import {MissionsListRouteComponent} from "./routes/missions-route/missions-list-route/missions-list-route.component";
+import {MissionsCoreRouteComponent} from "./routes/missions-route/missions-core-route/missions-core-route.component";
 
 const appRoutes: Routes = [
   { path: 'auth', component: AuthComponent },
   { path: 'home', component: HomeRouteComponent },
   { path: 'refactor-game', component: RefactoringGameExListRouteComponent },
   { path: 'check-game', component: CheckGameExListRoute},
-  { path: 'refactor-game/:exercise', component: RefactoringGameCoreRouteComponent},
-  { path: 'check-game/:exercise', component: CheckGameCoreRouteComponent},
+  { path: 'refactor-game/:exercise', component: RefactoringGameCoreRouteComponent },
+  { path: 'check-game/:exercise', component: CheckGameCoreRouteComponent },
   { path: 'refactor-game/leaderboard/:exercise', component: LeaderboardRouteComponent},
   { path: 'assignments/leaderboard/:exercise', component: LeaderboardRouteComponent},
   { path: 'assignments', component: AssignmentsListRoute},
   { path: 'assignments/:nome/:exercise', component: AssignmentsCoreRouteComponent},
   { path: 'settings', component: SettingsRouteComponent},
   { path: 'profile', component: ProfileRouteComponent},
+  { path: 'missions', component: MissionsListRouteComponent },
+  { path: 'missions/:missionId', component: MissionsCoreRouteComponent },
   { path: "**", redirectTo:  'home'}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes)],
+  imports: [RouterModule.forRoot(appRoutes, {onSameUrlNavigation: "reload"})],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
+

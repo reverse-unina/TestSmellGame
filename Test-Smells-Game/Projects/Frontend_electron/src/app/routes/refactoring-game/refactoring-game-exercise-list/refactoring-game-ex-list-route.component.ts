@@ -25,11 +25,11 @@ export class RefactoringGameExListRouteComponent implements OnInit {
 
   constructor(private exerciseService: ExerciseService,
               private _electronService: ElectronService,
-              protected userService: UserService,
+              public userService: UserService,
               private zone: NgZone,
               private fb: FormBuilder) { }
 
-  protected config!: levelConfig;
+  config!: levelConfig;
   exercises: RefactoringGameExerciseConfiguration[] = [];
   serverError: string | undefined;
   waitingForServer!: boolean;
