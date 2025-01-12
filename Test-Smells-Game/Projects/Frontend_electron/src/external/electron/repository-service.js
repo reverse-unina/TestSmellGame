@@ -263,6 +263,9 @@ function getJsonFileById(fileId, className) {
     case "CheckGameExerciseConfig":
       directory = process.env.ROOT_PATH + "src/external/compiler/LocalExercises" + "\\ExerciseDB\\CheckSmellGame\\";
       break;
+    case "RefactoringGameExerciseConfig":
+      directory = process.env.ROOT_PATH + "src/external/compiler/LocalExercises" + "\\ExerciseDB\\RefactoringGame\\";
+      break;
   }
 
   const result = getAllJsonFilePaths(directory);

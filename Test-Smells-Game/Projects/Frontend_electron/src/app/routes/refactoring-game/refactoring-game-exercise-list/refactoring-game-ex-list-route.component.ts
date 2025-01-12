@@ -8,7 +8,10 @@ import {MatDividerModule} from "@angular/material/divider";
 import {FormBuilder, NgForm} from "@angular/forms";
 import {environment} from "../../../../environments/environment.prod";
 import { HttpClient } from '@angular/common/http';
-import { RefactoringGameExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
+import {
+  CheckGameExerciseConfig,
+  RefactoringGameExerciseConfiguration
+} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 import {DatePipe} from "@angular/common";
@@ -31,6 +34,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
 
   config!: levelConfig;
   exercises: RefactoringGameExerciseConfiguration[] = [];
+  exercisesFromLocal: RefactoringGameExerciseConfiguration[] = [];
   serverError: string | undefined;
   waitingForServer!: boolean;
   enableGit = false
@@ -57,14 +61,27 @@ export class RefactoringGameExListRouteComponent implements OnInit {
       });
     } else if (this.exerciseType == 1){
       // GET EXERCISES LIST FROM GIT
-      this.waitingForServer = false;
+      this.waitingForServer = true;
+      this.exerciseService.getRefactoringGameExercises().subscribe({
+        next: (response: RefactoringGameExerciseConfiguration[]) => {
+          this.waitingForServer = false;
+          this.serverError = undefined;
+          this.exercises = response;
+          console.log(response);
+        },
+        error: (err) => {
+          this.waitingForServer = false;
+          this.serverError = err.error.message || 'An unexpected error occurred';
+        }
+      });
       this.enableGetExercisesFromGit()
-      this._electronService.ipcRenderer.on('getExerciseFilesFromLocal', (event, data)=>{
+      this._electronService.ipcRenderer.on('getFilesFromLocal', (event, data: RefactoringGameExerciseConfiguration[])=>{
         this.zone.run(()=>{
-          this.exercises = data;
+          data.forEach(d => this.exercisesFromLocal.push(RefactoringGameExerciseConfiguration.fromJson(d)));
           this.child.stopLoading()
-        })
-      })
+          console.log("Exercises received: ", this.exercisesFromLocal)
+        });
+      });
     }
 
     this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
@@ -80,11 +97,15 @@ export class RefactoringGameExListRouteComponent implements OnInit {
     }
   }
 
-    private enableGetExercisesFromGit() {
-    this.enableGit = true
+  private enableGetExercisesFromGit() {
+    this.enableGit = true;
     this.gitForm = this.fb.group({
-      url:"https://github.com/LZannini/Thesis-Exercises-Repository",
-      branch:"exercises"
-    })
+      url:"https://github.com/mick0974/TestSmellGame-Exercises",
+      branch:"main"
+    });
+  }
+
+  isExerciseInLocal(exerciseId: string) {
+    return this.exercises.find(e => e.exerciseId === exerciseId) !== undefined;
   }
 }

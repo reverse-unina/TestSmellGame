@@ -10,6 +10,16 @@ export class RefactoringGameExerciseConfiguration {
       'level': number
     };
     autoValutative!: boolean;
+
+  static fromJson(json: any): RefactoringGameExerciseConfiguration {
+    const config = new RefactoringGameExerciseConfiguration();
+
+    config.exerciseId = json.exerciseId;
+    config.refactoringGameConfiguration = json.refactoring_game_configuration;
+    config.autoValutative = json.auto_valutative;
+
+    return config;
+  }
 }
 
 export class CheckGameExerciseConfig {
