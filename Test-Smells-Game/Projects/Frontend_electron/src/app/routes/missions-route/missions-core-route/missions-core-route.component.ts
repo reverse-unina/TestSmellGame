@@ -60,7 +60,8 @@ export class MissionsCoreRouteComponent implements OnInit {
     this.checkSmellService = new CheckSmellService(
       this.exerciseService,
       this.userService,
-      this.leaderboardService
+      this._electronService,
+      this.zone
     );
     this.refactoringService = new RefactoringService(
       this.codeService,
@@ -164,7 +165,8 @@ export class MissionsCoreRouteComponent implements OnInit {
         this.checkSmellService = new CheckSmellService(
           this.exerciseService,
           this.userService,
-          this.leaderboardService
+          this._electronService,
+          this.zone
         );
 
         this.serverError = await this.checkSmellService.initQuestionsFromCloud(this.mission.steps[this.currentStep].id);

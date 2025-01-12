@@ -69,7 +69,8 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     this.checkSmellService = new CheckSmellService(
       this.exerciseService,
       this.userService,
-      this.leaderboardService
+      this._electronService,
+      this.zone
     );
   }
 
@@ -213,7 +214,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       question.answers.forEach(ans => {
         if (ans.isChecked) {
           content += `${ans.answerText}, `;
-          if (ans.correct)
+          if (ans.isCorrect)
             givenPoints += 1;
           else
             lostPoints += 0.5;
@@ -224,7 +225,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
       content += "\tCorrect answers: [";
       question.answers.forEach(ans => {
-        ans.correct? content += `${ans.answerText}, ` : "";
+        ans.isCorrect? content += `${ans.answerText}, ` : "";
         questionPoints++;
       });
       content = content.substring(0, content.length-2);

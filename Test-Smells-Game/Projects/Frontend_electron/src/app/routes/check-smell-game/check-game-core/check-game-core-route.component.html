@@ -3,7 +3,7 @@
   <div>
     <div *ngIf="!checkSmellService.exerciseCompleted else showResult" class="card">
 
-      <div *ngIf="checkSmellService.exerciseConfiguration">
+      <div *ngIf="checkSmellService.exerciseConfiguration && checkSmellService.questions && checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode">
         <app-check-smell-question #testing [editorHeader]="exerciseName+'.java'" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
         </app-check-smell-question>
 

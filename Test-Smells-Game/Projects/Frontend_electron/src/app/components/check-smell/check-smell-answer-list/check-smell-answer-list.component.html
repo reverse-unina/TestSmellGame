@@ -4,7 +4,7 @@
       <mat-selection-list [multiple]="true">
 
         <li *ngFor="let option of questionAnswers" class="list-group-item">
-          <div [ngStyle]="{'background-color': showBackground ? (option.correct ? 'green' : 'red') : ''}">
+          <div [ngStyle]="{'background-color': showBackground ? (option.isCorrect ? 'green' : 'red') : ''}">
             <mat-checkbox #checkbox
                           (click)="selectAnswer(option)"
                           (change)="changeCheckbox(checkbox)"

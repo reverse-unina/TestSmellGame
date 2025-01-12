@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {firstValueFrom, Observable} from "rxjs";
 import {levelConfig} from "../../model/levelConfiguration/level.configuration.model";
 import {User} from "../../model/user/user.model";
@@ -11,11 +11,11 @@ import {SuccessAlertComponent} from "../../components/alert/success-alert/succes
 import {AchievementAlertComponent} from "../../components/alert/achivement-alert/achievement-alert.component";
 import {FailAlertComponent} from "../../components/alert/fail-alert/fail-alert.component";
 import {LeaderboardService} from "../leaderboard/leaderboard.service";
+import {ElectronService} from "ngx-electron";
 
 export class CheckSmellService {
   config!: levelConfig;
   user!: User;
-  exerciseRetrievalType!: number;
   actualQuestionNumber: number = 0;
 
   questions!: Question[];
@@ -28,12 +28,12 @@ export class CheckSmellService {
   constructor(
     private exerciseService: ExerciseService,
     private userService: UserService,
-    private leaderboardService: LeaderboardService
+    private _electronService: ElectronService,
+    private zone: NgZone
   ) { }
 
   async initQuestionsFromCloud(exerciseName: string): Promise<string | undefined> {
     try {
-      this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
 
       const data = await firstValueFrom(this.exerciseService.getCheckGameConfigFile(exerciseName));
       this.exerciseConfiguration = data;
@@ -49,9 +49,17 @@ export class CheckSmellService {
 
   async initQuestionsFromLocal(exerciseName: string): Promise<string | undefined> {
     try {
-      this.exerciseService.initProductionCodeFromLocal(exerciseName);
-      this.exerciseService.initTestingCodeFromLocal(exerciseName);
       this.exerciseService.initCheckSmellExerciseConfigFromLocal(exerciseName);
+      this._electronService.ipcRenderer.on('receiveCheckGameConfigFromLocal', (event, data: CheckGameExerciseConfig)=>{
+        this.zone.run(()=>{
+          this.exerciseConfiguration = CheckGameExerciseConfig.fromJson(data);
+          this.questions = this.exerciseConfiguration.checkGameConfiguration.questions;
+
+          console.log(this.questions);
+        });
+      });
+
+      this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
       return undefined;
     } catch (error) {
       // @ts-ignore
@@ -94,9 +102,9 @@ export class CheckSmellService {
       let givenAnswersScore = 0;
 
       question.answers.forEach(ans => {
-        ans.correct? currentCorrectAnswers++ : 0;
+        ans.isCorrect? currentCorrectAnswers++ : 0;
         if (ans.isChecked) {
-          if (ans.correct)
+          if (ans.isCorrect)
             givenAnswersScore++;
           else
             givenAnswersScore -= 0.5;

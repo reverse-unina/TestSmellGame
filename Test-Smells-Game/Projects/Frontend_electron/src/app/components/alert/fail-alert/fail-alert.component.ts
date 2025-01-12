@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 
 @Component({
   selector: 'app-fail-alert',
   templateUrl: './fail-alert.component.html',
   styleUrls: ['./fail-alert.component.css']
 })
-export class FailAlertComponent {
+export class FailAlertComponent implements OnDestroy {
   @Input() message: string = 'Unfortunately, you failed the exercise. Don’t give up, try again!';
   showModal: boolean = false;
 
@@ -15,5 +15,8 @@ export class FailAlertComponent {
 
   close() {
     this.showModal = false
+  }
+
+  ngOnDestroy(): void {
   }
 }

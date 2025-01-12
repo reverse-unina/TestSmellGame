@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {Question} from "../../../model/question/question.model";
 import {Answer} from "../../../model/question/answer.model";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -8,7 +8,7 @@ import {MatCheckbox} from "@angular/material/checkbox";
   templateUrl: './check-smell-answer-list.component.html',
   styleUrls: ['./check-smell-answer-list.component.css']
 })
-export class CheckSmellAnswerListComponent {
+export class CheckSmellAnswerListComponent implements OnDestroy{
   @Input() questionAnswers!: Answer[];
   @Input() showBackground: boolean = false;
   @Input() disabled: boolean = false;
@@ -19,5 +19,8 @@ export class CheckSmellAnswerListComponent {
 
   changeCheckbox(checkbox: MatCheckbox) {
     checkbox.checked = !checkbox.checked;
+  }
+
+  ngOnDestroy(): void {
   }
 }

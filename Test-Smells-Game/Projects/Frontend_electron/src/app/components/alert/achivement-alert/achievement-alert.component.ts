@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 
 @Component({
   selector: 'app-achievement-alert',
   templateUrl: './achievement-alert.component.html',
   styleUrls: ['./achievement-alert.component.css']
 })
-export class AchievementAlertComponent {
+export class AchievementAlertComponent implements OnDestroy {
   title!: string;
   message!: string;
   showModal: boolean = false;
@@ -18,5 +18,8 @@ export class AchievementAlertComponent {
 
   close() {
     this.showModal = false
+  }
+
+  ngOnDestroy(): void {
   }
 }

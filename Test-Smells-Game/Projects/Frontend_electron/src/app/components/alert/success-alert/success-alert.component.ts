@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 
 @Component({
   selector: 'app-success-alert',
   templateUrl: './success-alert.component.html',
   styleUrls: ['./success-alert.component.css']
 })
-export class SuccessAlertComponent {
+export class SuccessAlertComponent implements OnDestroy {
   @Input() message: string = "You have completed successfully the exercise.";
   showModal: boolean = false;
 
@@ -15,5 +15,8 @@ export class SuccessAlertComponent {
 
   close() {
     this.showModal = false
+  }
+
+  ngOnDestroy(): void {
   }
 }

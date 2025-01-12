@@ -24,8 +24,8 @@ export class CheckGameExerciseConfig {
     const config = new CheckGameExerciseConfig();
 
     config.exerciseId = json.exerciseId;
-    config.checkGameConfiguration = json.check_game_configuration || json.checkGameConfiguration;
-    config.autoValutative = json.autoValutative;
+    config.checkGameConfiguration = json.check_game_configuration;
+    config.autoValutative = json.auto_valutative;
 
     return config;
   }

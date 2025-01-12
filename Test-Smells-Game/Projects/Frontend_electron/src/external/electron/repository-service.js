@@ -261,7 +261,7 @@ function getJsonFileById(fileId, className) {
 
   switch (className) {
     case "CheckGameExerciseConfig":
-      directory = process.env.LOCAL_EXERCISE_DIRECTORY + "ExerciseDB/CheckSmellGame/";
+      directory = process.env.ROOT_PATH + "src/external/compiler/LocalExercises" + "\\ExerciseDB\\CheckSmellGame\\";
       break;
   }
 

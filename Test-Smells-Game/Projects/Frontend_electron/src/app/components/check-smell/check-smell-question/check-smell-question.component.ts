@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, ViewChild} from '@angular/core';
 import {ProgressBarMode} from "@angular/material/progress-bar";
 
 @Component({
@@ -6,11 +6,14 @@ import {ProgressBarMode} from "@angular/material/progress-bar";
   templateUrl: './check-smell-question.component.html',
   styleUrls: ['./check-smell-question.component.css']
 })
-export class CheckSmellQuestionComponent {
+export class CheckSmellQuestionComponent implements OnDestroy {
   @Input() editorHeader: string = "title";
   @Input() injectedCode: string = "injectedCode";
   @Input() editable: boolean = true;
   @Input() progressBarMode: ProgressBarMode = "determinate";
 
   @ViewChild('editorComponent') editorComponent: any;
+
+  ngOnDestroy(): void {
+  }
 }
