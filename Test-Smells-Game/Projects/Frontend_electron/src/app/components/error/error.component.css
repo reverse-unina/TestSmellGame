@@ -1,0 +1,54 @@
+.error-container {
+  text-align: center;
+  padding: 30px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff7b7b, #ff4949);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  max-width: 600px;
+  margin: 50px auto;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.error-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.error-icon {
+  font-size: 40px;
+  margin-right: 10px;
+  color: #ffe66d;
+}
+
+.error-title {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.error-message {
+  font-size: 20px;
+  margin: 20px 0;
+  font-weight: 500;
+}
+
+.error-contact {
+  font-size: 18px;
+  margin-top: 20px;
+  font-style: italic;
+  color: #ffe66d;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

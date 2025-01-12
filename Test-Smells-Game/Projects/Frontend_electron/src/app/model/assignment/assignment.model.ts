@@ -1,6 +1,6 @@
 export interface Student {
   name: string;
-  exercise: string;
+  exerciseId: string;
   startDate: string;
   endDate: string;
   startTime: string;
@@ -8,8 +8,9 @@ export interface Student {
   submitted: boolean;
 }
 
-export interface Assignment {
-  name: string;
+export interface AssignmentConfiguration {
+  assignmentId: string;
   students: Student[];
   type: string;
+  gameType: string;
 }

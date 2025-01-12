@@ -1,4 +1,4 @@
-import { Component, NgZone, HostListener, OnInit } from '@angular/core';
+import {Component, NgZone, HostListener, OnInit, ViewChild} from '@angular/core';
 import { CodeeditorService } from "../../../services/codeeditor/codeeditor.service";
 import { ExerciseService } from "../../../services/exercise/exercise.service";
 import { ActivatedRoute } from "@angular/router";
@@ -11,6 +11,11 @@ import { MatCheckbox } from "@angular/material/checkbox";
 import { UserService } from '../../../services/user/user.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import {AchievementAlertComponent} from "../../../components/alert/achivement-alert/achievement-alert.component";
+import {FailAlertComponent} from "../../../components/alert/fail-alert/fail-alert.component";
+import {SuccessAlertComponent} from "../../../components/alert/success-alert/success-alert.component";
+import {CheckSmellService} from "../../../services/check-smell/check-smell.service";
+import {LeaderboardService} from "../../../services/leaderboard/leaderboard.service";
 
 @Component({
   selector: 'app-check-game-core',
@@ -18,18 +23,14 @@ import { levelConfig } from "src/app/model/levelConfiguration/level.configuratio
   styleUrls: ['./check-game-core-route.component.css']
 })
 export class CheckGameCoreRouteComponent implements OnInit {
-  config!: levelConfig;
-  user!: User;
-  exerciseName = this.route.snapshot.params['exercise'];
+  exerciseName!: string;
+
+  @ViewChild('achievementAlert') achievementAlert!: AchievementAlertComponent;
+  @ViewChild('failAlert') failAlert!: FailAlertComponent;
+  @ViewChild('successAlert') successAlert!: SuccessAlertComponent;
+
+  protected checkSmellService!: CheckSmellService;
   exerciseRetrievalType!: number;
-  actualQuestionNumber: number = 0;
-
-  questions!: Question[];
-  selectedAnswers: Answer[] = [];
-  exerciseConfiguration!: ExerciseConfiguration;
-
-  exerciseCompleted: boolean = false;
-  score: number = 0;
 
   constructor(
     private codeService: CodeeditorService,
@@ -37,30 +38,34 @@ export class CheckGameCoreRouteComponent implements OnInit {
     private route: ActivatedRoute,
     private zone: NgZone,
     private _electronService: ElectronService,
-    private _snackBar: MatSnackBar,
+    private leaderboardService: LeaderboardService,
     private userService: UserService
-  ) { // GET CONFIG CLASS FROM ELECTRON
+  ) {
+    // GET CONFIG CLASS FROM ELECTRON
     this._electronService.ipcRenderer.on('receiveConfigFilesFromLocal',(event,data)=>{
       this.zone.run( () => {
         this.setupQuestions(data);
       })
-    }) }
+    });
+
+    this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
+    this.checkSmellService = new CheckSmellService(
+      this.exerciseService,
+      this.userService,
+      this.leaderboardService
+    )
+  }
 
   ngOnInit(): void {
     this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
 
-    this.exerciseService.getConfigFile(this.exerciseName).subscribe(data => {
-      this.setupQuestions(data);
-    });
 
     // INIT PRODUCTION CLASS FROM LOCAL
     if(this.exerciseRetrievalType == 1){
       this.exerciseService.initConfigCodeFromLocal(this.exerciseName);
+    } else if (this.exerciseRetrievalType == 2){
       // INIT PRODUCTION CLASS FROM CLOUD
-    }else if(this.exerciseRetrievalType == 2){
-      this.exerciseService.getConfigFile(this.exerciseName).subscribe(data=>{
-        this.setupQuestions(data);
-      })
+      this.checkSmellService.initQuestionsFromCloud(this.exerciseName);
     }
 
     this.exerciseService.getLevelConfig().subscribe(

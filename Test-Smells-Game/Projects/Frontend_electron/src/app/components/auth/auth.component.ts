@@ -4,6 +4,7 @@ import {AuthService} from "../../services/auth/auth.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ProgressBarMode} from "@angular/material/progress-bar";
+import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
 
 @Component({
   selector: 'app-auth',
@@ -17,7 +18,8 @@ export class AuthComponent {
   message = "";
   constructor(private authService: AuthService,
               private router: Router,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private leaderboardService: LeaderboardService) {
   }
 
 
@@ -99,11 +101,16 @@ export class AuthComponent {
     }
 
   private submitSignUpMode(email: string, username: string, password: string) {
-    this.authService.signup(email, username, password).subscribe(response => {
+    this.authService.signup(email, username, password).subscribe(
+      response => {
       this.stopLoading()
       response = JSON.parse(JSON.stringify(response))
       // @ts-ignore
       this.handleSignUpSuccess(response.status);
+      this.leaderboardService.createNewScore(username).subscribe(
+        data => console.log(data),
+        error => this.handleSignUpErrors(error.error.error_code)
+      )
     }, error => {
       this.stopLoading()
       this.handleSignUpErrors(error.error.error_code);

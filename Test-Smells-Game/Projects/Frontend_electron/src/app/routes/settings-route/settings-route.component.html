@@ -1,14 +1,9 @@
-<p style="color: red">
-  Posizionare il cursore sopra l'icona
-  <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Informazione">info</mat-icon>
-  per ricevere informazioni aggiuntive riguardo l'impostazione in questione
-</p>
 <div class="card">
   <div class="card-header">
     {{ 'Language' | translate }}
   </div>
   <div class="card-body">
-    <form #langageForm="ngForm">
+    <form #languageForm="ngForm">
       <div class="form-check">
         <input class="form-check-input" type="radio" name="languageRadio" value="en" [(ngModel)]="selectedLanguage">
         <label class="form-check-label">
@@ -46,7 +41,7 @@
           type="url"
           id="user_service"
           class="form-control"
-          ngModel
+          formControlName="user_service"
           name="user_service"
           required
         />
@@ -55,7 +50,7 @@
           type="url"
           id="compiler_service"
           class="form-control"
-          ngModel
+          formControlName="compiler_service"
           name="compiler_service"
           required
         />
@@ -64,7 +59,7 @@
           type="url"
           id="exercise_service"
           class="form-control"
-          ngModel
+          formControlName="exercise_service"
           name="exercise_service"
           required
         />
@@ -73,7 +68,7 @@
           type="url"
           id="leaderboard_service"
           class="form-control"
-          ngModel
+          formControlName="leaderboard_service"
           name="leaderboard_service"
           required
         />
@@ -100,51 +95,17 @@
   <div class="card-body">
     <form #checkboxForm="ngForm" (submit)="submitCompileCheckboxes(checkboxForm)">
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="Local" [checked]="compileType == 1" value="Local" (change)="clickCompileCheckbox(1)">
+        <input class="form-check-input" type="radio" disabled name="exampleRadios" id="Local" value="Local">
         <label class="form-check-label" for="Local">
-          Local
+          {{ 'Local' | translate }}
+          <p style="color: red">{{ 'To use Local compile you need to execute the Electron App' | translate }}</p>
         </label>
-          <mat-icon style="margin-left:10px; font-size: 12px" matTooltip="La compilazione in locale necessita che sia installato Java e Maven ed utilizza le risorse del PC del giocatore">info</mat-icon>
       </div>
       <div class="form-check">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="Cloud" value="Cloud" [checked]="compileType == 2" [disabled]="!isUserAuthenticated" (change)="clickCompileCheckbox(2)">
+        <input class="form-check-input" type="radio" name="exampleRadios" id="Cloud" value="Cloud" checked [disabled]="!isUserAuthenticated">
         <label class="form-check-label" for="Cloud">
-          Cloud <p *ngIf="!isUserAuthenticated" style="color: red"> To use cloud you need to login</p>
+          Cloud <p *ngIf="!isUserAuthenticated" style="color: red"> {{ 'To use cloud you need to login' | translate }} </p>
         </label>
-        <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="La compilazione Cloud non necessita alcuna dipendenza e viene effettuata sul server di compilazione impostato negli environments">info</mat-icon>
-      </div>
-      <button
-        class="btn btn-primary"
-        type="submit"
-      >
-        OK
-      </button>
-    </form>
-  </div>
-</div>
-
-<hr>
-
-<div class="card">
-  <div class="card-header">
-    Exercise retrieval
-    <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Questa impostazione definisce le modalità in cui vengono recuperati gli esercizi da utilizzare per il gioco">info</mat-icon>
-  </div>
-  <div class="card-body">
-    <form #checkboxForm="ngForm" (submit)="submitExerciseCheckboxes(checkboxForm)">
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="LocalExercises" value="LocalExercises" [checked]="exerciseType == 1" (change)="clickExerciseCheckbox(1)">
-        <label class="form-check-label" for="LocalExercises">
-          GitHub
-        </label>
-        <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Gli esercizi vengono scaricati in locale, recuperandoli attraverso una repository GitHub, è necessario che sul PC del giocatore sia installato Git">info</mat-icon>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" type="radio" name="exampleRadios" id="CloudExercises" value="CloudExercises" [checked]="exerciseType == 2" (change)="clickExerciseCheckbox(2)">
-        <label class="form-check-label" for="CloudExercises">
-          Exercise Service
-        </label>
-        <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Gli esercizi vengono recuperati dal server in Cloud, non è necessaria alcuna dipendenza">info</mat-icon>
       </div>
       <button
         class="btn btn-primary"

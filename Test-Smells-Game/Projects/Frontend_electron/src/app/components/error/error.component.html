@@ -1,0 +1,11 @@
+<div class="error-container">
+  <div class="error-header">
+    <i class="error-icon fa fa-exclamation-triangle"></i>
+    <h1 class="error-title">{{ title | translate }}</h1>
+  </div>
+  <h2 class="error-message">
+    <span *ngFor="let error of refactorErrorMessage()">{{ error | translate }} </span>
+  </h2>
+  <h2 class="error-contact">{{ 'Please contact your supervisor' | translate }}</h2>
+</div>
+

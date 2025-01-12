@@ -2,42 +2,28 @@
 
 <mat-spinner *ngIf="waitingForServer"></mat-spinner>
 
-<div *ngIf="this.exerciseType != 1 && this.exerciseType != 2" class="alert alert-danger" role="alert">
-  You need to set Exercise Retrieval in Settings
-</div>
-
-<div *ngIf="this.exerciseType == 1" class="alert alert-success" role="alert">
-  {{ 'You are actually using Local Retrieve mode' | translate }}
-</div>
-
-<div *ngIf="this.exerciseType == 2" class="alert alert-success" role="alert">
+<div class="alert alert-success" role="alert">
   {{ 'You are actually using Cloud Retrieve mode' | translate }}
 </div>
 
-<div *ngIf="serverProblems" class="alert alert-danger" role="alert">
-  Exercise server has problems
+<div *ngIf="serverError !== undefined; else renderList">
+  <app-error  [title]="'Error loading refactoring exercises'" [error]="serverError"></app-error>
 </div>
 
-<ul class="list-group">
-  <ng-container *ngFor="let exercise of exercises">
-    <li class="list-group-item" *ngIf="!exercise.endsWith('.md')">
-      <ng-container *ngIf="getConfigForExercise(exercise) as config">
-        <a [routerLink]="isExerciseEnabled(config.refactoring_game_configuration.level) ? '/refactor-game/' + config.exerciseId.slice(0, -2) : null"
-           [style.textDecoration]="isExerciseEnabled(config.refactoring_game_configuration.level) ? 'none' : 'line-through'"
-           [style.pointerEvents]="isExerciseEnabled(config.refactoring_game_configuration.level) ? 'auto' : 'none'"
-           [style.color]="isExerciseEnabled(config.refactoring_game_configuration.level) ? 'blue' : 'red'">
-          {{ exercise }}
-          <span *ngIf="config.refactoring_game_configuration.level === 1">⭐</span>
-          <span *ngIf="config.refactoring_game_configuration.level === 2">⭐⭐</span>
-          <span *ngIf="config.refactoring_game_configuration.level === 3">⭐⭐⭐</span>
+<ng-template #renderList>
+  <div *ngIf="exercises && userService.user.value && config">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of exercises; let i = index">
+        <a [routerLink]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? '/refactor-game/' + item.exerciseId : null"
+           [style.textDecoration]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'none' : 'line-through'"
+           [style.pointerEvents]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'auto' : 'none'"
+           [style.color]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'blue' : 'red'">
+          {{ item.exerciseId }}
+          <span *ngIf="item.refactoringGameConfiguration.level === 1">⭐</span>
+          <span *ngIf="item.refactoringGameConfiguration.level === 2">⭐⭐</span>
+          <span *ngIf="item.refactoringGameConfiguration.level === 3">⭐⭐⭐</span>
         </a>
-      </ng-container>
-
-      <ng-container *ngIf="!getConfigForExercise(exercise)">
-        <span style="color: red; text-decoration: line-through;">{{ exercise }}</span>
-      </ng-container>
-    </li>
-  </ng-container>
-</ul>
-
-<app-github-retriever #child *ngIf="enableGit"></app-github-retriever>
+      </li>
+    </ul>
+  </div>
+</ng-template>

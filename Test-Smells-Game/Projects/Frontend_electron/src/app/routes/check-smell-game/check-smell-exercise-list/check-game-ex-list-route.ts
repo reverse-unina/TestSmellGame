@@ -5,10 +5,11 @@ import {Router} from "@angular/router";
 import {ElectronService} from "ngx-electron";
 import { HttpClient } from '@angular/common/http';
 import {FormBuilder, NgForm} from "@angular/forms";
-import {ExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
+import {CheckGameExerciseConfig} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import {GithubRetrieverComponent} from "../../../components/github-retriever/github-retriever.component";
 import {environment} from "../../../../environments/environment.prod";
 import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import {firstValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-check-smell-game-exercise-list',
@@ -16,6 +17,14 @@ import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.
   styleUrls: ['./check-game-ex-list-route.component.css']
 })
 export class CheckGameExListRoute implements OnInit {
+  config!: levelConfig;
+  exercises: CheckGameExerciseConfig[] = [];
+  serverError: string | undefined;
+  waitingForServer!: boolean;
+  enableGit = false;
+  gitForm: any;
+  exerciseType !: number;
+  @ViewChild('child') child!: GithubRetrieverComponent;
 
   constructor(private exerciseService: ExerciseService,
               private userService: UserService,
@@ -26,32 +35,26 @@ export class CheckGameExListRoute implements OnInit {
               private http: HttpClient
   ) { }
 
-  private config!: levelConfig;
-  exercises = new Array<any>();
-  enableGit = false;
-  gitForm: any;
-  exerciseConfigurations = new Array<ExerciseConfiguration>();
-  serverProblems = false;
-  waitingForServer!: boolean;
-  exerciseType !: number;           
-  @ViewChild('child') child!: GithubRetrieverComponent;  
-
-  ngOnInit(): void {
-    this.exerciseType = Number(localStorage.getItem("exerciseRetrieval"));  
+  async ngOnInit(): Promise<void> {
+    this.exerciseType = Number(localStorage.getItem("exerciseRetrieval"));
 
     // GET EXERCISES LIST FROM CLOUD
     if (this.exerciseType == 2){
       this.waitingForServer = true;
-      this.initExercises();
-      this.exerciseService.getExercises().subscribe(response =>{
-        this.waitingForServer = false;
-        this.exercises = response;
-      }, error => {
-        this.serverProblems = true;
-        this.waitingForServer = false;
+      this.exerciseService.getCheckGameExercises().subscribe({
+        next: (response: CheckGameExerciseConfig[]) => {
+          this.waitingForServer = false;
+          this.serverError = undefined;
+          this.exercises = response;
+          console.log(response);
+        },
+        error: (err) => {
+          this.waitingForServer = false;
+          this.serverError = err.error.message || 'An unexpected error occurred';
+        }
       });
-      // GET EXERCISES LIST FROM GIT
     } else if (this.exerciseType == 1){
+      // GET EXERCISES LIST FROM GIT
       this.waitingForServer = false;
       this.initExercises();
       this.enableGetExercisesFromGit()
@@ -62,34 +65,6 @@ export class CheckGameExListRoute implements OnInit {
         })
       })
     }
-  }
-
-  getConfigForExercise(exercise: string) {
-    return this.exerciseConfigurations.find(config => config.exerciseId.slice(0, -2) === exercise);
-  } 
-
-  private initExercises() {
-    this.exerciseService.getAllConfigFiles().subscribe(
-      (response: any[]) => {
-        this.waitingForServer = false;
-        this.exerciseConfigurations = response.map(item => JSON.parse(atob(item)));
-        console.log(this.exerciseConfigurations);
-      },
-      error => {
-        this.serverProblems = true;
-        this.waitingForServer = false;
-      }
-    ); 
-
-    this.exerciseService.getLevelConfig().subscribe(
-      (data: levelConfig) => {
-        this.config = data;
-        console.log('LevelConfig:', this.config);
-      },
-      error => {
-        console.error('Error fetching level config:', error);
-      }
-    );
   }
 
   private enableGetExercisesFromGit() {
@@ -109,13 +84,13 @@ export class CheckGameExListRoute implements OnInit {
 
 
   isExerciseEnabled(level: number): boolean {
-        if (this.userService.getUserExp() < this.config.expValues[0]) {
-          return level === 1;
-        } else if (this.userService.getUserExp() < this.config.expValues[1]) {
-          return level <= 2;
-        } else {
-          return true;
-        }
-      }
+    if (this.userService.getUserExp() < this.config.expValues[0]) {
+      return level === 1;
+    } else if (this.userService.getUserExp() < this.config.expValues[1]) {
+      return level <= 2;
+    } else {
+      return true;
+    }
+  }
 
 }

@@ -1,0 +1,14 @@
+<div *ngIf="topUsers && Object.keys(topUsers).length > 0">
+  <div *ngFor="let mode of topUsers | keyvalue" class="game-mode-podium">
+    <h4>{{ mode.key | translate }}</h4>
+    <ol class="podium-list">
+      <li *ngFor="let userGroup of mode.value; let i = index" [ngClass]="'podium-' + (i + 1)">
+        <h5>{{ 'Position' | translate }} {{ i + 1 }} ({{ 'Score' | translate }} {{userGroup.score}})</h5>
+        <span *ngFor="let user of userGroup.userName; let last = last">
+          {{ user }} <span *ngIf="!last">, </span>
+        </span>
+      </li>
+    </ol>
+  </div>
+</div>
+

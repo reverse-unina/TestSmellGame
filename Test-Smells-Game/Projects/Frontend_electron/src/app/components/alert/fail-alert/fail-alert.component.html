@@ -1,0 +1,7 @@
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content failure-modal">
+    <h1 class="title">{{ '❌ Oh no! ❌' }}</h1>
+    <p class="message">{{ message | translate }}</p>
+    <button class="close-button" (click)="close()">{{ 'Try again' | translate}}</button>
+  </div>
+</div>
