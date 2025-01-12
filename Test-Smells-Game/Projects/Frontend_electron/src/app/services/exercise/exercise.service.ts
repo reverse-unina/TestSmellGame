@@ -18,9 +18,9 @@ export class ExerciseService {
 
   constructor(private http: HttpClient, private _electronService: ElectronService) { }
 
-  getFilesFromRemote(githubUrl: string, branchName: string) {
+  getFilesFromRemote(githubUrl: string, branchName: string, exerciseType: string) {
     let repo = new Repository(branchName, githubUrl);
-    this._electronService.ipcRenderer.send("getFilesFromRemote", repo);
+    this._electronService.ipcRenderer.send("getFilesFromRemote", repo, exerciseType);
   }
 
   initProductionCodeFromLocal(exercise: string) {

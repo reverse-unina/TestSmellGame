@@ -11,20 +11,45 @@
 </div>
 
 <ng-template #renderList>
-  <div *ngIf="config">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of exercises; let i = index">
-        <a [routerLink]="isExerciseEnabled(item.checkGameConfiguration.level) ? '/check-game/' + item.exerciseId : null"
-           [style.textDecoration]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'none' : 'line-through'"
-           [style.pointerEvents]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'auto' : 'none'"
-           [style.color]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'blue' : 'red'">
-          {{ item.exerciseId }}
-          <span *ngIf="item.checkGameConfiguration.level === 1">⭐</span>
-          <span *ngIf="item.checkGameConfiguration.level === 2">⭐⭐</span>
-          <span *ngIf="item.checkGameConfiguration.level === 3">⭐⭐⭐</span>
-        </a>
-      </li>
-    </ul>
+  <div *ngIf="exerciseType === 1">
+    <div *ngIf="config">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let item of exercisesFromLocal; let i = index">
+          <a *ngIf="isExerciseInLocal(item.exerciseId)" [routerLink]="isExerciseEnabled(item.checkGameConfiguration.level) ? '/check-game/' + item.exerciseId : null"
+             [style.textDecoration]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'none' : 'line-through'"
+             [style.pointerEvents]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'auto' : 'none'"
+             [style.color]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'blue' : 'red'">
+            {{ item.exerciseId }}
+            <span *ngIf="item.checkGameConfiguration.level === 1">⭐</span>
+            <span *ngIf="item.checkGameConfiguration.level === 2">⭐⭐</span>
+            <span *ngIf="item.checkGameConfiguration.level === 3">⭐⭐⭐</span>
+          </a>
+
+          <ng-container *ngIf="!isExerciseInLocal(item.exerciseId)">
+            <span style="color: red; text-decoration: line-through;">{{ item.exerciseId }}</span>
+          </ng-container>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="exerciseType === 2">
+    <div *ngIf="config">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let item of exercises; let i = index">
+          <a [routerLink]="isExerciseEnabled(item.checkGameConfiguration.level) ? '/check-game/' + item.exerciseId : null"
+             [style.textDecoration]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'none' : 'line-through'"
+             [style.pointerEvents]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'auto' : 'none'"
+             [style.color]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'blue' : 'red'">
+            {{ item.exerciseId }}
+            <span *ngIf="item.checkGameConfiguration.level === 1">⭐</span>
+            <span *ngIf="item.checkGameConfiguration.level === 2">⭐⭐</span>
+            <span *ngIf="item.checkGameConfiguration.level === 3">⭐⭐⭐</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </ng-template>
 
+<app-github-retriever #child *ngIf="enableGit" [exerciseDBType]="'check-smell'"></app-github-retriever>

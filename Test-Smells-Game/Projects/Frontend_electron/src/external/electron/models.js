@@ -7,6 +7,8 @@ class RefactoringGameExerciseConfiguration {
   }
 }
 
+
+
 class CheckGameExerciseConfig {
   constructor(exerciseId, checkGameConfiguration, autoValutative) {
     this.exerciseId = exerciseId;

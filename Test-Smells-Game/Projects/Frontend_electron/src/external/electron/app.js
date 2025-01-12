@@ -88,17 +88,30 @@ ipcMain.on('compile',async (event, data) => {
   mainWindow.webContents.send('refactoring-exercise-response', result)
 })
 
-ipcMain.on('getRefactoringDBFromRemote', async (event, data) => {
+ipcMain.on('getFilesFromRemote', async (event, data, type) => {
   console.log("clone repo data: ", data);
+  console.log("type exercises: ", type);
   await repo.cloneRepository(data)
-  let directory = process.env.LOCAL_EXERCISE_FOLDER + "ExerciseDB/RefactoringGame/";
-  let result = repo.getAllJsonFilesInDirectory(directory, RefactoringGameExerciseConfiguration);
-  mainWindow.webContents.send('getRefactoringExercisesFilesFromLocal', result)
+
+  let directory;
+  let result;
+  switch (type) {
+    case "check-smell":
+      directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\CheckSmellGame\\";
+      result = repo.getAllJsonFilesInDirectory(directory, CheckGameExerciseConfig);
+      break;
+    case "refactoring":
+      directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\RefactoringGame\\";
+      result = repo.getAllJsonFilesInDirectory(directory, RefactoringGameExerciseConfiguration);
+      break;
+  }
+
+  mainWindow.webContents.send('getFilesFromLocal', result);
 });
 
 ipcMain.on('getCheckGameFilesFromRemote', async (event, data) => {
   await repo.cloneRepository(data)
-  let directory = process.env.LOCAL_EXERCISE_FOLDER + "ExerciseDB/CheckSmellGame/";
+  let directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\CheckSmellGame\\";
   let result = repo.getAllJsonFilesInDirectory(directory, CheckGameExerciseConfig);
   mainWindow.webContents.send('getCheckGameExerciseFilesFromLocal', result)
 })

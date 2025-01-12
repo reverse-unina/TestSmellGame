@@ -19,6 +19,7 @@ import {firstValueFrom} from "rxjs";
 export class CheckGameExListRoute implements OnInit {
   config!: levelConfig;
   exercises: CheckGameExerciseConfig[] = [];
+  exercisesFromLocal: CheckGameExerciseConfig[] = [];
   serverError: string | undefined;
   waitingForServer!: boolean;
   enableGit = false;
@@ -55,33 +56,39 @@ export class CheckGameExListRoute implements OnInit {
       });
     } else if (this.exerciseType == 1){
       // GET EXERCISES LIST FROM GIT
-      this.waitingForServer = false;
-      //this.initExercises();
+      this.waitingForServer = true;
+      this.exerciseService.getCheckGameExercises().subscribe({
+        next: (response: CheckGameExerciseConfig[]) => {
+          this.waitingForServer = false;
+          this.serverError = undefined;
+          this.exercises = response;
+          console.log(response);
+        },
+        error: (err) => {
+          this.waitingForServer = false;
+          this.serverError = err.error.message || 'An unexpected error occurred';
+        }
+      });
       this.enableGetExercisesFromGit()
-      this._electronService.ipcRenderer.on('getExerciseFilesFromLocal', (event, data)=>{
+      this._electronService.ipcRenderer.on('getFilesFromLocal', (event, data: CheckGameExerciseConfig[])=>{
         this.zone.run(()=>{
-          this.exercises = data;
+          data.forEach(d => this.exercisesFromLocal.push(CheckGameExerciseConfig.fromJson(d)));
           this.child.stopLoading()
-        })
-      })
+          console.log("Exercises received: ", this.exercisesFromLocal)
+        });
+      });
     }
+
+    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
   }
 
   private enableGetExercisesFromGit() {
-    this.enableGit = true
+    this.enableGit = true;
     this.gitForm = this.fb.group({
-      url:"https://github.com/LZannini/Thesis-Exercises-Repository",
-      branch:"exercises"
-    })
+      url:"https://github.com/mick0974/TestSmellGame-Exercises",
+      branch:"main"
+    });
   }
-
-  prepareGetFilesFromRemote(form: NgForm){
-    this.exercises = [];
-    this.exerciseService.getFilesFromRemote(form.value.url, form.value.branch)
-    environment.repositoryUrl = form.value.url;
-    environment.repositoryBranch = form.value.branch;
-  }
-
 
   isExerciseEnabled(level: number): boolean {
     if (this.userService.getUserExp() < this.config.expValues[0]) {
@@ -91,6 +98,10 @@ export class CheckGameExListRoute implements OnInit {
     } else {
       return true;
     }
+  }
+
+  isExerciseInLocal(exerciseId: string) {
+    return this.exercises.find(e => e.exerciseId === exerciseId) !== undefined;
   }
 
 }

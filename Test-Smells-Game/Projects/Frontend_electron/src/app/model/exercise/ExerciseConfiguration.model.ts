@@ -19,4 +19,14 @@ export class CheckGameExerciseConfig {
     'level': number
   };
   autoValutative!: boolean;
+
+  static fromJson(json: any): CheckGameExerciseConfig {
+    const config = new CheckGameExerciseConfig();
+
+    config.exerciseId = json.exerciseId;
+    config.checkGameConfiguration = json.check_game_configuration || json.checkGameConfiguration;
+    config.autoValutative = json.autoValutative;
+
+    return config;
+  }
 }

@@ -100,19 +100,19 @@ function getAllJsonFilesInDirectory(directory, className) {
   return jsonFiles;
 }
 
-// Function to get all JSON file paths in a directory
-function getAllJsonFilePaths(directory) {
-  const jsonFilePaths = [];
-
-  if (!fs.existsSync(directory) || !fs.statSync(directory).isDirectory()) {
-    return new Map([['NOT_FOUND', 'Database not found']]);
-  }
+function getJsonFilesRecursively(directory) {
+  let jsonFilePaths = [];
 
   try {
     const files = fs.readdirSync(directory);
+
     files.forEach(file => {
       const filePath = path.join(directory, file);
-      if (filePath.endsWith('.json') && fs.statSync(filePath).isFile()) {
+      const stats = fs.statSync(filePath);
+
+      if (stats.isDirectory()) {
+        jsonFilePaths = jsonFilePaths.concat(getJsonFilesRecursively(filePath));
+      } else if (filePath.endsWith('.json') && stats.isFile()) {
         jsonFilePaths.push(filePath);
       }
     });
@@ -121,6 +121,22 @@ function getAllJsonFilePaths(directory) {
     console.error(`${error}: ${err.message}`);
     return new Map([['INTERNAL_SERVER_ERROR', error]]);
   }
+
+  return jsonFilePaths;
+}
+
+// Function to get all JSON file paths in a directory
+function getAllJsonFilePaths(directory) {
+  let jsonFilePaths = [];
+
+  console.log("getAllJsonFilePaths dir bd: ", directory);
+  if (!fs.existsSync(directory) || !fs.statSync(directory).isDirectory()) {
+    return new Map([['NOT_FOUND', 'Database not found']]);
+  }
+
+  jsonFilePaths = getJsonFilesRecursively(directory);
+  if (jsonFilePaths instanceof Map)
+    return jsonFilePaths;
 
   if (jsonFilePaths.length === 0) {
     const error = 'Json files not found';
