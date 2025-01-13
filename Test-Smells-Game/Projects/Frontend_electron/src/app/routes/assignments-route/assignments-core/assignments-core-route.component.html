@@ -13,6 +13,17 @@
   </div>
   <hr>
 
+  <div *ngIf="this.compileType != 1 && this.compileType != 2" class="alert alert-danger" role="alert">
+    {{ 'You need to set Compile Mode in Settings' | translate }}
+  </div>
+
+  <div *ngIf="compileType == 1" style="color: green; margin-top: 10px;">
+    <h3>{{ 'You are using Local Compile Mode' | translate }}</h3>
+  </div>
+  <div *ngIf="compileType == 2" style="color: green; margin-top: 10px;">
+    <h3>{{ 'You are using Cloud Compile Mode' | translate }}</h3>
+  </div>
+
   <div *ngIf="currentUser && assignment">
     <div *ngIf="assignment!.gameType === 'refactoring'">
       <div class="container">

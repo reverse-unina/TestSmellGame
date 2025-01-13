@@ -14,6 +14,7 @@ import {Question} from "../../../model/question/question.model";
 import {RefactoringService} from "../../../services/refactoring/refactoring.service";
 import {CheckSmellService} from "../../../services/check-smell/check-smell.service";
 import {ElectronService} from "ngx-electron";
+import {RefactoringGameExerciseConfiguration} from "../../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-assignments-core',
@@ -41,6 +42,9 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   refactoringService!: RefactoringService;
   checkSmellService!: CheckSmellService;
+
+  compileType!: number;
+  exerciseType!: number;
 
   constructor(
     private codeEditorService: CodeeditorService,
@@ -72,6 +76,39 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this._electronService,
       this.zone
     );
+
+    this._electronService.ipcRenderer.on('refactoring-exercise-response', (event, data)=>{
+      this.zone.run(()=>{
+        this.refactoringService.elaborateCompilerAnswer(data);
+      })
+    });
+
+    // GET PRODUCTION CLASS FROM ELECTRON
+    this._electronService.ipcRenderer.on('receiveProductionClassFromLocal',(event,data)=>{
+      console.log("Test Code from Local: ", data);
+
+      this.zone.run( ()=> {
+        this.refactoringService.userCode = data
+        this.refactoringService.originalProductionCode = data
+      })
+    });
+
+    // GET TESTING CLASS FROM ELECTRON
+    this._electronService.ipcRenderer.on('receiveTestingClassFromLocal',(event,data: string)=>{
+      console.log("Test Code from Local: ", data);
+      this.zone.run( () => {
+        this.refactoringService.testingCode = data
+        this.refactoringService.originalTestCode = data
+      })
+    });
+
+    // GET CONFIG FILE FROM ELECTRON
+    this._electronService.ipcRenderer.on('receiveRefactoringGameConfigFromLocal',(event,data: RefactoringGameExerciseConfiguration)=>{
+      console.log("Test Code from Local: ", data);
+      this.zone.run( () => {
+        this.refactoringService.exerciseConfiguration = RefactoringGameExerciseConfiguration.fromJson(data);
+      })
+    });
   }
 
   async ngOnInit(): Promise<void> {
@@ -85,10 +122,13 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
     this.assignment = await firstValueFrom(this.assignmentsService.getAssignmentByName(this.assignmentName));
 
+    this.compileType = 1 // TODO: remove
+    this.exerciseType = 1 // TODO: remove
+
     console.log(this.assignment);
     if (this.assignment) {
       this.startCheckInterval();
-      console.log("assignemnt");
+      console.log("assignemnt type: ", this.assignment.gameType);
       if (this.assignment!.gameType === "refactoring") {
         this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
           isModified => {
@@ -97,7 +137,14 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
         );
 
         this.refactoringService.initSmellDescriptions();
-        this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
+
+        if (this.exerciseType == 1) {
+          console.log("Exercise name: ", this.exerciseName)
+          this.serverError = await this.refactoringService.initCodeFromLocal(this.exerciseName);
+        } else if (this.exerciseType == 2) {
+          this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
+        }
+
         this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
 
         if (this.code.editorComponent && this.code.editorComponent.editor) {
@@ -106,10 +153,16 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
         }
 
       } else if (this.assignment!.gameType === "check-smell") {
-        this.serverError = await this.checkSmellService.initQuestionsFromCloud(this.exerciseName);
+        if (this.exerciseType == 1) {
+          this.serverError = await this.checkSmellService.initQuestionsFromLocal(this.exerciseName);
+        } else if (this.exerciseType == 2) {
+          this.serverError = await this.checkSmellService.initQuestionsFromCloud(this.exerciseName);
+        }
+
       }
     }
 
+    console.log("Production Code from Local: ", this.refactoringService.userCode);
   }
 
 
@@ -259,7 +312,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   }
 
   async compile(): Promise<void> {
-    if (await this.refactoringService.compileExercise(this.testing.editorComponent)){
+    if (await this.refactoringService.compileExercise(this.testing.editorComponent, this.compileType)) {
       console.log("Compile compiled");
       this.isCompiledSuccessfully = true;
       this.codeModified = false;
