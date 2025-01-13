@@ -15,6 +15,7 @@ export class RefactoringGameExerciseConfiguration {
     const config = new RefactoringGameExerciseConfiguration();
 
     config.exerciseId = json.exerciseId;
+    config.className = json.class_name;
     config.refactoringGameConfiguration = json.refactoring_game_configuration;
     config.autoValutative = json.auto_valutative;
 

@@ -122,9 +122,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
     this.assignment = await firstValueFrom(this.assignmentsService.getAssignmentByName(this.assignmentName));
 
-    this.compileType = 1 // TODO: remove
-    this.exerciseType = 1 // TODO: remove
-
     console.log(this.assignment);
     if (this.assignment) {
       this.startCheckInterval();

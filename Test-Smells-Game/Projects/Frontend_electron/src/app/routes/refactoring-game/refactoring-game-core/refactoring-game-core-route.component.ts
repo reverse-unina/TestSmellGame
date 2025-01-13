@@ -88,8 +88,6 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
     this.compileType = Number(localStorage.getItem("compileMode"));
     this.exerciseType = Number(localStorage.getItem("exerciseRetrieval"));
 
-    this.compileType = 1; //TODO: remove
-
     if (this.exerciseType == 1) {
       await this.refactoringService.initSmellDescriptions();
       this.serverError = await this.refactoringService.initCodeFromLocal(this.exerciseName);

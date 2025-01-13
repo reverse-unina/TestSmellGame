@@ -162,6 +162,7 @@ export class RefactoringService {
       const exercise = new Exercise(this.exerciseConfiguration.className, this.originalProductionCode, this.originalTestCode, testing.injectedCode);
       this.compiledExercise = exercise;
 
+      console.log("Compiled exercise class name: ", this.compiledExercise.exerciseName);
       if(compileType == 1){
         this._electronService.ipcRenderer.send("compile", ([this.compiledExercise,
           this.exerciseConfiguration.refactoringGameConfiguration]));
