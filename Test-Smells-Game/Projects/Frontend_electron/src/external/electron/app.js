@@ -5,6 +5,7 @@ const utils = require('./utils')
 const refactoring_service = require('./refactoring-service')
 const repo = require('./repository-service')
 const {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} = require("./models");
+const fs = require("fs");
 
 utils.configEnvironment("PRODUCTION");
 
@@ -118,6 +119,7 @@ ipcMain.on('getCheckGameFilesFromRemote', async (event, data) => {
 
 ipcMain.on('getProductionClassFromLocal', async(event,data, type)=> {
   let result = await repo.getRefactoringExerciseFile(data, type);
+  console.log("Production code to frontend: ", result)
   mainWindow.webContents.send('receiveProductionClassFromLocal', result)
 })
 
@@ -126,15 +128,16 @@ ipcMain.on('getTestingClassFromLocal', async(event,data, type)=> {
   mainWindow.webContents.send('receiveTestingClassFromLocal', result)
 })
 
+ipcMain.on('getRefactoringExerciseConfigFromLocal', async(event,data, type)=> {
+  let result = await repo.getRefactoringExerciseFile(data, type);
+  mainWindow.webContents.send('receiveRefactoringGameConfigFromLocal', result)
+})
+
 ipcMain.on('getCheckGameExerciseConfigFromLocal', async(event,data, type)=> {
   let result = await repo.getJsonFileById(data, type);
   mainWindow.webContents.send('receiveCheckGameConfigFromLocal', result)
 })
 
-ipcMain.on('cloneRefactoringFilesFromRemote', async(event,data, type)=> {
-  let result = await repo.getRefactoringExerciseFile(data, type);
-  mainWindow.webContents.send('receiveRefactoringGameConfigFromLocal', result)
-})
 
 ipcMain.on('checkDependencies', async(event,data)=> {
   await utils.checkMaven().then(result => {
@@ -148,10 +151,5 @@ ipcMain.on('checkDependencies', async(event,data)=> {
     }
     mainWindow.webContents.send('receiveDependenciesCheck', result)
   })
-})
-
-ipcMain.on('getConfigFilesFromLocal', async(event, data)=> {
-  let result = await repo.getJsonFileById(data);
-  mainWindow.webContents.send('receiveConfigFilesFromLocal', result)
 })
 

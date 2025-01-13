@@ -24,15 +24,18 @@ export class ExerciseService {
   }
 
   initProductionCodeFromLocal(exercise: string) {
+    console.log("Sending request for Production code");
     this._electronService.ipcRenderer.send('getProductionClassFromLocal', exercise, "Production");
   }
 
   initTestingCodeFromLocal(exercise: string) {
+    console.log("Sending request for Test code");
     this._electronService.ipcRenderer.send('getTestingClassFromLocal', exercise, "Test");
   }
 
   initRefactoringExerciseConfigFromLocal(exercise: string) {
     //this._electronService.ipcRenderer.send('getConfigFilesFromLocal', exercise);
+    console.log("Sending request for Config code");
     this._electronService.ipcRenderer.send('getRefactoringExerciseConfigFromLocal', exercise, 'Config');
   }
 

@@ -1,5 +1,5 @@
 // core/refactoring.service.ts
-import {Injectable, NgZone, ViewChild} from '@angular/core';
+import {NgZone} from '@angular/core';
 import {SmellDescription} from "../../model/SmellDescription/SmellDescription.model";
 import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
 import {CodeeditorService} from "../codeeditor/codeeditor.service";
@@ -53,38 +53,7 @@ export class RefactoringService {
     private userService: UserService,
     private _electronService: ElectronService,
     private zone: NgZone
-  ) {
-    this._electronService.ipcRenderer.on('refactoring-exercise-response', (event, data)=>{
-      this.zone.run(()=>{
-        this.elaborateCompilerAnswer(data);
-      })
-    });
-
-    // GET PRODUCTION CLASS FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveProductionClassFromLocal',(event,data)=>{
-      this.zone.run( ()=> {
-        this.userCode = data
-        this.originalProductionCode = data
-      })
-    });
-
-    // GET TESTING CLASS FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveTestingClassFromLocal',(event,data)=>{
-      this.zone.run( () => {
-        this.testingCode = data
-        this.originalTestCode = data
-      })
-    });
-
-    // GET CONFIG FILE FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveRefactoringGameConfigFromLocal',(event,data)=>{
-      this.zone.run( () => {
-        this.exerciseConfiguration = data;
-        this.exerciseConfiguration.refactoringGameConfiguration.refactoringLimit = data.refactoringGameConfiguration.refactoringLimit;
-        this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed = data.refactoringGameConfiguration.smellsAllowed;
-      })
-    });
-  }
+  ) { }
 
   async initCodeFromCloud(exerciseName: string): Promise<string | undefined> {
     try {
@@ -99,8 +68,6 @@ export class RefactoringService {
       const refactoringConfigData = await firstValueFrom(this.exerciseService.getRefactoringGameConfigFile(exerciseName));
       this.exerciseConfiguration = refactoringConfigData;
 
-      // Setup config files
-
       return undefined;
     } catch (error) {
       // @ts-ignore
@@ -113,6 +80,7 @@ export class RefactoringService {
       this.exerciseService.initProductionCodeFromLocal(exerciseName);
       this.exerciseService.initTestingCodeFromLocal(exerciseName);
       this.exerciseService.initRefactoringExerciseConfigFromLocal(exerciseName);
+
       return undefined;
     } catch (error) {
       // @ts-ignore
@@ -183,7 +151,7 @@ export class RefactoringService {
     });
   }
 
-  compileExercise(testing: any): Promise<boolean> {
+  compileExercise(testing: any, compileType: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.resetData();
       this.startLoading();
@@ -194,18 +162,23 @@ export class RefactoringService {
       const exercise = new Exercise(this.exerciseConfiguration.className, this.originalProductionCode, this.originalTestCode, testing.injectedCode);
       this.compiledExercise = exercise;
 
-      this.codeService.compile(exercise, this.exerciseConfiguration).subscribe(
-        (data) => {
-          this.elaborateCompilerAnswer(data);
-          this.stopLoading();
-          resolve(true);
-        },
-        (error) => {
-          this.showPopUp('Cloud server has a problem');
-          this.stopLoading();
-          resolve(false);
-        }
-      );
+      if(compileType == 1){
+        this._electronService.ipcRenderer.send("compile", ([this.compiledExercise,
+          this.exerciseConfiguration.refactoringGameConfiguration]));
+      } else if(compileType == 2) {
+        this.codeService.compile(exercise, this.exerciseConfiguration).subscribe(
+          (data) => {
+            this.elaborateCompilerAnswer(data);
+            this.stopLoading();
+            resolve(true);
+          },
+          (error) => {
+            this.showPopUp('Cloud server has a problem');
+            this.stopLoading();
+            resolve(false);
+          }
+        );
+      }
     });
   }
 

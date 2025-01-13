@@ -195,7 +195,7 @@ export class MissionsCoreRouteComponent implements OnInit {
   }
 
   compile(): void {
-    this.refactoringService.compileExercise(this.testing.editorComponent).then(
+    this.refactoringService.compileExercise(this.testing.editorComponent, 1).then(
       () => {
         if (this.isExercisePassed())
           this.successAlert.show();

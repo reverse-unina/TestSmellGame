@@ -188,14 +188,18 @@ function checkSmellExerciseHaveDuplicateIds(exercises) {
 
 // Function to get the Refactoring Exercise file based on exerciseId and type
 function getRefactoringExerciseFile(exerciseId, type) {
-  const result = getAllJsonFilePaths('path/to/refactoringDB');
+  const result = getAllJsonFilePaths(process.env.ROOT_PATH + "src/external/compiler/LocalExercises" + "\\ExerciseDB\\RefactoringGame\\");
 
   if (result instanceof Map) return result;
 
   const configFilePaths = result;
-  const exercisePath = configFilePaths
-    .map(filePath => deserializeJson(filePath, 'RefactoringGameExerciseConfiguration'))
-    .find(exercise => exercise.exerciseId === exerciseId);
+  let exercisePath;
+  for (let i = 0; i < configFilePaths.length; i++) {
+    if ((deserializeJson(configFilePaths[i], 'RefactoringGameExerciseConfiguration').exerciseId === exerciseId) !== undefined) {
+      exercisePath = configFilePaths[i];
+      break
+    }
+  }
 
   if (exercisePath) {
     let parentDirectory;
@@ -203,13 +207,12 @@ function getRefactoringExerciseFile(exerciseId, type) {
 
     switch (type) {
       case 'Production':
-        parentDirectory = path.dirname(exercisePath.filePath);
-        console.info('Parent directory: ' + parentDirectory);
+        parentDirectory = path.dirname(exercisePath);
 
-        productionFile = findFile(parentDirectory, '.java', 'Test.java');
+        productionFile = fs.readdirSync(parentDirectory).find(file => file.endsWith(".java") && !file.endsWith("Test.java"));
         if (productionFile) {
           try {
-            return fs.readFileSync(productionFile, 'utf8');
+            return fs.readFileSync(parentDirectory + "\\" + productionFile, 'utf8');
           } catch (e) {
             const error = `Failed to read ${exerciseId} Production file`;
             console.error(`${error}: ${e.message}`);
@@ -222,12 +225,13 @@ function getRefactoringExerciseFile(exerciseId, type) {
         }
 
       case 'Test':
-        parentDirectory = path.dirname(exercisePath.filePath);
+        parentDirectory = path.dirname(exercisePath);
 
-        productionFile = findFile(parentDirectory, 'Test.java');
+        productionFile = fs.readdirSync(parentDirectory).find(file => file.endsWith("Test.java"));
+
         if (productionFile) {
           try {
-            return fs.readFileSync(productionFile, 'utf8');
+            return fs.readFileSync(parentDirectory + "\\" + productionFile, 'utf8');
           } catch (e) {
             const error = `Failed to read ${exerciseId} Test file`;
             console.error(`${error}: ${e.message}`);
@@ -240,7 +244,14 @@ function getRefactoringExerciseFile(exerciseId, type) {
         }
 
       default:
-        return exercisePath;
+        parentDirectory = path.dirname(exercisePath);
+        try {
+          return deserializeJson(exercisePath, 'RefactoringGameExerciseConfig');
+        } catch (e) {
+          const error = `Failed to read ${exerciseId} Config file`;
+          console.error(`${error}: ${e.message}`);
+          return new Map([['INTERNAL_SERVER_ERROR', error]]);
+        }
     }
   } else {
     const error = 'File not found';
@@ -262,9 +273,6 @@ function getJsonFileById(fileId, className) {
   switch (className) {
     case "CheckGameExerciseConfig":
       directory = process.env.ROOT_PATH + "src/external/compiler/LocalExercises" + "\\ExerciseDB\\CheckSmellGame\\";
-      break;
-    case "RefactoringGameExerciseConfig":
-      directory = process.env.ROOT_PATH + "src/external/compiler/LocalExercises" + "\\ExerciseDB\\RefactoringGame\\";
       break;
   }
 

@@ -74,7 +74,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
           this.serverError = err.error.message || 'An unexpected error occurred';
         }
       });
-      this.enableGetExercisesFromGit()
+      this.enableGetExercisesFromGit();
       this._electronService.ipcRenderer.on('getFilesFromLocal', (event, data: RefactoringGameExerciseConfiguration[])=>{
         this.zone.run(()=>{
           data.forEach(d => this.exercisesFromLocal.push(RefactoringGameExerciseConfiguration.fromJson(d)));
