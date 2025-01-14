@@ -99,11 +99,11 @@ ipcMain.on('getFilesFromRemote', async (event, data, type) => {
   switch (type) {
     case "check-smell":
       directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\CheckSmellGame\\";
-      result = repo.getAllJsonFilesInDirectory(directory, CheckGameExerciseConfig);
+      result = repo.getAllJsonFilesInDirectory(directory, "CheckGameExerciseConfig");
       break;
     case "refactoring":
       directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\RefactoringGame\\";
-      result = repo.getAllJsonFilesInDirectory(directory, RefactoringGameExerciseConfiguration);
+      result = repo.getAllJsonFilesInDirectory(directory, "RefactoringGameExerciseConfiguration");
       break;
   }
 

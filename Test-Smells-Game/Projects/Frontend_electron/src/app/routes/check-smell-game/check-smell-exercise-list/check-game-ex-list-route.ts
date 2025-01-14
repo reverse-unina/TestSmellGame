@@ -72,9 +72,16 @@ export class CheckGameExListRoute implements OnInit {
       this.enableGetExercisesFromGit()
       this._electronService.ipcRenderer.on('getFilesFromLocal', (event, data: CheckGameExerciseConfig[])=>{
         this.zone.run(()=>{
-          data.forEach(d => this.exercisesFromLocal.push(CheckGameExerciseConfig.fromJson(d)));
-          this.child.stopLoading()
-          console.log("Exercises received: ", this.exercisesFromLocal)
+          if (data instanceof Map) {
+            this.waitingForServer = false;
+            // @ts-ignore
+            this.serverError = data.get("message") || 'An unexpected error occurred';
+            this.child.stopLoading();
+          } else {
+            data.forEach(d => this.exercisesFromLocal.push(CheckGameExerciseConfig.fromJson(d)));
+            this.child.stopLoading()
+            console.log("Exercises received: ", this.exercisesFromLocal)
+          }
         });
       });
     }

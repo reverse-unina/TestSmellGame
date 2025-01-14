@@ -1,11 +1,81 @@
 const sh = require("./shell");
 const utils = require('./utils')
 const fs = require("fs");
+const Ajv = require("ajv");
 
 let path = require('path')
 const git = require('isomorphic-git')
 const http = require('isomorphic-git/http/node')
 const {branch} = require("isomorphic-git");
+
+const refactoringConfigSchema = {
+  "type": "object",
+  "properties": {
+    "exerciseId": { "type": "string" },
+    "class_name": { "type": "string" },
+    "refactoring_game_configuration": {
+      "type": "object",
+      "properties": {
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "refactoring_limit": { "type": "integer" },
+        "smells_allowed": { "type": "integer" },
+        "level": { "type": "integer" },
+        "ignored_smells": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["dependencies", "refactoring_limit", "smells_allowed", "level", "ignored_smells"]
+    },
+    "auto_valutative": { "type": "boolean" }
+  },
+  "required": ["exerciseId", "class_name", "refactoring_game_configuration", "auto_valutative"]
+};
+
+const checkSmellSchema = {
+  "type": "object",
+  "properties": {
+    "exerciseId": { "type": "string" },
+    "check_game_configuration": {
+      "type": "object",
+      "properties": {
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "questionTitle": { "type": "string" },
+              "questionCode": { "type": "string" },
+              "answers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "answerText": { "type": "string" },
+                    "isCorrect": { "type": "boolean" }
+                  },
+                  "required": ["answerText", "isCorrect"]
+                }
+              }
+            },
+            "required": ["questionTitle", "questionCode", "answers"]
+          }
+        },
+        "level": { "type": "integer" }
+      },
+      "required": ["questions", "level"]
+    },
+    "auto_valutative": { "type": "boolean" }
+  },
+  "required": ["exerciseId", "check_game_configuration", "auto_valutative"]
+};
 
 async function cloneRepository(data) {
   console.log(process.env.ROOT_PATH);
@@ -22,7 +92,6 @@ async function cloneRepository(data) {
   })
 }
 
-// Function to get all JSON files in a directory
 function getAllJsonFilesInDirectory(directory, className) {
   const result = getAllJsonFilePaths(directory);
 
@@ -40,60 +109,29 @@ function getAllJsonFilesInDirectory(directory, className) {
     jsonFiles.push(fileResult);
   }
 
-  // Validation based on the className
-  if (className === 'Assignment') {
-    if (!(jsonFiles[0] instanceof Object || jsonFiles[0].name)) {
-      const error = 'The first item in the list is not of the expected type "Assignment". Please ensure that the data is correctly formatted.';
-      console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
-    }
-
-    if (assignmentsHaveDuplicateNames(jsonFiles)) {
-      const error = 'Duplicate assignment names found';
-      console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
-    }
-  } else if (className === 'Mission') {
-    if (!(jsonFiles[0] instanceof Object || jsonFiles[0].id)) {
-      const error = 'The first item in the list is not of the expected type "Mission". Please ensure that the data is correctly formatted.';
-      console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
-    }
-
-    if (missionsHaveDuplicateIds(jsonFiles)) {
-      const error = 'Duplicate mission identifiers found';
-      console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
-    }
-  } else if (className === 'RefactoringExercise') {
+  if (className === 'RefactoringExercise') {
     if (!(jsonFiles[0] instanceof Object || jsonFiles[0].id)) {
       const error = 'The first item in the list is not of the expected type "RefactoringExercise". Please ensure that the data is correctly formatted.';
       console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
+      return new Map([['message', error]]);
     }
 
     if (refactoringExerciseHaveDuplicateIds(jsonFiles)) {
       const error = 'Duplicate exercise identifiers found';
       console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
+      return new Map([['message', error]]);
     }
   } else if (className === 'CheckSmellExercise') {
     if (!(jsonFiles[0] instanceof Object || jsonFiles[0].id)) {
       const error = 'The first item in the list is not of the expected type "CheckSmellExercise". Please ensure that the data is correctly formatted.';
       console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
+      return new Map([['message', error]]);
     }
 
     if (checkSmellExerciseHaveDuplicateIds(jsonFiles)) {
       const error = 'Duplicate exercise identifiers found';
       console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
-    }
-  } else if (className === 'LevelConfig') {
-    if (!(jsonFiles[0] instanceof Object || jsonFiles[0].id)) {
-      const error = 'The first item in the list is not of the expected type "LevelConfig". Please ensure that the data is correctly formatted.';
-      console.error(error);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
+      return new Map([['message', error]]);
     }
   }
 
@@ -119,19 +157,18 @@ function getJsonFilesRecursively(directory) {
   } catch (err) {
     const error = 'Error occurred while reading json files';
     console.error(`${error}: ${err.message}`);
-    return new Map([['INTERNAL_SERVER_ERROR', error]]);
+    return new Map([['message', error]]);
   }
 
   return jsonFilePaths;
 }
 
-// Function to get all JSON file paths in a directory
 function getAllJsonFilePaths(directory) {
   let jsonFilePaths = [];
 
   console.log("getAllJsonFilePaths dir bd: ", directory);
   if (!fs.existsSync(directory) || !fs.statSync(directory).isDirectory()) {
-    return new Map([['NOT_FOUND', 'Database not found']]);
+    return new Map([['message', 'Database not found']]);
   }
 
   jsonFilePaths = getJsonFilesRecursively(directory);
@@ -141,28 +178,45 @@ function getAllJsonFilePaths(directory) {
   if (jsonFilePaths.length === 0) {
     const error = 'Json files not found';
     console.error(error);
-    return new Map([['NOT_FOUND', error]]);
+    return new Map([['message', error]]);
   }
 
   return jsonFilePaths;
 }
 
-// Function to deserialize JSON data from a file
 function deserializeJson(filePath, className) {
+  const ajv = new Ajv();
+  let validate;
+
+  if (className === 'RefactoringGameExerciseConfiguration')
+    validate = ajv.compile(refactoringConfigSchema);
+  else
+    validate = ajv.compile(checkSmellSchema);
+
+  console.log("className: ", className);
+  console.log("validate: ", validate)
   try {
     const fileContent = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(fileContent);
+    const json =  JSON.parse(fileContent);
+    const valid = validate(json);
+
+    if (!valid) {
+      const error = `Error validating schema for ${path.basename(filePath)}`;
+      console.error(`${error}: `, validate.errors);
+      return new Map([['message', error]]);
+    } else {
+      return json;
+    }
   } catch (e) {
     if (e.name === 'SyntaxError') {
       const error = `Error reading file ${path.basename(filePath)}`;
       console.error(`${error}: ${e.message}`);
-      return new Map([['INTERNAL_SERVER_ERROR', error]]);
+      return new Map([['message', error]]);
     }
-    return new Map([['INTERNAL_SERVER_ERROR', e.message]]);
+    return new Map([['message', e.message]]);
   }
 }
 
-// Function to check for duplicate refactoring exercise ids
 function refactoringExerciseHaveDuplicateIds(exercises) {
   const ids = new Set();
   for (const exercise of exercises) {
@@ -174,7 +228,6 @@ function refactoringExerciseHaveDuplicateIds(exercises) {
   return false;
 }
 
-// Function to check for duplicate check smell exercise ids
 function checkSmellExerciseHaveDuplicateIds(exercises) {
   const ids = new Set();
   for (const exercise of exercises) {
@@ -186,7 +239,6 @@ function checkSmellExerciseHaveDuplicateIds(exercises) {
   return false;
 }
 
-// Function to get the Refactoring Exercise file based on exerciseId and type
 function getRefactoringExerciseFile(exerciseId, type) {
   const result = getAllJsonFilePaths(process.env.ROOT_PATH + "src/external/compiler/LocalExercises" + "\\ExerciseDB\\RefactoringGame\\");
 
@@ -216,12 +268,12 @@ function getRefactoringExerciseFile(exerciseId, type) {
           } catch (e) {
             const error = `Failed to read ${exerciseId} Production file`;
             console.error(`${error}: ${e.message}`);
-            return new Map([['INTERNAL_SERVER_ERROR', error]]);
+            return new Map([['message', error]]);
           }
         } else {
           const error = 'File not found';
           console.error(error);
-          return new Map([['NOT_FOUND', error]]);
+          return new Map([['message', error]]);
         }
 
       case 'Test':
@@ -235,38 +287,36 @@ function getRefactoringExerciseFile(exerciseId, type) {
           } catch (e) {
             const error = `Failed to read ${exerciseId} Test file`;
             console.error(`${error}: ${e.message}`);
-            return new Map([['INTERNAL_SERVER_ERROR', error]]);
+            return new Map([['message', error]]);
           }
         } else {
           const error = 'File not found';
           console.error(error);
-          return new Map([['NOT_FOUND', error]]);
+          return new Map([['message', error]]);
         }
 
       default:
         parentDirectory = path.dirname(exercisePath);
         try {
-          return deserializeJson(exercisePath, 'RefactoringGameExerciseConfig');
+          return deserializeJson(exercisePath, 'RefactoringGameExerciseConfiguration');
         } catch (e) {
           const error = `Failed to read ${exerciseId} Config file`;
           console.error(`${error}: ${e.message}`);
-          return new Map([['INTERNAL_SERVER_ERROR', error]]);
+          return new Map([['message', error]]);
         }
     }
   } else {
     const error = 'File not found';
     console.error(error);
-    return new Map([['NOT_FOUND', error]]);
+    return new Map([['message', error]]);
   }
 }
 
-// Helper function to find a file in a directory that matches certain criteria
 function findFile(directory, ...criteria) {
   const files = fs.readdirSync(directory);
   return files.find(file => criteria.some(criterion => file.includes(criterion)));
 }
 
-// Function to get JSON file by ID from the directory
 function getJsonFileById(fileId, className) {
   let directory;
 
@@ -302,7 +352,7 @@ function getJsonFileById(fileId, className) {
   } else {
     const error = 'File not found';
     console.error(error);
-    return new Map([['NOT_FOUND', error]]);
+    return new Map([['message', error]]);
   }
 }
 

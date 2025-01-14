@@ -1,20 +1,10 @@
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { ExerciseService } from 'src/app/services/exercise/exercise.service';
-import { Router } from "@angular/router";
 import {ElectronService} from "ngx-electron";
-import {MatListModule} from "@angular/material/list";
-import {MatIconModule} from "@angular/material/icon";
-import {MatDividerModule} from "@angular/material/divider";
 import {FormBuilder, NgForm} from "@angular/forms";
-import {environment} from "../../../../environments/environment.prod";
-import { HttpClient } from '@angular/common/http';
-import {
-  CheckGameExerciseConfig,
-  RefactoringGameExerciseConfiguration
-} from 'src/app/model/exercise/ExerciseConfiguration.model';
+import {RefactoringGameExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
-import {DatePipe} from "@angular/common";
 import {GithubRetrieverComponent} from "../../../components/github-retriever/github-retriever.component";
 import {firstValueFrom} from "rxjs";
 
@@ -75,13 +65,22 @@ export class RefactoringGameExListRouteComponent implements OnInit {
         }
       });
       this.enableGetExercisesFromGit();
-      this._electronService.ipcRenderer.on('getFilesFromLocal', (event, data: RefactoringGameExerciseConfiguration[])=>{
+      this._electronService.ipcRenderer.on('getFilesFromLocal', (event, data: any)=>{
         this.zone.run(()=>{
-          data.forEach(d => this.exercisesFromLocal.push(RefactoringGameExerciseConfiguration.fromJson(d)));
-          this.child.stopLoading()
-          console.log("Exercises received: ", this.exercisesFromLocal)
+          if (data instanceof Map) {
+            this.waitingForServer = false;
+            // @ts-ignore
+            this.serverError = data.get("message") || 'An unexpected error occurred';
+            this.child.stopLoading();
+          } else {
+            // @ts-ignore
+            data.forEach(d => this.exercisesFromLocal.push(RefactoringGameExerciseConfiguration.fromJson(d)));
+            this.child.stopLoading();
+            console.log("Exercises received: ", this.exercisesFromLocal)
+          }
         });
       });
+
     }
 
     this.config = await firstValueFrom(this.exerciseService.getLevelConfig());

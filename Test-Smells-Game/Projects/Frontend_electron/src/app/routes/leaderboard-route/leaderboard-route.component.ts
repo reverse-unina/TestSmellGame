@@ -30,6 +30,7 @@ export class LeaderboardRouteComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("Leaderboard page");
     this.isAssignmentsRoute = this.router.url.includes('assignments');
     this.getConfiguration();
 
@@ -46,11 +47,13 @@ export class LeaderboardRouteComponent implements OnInit {
       this.testingCode = data
     })
   }
+
   setupConfigFiles(data:any){
     this.exerciseConfiguration = data;
     this.isAutoValutative = this.exerciseConfiguration.autoValutative;
     this.leaderboardService.getSolutionsByExerciseName(this.exerciseConfiguration.exerciseId).subscribe(data=>{
       this.solutions = data;
+      console.log("Data: ", data);
     })
 
   }

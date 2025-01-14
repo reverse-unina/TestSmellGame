@@ -58,8 +58,6 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
 
     // GET PRODUCTION CLASS FROM ELECTRON
     this._electronService.ipcRenderer.on('receiveProductionClassFromLocal',(event,data)=>{
-      console.log("Test Code from Local: ", data);
-
       this.zone.run( ()=> {
         this.refactoringService.userCode = data
         this.refactoringService.originalProductionCode = data
@@ -68,7 +66,6 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
 
     // GET TESTING CLASS FROM ELECTRON
     this._electronService.ipcRenderer.on('receiveTestingClassFromLocal',(event,data: string)=>{
-      console.log("Test Code from Local: ", data);
       this.zone.run( () => {
         this.refactoringService.testingCode = data
         this.refactoringService.originalTestCode = data
@@ -77,7 +74,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
 
     // GET CONFIG FILE FROM ELECTRON
     this._electronService.ipcRenderer.on('receiveRefactoringGameConfigFromLocal',(event,data: RefactoringGameExerciseConfiguration)=>{
-      console.log("Test Code from Local: ", data);
+      console.log("Config Code from Local: ", data);
       this.zone.run( () => {
         this.refactoringService.exerciseConfiguration = RefactoringGameExerciseConfiguration.fromJson(data);
       })
@@ -98,8 +95,6 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
 
     this.refactoringService.restoreCode("refactoring-game", this.exerciseName);
 
-    console.log("Production code: ",this.refactoringService.userCode);
-    console.log("Test code: ",this.refactoringService.testingCode);
     console.log("Config code: ",this.refactoringService.exerciseConfiguration);
   }
 

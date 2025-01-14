@@ -232,6 +232,9 @@ export class RefactoringService {
   }
 
   isExercisePassed(): boolean {
+    console.log("this.smellNumber: ", this.smellNumber);
+    console.log("this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed: ", this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed);
+
     return this.smellNumber <= this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed;
   }
 

@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 
 @Component({
   selector: 'app-error',
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.css']
 })
-export class ErrorComponent {
+export class ErrorComponent implements OnDestroy {
   @Input() title!: string;
   @Input() error!: string;
 
@@ -39,5 +39,8 @@ export class ErrorComponent {
     } else {
       return [this.error];
     }
+  }
+
+  ngOnDestroy(): void {
   }
 }
