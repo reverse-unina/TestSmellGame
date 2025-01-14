@@ -40,6 +40,7 @@ const execSmellDetector = () => {
       } else {
         resolve(stdout);
       }
+      console.log(stdout);
     })
   })
 }

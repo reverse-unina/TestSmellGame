@@ -86,7 +86,19 @@ ipcMain.on('compile',async (event, data) => {
   if(result.success)
     result.smellResult = utils.removeIgnoredSmells(result.smellResult, data[1]);
   console.log(result);
-  mainWindow.webContents.send('refactoring-exercise-response', result)
+
+  const parsedResult = {
+    testResult: result.testResult,
+    similarityResponse: result.similarityResponse,
+    smellResult: result.smellResult,
+    success: result.success,
+    originalCoverage: result.originalCoverage,
+    refactoredCoverage: result.refactoredCoverage
+  }
+
+  console.log("--------------------------------------------------------")
+  console.log(parsedResult);
+  mainWindow.webContents.send('refactoring-exercise-response', parsedResult);
 })
 
 ipcMain.on('getFilesFromRemote', async (event, data, type) => {

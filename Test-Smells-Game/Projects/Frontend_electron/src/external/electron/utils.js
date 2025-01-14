@@ -73,7 +73,7 @@ function cleanSuccessResponse(response){
 }
 
 function removeIgnoredSmells(smells, exerciseConfiguration){
-  const ignoredSmells = exerciseConfiguration["ignored_smells"];
+  const ignoredSmells = exerciseConfiguration["ignoredSmells"];
   console.log("Smells : " + smells);
   if(ignoredSmells !== undefined && smells !== ''){
     let result = JSON.parse(smells);
