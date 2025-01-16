@@ -13,7 +13,7 @@
       "type": "refactoring"
     },
     {
-      "id": "Exam1",
+      "id": "Calculator",
       "type": "check-smell"
     }
   ]

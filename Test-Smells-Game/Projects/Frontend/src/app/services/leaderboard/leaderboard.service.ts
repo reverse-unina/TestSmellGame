@@ -91,7 +91,7 @@ export class LeaderboardService {
     const params = new HttpParams()
       .set('score', score.toString());
 
-    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/missions`, {}, { params });
+    return this.http.put<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/missions`, {}, { params });
   }
 
   updateBestCheckSmellScore(userName: string, exerciseId: string, score: number): Observable<Score> {
