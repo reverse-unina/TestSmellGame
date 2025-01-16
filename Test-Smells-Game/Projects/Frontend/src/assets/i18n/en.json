@@ -168,7 +168,15 @@
   "Errore durante caricamento degli esercizi di check-smell": "Error loading check-smell exercises",
 
   "Errore nel caricamento dell'esperimento": "Error loading assignment",
-  "Errore durante l'esecuzione della missione": "Error during the execution of the mission"
+  "Errore durante l'esecuzione della missione": "Error during the execution of the mission",
+  "Vai alla risorsa esterna": "Go to external resource",
+  "Posizione": "Position",
+  "POSIZIONE": "POSITION",
+  "Podio modalità di gioco": "Game Mode Podium",
+  "Podio esercizi di refactoring": "Refactoring Exercise Podium",
+
+  "Hai completato con successo lo step della missione": "You have completed successfully the mission step.",
+  "Hai fallito l'esecizio. Non arrenderti, prova ancora!": "You failed the exercise. Don’t give up, try again!"
 
 
 }

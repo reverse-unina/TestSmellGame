@@ -169,6 +169,14 @@
   "Error loading refactoring exercises": "Errore durante caricamento degli esercizi di refactoring",
   "Error loading check-smell exercises": "Errore durante caricamento degli esercizi di check-smell",
 
-  "Error loading assignment": "Errore nel caricamento dell'esperimento",
-  "Error during the execution of the mission": "Errore durante l'esecuzione della missione"
+  "Error during the execution of the mission": "Errore durante l'esecuzione della missione",
+  "Go to external resource": "Vai alla risorsa esterna",
+  "Position": "Posizione",
+  "POSITION": "POSIZIONE",
+  "Game Mode Podium": "Podio modalità di gioco",
+  "Refactoring Exercise Podium": "Podio esercizi di refactoring",
+
+  "You have completed successfully the mission step.": "Hai completato con successo lo step della missione",
+  "You failed the exercise. Don’t give up, try again!": "Hai fallito l'esecizio. Non arrenderti, prova ancora!"
+
 }

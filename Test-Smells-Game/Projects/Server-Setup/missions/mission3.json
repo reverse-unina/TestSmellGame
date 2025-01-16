@@ -1,6 +1,6 @@
 {
   "missionId": "TestMission3",
-  "name": "Misisone con 1 solo esercizio di refactoring",
+  "name": "Missione con 1 solo esercizio di refactoring",
   "badge": "Climbing",
   "badge_filename": "climbing",
   "steps": [
