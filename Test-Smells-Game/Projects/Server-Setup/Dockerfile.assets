@@ -6,23 +6,13 @@ RUN mkdir -p /levelconfig
 RUN mkdir -p /badges
 RUN mkdir -p /missions
 
-COPY /assignments/assignment1.json /assignments/
-COPY /assignments/assignment2.json /assignments/
-COPY /assignments/assignment3.json /assignments/
+COPY /assignments/*.json /assignments/
 
 COPY /levelconfig/levelConfig.json /levelconfig/
 
-COPY /badges/peak.png /badges/
-COPY /badges/badge_bronze.png /badges/
-COPY /badges/badge_gold.png /badges/
-COPY /badges/badge_silver.png /badges/
-COPY /badges/climbing.png /badges/
-COPY /badges/quiz_master.png /badges/
-COPY /badges/starting-point.png /badges/
+COPY /badges/*.png /badges/
 
-COPY /missions/mission1.json /missions/
-COPY /missions/mission2.json /missions/
-COPY /missions/mission3.json /missions/
-COPY /missions/mission4.json /missions/
+COPY /missions/*.json /missions/
+
 
 

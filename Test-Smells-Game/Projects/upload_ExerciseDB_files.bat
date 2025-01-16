@@ -1,10 +1,15 @@
 @echo off
 set sourceDir=.\exercises
 set containerName=exercise-service
-set destDir=/ExerciseDB
 
+if "%~1"=="" (
+    echo Error: You must specify the source directory as the first argument.
+    exit /b 1
+)
+
+set sourceDir=%~1
 if not exist "%sourceDir%" (
-    echo Error: the folder "%sourceDir%" doesn't exist.
+    echo Error: The folder "%sourceDir%" doesn't exist.
     exit /b 1
 )
 
