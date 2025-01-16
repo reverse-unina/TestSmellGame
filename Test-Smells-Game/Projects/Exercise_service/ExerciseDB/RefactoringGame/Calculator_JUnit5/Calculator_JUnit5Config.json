@@ -1,5 +1,5 @@
 {
-  "exerciseId": "Calculator",
+  "exerciseId": "Calculator_JUnit5",
   "class_name": "Calculator",
   "refactoring_game_configuration": {
     "dependencies": [
