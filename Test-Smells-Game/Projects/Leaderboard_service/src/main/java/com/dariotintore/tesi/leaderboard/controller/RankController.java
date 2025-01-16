@@ -60,21 +60,29 @@ public class RankController {
         return ResponseEntity.ok(podiumDTOMap);
     }
 
-    @PostMapping("/{username}/score")
+    @PutMapping("/{username}/missions")
     public ResponseEntity<Score> updateUserScore(
             @PathVariable(name = "username") String userName,
-            @RequestParam String gameMode,
             @RequestParam int score) {
-        Score updatedScore = scoreService.updateScore(userName, gameMode, score);
+        Score updatedScore = scoreService.updateMissionsScore(userName, score);
         return ResponseEntity.ok(updatedScore);
     }
 
-    @PostMapping("/{username}/refactoring")
+    @PutMapping("/{username}/refactoring")
     public ResponseEntity<Score> updateBestRefactoringScore(
             @PathVariable(name = "username") String userName,
             @RequestParam String exerciseId,
             @RequestParam int score) {
         Score updatedScore = scoreService.updateBestRefactoringScore(userName, exerciseId, score);
+        return ResponseEntity.ok(updatedScore);
+    }
+
+    @PutMapping("/{username}/checksmell")
+    public ResponseEntity<Score> updateBestCheckSmellScore(
+            @PathVariable(name = "username") String userName,
+            @RequestParam String exerciseId,
+            @RequestParam int score) {
+        Score updatedScore = scoreService.updateBestCheckSmellGameScore(userName, exerciseId, score);
         return ResponseEntity.ok(updatedScore);
     }
 }

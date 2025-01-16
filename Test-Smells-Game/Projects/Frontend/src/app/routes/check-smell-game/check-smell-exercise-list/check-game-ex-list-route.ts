@@ -29,7 +29,14 @@ export class CheckGameExListRoute implements OnInit {
       next: (response: CheckGameExerciseConfig[]) => {
         this.waitingForServer = false;
         this.serverError = undefined;
-        this.exercises = response;
+        this.exercises = response.sort(
+          (a, b) => {
+            const byLevel = a.checkGameConfiguration.level - b.checkGameConfiguration.level;
+            if (byLevel !== 0)
+              return byLevel;
+
+            return a.exerciseId > b.exerciseId ? 1 : -1;
+        });
         console.log(response);
       },
       error: (err) => {

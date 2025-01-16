@@ -30,7 +30,14 @@ export class RefactoringGameExListRouteComponent implements OnInit {
       next: (response: RefactoringGameExerciseConfiguration[]) => {
         this.waitingForServer = false;
         this.serverError = undefined;
-        this.exercises = response;
+        this.exercises = response.sort(
+          (a, b) => {
+            const byLevel = a.refactoringGameConfiguration.level - b.refactoringGameConfiguration.level;
+            if (byLevel !== 0)
+              return byLevel;
+
+            return a.exerciseId > b.exerciseId ? 1 : -1;
+          });
         console.log(this.exercises);
       },
       error: (err) => {

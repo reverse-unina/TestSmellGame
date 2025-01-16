@@ -76,13 +76,15 @@ export class ProfileRouteComponent implements OnInit {
   }
 
   private setUserLevel(): void {
-    if (this.user.exp < this.config.expValues[0]) {
-      this.userLevel = '⭐';
-    } else if (this.user.exp >= this.config.expValues[0] && this.user.exp < this.config.expValues[1]) {
-      this.userLevel = '⭐⭐';
-    } else if (this.user.exp >= this.config.expValues[1]){
-      this.userLevel = '⭐⭐⭐';
+    for (let i = 0; i < this.config.expValues.length; i++) {
+      if (this.user.exp < this.config.expValues[i]) {
+        this.userLevel = '⭐'.repeat(i + 1);
+        return;
+      }
     }
+
+    this.userLevel = '⭐'.repeat(this.config.expValues.length + 1);
+    return;
   }
 
   nextBadge() {

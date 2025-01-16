@@ -38,18 +38,28 @@ export class UserService {
     this.userHasUnlockedBadge = false;
 
     const currentUser = this.user.value;
+    this.config = await lastValueFrom(this.exerciseService.getLevelConfig());
 
     if (!currentUser) {
       console.error('No user found!');
       return;
     }
 
+    let oldUserLevel = 0, i = 0;
+    const oldUserExp = currentUser.exp;
+    for (i; i < this.config.expValues.length; i++) {
+      if (oldUserExp < this.config.expValues[i]) {
+        oldUserLevel = i+1;
+        break;
+      }
+    }
+    if (oldUserLevel == 0) {
+      oldUserLevel = this.config.expValues.length;
+    }
+
     // Increase user exp
     currentUser.exp += exp;
     this.user.next(currentUser);
-
-    console.log('Envs:', environment);
-    console.log('user-service:', `${environment.userServiceUrl}/users/updateExp`);
 
     // Update user exp on server
     this.http.post(`${environment.userServiceUrl}/users/updateExp`, currentUser).subscribe({
@@ -58,24 +68,28 @@ export class UserService {
     });
 
     // Check if user has leveled up or unlocked badge
-    try {
-      this.config = await lastValueFrom(await this.exerciseService.getLevelConfig());
-
-      if (this.config) {
-        if (currentUser.exp === this.config.expValues[0] || currentUser.exp === this.config.expValues[1]) {
-          this.userHasLevelledUp = true;
-        }
-
-        if (this.config.badgeValues.hasOwnProperty(currentUser.exp)) {
-          this.userHasUnlockedBadge = true;
+    let currentUserLevel = 0; i = 0;
+    if (this.config) {
+      // Check if user levelled up
+      for (i; i < this.config.expValues.length; i++) {
+        if (this.user.value.exp < this.config.expValues[i]) {
+          currentUserLevel = i + 1;
+          break;
         }
       }
-    } catch (error) {
-      console.error('Error fetching level config:', error);
-    }
 
-    console.log("levelUP: ", this.userHasLevelledUp);
-    console.log("unlockBadge: ", this.userHasUnlockedBadge);
+      if (currentUserLevel == 0) {
+        currentUserLevel = this.config.expValues.length;
+      }
+
+      if (currentUserLevel > oldUserLevel) {
+        this.userHasLevelledUp = true;
+      }
+
+      this.userHasUnlockedBadge = this.config.badgeValues.some(
+        badge => badge.points === currentUser.exp
+      );
+    }
   }
 
   hasUserLevelledUp(): boolean {

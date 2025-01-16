@@ -87,13 +87,19 @@ export class LeaderboardService {
     return this.http.get<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}`);
   }
 
-
-  updateScore(userName: string, gameMode: string, score: number): Observable<Score> {
+  updateMissionsScore(userName: string, score: number): Observable<Score> {
     const params = new HttpParams()
-      .set('gameMode', gameMode)
       .set('score', score.toString());
 
-    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/score`, {}, { params });
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/missions`, {}, { params });
+  }
+
+  updateBestCheckSmellScore(userName: string, exerciseId: string, score: number): Observable<Score> {
+    const params = new HttpParams()
+      .set('exerciseId', exerciseId)
+      .set('score', score.toString());
+
+    return this.http.put<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/checksmell`, {}, { params });
   }
 
   updateBestRefactoringScore(userName: string, exerciseId: string, score: number): Observable<Score> {
@@ -101,7 +107,7 @@ export class LeaderboardService {
       .set('exerciseId', exerciseId)
       .set('score', score.toString());
 
-    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/refactoring`, {}, { params });
+    return this.http.put<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/refactoring`, {}, { params });
   }
 
   getUserRank(userName: string): Observable<UserRanking> {

@@ -24,26 +24,24 @@ public class ScoreService {
         return rankRepository.save(score);
     }
 
-    public Optional<Score> getScore(String userName) {
-        return rankRepository.findByUserName(userName);
-    }
-
-    public Score updateScore(String userName, String gameMode, int score) {
+    public Score updateMissionsScore(String userName, int score) {
         Score rank = rankRepository.findByUserName(userName)
                 .orElseGet(() -> createNewRank(userName));
 
-        switch (gameMode.toLowerCase()) {
-            case "refactoring":
-                rank.setRefactoringScore(rank.getRefactoringScore() + score);
-                break;
-            case "check-smell":
-                rank.setCheckSmellScore(rank.getCheckSmellScore() + score);
-                break;
-            case "missions":
-                rank.setMissionsScore(rank.getMissionsScore() + score);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid game mode: " + gameMode);
+        rank.setMissionsScore(rank.getMissionsScore() + score);
+        return rankRepository.save(rank);
+    }
+
+    public Score updateBestCheckSmellGameScore(String userName, String exerciseId, int score) {
+        Score rank = rankRepository.findByUserName(userName).get();
+
+        Integer currentScoreForExercise = rank.getBestCheckSmellScore().get(exerciseId);
+        Integer updatedScoreForExercise = rank.getBestCheckSmellScore().merge(exerciseId, score, Math::max);
+
+        if (currentScoreForExercise == null) {
+            rank.setCheckSmellScore(rank.getCheckSmellScore() + updatedScoreForExercise);
+        } else if (updatedScoreForExercise > currentScoreForExercise) {
+            rank.setCheckSmellScore(rank.getCheckSmellScore() + updatedScoreForExercise - currentScoreForExercise);
         }
 
         return rankRepository.save(rank);
@@ -52,8 +50,20 @@ public class ScoreService {
     public Score updateBestRefactoringScore(String userName, String exerciseId, int score) {
         Score rank = rankRepository.findByUserName(userName).get();
 
-        rank.getBestRefactoringScores().merge(exerciseId, score, Math::max);
+        Integer currentScoreForExercise = rank.getBestRefactoringScores().get(exerciseId);
+        Integer updatedScoreForExercise = rank.getBestRefactoringScores().merge(exerciseId, score, Math::max);
+
+        if (currentScoreForExercise == null) {
+            rank.setRefactoringScore(rank.getRefactoringScore() + updatedScoreForExercise);
+        } else if (updatedScoreForExercise > currentScoreForExercise) {
+            rank.setRefactoringScore(rank.getRefactoringScore() + updatedScoreForExercise - currentScoreForExercise);
+        }
+
         return rankRepository.save(rank);
+    }
+
+    public Optional<Score> getScore(String userName) {
+        return rankRepository.findByUserName(userName);
     }
 
     public Map<String, Object> getUserRank(String userName) {
@@ -69,21 +79,6 @@ public class ScoreService {
         }
 
         List<Score> allScores = rankRepository.findAll();
-        /*
-        Map<String, List<Integer>> gameModeDistinctScore = new HashMap<>();
-        gameModeDistinctScore.put("refactoring", allScores.stream().map(Score::getRefactoringScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList()));
-        gameModeDistinctScore.put("smell", allScores.stream().map(Score::getCheckSmellScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList()));
-        gameModeDistinctScore.put("missions", allScores.stream().map(Score::getMissionsScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList()));
-
-         */
-
-        Map<String, Integer> gameModeRankings = new HashMap<>();
-        gameModeRankings.put("refactoring", calculateRank(userRank.getRefactoringScore(),
-                allScores.stream().map(Score::getRefactoringScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList())));
-        gameModeRankings.put("check-smell", calculateRank(userRank.getCheckSmellScore(),
-                allScores.stream().map(Score::getCheckSmellScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList())));
-        gameModeRankings.put("missions", calculateRank(userRank.getMissionsScore(),
-                allScores.stream().map(Score::getMissionsScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList())));
 
         Map<String, Integer> refactoringExerciseRankings = new HashMap<>();
         for (Map.Entry<String, Integer> entry : userRank.getBestRefactoringScores().entrySet()) {
@@ -99,50 +94,18 @@ public class ScoreService {
             refactoringExerciseRankings.put(exerciseId, calculateRank(exerciseScore, scores));
         }
 
+        Map<String, Integer> gameModeRankings = new HashMap<>();
+        gameModeRankings.put("refactoring", calculateRank(userRank.getRefactoringScore(),
+                allScores.stream().map(Score::getRefactoringScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList())));
+        gameModeRankings.put("check-smell", calculateRank(userRank.getCheckSmellScore(),
+                allScores.stream().map(Score::getCheckSmellScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList())));
+        gameModeRankings.put("missions", calculateRank(userRank.getMissionsScore(),
+                allScores.stream().map(Score::getMissionsScore).sorted(Comparator.reverseOrder()).distinct().collect(Collectors.toList())));
+
+
         ranking.put("gameModeRankings", gameModeRankings);
         ranking.put("refactoringExerciseRankings", refactoringExerciseRankings);
         return ranking;
-    }
-
-    public Map<String, List<PodiumDTO>> gettttt(int podiumDimension) {
-        Map<String, List<PodiumDTO>> topUsers = new HashMap<>();
-
-        List<Score> allScores = rankRepository.findAll();
-        logger.info("allScores: " + allScores);
-
-        Map<String, List<Integer>> gameModeScores = new HashMap<>();
-        gameModeScores.put("refactoring", allScores.stream().map(Score::getRefactoringScore).sorted(Comparator.reverseOrder()).collect(Collectors.toList()));
-        gameModeScores.put("check-smell", allScores.stream().map(Score::getCheckSmellScore).sorted(Comparator.reverseOrder()).collect(Collectors.toList()));
-        gameModeScores.put("missions", allScores.stream().map(Score::getMissionsScore).sorted(Comparator.reverseOrder()).collect(Collectors.toList()));
-
-        for (Map.Entry<String, List<Integer>> entry : gameModeScores.entrySet()) {
-            String mode = entry.getKey();
-            List<Integer> sortedScores = entry.getValue();
-
-            // Collect users for each score
-            Map<Integer, List<String>> scoreToUsersMap = new HashMap<>();
-            for (Score score : allScores) {
-                int scoreValue = getScoreByMode(score, mode);
-                scoreToUsersMap
-                        .computeIfAbsent(scoreValue, k -> new ArrayList<>())
-                        .add(score.getUserName());
-            }
-
-            logger.info("scoreToUsersMap: " + scoreToUsersMap);
-
-            List<PodiumDTO> topModeUsers = sortedScores.stream()
-                    .distinct()
-                    .limit(podiumDimension)
-                    .map(score -> {
-                        List<String> usersWithScore = scoreToUsersMap.get(score);
-                        return new PodiumDTO(usersWithScore, score);
-                    })
-                    .collect(Collectors.toList());
-
-            topUsers.put(mode, topModeUsers);
-        }
-
-        return topUsers;
     }
 
     public Map<String, List<PodiumDTO>> getGameModePodium(int podiumDimension) {

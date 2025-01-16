@@ -19,7 +19,8 @@ public class LeaderboardApplication {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:*", "https://*.trycloudflare.com", "https://*.ngrok-free.app");
+                .allowedOriginPatterns("http://localhost:*", "https://*.trycloudflare.com", "https://*.ngrok-free.app")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH");
       }
     };
   }

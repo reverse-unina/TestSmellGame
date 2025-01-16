@@ -28,8 +28,14 @@ public class Score {
     private Integer missionsScore = 0;
 
     @ElementCollection
+    @CollectionTable(name = "check_smell_scores", joinColumns = @JoinColumn(name = "score_id"))
+    @MapKeyColumn(name = "exercise_id")
+    @Column(name = "best_score_check_smell")
+    private Map<String, Integer> bestCheckSmellScore = new HashMap<>();
+
+    @ElementCollection
     @CollectionTable(name = "refactoring_scores", joinColumns = @JoinColumn(name = "score_id"))
     @MapKeyColumn(name = "exercise_id")
-    @Column(name = "best_score")
+    @Column(name = "best_score_refactoring")
     private Map<String, Integer> bestRefactoringScores = new HashMap<>();
 }
