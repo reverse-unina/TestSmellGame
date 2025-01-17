@@ -28,7 +28,7 @@ export class CheckGameExListRoute implements OnInit {
   @ViewChild('child') child!: GithubRetrieverComponent;
 
   constructor(private exerciseService: ExerciseService,
-              private userService: UserService,
+              protected userService: UserService,
               private _electronService: ElectronService,
               private zone:NgZone,
               private _router: Router,
@@ -39,6 +39,8 @@ export class CheckGameExListRoute implements OnInit {
   async ngOnInit(): Promise<void> {
     this.exerciseType = Number(localStorage.getItem("exerciseRetrieval"));
 
+    console.log("Check smell list")
+
     // GET EXERCISES LIST FROM CLOUD
     if (this.exerciseType == 2){
       this.waitingForServer = true;
@@ -46,7 +48,14 @@ export class CheckGameExListRoute implements OnInit {
         next: (response: CheckGameExerciseConfig[]) => {
           this.waitingForServer = false;
           this.serverError = undefined;
-          this.exercises = response;
+          this.exercises = response.sort(
+            (a, b) => {
+              const byLevel = a.checkGameConfiguration.level - b.checkGameConfiguration.level;
+              if (byLevel !== 0)
+                return byLevel;
+
+              return a.exerciseId > b.exerciseId ? 1 : -1;
+            });
           console.log(response);
         },
         error: (err) => {
@@ -61,7 +70,14 @@ export class CheckGameExListRoute implements OnInit {
         next: (response: CheckGameExerciseConfig[]) => {
           this.waitingForServer = false;
           this.serverError = undefined;
-          this.exercises = response;
+          this.exercises = response.sort(
+            (a, b) => {
+              const byLevel = a.checkGameConfiguration.level - b.checkGameConfiguration.level;
+              if (byLevel !== 0)
+                return byLevel;
+
+              return a.exerciseId > b.exerciseId ? 1 : -1;
+            });
           console.log(response);
         },
         error: (err) => {
@@ -70,7 +86,7 @@ export class CheckGameExListRoute implements OnInit {
         }
       });
       this.enableGetExercisesFromGit()
-      this._electronService.ipcRenderer.on('getFilesFromLocal', (event, data: CheckGameExerciseConfig[])=>{
+      this._electronService.ipcRenderer.on('getCheckSmellExercisesFromLocal', (event, data: CheckGameExerciseConfig[])=>{
         this.zone.run(()=>{
           if (data instanceof Map) {
             this.waitingForServer = false;
@@ -98,13 +114,19 @@ export class CheckGameExListRoute implements OnInit {
   }
 
   isExerciseEnabled(level: number): boolean {
-    if (this.userService.getUserExp() < this.config.expValues[0]) {
-      return level === 1;
-    } else if (this.userService.getUserExp() < this.config.expValues[1]) {
-      return level <= 2;
-    } else {
-      return true;
+    const userExp = this.userService.user.value.exp;
+    let userLevel = 0;
+    for (let i = 0; i < this.config.expValues.length; i++) {
+      if (userExp < this.config.expValues[i]) {
+        userLevel = i+1;
+        break;
+      }
     }
+    if (userLevel == 0) {
+      userLevel = this.config.expValues.length;
+    }
+
+    return userLevel >= level;
   }
 
   isExerciseInLocal(exerciseId: string) {

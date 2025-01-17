@@ -30,7 +30,7 @@
 
         <div style="margin-top: 20px">
           <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
-          <button style="margin-left: 20px;" type="button" class="btn btn-primary" [disabled]="submitIsEnabled()" (click)="refactoringService.publishSolution(exerciseName)">{{ 'Save in solution repository' | translate }}</button>
+          <button style="margin-left: 20px;" type="button" class="btn btn-primary" [disabled]="submitIsDisabled()" (click)="publishSolution()">{{ 'Save in solution repository' | translate }}</button>
         </div>
 
         <mat-divider></mat-divider>
@@ -65,5 +65,9 @@
         <button type="button" class="btn btn-primary" routerLink="/refactor-game/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
       </div>
     </div>
+
+    <app-success-alert #successAlert></app-success-alert>
+    <app-fail-alert #failAlert></app-fail-alert>
+    <app-achievement-alert #achievementAlert></app-achievement-alert>
   </div>
 </ng-template>

@@ -55,12 +55,15 @@ export class TopbarComponent implements OnInit {
   }
 
   getStars(exp: number): string {
-      if (exp < this.config.expValues[0]) {
-        return '⭐';
-      } else if (exp < this.config.expValues[1]) {
-        return '⭐⭐';
-      } else {
-        return '⭐⭐⭐';
+    let stars;
+    for (let i = 0; i < this.config.expValues.length; i++) {
+      if (this.currentUser!.exp < this.config.expValues[i]) {
+        stars = '⭐'.repeat(i + 1);
+        return stars;
       }
     }
+
+    stars = '⭐'.repeat(this.config.expValues.length + 1);
+    return stars;
+  }
 }
