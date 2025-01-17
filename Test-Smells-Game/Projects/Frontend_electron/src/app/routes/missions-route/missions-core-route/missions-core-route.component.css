@@ -15,32 +15,6 @@
   width: 100%;
 }
 
-.btn-next-step {
-  padding: 12px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.btn-next-step:hover {
-  background-color: #0056b3;
-}
-
-.btn-next-step:active {
-  transform: scale(0.98);
-}
-
-.btn-next-step:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
 .mission-complete {
   background-color: #f4f8fb;
   border-radius: 12px;

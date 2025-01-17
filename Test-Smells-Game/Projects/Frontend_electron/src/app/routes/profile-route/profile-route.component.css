@@ -1,7 +1,7 @@
 body {
   background: linear-gradient(to right, #ff7e5f, #feb47b);
   height: 100vh;
-  margin: 0;
+  margin: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,22 +11,22 @@ body {
 .main-container {
   display: flex;
   gap: 40px;
-  width: 90%;
-  align-items: flex-start;
-  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .profile-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   background-color: rgba(255, 255, 255, 0.6);
   padding: 40px;
   border: 2px solid rgba(204, 204, 204, 0.6);
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 45%;
+
 }
 
 .user-info {
@@ -72,7 +72,7 @@ body {
 
 .leaderboard-container {
   padding: 20px;
-  background: #f9f9f9;
+  background-color: rgba(255, 255, 255, 0.6);
   border: 1px solid #ddd;
   border-radius: 15px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -204,7 +204,7 @@ body {
 
 .top-ranking-section {
   padding: 20px;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.6);
   border: 1px solid #ddd;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -219,7 +219,12 @@ body {
   text-transform: uppercase;
 }
 
+.podium-container {
+  margin-top: 50px;
+}
 
-
-
-
+.inserted-card {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
