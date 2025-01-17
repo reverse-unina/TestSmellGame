@@ -1,5 +1,6 @@
 @echo off
 set sourceDir=.\exercises
+set destDir=/ExerciseDB
 set containerName=exercise-service
 
 if "%~1"=="" (

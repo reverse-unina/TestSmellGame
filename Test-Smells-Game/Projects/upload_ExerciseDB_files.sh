@@ -2,6 +2,7 @@
 
 SOURCE_DIR="./Exercise_service/ExerciseDB"
 CONTAINER_NAME="exercise-service"
+DEST_DIR="/ExerciseDB"
 
 if [ -z "$1" ]; then
   echo "Error: You must specify the source directory as the first argument."
