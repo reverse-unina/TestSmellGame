@@ -14,14 +14,12 @@
   <div *ngIf="config">
     <ul class="list-group">
       <li class="list-group-item" *ngFor="let item of exercises; let i = index">
-        <a [routerLink]="isExerciseEnabled(item.checkGameConfiguration.level) ? '/check-game/' + item.exerciseId : null"
+        <a [routerLink]="(isExerciseEnabled(item.checkGameConfiguration.level)) ? '/check-game/' + item.exerciseId : null"
            [style.textDecoration]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'none' : 'line-through'"
            [style.pointerEvents]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'auto' : 'none'"
            [style.color]="isExerciseEnabled(item.checkGameConfiguration.level) ? 'blue' : 'red'">
           {{ item.exerciseId }}
-          <span *ngIf="item.checkGameConfiguration.level === 1">⭐</span>
-          <span *ngIf="item.checkGameConfiguration.level === 2">⭐⭐</span>
-          <span *ngIf="item.checkGameConfiguration.level === 3">⭐⭐⭐</span>
+          <span>{{'⭐'.repeat(item.checkGameConfiguration.level)}}</span>
         </a>
       </li>
     </ul>
