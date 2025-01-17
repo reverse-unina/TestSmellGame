@@ -14,7 +14,7 @@
   <div *ngIf="exercises && userService.user.value && config">
     <ul class="list-group">
       <li class="list-group-item" *ngFor="let item of exercises; let i = index">
-        <a [routerLink]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? '/check-game/' + item.exerciseId : null"
+        <a [routerLink]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? '/refactor-game/' + item.exerciseId : null"
            [style.textDecoration]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'none' : 'line-through'"
            [style.pointerEvents]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'auto' : 'none'"
            [style.color]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'blue' : 'red'">

@@ -135,7 +135,6 @@ export function HttpLoaderFactory(http:HttpClient) {
         deps: [HttpClient],
       }
     }),
-    RouterModule,
     RouterModule
   ],
   providers: [AuthService],
