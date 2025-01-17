@@ -294,7 +294,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   // Refactoring assignments type methods
   submitIsDisabled(): boolean {
-    return this.refactoringService.progressBarMode == 'query' || !this.isCompiledSuccessfully || this.codeModified;
+    return this.refactoringService.progressBarMode == 'query' || !this.isCompiledSuccessfully || this.codeModified || !this.refactoringService.isExercisePassed();
   }
 
   @HostListener('window:beforeunload', ['$event'])

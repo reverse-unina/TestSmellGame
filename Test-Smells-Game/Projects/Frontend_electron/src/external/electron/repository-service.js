@@ -244,10 +244,13 @@ function getRefactoringExerciseFile(exerciseId, type) {
 
   if (result instanceof Map) return result;
 
+  console.log("ExerciseId: ", exerciseId);
+
   const configFilePaths = result;
   let exercisePath;
   for (let i = 0; i < configFilePaths.length; i++) {
-    if ((deserializeJson(configFilePaths[i], 'RefactoringGameExerciseConfiguration').exerciseId === exerciseId) !== undefined) {
+    const deserializedFile = deserializeJson(configFilePaths[i], 'RefactoringGameExerciseConfiguration');
+    if (deserializedFile.exerciseId !== undefined && deserializedFile.exerciseId === exerciseId) {
       exercisePath = configFilePaths[i];
       break
     }
@@ -298,6 +301,7 @@ function getRefactoringExerciseFile(exerciseId, type) {
       default:
         parentDirectory = path.dirname(exercisePath);
         try {
+          console.log("Config file: ",  deserializeJson(exercisePath, 'RefactoringGameExerciseConfiguration'));
           return deserializeJson(exercisePath, 'RefactoringGameExerciseConfiguration');
         } catch (e) {
           const error = `Failed to read ${exerciseId} Config file`;
@@ -310,11 +314,6 @@ function getRefactoringExerciseFile(exerciseId, type) {
     console.error(error);
     return new Map([['message', error]]);
   }
-}
-
-function findFile(directory, ...criteria) {
-  const files = fs.readdirSync(directory);
-  return files.find(file => criteria.some(criterion => file.includes(criterion)));
 }
 
 function getJsonFileById(fileId, className) {
