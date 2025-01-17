@@ -9,20 +9,10 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from './components/home/home.component';
 import {AuthService} from "./services/auth/auth.service";
-import {CommonModule} from "@angular/common";
+import {CommonModule, NgIf} from "@angular/common";
 import {CodeEditorComponent} from './components/codeeditor/code-editor.component';
-import {
-  RefactoringGameCoreRouteComponent
-} from './routes/refactoring-game/refactoring-game-core/refactoring-game-core-route.component';
 import {ProfileRouteComponent} from './routes/profile-route/profile-route.component';
 import {CodemirrorModule} from '@ctrl/ngx-codemirror';
-import {
-  RefactoringGameExListRouteComponent
-} from './routes/refactoring-game/refactoring-game-exercise-list/refactoring-game-ex-list-route.component';
-import {CheckGameExListRoute} from './routes/check-smell-game/check-smell-exercise-list/check-game-ex-list-route';
-import {CheckGameCoreRouteComponent} from './routes/check-smell-game/check-game-core/check-game-core-route.component';
-import {AssignmentsListRoute} from './routes/assignments/assignments-list/assignments-list-route';
-import {AssignmentsCoreRouteComponent} from './routes/assignments/assignments-core/assignments-core-route.component';
 import {SolutionComponent} from './components/solution/solution.component';
 import {LeaderboardRouteComponent} from './routes/leaderboard-route/leaderboard-route.component';
 import {LoaderComponent} from './components/loader/loader.component';
@@ -45,7 +35,35 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { SuccessAlertComponent } from './components/alert/success-alert/success-alert.component';
+import { FailAlertComponent } from './components/alert/fail-alert/fail-alert.component';
+import { AchievementAlertComponent } from './components/alert/achivement-alert/achievement-alert.component';
+import { RefactoringScoreComponent } from './components/refactoring/refactoring-score/refactoring-score.component';
+import { RefactoringSmellListComponent } from './components/refactoring/refactoring-smell-list/refactoring-smell-list.component';
+import { RefactoringCompilationResultsComponent } from './components/refactoring/refactoring-compilation-results/refactoring-compilation-results.component';
+import { RefactoringEditorCardComponent } from './components/refactoring/refactoring-editor-card/refactoring-editor-card.component';
+import { CheckSmellAnswerListComponent } from './components/check-smell/check-smell-answer-list/check-smell-answer-list.component';
+import { CheckSmellQuestionComponent } from './components/check-smell/check-smell-question/check-smell-question.component';
+import { LearningPageRouteComponent } from './routes/learning-page-route/learning-page-route.component';
+import { MissionProgressComponent } from './components/mission-progress/mission-progress.component';
+import { ErrorComponent } from './components/error/error.component';
+import { PodiumComponent } from './components/podium/podium.component';
+import { RankComponent } from './components/rank/rank.component';
 import { ElectronService } from 'ngx-electron';
+import {CheckGameExListRoute} from "./routes/check-smell-game/check-smell-exercise-list/check-game-ex-list-route";
+import {CheckGameCoreRouteComponent} from "./routes/check-smell-game/check-game-core/check-game-core-route.component";
+import {
+  AssignmentsCoreRouteComponent
+} from "./routes/assignments-route/assignments-core/assignments-core-route.component";
+import {
+  RefactoringGameCoreRouteComponent
+} from "./routes/refactoring-game/refactoring-game-core/refactoring-game-core-route.component";
+import {
+  RefactoringGameExListRouteComponent
+} from "./routes/refactoring-game/refactoring-game-exercise-list/refactoring-game-ex-list-route.component";
+import {MissionsListRouteComponent} from "./routes/missions-route/missions-list-route/missions-list-route.component";
+import {MissionsCoreRouteComponent} from "./routes/missions-route/missions-core-route/missions-core-route.component";
+import {AssignmentsListRoute} from "./routes/assignments-route/assignments-list/assignments-list-route";
 
 
 export function HttpLoaderFactory(http:HttpClient) {
@@ -74,8 +92,24 @@ export function HttpLoaderFactory(http:HttpClient) {
     LogknownissuesComponent,
     LogviewerComponent,
     LogelementComponent,
+    SuccessAlertComponent,
+    FailAlertComponent,
+    AchievementAlertComponent,
+    RefactoringScoreComponent,
+    RefactoringSmellListComponent,
+    RefactoringCompilationResultsComponent,
+    RefactoringEditorCardComponent,
+    CheckSmellAnswerListComponent,
+    CheckSmellQuestionComponent,
+    LearningPageRouteComponent,
+    MissionsListRouteComponent,
+    MissionsCoreRouteComponent,
+    MissionProgressComponent,
+    ErrorComponent,
+    PodiumComponent,
+    RankComponent,
     AssignmentsListRoute,
-    AssignmentsCoreRouteComponent
+    AssignmentsCoreRouteComponent,
   ],
   imports: [
     BrowserModule,

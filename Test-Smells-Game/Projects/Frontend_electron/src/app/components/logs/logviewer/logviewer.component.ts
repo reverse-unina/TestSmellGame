@@ -15,7 +15,8 @@ export class LogviewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initLogs()
+    this.initLogs();
+    console.log("init logs");
   }
 
 

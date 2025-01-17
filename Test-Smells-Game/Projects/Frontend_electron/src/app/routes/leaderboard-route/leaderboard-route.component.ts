@@ -4,7 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
 import {Solution} from "../../model/solution/solution";
 import {ExerciseService} from "../../services/exercise/exercise.service";
-import {ExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
+import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} from "../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-leaderboard-route',
@@ -18,7 +18,7 @@ export class LeaderboardRouteComponent implements OnInit {
   testingCode!: string;
   exerciseName = this.route.snapshot.params['exercise'];
   isAutoValutative!: boolean;
-  exerciseConfiguration!: ExerciseConfiguration;
+  exerciseConfiguration!: RefactoringGameExerciseConfiguration;
   isAssignmentsRoute!: boolean;
 
   constructor(private http: HttpClient,
@@ -30,6 +30,7 @@ export class LeaderboardRouteComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("Leaderboard page");
     this.isAssignmentsRoute = this.router.url.includes('assignments');
     this.getConfiguration();
 
@@ -46,16 +47,18 @@ export class LeaderboardRouteComponent implements OnInit {
       this.testingCode = data
     })
   }
+
   setupConfigFiles(data:any){
     this.exerciseConfiguration = data;
-    this.isAutoValutative = this.exerciseConfiguration.auto_valutative;
+    this.isAutoValutative = this.exerciseConfiguration.autoValutative;
     this.leaderboardService.getSolutionsByExerciseName(this.exerciseConfiguration.exerciseId).subscribe(data=>{
       this.solutions = data;
+      console.log("Data: ", data);
     })
 
   }
 
   getConfiguration() {
-    this.exerciseService.getConfigFile(this.exerciseName).subscribe(data=>{this.setupConfigFiles(data)})
+    this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data=>{this.setupConfigFiles(data)})
   }
 }

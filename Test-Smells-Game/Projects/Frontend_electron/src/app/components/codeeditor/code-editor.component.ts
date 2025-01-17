@@ -41,6 +41,7 @@ export class CodeEditorComponent implements OnInit {
   constructor(private location: Location, private codeEditorService: CodeeditorService ) { }
 
   ngOnInit() {
+    console.log("code editor")
     if (!this.editable) {
       this.codeMirrorOptions['readOnly'] = 'nocursor';
     }

@@ -1,14 +1,9 @@
-<p style="color: red">
-  Posizionare il cursore sopra l'icona
-  <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="Informazione">info</mat-icon>
-  per ricevere informazioni aggiuntive riguardo l'impostazione in questione
-</p>
 <div class="card">
   <div class="card-header">
     {{ 'Language' | translate }}
   </div>
   <div class="card-body">
-    <form #langageForm="ngForm">
+    <form #languageForm="ngForm">
       <div class="form-check">
         <input class="form-check-input" type="radio" name="languageRadio" value="en" [(ngModel)]="selectedLanguage">
         <label class="form-check-label">
@@ -46,7 +41,7 @@
           type="url"
           id="user_service"
           class="form-control"
-          ngModel
+          formControlName="user_service"
           name="user_service"
           required
         />
@@ -55,7 +50,7 @@
           type="url"
           id="compiler_service"
           class="form-control"
-          ngModel
+          formControlName="compiler_service"
           name="compiler_service"
           required
         />
@@ -64,7 +59,7 @@
           type="url"
           id="exercise_service"
           class="form-control"
-          ngModel
+          formControlName="exercise_service"
           name="exercise_service"
           required
         />
@@ -73,7 +68,7 @@
           type="url"
           id="leaderboard_service"
           class="form-control"
-          ngModel
+          formControlName="leaderboard_service"
           name="leaderboard_service"
           required
         />
@@ -104,7 +99,7 @@
         <label class="form-check-label" for="Local">
           Local
         </label>
-          <mat-icon style="margin-left:10px; font-size: 12px" matTooltip="La compilazione in locale necessita che sia installato Java e Maven ed utilizza le risorse del PC del giocatore">info</mat-icon>
+        <mat-icon style="margin-left:10px; font-size: 12px" matTooltip="La compilazione in locale necessita che sia installato Java e Maven ed utilizza le risorse del PC del giocatore">info</mat-icon>
       </div>
       <div class="form-check">
         <input class="form-check-input" type="radio" name="exampleRadios" id="Cloud" value="Cloud" [checked]="compileType == 2" [disabled]="!isUserAuthenticated" (change)="clickCompileCheckbox(2)">

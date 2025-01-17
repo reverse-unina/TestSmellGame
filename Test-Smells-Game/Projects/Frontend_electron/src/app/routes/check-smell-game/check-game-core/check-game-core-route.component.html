@@ -1,81 +1,41 @@
 <div class="container">
   <h1>{{exerciseName}}</h1>
   <div>
-    <div *ngIf="!exerciseCompleted else showResult" class="card">
-      <div class="card-header">
-        {{exerciseName}}.java
-      </div>
-      <div class="card-body">
-        <h2>{{ 'Which is the smell present in the following method?' | translate }}</h2>
-        <app-codeeditor #testing [injectedCode]="questions[actualQuestionNumber].questionCode" [editable]="false"></app-codeeditor>
-      </div>
-      <div class="card-footer">
+    <div *ngIf="!checkSmellService.exerciseCompleted else showResult" class="card">
 
-        <div class="form-check">
-          <ul class="list-group">
-            <mat-selection-list [multiple]="false">
+      <div *ngIf="checkSmellService.exerciseConfiguration && checkSmellService.questions && checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode">
+        <app-check-smell-question #testing [editorHeader]="exerciseName+'.java'" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
+        </app-check-smell-question>
 
-              <li *ngFor="let option of questions[actualQuestionNumber].answers" class="list-group-item">
-                <mat-checkbox #checkbox
-                              (click)="selectAnswer(option)"
-                              (change)="changeCheckbox(checkbox)"
-                              [checked]="this.option.isChecked">
-                  {{option.answerText}}
-                </mat-checkbox>
-              </li>
-            </mat-selection-list>
-          </ul>
+        <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers">
+        </app-check-smell-answer-list>
+
+        <div>
+          <button class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+          <button class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
         </div>
-
-
+        <button *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
       </div>
-      <div>
-        <button class="btn btn-primary" (click)="goBackward()">{{ 'Back' | translate }}</button>
-        <button class="btn btn-primary" (click)="goForward()">{{ 'Next' | translate }}</button>
-      </div>
-      <button *ngIf="selectedAnswers.length == questions.length" class="btn btn-primary" (click)="showResults()">{{ 'Results' | translate }}</button>
+
     </div>
   </div>
 
+  <app-success-alert #successAlert></app-success-alert>
+  <app-fail-alert #failAlert></app-fail-alert>
+  <app-achievement-alert #achievementAlert></app-achievement-alert>
+
   <ng-template #showResult>
-    <h1>{{ 'Score' | translate }}: {{this.score}}</h1>
-    <div *ngFor="let question of questions" class="card">
-      <div class="card-body">
-        <h2>{{ 'Which is the smell present in the following method?' | translate }}</h2>
-        <app-codeeditor #testing [injectedCode]="question.questionCode" [editable]="false"></app-codeeditor>
-      </div>
-      <div class="card-footer">
+    <h1>{{ 'Score' | translate }}: {{Math.round((checkSmellService.score * 100) / checkSmellService.assignmentScore) + '/100'}}</h1>
+    <div *ngFor="let question of checkSmellService.questions" class="card">
 
-        <div class="form-check">
-          <ul class="list-group">
-            <mat-selection-list [multiple]="false">
+      <app-check-smell-question [injectedCode]="question.questionCode">
+      </app-check-smell-question>
 
-              <li *ngFor="let option of question.answers" class="list-group-item">
-                <div style="background-color: green" *ngIf="option.isCorrect">
-                  <mat-checkbox
-                    [checked]="this.option.isChecked"
-                    disabled>
-                    {{option.answerText}}
-                  </mat-checkbox>
-
-                </div>
-                <div style="background-color: red" *ngIf="!option.isCorrect">
-                  <mat-checkbox
-                    [checked]="this.option.isChecked"
-                    disabled>
-                    {{option.answerText}}
-                  </mat-checkbox>
-
-                </div>
-
-              </li>
-            </mat-selection-list>
-          </ul>
-        </div>
-
-
-      </div>
+      <app-check-smell-answer-list [questionAnswers]="question.answers"
+                                   [showBackground]="true" [disabled]="true">
+      </app-check-smell-answer-list>
     </div>
   </ng-template>
 
 </div>
+
