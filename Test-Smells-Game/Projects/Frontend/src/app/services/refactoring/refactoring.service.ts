@@ -165,56 +165,10 @@ export class RefactoringService {
     });
   }
 
-  publishSolution(exerciseName: string): void {
-    this.startLoading()
-
-    const score: number = Math.abs(this.smellNumber - this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed);
-
-    if(this.exerciseIsCompiledSuccessfully && this.isExercisePassed()){
-      this.leaderboardService.saveSolution(this.compiledExercise,
-        this.exerciseConfiguration,
-        score,
-        Boolean(this.refactoringResult),
-        this.originalCoverage,
-        this.refactoredCoverage,
-        this.smells).subscribe(
-          result => {
-            this.showPopUp("Solution saved");
-            this.stopLoading();
-            this.userService.getCurrentUser().subscribe((user: User | any) => {
-              this.user = user;
-            });
-
-            this.userService.increaseUserExp(score);
-
-            this.leaderboardService.updateScore(this.user.userName, "refactoring", score).subscribe(
-              (data) => {
-                console.log("Updated exercise score: ", data);
-
-                this.leaderboardService.updateBestRefactoringScore(this.user.userName, exerciseName, score).subscribe(
-                  (data) => {
-                    console.log("Updated score: ", data);
-                  }
-                );
-              }
-            );
-
-            this.exerciseService.logEvent(this.user.userName, 'Completed ' + exerciseName + ' in refactoring game mode').subscribe({
-              next: response => console.log('Log event response:', response),
-              error: error => console.error('Error submitting log:', error)
-            });
-          },error => {
-            this.showPopUp("Server has a problem");
-            this.stopLoading()
-          });
-    }else{
-      this.showPopUp("To save your solution in solutions repository you have to complete the exercise");
-      this.stopLoading()
-    }
-  }
-
   isExercisePassed(): boolean {
-    return this.smellNumber <= this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed;
+    return this.exerciseIsCompiledSuccessfully &&
+            this.refactoredCoverage >= (this.originalCoverage - this.exerciseConfiguration.refactoringGameConfiguration.refactoringLimit) &&
+            this.smellNumber <= this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed;
   }
 
   elaborateCompilerAnswer(data: any): void {

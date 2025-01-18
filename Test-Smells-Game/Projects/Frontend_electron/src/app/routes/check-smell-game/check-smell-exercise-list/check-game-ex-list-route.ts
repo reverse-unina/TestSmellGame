@@ -5,10 +5,11 @@ import {Router} from "@angular/router";
 import {ElectronService} from "ngx-electron";
 import { HttpClient } from '@angular/common/http';
 import {FormBuilder, NgForm} from "@angular/forms";
-import {ExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
+import {CheckGameExerciseConfig} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import {GithubRetrieverComponent} from "../../../components/github-retriever/github-retriever.component";
 import {environment} from "../../../../environments/environment.prod";
 import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import {firstValueFrom} from "rxjs";
 
 @Component({
   selector: 'app-check-smell-game-exercise-list',
@@ -16,9 +17,18 @@ import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.
   styleUrls: ['./check-game-ex-list-route.component.css']
 })
 export class CheckGameExListRoute implements OnInit {
+  config!: levelConfig;
+  exercises: CheckGameExerciseConfig[] = [];
+  exercisesFromLocal: CheckGameExerciseConfig[] = [];
+  serverError: string | undefined;
+  waitingForServer!: boolean;
+  enableGit = false;
+  gitForm: any;
+  exerciseType !: number;
+  @ViewChild('child') child!: GithubRetrieverComponent;
 
   constructor(private exerciseService: ExerciseService,
-              private userService: UserService,
+              protected userService: UserService,
               private _electronService: ElectronService,
               private zone:NgZone,
               private _router: Router,
@@ -26,96 +36,101 @@ export class CheckGameExListRoute implements OnInit {
               private http: HttpClient
   ) { }
 
-  private config!: levelConfig;
-  exercises = new Array<any>();
-  enableGit = false;
-  gitForm: any;
-  exerciseConfigurations = new Array<ExerciseConfiguration>();
-  serverProblems = false;
-  waitingForServer!: boolean;
-  exerciseType !: number;           
-  @ViewChild('child') child!: GithubRetrieverComponent;  
+  async ngOnInit(): Promise<void> {
+    this.exerciseType = Number(localStorage.getItem("exerciseRetrieval"));
 
-  ngOnInit(): void {
-    this.exerciseType = Number(localStorage.getItem("exerciseRetrieval"));  
+    console.log("Check smell list")
 
     // GET EXERCISES LIST FROM CLOUD
     if (this.exerciseType == 2){
       this.waitingForServer = true;
-      this.initExercises();
-      this.exerciseService.getExercises().subscribe(response =>{
-        this.waitingForServer = false;
-        this.exercises = response;
-      }, error => {
-        this.serverProblems = true;
-        this.waitingForServer = false;
+      this.exerciseService.getCheckGameExercises().subscribe({
+        next: (response: CheckGameExerciseConfig[]) => {
+          this.waitingForServer = false;
+          this.serverError = undefined;
+          this.exercises = response.sort(
+            (a, b) => {
+              const byLevel = a.checkGameConfiguration.level - b.checkGameConfiguration.level;
+              if (byLevel !== 0)
+                return byLevel;
+
+              return a.exerciseId > b.exerciseId ? 1 : -1;
+            });
+          console.log(response);
+        },
+        error: (err) => {
+          this.waitingForServer = false;
+          this.serverError = err.error.message || 'An unexpected error occurred';
+        }
       });
-      // GET EXERCISES LIST FROM GIT
     } else if (this.exerciseType == 1){
-      this.waitingForServer = false;
-      this.initExercises();
+      // GET EXERCISES LIST FROM GIT
+      this.waitingForServer = true;
+      this.exerciseService.getCheckGameExercises().subscribe({
+        next: (response: CheckGameExerciseConfig[]) => {
+          this.waitingForServer = false;
+          this.serverError = undefined;
+          this.exercises = response.sort(
+            (a, b) => {
+              const byLevel = a.checkGameConfiguration.level - b.checkGameConfiguration.level;
+              if (byLevel !== 0)
+                return byLevel;
+
+              return a.exerciseId > b.exerciseId ? 1 : -1;
+            });
+          console.log(response);
+        },
+        error: (err) => {
+          this.waitingForServer = false;
+          this.serverError = err.error.message || 'An unexpected error occurred';
+        }
+      });
       this.enableGetExercisesFromGit()
-      this._electronService.ipcRenderer.on('getExerciseFilesFromLocal', (event, data)=>{
+      this._electronService.ipcRenderer.on('getCheckSmellExercisesFromLocal', (event, data: CheckGameExerciseConfig[])=>{
         this.zone.run(()=>{
-          this.exercises = data;
-          this.child.stopLoading()
-        })
-      })
+          if (data instanceof Map) {
+            this.waitingForServer = false;
+            // @ts-ignore
+            this.serverError = data.get("message") || 'An unexpected error occurred';
+            this.child.stopLoading();
+          } else {
+            data.forEach(d => this.exercisesFromLocal.push(CheckGameExerciseConfig.fromJson(d)));
+            this.child.stopLoading()
+            console.log("Exercises received: ", this.exercisesFromLocal)
+          }
+        });
+      });
     }
-  }
 
-  getConfigForExercise(exercise: string) {
-    return this.exerciseConfigurations.find(config => config.exerciseId.slice(0, -2) === exercise);
-  } 
-
-  private initExercises() {
-    this.exerciseService.getAllConfigFiles().subscribe(
-      (response: any[]) => {
-        this.waitingForServer = false;
-        this.exerciseConfigurations = response.map(item => JSON.parse(atob(item)));
-        console.log(this.exerciseConfigurations);
-      },
-      error => {
-        this.serverProblems = true;
-        this.waitingForServer = false;
-      }
-    ); 
-
-    this.exerciseService.getLevelConfig().subscribe(
-      (data: levelConfig) => {
-        this.config = data;
-        console.log('LevelConfig:', this.config);
-      },
-      error => {
-        console.error('Error fetching level config:', error);
-      }
-    );
+    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
   }
 
   private enableGetExercisesFromGit() {
-    this.enableGit = true
+    this.enableGit = true;
     this.gitForm = this.fb.group({
-      url:"https://github.com/LZannini/Thesis-Exercises-Repository",
-      branch:"exercises"
-    })
+      url:"https://github.com/mick0974/TestSmellGame-Exercises",
+      branch:"main"
+    });
   }
-
-  prepareGetFilesFromRemote(form: NgForm){
-    this.exercises = [];
-    this.exerciseService.getFilesFromRemote(form.value.url, form.value.branch)
-    environment.repositoryUrl = form.value.url;
-    environment.repositoryBranch = form.value.branch;
-  }
-
 
   isExerciseEnabled(level: number): boolean {
-        if (this.userService.getUserExp() < this.config.expValues[0]) {
-          return level === 1;
-        } else if (this.userService.getUserExp() < this.config.expValues[1]) {
-          return level <= 2;
-        } else {
-          return true;
-        }
+    const userExp = this.userService.user.value.exp;
+    let userLevel = 0;
+    for (let i = 0; i < this.config.expValues.length; i++) {
+      if (userExp < this.config.expValues[i]) {
+        userLevel = i+1;
+        break;
       }
+    }
+    if (userLevel == 0) {
+      userLevel = this.config.expValues.length;
+    }
+
+    return userLevel >= level;
+  }
+
+  isExerciseInLocal(exerciseId: string) {
+    return this.exercises.find(e => e.exerciseId === exerciseId) !== undefined;
+  }
 
 }

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {Subscription} from "rxjs";
 import {UserService} from "../../services/user/user.service";
@@ -12,7 +12,7 @@ import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.css']
 })
-export class TopbarComponent implements OnInit, OnDestroy {
+export class TopbarComponent implements OnInit {
   config!: levelConfig;
   isAuthenticated = false;
   currentUser: User | null = null;
@@ -55,12 +55,15 @@ export class TopbarComponent implements OnInit, OnDestroy {
   }
 
   getStars(exp: number): string {
-      if (exp < this.config.expValues[0]) {
-        return '⭐';
-      } else if (exp < this.config.expValues[1]) {
-        return '⭐⭐';
-      } else {
-        return '⭐⭐⭐';
+    let stars;
+    for (let i = 0; i < this.config.expValues.length; i++) {
+      if (this.currentUser!.exp < this.config.expValues[i]) {
+        stars = '⭐'.repeat(i + 1);
+        return stars;
       }
     }
+
+    stars = '⭐'.repeat(this.config.expValues.length + 1);
+    return stars;
+  }
 }

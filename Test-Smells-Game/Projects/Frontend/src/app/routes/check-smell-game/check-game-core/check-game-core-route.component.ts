@@ -51,17 +51,28 @@ export class CheckGameCoreRouteComponent implements OnInit {
         if (this.checkSmellService.isExercisePassed()) {
           this.successAlert.show();
 
-          if (this.userService.hasUserLevelledUp())
-            this.achievementAlert.show("Level Up!", "Congratulation, you have levelled up!");
+          this.leaderboardService.getScore(this.userService.user.value.userName).subscribe(
+            result => {
+              const currentScore = result;
+              this.leaderboardService.updateBestCheckSmellScore(this.userService.user.value.userName, this.exerciseName, 1).subscribe(
+                (updatedScore) => {
+                  console.log("Current score: ", currentScore);
+                  console.log("Updated score: ", updatedScore);
+                  if (updatedScore.checkSmellScore !== currentScore.checkSmellScore) {
+                    this.userService.increaseUserExp(1).then(
+                      success => {
+                        if (this.userService.hasUserLevelledUp())
+                          this.achievementAlert.show("Level Up!", "Congratulation, you have levelled up!");
 
-          if (this.userService.hasUserUnlockedBadge())
-            this.achievementAlert.show("Badge Unblocked!", "You have unlocked a new badge, view it on your profile page!");
-
-          this.leaderboardService.updateScore(this.userService.user.value.userName, "check-smell", 1).subscribe(
-            data => {console.log("Rank: ", data)}
+                        if (this.userService.hasUserUnlockedBadge())
+                          this.achievementAlert.show("Badge Unblocked!", "You have unlocked a new badge, view it on your profile page!");
+                      }
+                    );
+                  }
+                }
+              );
+            }
           );
-
-          this.userService.increaseUserExp(1);
         } else {
           this.failAlert.show();
         }

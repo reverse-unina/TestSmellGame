@@ -41,6 +41,7 @@
           },
           "configurations": {
             "production": {
+              "aot": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -79,6 +80,10 @@
               "browserTarget": "dariotintore_frontend:build:production"
             },
             "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractCss": false,
+              "namedChunks": true,
               "browserTarget": "dariotintore_frontend:build:development"
             }
           },

@@ -9,7 +9,7 @@ const sh = require("./shell")
 function configEnvironment(environment){
   process.env.ROOT_PATH = path.join(__dirname, '../../../')
   process.env.OS = process.platform
-  process.env.LOCAL_EXERCISE_FOLDER = process.env.ROOT_PATH + 'src/external/compiler/LocalExercises'
+  process.env.LOCAL_EXERCISE_FOLDER = process.env.ROOT_PATH + 'src\\external\\compiler\\LocalExercises'
   if(environment === "PRODUCTION"){
     const myEnv = dotenv.config({path: process.env.ROOT_PATH + "src/external/electron/production.env"})
     dotenvExpand.expand(myEnv)
@@ -17,6 +17,8 @@ function configEnvironment(environment){
     const myEnv = dotenv.config({path: process.env.ROOT_PATH + "src/external/electron/development.env"})
     dotenvExpand.expand(myEnv)
   }
+
+  console.log(process.env);
 }
 
 function writeFile(path, content){
@@ -71,7 +73,7 @@ function cleanSuccessResponse(response){
 }
 
 function removeIgnoredSmells(smells, exerciseConfiguration){
-  const ignoredSmells = exerciseConfiguration["ignored_smells"];
+  const ignoredSmells = exerciseConfiguration["ignoredSmells"];
   console.log("Smells : " + smells);
   if(ignoredSmells !== undefined && smells !== ''){
     let result = JSON.parse(smells);

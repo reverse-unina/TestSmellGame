@@ -1,143 +1,101 @@
-import { Component, NgZone, HostListener, OnInit } from '@angular/core';
-import { CodeeditorService } from "../../../services/codeeditor/codeeditor.service";
-import { ExerciseService } from "../../../services/exercise/exercise.service";
-import { ActivatedRoute } from "@angular/router";
-import { Question } from "../../../model/question/question.model";
-import { Answer } from "../../../model/question/answer.model";
-import { ExerciseConfiguration } from "../../../model/exercise/ExerciseConfiguration.model";
-import { User } from "../../../model/user/user.model";
+import {Component, HostListener, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {CheckSmellService} from "../../../services/check-smell/check-smell.service";
+import {ActivatedRoute} from "@angular/router";
+import {SuccessAlertComponent} from "../../../components/alert/success-alert/success-alert.component";
+import {AchievementAlertComponent} from "../../../components/alert/achivement-alert/achievement-alert.component";
+import {FailAlertComponent} from "../../../components/alert/fail-alert/fail-alert.component";
+import {Question} from "../../../model/question/question.model";
+import {ExerciseService} from "../../../services/exercise/exercise.service";
+import {UserService} from "../../../services/user/user.service";
+import {LeaderboardService} from "../../../services/leaderboard/leaderboard.service";
 import {ElectronService} from "ngx-electron";
-import { MatCheckbox } from "@angular/material/checkbox";
-import { UserService } from '../../../services/user/user.service';
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 
 @Component({
   selector: 'app-check-game-core',
   templateUrl: './check-game-core-route.component.html',
   styleUrls: ['./check-game-core-route.component.css']
 })
-export class CheckGameCoreRouteComponent implements OnInit {
-  config!: levelConfig;
-  user!: User;
-  exerciseName = this.route.snapshot.params['exercise'];
-  exerciseRetrievalType!: number;
-  actualQuestionNumber: number = 0;
+export class CheckGameCoreRouteComponent implements OnInit, OnDestroy {
+  exerciseName!: string;
 
-  questions!: Question[];
-  selectedAnswers: Answer[] = [];
-  exerciseConfiguration!: ExerciseConfiguration;
+  @ViewChild('achievementAlert') achievementAlert!: AchievementAlertComponent;
+  @ViewChild('failAlert') failAlert!: FailAlertComponent;
+  @ViewChild('successAlert') successAlert!: SuccessAlertComponent;
 
-  exerciseCompleted: boolean = false;
-  score: number = 0;
+  checkSmellService!: CheckSmellService;
+  private exerciseRetrievalType!: number;
 
   constructor(
-    private codeService: CodeeditorService,
     private exerciseService: ExerciseService,
+    private userService: UserService,
     private route: ActivatedRoute,
-    private zone: NgZone,
+    private leaderboardService: LeaderboardService,
     private _electronService: ElectronService,
-    private _snackBar: MatSnackBar,
-    private userService: UserService
-  ) { // GET CONFIG CLASS FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveConfigFilesFromLocal',(event,data)=>{
-      this.zone.run( () => {
-        this.setupQuestions(data);
-      })
-    }) }
+    private zone: NgZone
+  ) {
+    this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
+    this.checkSmellService = new CheckSmellService(
+      this.exerciseService,
+      this.userService,
+      this._electronService,
+      this.zone
+    )
+  }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
-
-    this.exerciseService.getConfigFile(this.exerciseName).subscribe(data => {
-      this.setupQuestions(data);
-    });
 
     // INIT PRODUCTION CLASS FROM LOCAL
     if(this.exerciseRetrievalType == 1){
-      this.exerciseService.initConfigCodeFromLocal(this.exerciseName);
+      await this.checkSmellService.initQuestionsFromLocal(this.exerciseName);
       // INIT PRODUCTION CLASS FROM CLOUD
     }else if(this.exerciseRetrievalType == 2){
-      this.exerciseService.getConfigFile(this.exerciseName).subscribe(data=>{
-        this.setupQuestions(data);
-      })
+      await this.checkSmellService.initQuestionsFromCloud(this.exerciseName);
     }
 
-    this.exerciseService.getLevelConfig().subscribe(
-              (data: levelConfig) => {
-                this.config = data;
-                console.log('LevelConfig:', this.config);
-              },
-              error => {
-                console.error('Error fetching level config:', error);
-              }
-            );
+    console.log("Injected code; ", this.checkSmellService.questions[this.checkSmellService.actualQuestionNumber].questionCode)
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any) {
-    $event.returnValue = true;
+  ngOnDestroy() {
   }
 
-  private setupQuestions(data: any) {
-    this.exerciseConfiguration = data;
-    this.questions = data.check_game_configuration.questions;
-  }
+  async submitExercise(): Promise<void> {
+    this.checkSmellService.calculateScore();
+    this.checkSmellService.logResult(this.exerciseName, "check game").then(
+      () => {
+        if (this.checkSmellService.isExercisePassed()) {
+          this.successAlert.show();
 
-  selectAnswer(option: Answer) {
-    this.clearCheckboxes();
-    this.selectedAnswers[this.actualQuestionNumber] = option;
-    option.isChecked = true;
-  }
+          this.leaderboardService.getScore(this.userService.user.value.userName).subscribe(
+            result => {
+              const currentScore = result;
+              this.leaderboardService.updateBestCheckSmellScore(this.userService.user.value.userName, this.exerciseName, 1).subscribe(
+                (updatedScore) => {
+                  console.log("Current score: ", currentScore);
+                  console.log("Updated score: ", updatedScore);
+                  if (updatedScore.checkSmellScore !== currentScore.checkSmellScore) {
+                    this.userService.increaseUserExp(1).then(
+                      success => {
+                        if (this.userService.hasUserLevelledUp())
+                          this.achievementAlert.show("Level Up!", "Congratulation, you have levelled up!");
 
-  goForward() {
-    if (this.actualQuestionNumber < this.questions.length - 1) {
-      this.actualQuestionNumber += 1;
-    }
-  }
-
-  goBackward() {
-    if (this.actualQuestionNumber > 0) {
-      this.actualQuestionNumber -= 1;
-    }
-  }
-
-  showResults() {
-    this.exerciseCompleted = true;
-    this.calculateScore();
-    const percentageCorrect = (this.score / this.questions.length) * 100;
-    const message = `Hai risposto correttamente al ${percentageCorrect}% delle domande. `;
-
-    if (this.score >= (this.config.answerPercentage / 100) * this.questions.length) {
-      alert(message + "Esercizio superato!");
-      this.userService.increaseUserExp();
-      this.userService.getCurrentUser().subscribe((user: User | any) => {
-          this.user = user;
-      });
-      this.exerciseService.logEvent(this.user.userName, 'Completed ' + this.exerciseName + ' in check game mode').subscribe({
-          next: response => console.log('Log event response:', response),
-          error: error => console.error('Error submitting log:', error)
-      });
-    } else {
-      alert(message + "Esercizio fallito!")
-    }
-  }
-
-  changeCheckbox(checkbox: MatCheckbox) {
-    checkbox.checked = true;
-  }
-
-  calculateScore() {
-    this.selectedAnswers.forEach(answer => {
-      if (answer.isCorrect) {
-        this.score += 1;
+                        if (this.userService.hasUserUnlockedBadge())
+                          this.achievementAlert.show("Badge Unblocked!", "You have unlocked a new badge, view it on your profile page!");
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          );
+        } else {
+          this.failAlert.show();
+        }
       }
-    });
+    );
+
+
   }
 
-  private clearCheckboxes() {
-    this.questions[this.actualQuestionNumber].answers.forEach(element => {
-      element.isChecked = false;
-    });
-  }
+  readonly Math = Math;
 }

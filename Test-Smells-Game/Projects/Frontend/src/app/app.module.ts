@@ -61,6 +61,7 @@ import { MissionProgressComponent } from './components/mission-progress/mission-
 import { ErrorComponent } from './components/error/error.component';
 import { PodiumComponent } from './components/podium/podium.component';
 import { RankComponent } from './components/rank/rank.component';
+import {RouterModule} from "@angular/router";
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http);
@@ -133,7 +134,8 @@ export function HttpLoaderFactory(http:HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       }
-    })
+    }),
+    RouterModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

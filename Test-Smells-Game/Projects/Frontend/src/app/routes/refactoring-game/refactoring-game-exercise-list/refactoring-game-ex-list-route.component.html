@@ -19,9 +19,7 @@
            [style.pointerEvents]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'auto' : 'none'"
            [style.color]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'blue' : 'red'">
           {{ item.exerciseId }}
-          <span *ngIf="item.refactoringGameConfiguration.level === 1">⭐</span>
-          <span *ngIf="item.refactoringGameConfiguration.level === 2">⭐⭐</span>
-          <span *ngIf="item.refactoringGameConfiguration.level === 3">⭐⭐⭐</span>
+          <span>{{'⭐'.repeat(item.refactoringGameConfiguration.level)}}</span>
         </a>
       </li>
     </ul>

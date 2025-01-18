@@ -36,6 +36,7 @@ export class SolutionComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log("App solution component");
     if(!this.isAutoValutative){
       this.leaderboardService.getVoteForUser(this.solutionId, this.userService.user.getValue().userId).subscribe(vote =>{
         if(vote == "UP"){

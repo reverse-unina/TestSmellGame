@@ -1,0 +1,84 @@
+{
+  "smells": [
+    {
+      "smellName": "Assertion Roulette",
+      "smellDescription": "Occurs when a test method has multiple non-documented assertions. Multiple assertion statements in a test method without a descriptive message impacts readability/understandability/maintainability as it’s not possible to understand the reason for the failure of the test."
+    },
+    {
+      "smellName": "Conditional Test Logic",
+      "smellDescription": "Test methods need to be simple and execute all statements in the production method. Conditions within the test method will alter the behavior of the test and its expected output, and would lead to situations where the test fails to detect defects in the production method since test statements were not executed as a condition was not met. Furthermore, conditional code within a test method negatively impacts the ease of comprehension by developers."
+    },
+    {
+      "smellName": "Constructor Initialization",
+      "smellDescription": "Ideally, the test suite should not have a constructor. Initialization of fields should be in the setUp() method. Developers who are unaware of the purpose of setUp() method would give rise to this smell by defining a constructor for the test suite."
+    },
+    {
+      "smellName": "Default Test",
+      "smellDescription": "By default Android Studio creates default test classes when a project is created. These classes are meant to serve as an example for developers when wring unit tests and should either be removed or renamed. Having such files in the project will cause developers to start adding test methods into these files, making the default test class a container of all test cases. This also would possibly cause problems when the classes need to be renamed in the future."
+    },
+    {
+      "smellName": "Duplicate Assert",
+      "smellDescription": "This smell occurs when a test method tests for the same condition multiple times within the same test method. If the test method needs to test the same condition using different values, a new test method should be utilized; the name of the test method should be an indication of the test being performed. Possible situations that would give rise to this smell include: (1) developers grouping multiple conditions to test a single method; (2) developers performing debugging activities; and (3) an accidental copy-paste of code."
+    },
+    {
+      "smellName": "Eager Test",
+      "smellDescription": "Occurs when a test method invokes several methods of the production object. This smell results in difficulties in test comprehension and maintenance."
+    },
+    {
+      "smellName": "Empty Test",
+      "smellDescription": "Occurs when a test method does not contain executable statements. Such methods are possibly created for debugging purposes and then forgotten about or contains commented out code. An empty test can be considered problematic and more dangerous than not having a test case at all since JUnit will indicate that the test passes even if there are no executable statements present in the method body. As such, developers introducing behavior-breaking changes into production class, will not be notified of the alternated outcomes as JUnit will report the test as passing."
+    },
+    {
+      "smellName": "Exception Handling",
+      "smellDescription": "This smell occurs when a test method explicitly a passing or failing of a test method is dependent on the production method throwing an exception. Developers should utilize JUnit's exception handling to automatically pass/fail the test instead of writing custom exception handling code or throwing an exception."
+    },
+    {
+      "smellName": "General Fixture",
+      "smellDescription": "Occurs when a test case fixture is too general and the test methods only access part of it. A test setup/fixture method that initializes fields that are not accessed by test methods indicates that the fixture is too generalized. A drawback of it being too general is that unnecessary work is being done when a test method is run."
+    },
+    {
+      "smellName": "Ignored Test",
+      "smellDescription": "JUnit 4 provides developers with the ability to suppress test methods from running. However, these ignored test methods result in overhead since they add unnecessary overhead with regards to compilation time, and increases code complexity and comprehension."
+    },
+    {
+      "smellName": "Lazy Test",
+      "smellDescription": "Occurs when multiple test methods invoke the same method of the production object."
+    },
+    {
+      "smellName": "Magic Number Test",
+      "smellDescription": "Occurs when assert statements in a test method contain numeric literals (i.e., magic numbers) as parameters. Magic numbers do not indicate the meaning/purpose of the number. Hence, they should be replaced with constants or variables, thereby providing a descriptive name for the input."
+    },
+    {
+      "smellName": "Mystery Guest",
+      "smellDescription": "Occurs when a test method utilizes external resources (e.g. files, database, etc.). Use of external resources in test methods will result in stability and performance issues. Developers should use mock objects in place of external resources."
+    },
+    {
+      "smellName": "Redundant Print",
+      "smellDescription": "Print statements in unit tests are redundant as unit tests are executed as part of an automated process with little to no human intervention. Print statements are possibly used by developers for traceability and debugging purposes and then forgotten."
+    },
+    {
+      "smellName": "Redundant Assertion",
+      "smellDescription": "This smell occurs when test methods contain assertion statements that are either always true or always false. This smell is introduced by developers for debugging purposes and then forgotten."
+    },
+    {
+      "smellName": "Resource Optimism",
+      "smellDescritpion": "This smell occurs when a test method makes an optimistic assumption that the external resource (e.g., File), utilized by the test method, exists."
+    },
+    {
+      "smellName": "Sensitive Equality",
+      "smellDescription": "Occurs when the toString method is used within a test method. Test methods verify objects by invoking the default toString() method of the object and comparing the output against an specific string. Changes to the implementation of toString() might result in failure. The correct approach is to implement a custom method within the object to perform this comparison."
+    },
+    {
+      "smellName": "Sleepy Test",
+      "smellDescription": "Explicitly causing a thread to sleep can lead to unexpected results as the processing time for a task can differ on different devices. Developers introduce this smell when they need to pause execution of statements in a test method for a certain duration (i.e. simulate an external event) and then continuing with execution."
+    },
+    {
+      "smellName": "Unknown Test",
+      "smellDescription": "An assertion statement is used to declare an expected boolean condition for a test method. By examining the assertion statement it is possible to understand the purpose of the test method. However, It is possible for a test method to written sans an assertion statement, in such an instance JUnit will show the test method as passing if the statements within the test method did not result in an exception, when executed. New developers to the project will find it difficult in understanding the purpose of such test methods (more so if the name of the test method is not descriptive enough)."
+    },
+    {
+      "smellName": "error",
+      "smellDescription": "No smell found"
+    }
+  ]
+}

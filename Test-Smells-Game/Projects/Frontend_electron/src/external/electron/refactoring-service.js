@@ -22,6 +22,8 @@ function doCompile(data) {
   let exercise = data[0];
   let exerciseConfiguration = data[1]
 
+  console.log(exerciseConfiguration);
+
   return new Promise((resolve, reject)=>{
     let response = {}
     deleteUserFiles()

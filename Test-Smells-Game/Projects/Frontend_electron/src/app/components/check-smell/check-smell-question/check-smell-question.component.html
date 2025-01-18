@@ -1,0 +1,9 @@
+<div>
+  <div class="card-header">
+    {{editorHeader}}
+  </div>
+  <div class="card-body">
+    <h2>{{ 'Which is the smell present in the following method?' | translate }}</h2>
+    <app-codeeditor #editorComponent [injectedCode]="injectedCode" [editable]="editable"></app-codeeditor>
+  </div>
+</div>

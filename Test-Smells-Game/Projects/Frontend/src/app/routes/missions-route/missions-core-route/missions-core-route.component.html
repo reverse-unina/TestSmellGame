@@ -23,7 +23,8 @@
             <mat-divider></mat-divider>
 
             <div style="margin-top: 20px">
-              <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
+              <button style="margin: 10px" type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
+              <button style="margin: 10px" *ngIf="isExercisePassed()" class="btn btn-primary" (click)="this.nextStep()">{{ 'Next' | translate }}</button>
             </div>
 
             <mat-divider></mat-divider>
@@ -53,7 +54,6 @@
                 [methodList]="refactoringService.methodList"
               ></app-refactoring-smell-list>
             </div>
-            <button *ngIf="isExercisePassed()" class="btn-next-step" (click)="this.nextStep()">{{ 'Next' | translate }}</button>
           </div>
         </div>
       </div>
@@ -69,11 +69,11 @@
             </app-check-smell-answer-list>
 
             <div>
-              <button class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
-              <button class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+              <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+              <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+              <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+              <button style="margin: 10px" *ngIf="isExercisePassed()" class="btn btn-primary" (click)="this.nextStep()">{{ 'Next' | translate }}</button>
             </div>
-            <button *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
-            <button *ngIf="isExercisePassed()" class="btn btn-primary" (click)="this.nextStep()">{{ 'Next' | translate }}</button>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@
               [externalReference]="learningService.learning.externalReference"
             ></app-learning-page-route>
             <div class="btn-container">
-              <button *ngIf="isExercisePassed()" class="btn-next-step" (click)="nextStep()">{{ 'Next' | translate }}</button>
+              <button style="margin: 10px" *ngIf="isExercisePassed()" class="btn btn-primary" (click)="nextStep()">{{ 'Next' | translate }}</button>
             </div>
           </div>
         </div>

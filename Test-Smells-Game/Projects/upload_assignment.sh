@@ -1,7 +1,13 @@
 #!/bin/bash
 
 VOLUME_NAME="assets"
-SOURCE_DIR="./assignments"
+
+if [ -z "$1" ]; then
+  echo "Error: You must specify the source directory as the first argument."
+  exit 1
+fi
+
+SOURCE_DIR="$1"
 
 # Verifica che la cartella sorgente esista
 if [ ! -d "$SOURCE_DIR" ]; then

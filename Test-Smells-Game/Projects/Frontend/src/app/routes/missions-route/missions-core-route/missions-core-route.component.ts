@@ -118,7 +118,7 @@ export class MissionsCoreRouteComponent implements OnInit {
 
     console.log("points", points);
 
-    this.leaderboardService.updateScore(this.userService.user.value.userName, "missions", points).subscribe(
+    this.leaderboardService.updateMissionsScore(this.userService.user.value.userName, points).subscribe(
       data => {
         console.log("Updated score: ", data);
       }
@@ -199,7 +199,7 @@ export class MissionsCoreRouteComponent implements OnInit {
   isExercisePassed(): boolean {
     switch (this.mission.steps[this.currentStep].type) {
       case "refactoring":
-         return this.refactoringService.exerciseIsCompiledSuccessfully && this.refactoringService.smellList.length <= this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed;
+         return this.refactoringService.isExercisePassed();
       case "check-smell":
          return this.checkSmellService.isExercisePassed();
       default:

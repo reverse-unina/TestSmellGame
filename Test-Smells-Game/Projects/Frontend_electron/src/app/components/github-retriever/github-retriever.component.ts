@@ -14,18 +14,15 @@ import {environment} from "../../../environments/environment.prod";
 export class GithubRetrieverComponent implements OnInit, OnChanges {
 
   constructor(private exerciseService: ExerciseService,
-              private _electronService: ElectronService,
-              private zone: NgZone,
-              private _router: Router,
-              private fb: FormBuilder,
-  ) {
-  }
+              private fb: FormBuilder
+  ) { }
 
   exercises = new Array<any>();
   enableGit = false
   gitForm: any;
   exerciseType !: number;
   @Input() progressBarMode!: ProgressBarMode;
+  @Input() exerciseDBType!: string;
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.progressBarMode)
@@ -36,18 +33,17 @@ export class GithubRetrieverComponent implements OnInit, OnChanges {
     this.fillFormValues()
   }
 
-
   private fillFormValues() {
     this.gitForm = this.fb.group({
-      url:"https://github.com/DarioTin/Tesi-Exercises-Repository",
-      branch:"exercises"
+      url:"https://github.com/mick0974/TestSmellGame-Exercises",
+      branch:"main"
     })
   }
 
   prepareGetFilesFromRemote(form: NgForm){
     this.exercises = [];
-    this.startLoading()
-    this.exerciseService.getFilesFromRemote(form.value.url, form.value.branch)
+    this.startLoading();
+    this.exerciseService.getFilesFromRemote(form.value.url, form.value.branch, this.exerciseDBType);
     environment.repositoryUrl = form.value.url;
     environment.repositoryBranch = form.value.branch;
   }

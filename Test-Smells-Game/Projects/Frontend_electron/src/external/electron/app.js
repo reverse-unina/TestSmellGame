@@ -4,10 +4,12 @@ const path = require("path");
 const utils = require('./utils')
 const refactoring_service = require('./refactoring-service')
 const repo = require('./repository-service')
+const {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} = require("./models");
+const fs = require("fs");
 
-utils.configEnvironment("PRODUCTION")
+utils.configEnvironment("PRODUCTION");
 
-let mainWindow
+let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -84,34 +86,70 @@ ipcMain.on('compile',async (event, data) => {
   if(result.success)
     result.smellResult = utils.removeIgnoredSmells(result.smellResult, data[1]);
   console.log(result);
-  mainWindow.webContents.send('refactoring-exercise-response', result)
+
+  const parsedResult = {
+    testResult: result.testResult,
+    similarityResponse: result.similarityResponse,
+    smellResult: result.smellResult,
+    success: result.success,
+    originalCoverage: result.originalCoverage,
+    refactoredCoverage: result.refactoredCoverage
+  }
+
+  console.log("--------------------------------------------------------")
+  console.log(parsedResult);
+  mainWindow.webContents.send('refactoring-exercise-response', parsedResult);
 })
 
-ipcMain.on('getFilesFromRemote', async (event, data) => {
+ipcMain.on('getFilesFromRemote', async (event, data, type) => {
+  console.log("clone repo data: ", data);
+  console.log("type exercises: ", type);
   await repo.cloneRepository(data)
-  let result = repo.getExerciseFilesFromLocal()
-  mainWindow.webContents.send('getExerciseFilesFromLocal', result)
+
+  let directory;
+  let result;
+  switch (type) {
+    case "check-smell":
+      directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\CheckSmellGame\\";
+      result = repo.getAllJsonFilesInDirectory(directory, "CheckGameExerciseConfig");
+      mainWindow.webContents.send('getCheckSmellExercisesFromLocal', result);
+      break;
+    case "refactoring":
+      directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\RefactoringGame\\";
+      result = repo.getAllJsonFilesInDirectory(directory, "RefactoringGameExerciseConfiguration");
+      mainWindow.webContents.send('getRefactoringExercisesFromLocal', result);
+      break;
+  }
+});
+
+ipcMain.on('getCheckGameFilesFromRemote', async (event, data) => {
+  await repo.cloneRepository(data)
+  let directory = process.env.LOCAL_EXERCISE_FOLDER + "\\ExerciseDB\\CheckSmellGame\\";
+  let result = repo.getAllJsonFilesInDirectory(directory, CheckGameExerciseConfig);
+  mainWindow.webContents.send('getCheckGameExerciseFilesFromLocal', result)
 })
 
-ipcMain.on('getProductionClassFromLocal', async(event,data)=> {
-  let result = await repo.getProductionFilesFromLocal(data);
+ipcMain.on('getProductionClassFromLocal', async(event,data, type)=> {
+  let result = await repo.getRefactoringExerciseFile(data, type);
+  console.log("Production code to frontend: ", result)
   mainWindow.webContents.send('receiveProductionClassFromLocal', result)
 })
 
-ipcMain.on('getTestingClassFromLocal', async(event,data)=> {
-  let result = await repo.getTestingFilesFromLocal(data);
+ipcMain.on('getTestingClassFromLocal', async(event,data, type)=> {
+  let result = await repo.getRefactoringExerciseFile(data, type);
   mainWindow.webContents.send('receiveTestingClassFromLocal', result)
 })
 
-ipcMain.on('getCheckGameConfigFromLocal', async(event,data)=> {
-  let result = await repo.getCheckGameConfiguration(data);
+ipcMain.on('getRefactoringExerciseConfigFromLocal', async(event,data, type)=> {
+  let result = await repo.getRefactoringExerciseFile(data, type);
+  mainWindow.webContents.send('receiveRefactoringGameConfigFromLocal', result)
+})
+
+ipcMain.on('getCheckGameExerciseConfigFromLocal', async(event,data, type)=> {
+  let result = await repo.getJsonFileById(data, type);
   mainWindow.webContents.send('receiveCheckGameConfigFromLocal', result)
 })
 
-ipcMain.on('getRefactoringGameConfigFromLocal', async(event,data)=> {
-  let result = await repo.getRefactoringGameConfiguration(data);
-  mainWindow.webContents.send('receiveRefactoringGameConfigFromLocal', result)
-})
 
 ipcMain.on('checkDependencies', async(event,data)=> {
   await utils.checkMaven().then(result => {
@@ -125,10 +163,5 @@ ipcMain.on('checkDependencies', async(event,data)=> {
     }
     mainWindow.webContents.send('receiveDependenciesCheck', result)
   })
-})
-
-ipcMain.on('getConfigFilesFromLocal', async(event, data)=> {
-  let result = await repo.getConfigFilesFromLocal(data);
-  mainWindow.webContents.send('receiveConfigFilesFromLocal', result)
 })
 

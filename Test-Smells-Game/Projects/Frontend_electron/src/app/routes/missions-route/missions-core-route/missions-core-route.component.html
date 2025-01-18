@@ -1,0 +1,132 @@
+<div *ngIf="!isLoading">
+  <div *ngIf="currentStep < mission.steps.length; else missionComplete">
+    <ng-container [ngSwitch]="mission.steps[currentStep].type">
+
+      <div *ngIf="this.compileType != 1 && this.compileType != 2" class="alert alert-danger" role="alert">
+        {{ 'You need to set Compile Mode in Settings' | translate }}
+      </div>
+
+      <div *ngIf="compileType == 1" style="color: green; margin-top: 10px;">
+        <h3>{{ 'You are using Local Compile Mode' | translate }}</h3>
+      </div>
+      <div *ngIf="compileType == 2" style="color: green; margin-top: 10px;">
+        <h3>{{ 'You are using Cloud Compile Mode' | translate }}</h3>
+      </div>
+
+      <!-- Refactoring exercise -->
+      <div *ngSwitchCase="'refactoring'">
+        <div *ngIf="serverError === undefined; else error" >
+          <div *ngIf="refactoringService.exerciseConfiguration" class="row">
+            <div class="col">
+              <app-refactoring-editor-card #code [editorHeader]="mission.steps[currentStep].id+'.java'" [injectedCode]="refactoringService.userCode" [editable]="false"
+                                           [progressBarMode]="refactoringService.progressBarMode">
+              </app-refactoring-editor-card>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="col" style="padding-top: 20px">
+              <app-refactoring-editor-card #testing [editorHeader]="mission.steps[currentStep].id+'Test.java'" [injectedCode]="refactoringService.testingCode"
+                                           [progressBarMode]="refactoringService.progressBarMode">
+              </app-refactoring-editor-card>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div style="margin-top: 20px">
+              <button style="margin: 10px" type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
+              <button style="margin: 10px" *ngIf="isExercisePassed()" class="btn btn-primary" (click)="this.nextStep()">{{ 'Next' | translate }}</button>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="col" style="margin-top: 20px">
+              <app-refactoring-editor-card #output [editorHeader]="'Shell'" [injectedCode]="refactoringService.shellCode" [editable]="false"
+                                           [progressBarMode]="refactoringService.progressBarMode">
+              </app-refactoring-editor-card>
+            </div>
+
+            <app-refactoring-compilation-results></app-refactoring-compilation-results>
+
+            <div *ngIf="refactoringService.exerciseIsCompiledSuccessfully">
+              <app-refactoring-score
+                [score]="Math.abs(refactoringService.smellNumber - refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed)"
+                [smellNumber]="refactoringService.smellNumber"
+                [refactoringResult]="refactoringService.refactoringResult"
+                [originalCoverage]="refactoringService.originalCoverage"
+                [refactoredCoverage]="refactoringService.refactoredCoverage"
+                [smellNumberWarning]="refactoringService.smellNumberWarning"
+                [exerciseConfiguration]="refactoringService.exerciseConfiguration"
+              ></app-refactoring-score>
+
+              <app-refactoring-smell-list
+                [smellList]="refactoringService.smellList"
+                [smellDescriptions]="refactoringService.smellDescriptions"
+                [methodList]="refactoringService.methodList"
+              ></app-refactoring-smell-list>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check-smell exercise -->
+      <div *ngSwitchCase="'check-smell'">
+        <div *ngIf="serverError === undefined; else error">
+          <div *ngIf="checkSmellService.exerciseConfiguration" class="card">
+            <app-check-smell-question #question [editorHeader]="'Step '+currentStep" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
+            </app-check-smell-question>
+
+            <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers">
+            </app-check-smell-answer-list>
+
+            <div>
+              <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+              <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+              <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+              <button style="margin: 10px" *ngIf="isExercisePassed()" class="btn btn-primary" (click)="this.nextStep()">{{ 'Next' | translate }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learning page -->
+      <div *ngSwitchCase="'learning'" class="page-container">
+        <div *ngIf="serverError === undefined; else error" >
+          <div *ngIf="learningService.learning">
+            <app-learning-page-route
+              [title]="learningService.learning.title"
+              [content]="learningService.learning.content"
+              [externalReference]="learningService.learning.externalReference"
+            ></app-learning-page-route>
+            <div class="btn-container">
+              <button style="margin: 10px" *ngIf="isExercisePassed()" class="btn btn-primary" (click)="nextStep()">{{ 'Next' | translate }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+  </div>
+</div>
+
+<app-success-alert #successAlert [message]="'You have completed successfully the mission step.'"></app-success-alert>
+<app-fail-alert #failAlert [message]="'You failed the exercise. Don’t give up, try again!'"></app-fail-alert>
+<app-achievement-alert #achievementAlert></app-achievement-alert>
+
+<ng-template #missionComplete>
+  <div class="mission-complete">
+    <div class="mission-header">
+      <h2>Missione Completata!</h2>
+      <div class="badge-icon">
+        <img src="assets/icons/trophy.png" alt="Trophy Icon" />
+      </div>
+    </div>
+    <p class="mission-description">{{ 'Congratulations! You have complete the mission and unlocked the badge:' | translate }} <strong>{{ mission.badge }}</strong>.</p>
+  </div>
+</ng-template>
+
+<ng-template #error>
+  <div *ngIf="serverError">
+    <app-error [title]="'Error during the execution of the mission'" [error]="serverError"></app-error>
+  </div>
+</ng-template>

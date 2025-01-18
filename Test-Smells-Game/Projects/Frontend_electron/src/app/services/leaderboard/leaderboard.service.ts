@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http"; 
-import { environment } from "../../../environments/environment.prod";
-import { Solution } from "../../model/solution/solution";
-import { Exercise } from "../../model/exercise/refactor-exercise.model";
-import { UserService } from "../user/user.service";
-import { ExerciseConfiguration } from "../../model/exercise/ExerciseConfiguration.model";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {environment} from "../../../environments/environment.prod";
+import {Solution} from "../../model/solution/solution";
+import {Exercise} from "../../model/exercise/refactor-exercise.model";
+import {UserService} from "../user/user.service";
+import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
+import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,7 @@ export class LeaderboardService {
   private getHttpHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'ngrok-skip-browser-warning': 'true'  
+      'ngrok-skip-browser-warning': 'true'
     });
   }
 
@@ -25,7 +27,7 @@ export class LeaderboardService {
   }
 
   saveSolution(exercise: Exercise,
-               exerciseConfiguration: ExerciseConfiguration,
+               exerciseConfiguration: RefactoringGameExerciseConfiguration,
                score: number,
                refactoringResult: boolean,
                originalCoverage: number,
@@ -69,4 +71,56 @@ export class LeaderboardService {
   getVoteForUser(solutionId: number, userId: number) {
     return this.http.get(environment.leaderboardServiceUrl + '/leaderboard/solution/' + solutionId + '/' + userId, { headers: this.getHttpHeaders() });
   }
+
+
+  /* Rank methods */
+  createNewScore(userName: string): Observable<Score> {
+    return this.http.post<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}`, {}, { headers: this.getHttpHeaders() });
+  }
+
+  getScore(userName: string): Observable<Score> {
+    return this.http.get<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}`, { headers: this.getHttpHeaders() });
+  }
+
+  updateMissionsScore(userName: string, score: number): Observable<Score> {
+    const params = new HttpParams()
+      .set('score', score.toString());
+
+    return this.http.put<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/missions`, {}, { params, headers: this.getHttpHeaders() });
+  }
+
+  updateBestCheckSmellScore(userName: string, exerciseId: string, score: number): Observable<Score> {
+    const params = new HttpParams()
+      .set('exerciseId', exerciseId)
+      .set('score', score.toString());
+
+    return this.http.put<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/checksmell`, {}, { params, headers: this.getHttpHeaders() });
+  }
+
+  updateBestRefactoringScore(userName: string, exerciseId: string, score: number): Observable<Score> {
+    const params = new HttpParams()
+      .set('exerciseId', exerciseId)
+      .set('score', score.toString());
+
+    return this.http.put<Score>(`${environment.leaderboardServiceUrl}/rank/${userName}/refactoring`, {}, { params, headers: this.getHttpHeaders() });
+  }
+
+  getUserRank(userName: string): Observable<UserRanking> {
+    return this.http.get<UserRanking>(`${environment.leaderboardServiceUrl}/rank/${userName}/ranking`, { headers: this.getHttpHeaders() });
+  }
+
+  getGameModePodium(podiumDimension: number): Observable<PodiumRanking> {
+    const params = new HttpParams()
+      .set('podiumDimension', podiumDimension);
+
+    return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/gamemode`, { params, headers: this.getHttpHeaders() });
+  }
+
+  getRefactoringExercisePodium(podiumDimension: number): Observable<PodiumRanking> {
+    const params = new HttpParams()
+      .set('podiumDimension', podiumDimension);
+
+    return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/refactoring`, { params, headers: this.getHttpHeaders() });
+  }
+
 }

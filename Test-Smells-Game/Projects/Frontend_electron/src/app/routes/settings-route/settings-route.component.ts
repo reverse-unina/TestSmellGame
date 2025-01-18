@@ -3,7 +3,6 @@ import {FormBuilder, NgForm} from "@angular/forms";
 import {environment} from "../../../environments/environment.prod";
 import {UserService} from "../../services/user/user.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {TranslateService} from '@ngx-translate/core';
 import {SettingsService} from "../../services/settings/settings.service";
 import {ElectronService} from "ngx-electron";
 
@@ -136,5 +135,5 @@ export class SettingsRouteComponent implements OnInit {
       }
     }
 
-  protected readonly localStorage = localStorage;
+  readonly localStorage = localStorage;
 }
