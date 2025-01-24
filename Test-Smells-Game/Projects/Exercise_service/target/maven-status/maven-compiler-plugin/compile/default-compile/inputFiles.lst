@@ -1,10 +1,19 @@
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Controller\LevelConfigController.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Assignment\Student.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Controller\AssignmentController.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Assignment\Assignment.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Service\FileService.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\LevelConfig\LevelConfig.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Config\WebConfig.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Controller\FileController.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\ExerciseserviceApplication.java
-C:\Users\loris\OneDrive\Desktop\Thesis-main\Test Smells Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\Config\SecurityConfig.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\controller\LevelConfigController.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\service\JsonFileService.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\assignment\Student.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\exercise\refactoring\TestSmellType.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\service\FileService.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\controller\FileController.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\controller\MissionController.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\learningcontent\LearningContent.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\mission\Mission.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\controller\AssignmentController.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\exercise\refactoring\RefactoringExercise.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\exercise\checksmell\CheckSmellExercise.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\config\SecurityConfig.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\ExerciseserviceApplication.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\controller\ExerciseController.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\levelconfig\LevelConfig.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\config\WebConfig.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\assignment\Assignment.java
+C:\Users\fedes\Desktop\Fork\TestSmellsGame\Test-Smells-Game\Projects\Exercise_service\src\main\java\com\dariotintore\tesi\exerciseservice\entity\levelconfig\BadgeValue.java

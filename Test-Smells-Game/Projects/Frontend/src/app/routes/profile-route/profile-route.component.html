@@ -124,6 +124,20 @@
     </div>
   </div>
 
+
+  <div class="podium-container">
+  <div class="leaderboard-container">
+    <h1 class="leaderboard-title">Your Test History</h1>
+    <app-grafico 
+      [visualizzaGriglia]="false"
+      [testScores]="testScores"
+      [testDates]="testDates">
+    </app-grafico>
+    <button class="btn btn-primary" routerLink="/test-history">View Full Test History</button>
+  </div>
+  </div>
+
+  
   <ng-template #renderNoRank>
     {{ 'You have yet to complete a refactoring type exercise' | translate }}
   </ng-template>
@@ -132,6 +146,4 @@
     {{ 'No user has yet completed a refactoring exercise' | translate }}
   </ng-template>
 </div>
-
-
 

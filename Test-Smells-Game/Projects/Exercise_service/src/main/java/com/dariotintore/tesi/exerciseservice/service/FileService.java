@@ -291,5 +291,45 @@ public class FileService {
 		return Files.readAllBytes(Paths.get(basePath + filename + ".png"));
 	}
 
+
+	public List<Object> getExercisesByLevel(int level) {
+		List<Object> matchingExercises = new ArrayList<>();
+
+		// Directory per i diversi tipi di esercizi
+		String checkSmellDirectory = "ExerciseDB/CheckSmellGame/";
+		String refactoringDirectory = "ExerciseDB/RefactoringGame/";
+
+		// Ottieni gli esercizi di tipo CheckSmell
+		Object checkSmellResult = getAllJsonFilesInDirectory(checkSmellDirectory, CheckSmellExercise.class);
+		if (checkSmellResult instanceof List) {
+			List<CheckSmellExercise> checkSmellExercises = (List<CheckSmellExercise>) checkSmellResult;
+			for (CheckSmellExercise exercise : checkSmellExercises) {
+				if (exercise.getCheckGameConfiguration() != null &&
+						exercise.getCheckGameConfiguration().getLevel() == level) {
+					matchingExercises.add(exercise);
+				}
+			}
+		} else {
+			System.out.println("Nessun esercizio CheckSmell trovato.");
+		}
+
+		// Ottieni gli esercizi di tipo Refactoring
+		Object refactoringResult = getAllJsonFilesInDirectory(refactoringDirectory, RefactoringExercise.class);
+		if (refactoringResult instanceof List) {
+			List<RefactoringExercise> refactoringExercises = (List<RefactoringExercise>) refactoringResult;
+			for (RefactoringExercise exercise : refactoringExercises) {
+				if (exercise.getRefactoringGameConfiguration() != null &&
+						exercise.getRefactoringGameConfiguration().getLevel() == level) {
+					matchingExercises.add(exercise);
+				}
+			}
+		}else {
+			System.out.println("Nessun esercizio Refactoring trovato.");
+		}
+
+		return matchingExercises;
+	}
+
+
 }
 

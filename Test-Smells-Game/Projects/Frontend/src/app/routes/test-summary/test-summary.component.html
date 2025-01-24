@@ -1,0 +1,108 @@
+<div class="test-summary-container">
+    <h2>{{'Test summary' | translate}}</h2>
+  
+    <div class="score-summary">
+      <h4><i class="fas fa-star"></i>{{ 'Toral score' | translate }} Check-game <strong>{{ totalScoreCheck }}</strong></h4>
+      <h4><i class="fas fa-star"></i>{{ 'Toral score' | translate }} Refactoring-game <strong>{{ totalScoreRef }}</strong></h4>
+    </div>
+  
+     <!-- Risultati del Check Game -->
+     <div *ngIf="correctAnswersList.length || wrongAnswersList.length" class="check-game-results">
+      <h3 class="results-title"><strong>{{'Results' | translate}} Check Game</strong></h3>
+  
+    <!-- Statistiche Generali -->
+    <div class="statistics">
+      <div class="level-summary">
+        <h4>{{ 'Scores by Level' | translate }}</h4>
+        <table class="level-table">
+          <tr>
+            <th>{{ 'Level' | translate}}</th>
+            <th>{{ 'Points' | translate}}</th>
+          </tr>
+          <tr>
+            <td>{{ 'Level' | translate}} 1</td>
+            <td>{{ calculateLevelScore(1) }} punti</td>
+          </tr>
+          <tr>
+            <td>{{ 'Level' | translate}} 2</td>
+            <td>{{ calculateLevelScore(2) }} punti</td>
+          </tr>
+          <tr>
+            <td>{{ 'Level' | translate}} 3</td>
+            <td>{{ calculateLevelScore(3) }} punti</td>
+          </tr>
+        </table>
+      </div>
+      <div class="score-summary">
+        <p>{{ 'Completed Questions' | translate}}: <strong>{{ correctAnswersList.length + wrongAnswersList.length }}/6</strong></p>
+        <p>{{ 'Correct Answers' | translate}}: <span class="correct-answer">{{ correctAnswersList.length }}</span></p>
+        <p>{{ 'Wrong Answers' | translate}}: <span class="wrong-answer">{{ wrongAnswersList.length }}</span></p>
+      </div>
+    </div>
+  
+      <!-- Risposte Corrette -->
+      <div *ngIf="correctAnswersList.length">
+        <h4>{{ 'Correct Answers' | translate}}:</h4>
+        <ul class="answer-list">
+          <li *ngFor="let answer of correctAnswersList" class="correct-answer-item">
+            ✅ <strong>{{ answer.exerciseId }}</strong>
+            <div class="exercise-card">
+              <div class="exercise-body">
+                <app-codeeditor
+                  [injectedCode]="answer.questionText"
+                  [editable]="false"
+                ></app-codeeditor>
+              </div>
+            </div>
+            <p><strong>{{ 'Selected Answer' | translate}}:</strong> {{ answer.selectedAnswer }}</p>
+            <p *ngIf="answer.selectedAnswer !== answer.correctAnswer">
+              <strong>Risposta Corretta:</strong> {{ answer.correctAnswer }}</p>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Risposte Errate -->
+      <div *ngIf="wrongAnswersList.length">
+        <h4>{{ 'Wrong Answers' | translate}}:</h4>
+        <ul class="answer-list">
+          <li *ngFor="let answer of wrongAnswersList" class="wrong-answer-item">
+            ❌ <strong>{{ answer.exerciseId }}</strong>
+            <div class="exercise-card">
+              <div class="exercise-body">
+                <app-codeeditor
+                  [injectedCode]="answer.questionText"
+                  [editable]="false"
+                ></app-codeeditor>
+              </div>
+            </div>
+            <p><strong>{{ 'Selected Answer' | translate}}:</strong> {{ answer.selectedAnswer }}</p>
+            <p><strong>{{ 'Corrent answer' | translate}}:</strong> {{ answer.correctAnswer }}</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <!-- Risultati del Refactoring Game -->
+    <div *ngIf="totalScoreRef > 0" class="refactoring-game-results">
+      <h3 class="results-title"><strong>Risultati Refactoring Game</strong></h3>
+    
+      <!-- Div separato per *ngFor -->
+      <div *ngFor="let exercise of completedRefactoringExercisesList" class="refactoring-summary">
+        <div class="refactoring-card">
+          <h4 class="exercise-title">{{ 'Exercise' | translate}}: <span>{{ exercise.exerciseId }}</span></h4>
+          
+          <div class="exercise-details">
+            <p><strong><i class="fas fa-star"></i>{{ 'Score' | translate}}:</strong> {{ exercise.score }}</p>
+            <p><strong>{{ 'Smells Reduced' | translate}}:</strong>{{ exercise.smellNumber }}</p>
+            <p><strong>{{ 'Original Coverage' | translate}}:</strong>{{ exercise.originalCoverage }}%</p>
+            <p><strong>{{ 'Refactored Coverage' | translate}}:</strong>{{ exercise.refactoredCoverage }}%</p>
+            <p><strong>{{ 'Refactoring Result' | translate }}:</strong> {{ exercise.refactoringResult ? 'Success' : 'Failed' }}</p>
+          </div>
+        </div>
+    </div>
+  </div>
+    
+  
+  <button class="btn btn-primary" routerLink="/test-history">{{ 'View History' | translate}}</button>
+  
+</div>  

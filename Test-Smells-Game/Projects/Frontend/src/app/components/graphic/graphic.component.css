@@ -1,0 +1,59 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  .history-container {
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+    background-color: #ffffff; /* Sfondo bianco */
+    padding: 20px;
+    border-radius: 8px; /* Angoli arrotondati */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  }
+  
+  .test-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .test-table th, .test-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .test-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  test-history-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Colore alternato per le righe */
+  }
+  
+  .test-history-table tr:hover {
+    background-color: #f1f1f1; /* Colore al passaggio del mouse */
+  }
+
+  
+  .chart-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #ffffff; /* Sfondo bianco */
+  padding: 20px;
+  border-radius: 8px; /* Angoli arrotondati */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  }

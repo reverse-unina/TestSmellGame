@@ -1,0 +1,66 @@
+<div class="multilevel-game-container">
+    <h1>Multi-Level Test</h1>
+    <h5>{{ 'Level' | translate }} {{ currentLevel }}  -  {{ 'Exercise' | translate }} {{ currentExerciseIndex +1 }}</h5>
+
+    <div *ngIf="exercises[currentExerciseIndex]; else noExercises"> 
+      
+      <div class="timer">
+        <p>{{ 'Remaining Time' | translate }}: {{ formatTime(timeLeft) }}</p>
+      </div> 
+
+      <div *ngIf="exercises[currentExerciseIndex]?.type === 'check-game'; else refactoringTemplate">
+        
+        
+        <h4>Check-Smell Game: {{ exercises[currentExerciseIndex]?.data?.exerciseId || 'id non disponibile' }}</h4>
+        <app-check-game-core 
+        *ngIf="exercises[currentExerciseIndex]?.data?.exerciseId" 
+        [exerciseNameTest]="exercises[currentExerciseIndex]?.data?.exerciseId"
+        [isMultiLevelGame]="true"
+        (exerciseCompleted)="handleCompletedCheckGame($event)">
+        </app-check-game-core>
+      </div>
+
+      <ng-template #refactoringTemplate>
+        <h4>Refactoring Game: {{ normalizeExerciseId(exercises[currentExerciseIndex]?.data?.exerciseId) }}</h4>
+        <app-refactoring-game-core 
+          #refactoringGameCore
+          *ngIf="exercises[currentExerciseIndex]?.data?.exerciseId" 
+          (exerciseCompleted)="handleCompletedRefactoringGame($event)"
+          [exerciseNameTest]="exercises[currentExerciseIndex]?.data?.exerciseId"
+          [isMultiLevelGame]="isMultiLevelGame">
+        </app-refactoring-game-core>
+      </ng-template>
+
+      <div class="button-group" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+        <div style="display: flex; gap: 10px;"> 
+            <button
+              class="btn btn-secondary"
+              style="width: 150px;"
+              (click)="previousExercise()"
+              [disabled]="currentExerciseIndex === 0">Back
+            </button>
+            <button 
+              class="btn btn-primary" 
+              style="width: 150px;"
+              (click)="nextExercise()">Next 
+            </button>
+        </div>
+        <button
+          class="btn btn-danger"
+          style="width: 150px;"
+          (click)="submitTest()">ConsegnaTest
+        </button>
+      </div>
+    </div>
+
+    <ng-template #noExercises>
+      <div class="alert alert-info mt-3">
+        <p>{{'Loading exercises or no exercises available' | translate }}.</p>
+      </div>
+    </ng-template>
+
+    <div *ngIf="exercises.length === 0">
+      <p>{{ 'Loading exercises' | translate}}...</p>
+    </div>
+  </div>
+    

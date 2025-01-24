@@ -1,0 +1,215 @@
+.test-summary-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .statistics p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  
+  .correct-answer {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .wrong-answer {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .answer-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .correct-answer-item, .wrong-answer-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  .exercise-card {
+    margin-top: 10px;
+  }
+  
+  .exercise-header {
+    background-color: #f5f5f5;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .exercise-body {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .results-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 21px;
+    margin: 20px 0;
+    color: #333;
+  }
+  
+  .test-summary-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .summary-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .statistics {
+    margin-bottom: 30px;
+  }
+  
+  .level-summary {
+    margin-bottom: 20px;
+  }
+  
+  .level-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+  }
+  
+  .level-table th, .level-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .level-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .score-summary p {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+  
+  .total-score {
+    font-weight: bold;
+    font-size: 18px;
+    color: #4caf50;
+  }
+  
+  .correct-answer {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .wrong-answer {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .check-game-results {
+    margin-top: 20px;
+  }
+  
+  .results-title {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #444;
+  }
+  
+  .correct-results, .wrong-results {
+    margin-bottom: 20px;
+  }
+  
+  .answer-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .correct-answer-item, .wrong-answer-item {
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  .exercise-card {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+  }
+  
+  .refactoring-game-results {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .results-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .refactoring-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .refactoring-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .exercise-title {
+    font-size: 1.2rem;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  .exercise-title span {
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .exercise-details p {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+  
+  .exercise-details strong {
+    color: #555;
+  }
+  
+  button {
+    margin-top: 15px;
+  }
+  
+  

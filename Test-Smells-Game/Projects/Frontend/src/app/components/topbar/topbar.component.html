@@ -18,6 +18,9 @@
         <a class="nav-link" routerLink="/check-game">Check Game</a>
       </li>
       <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
+        <a class="nav-link" routerLink="/test-game">{{ 'Multi-Level Test' | translate }}</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">
         <a class="nav-link" routerLink="/assignments">{{ 'Assignments' | translate }}</a>
       </li>
       <li class="nav-item" routerLinkActive="active" *ngIf="isAuthenticated">

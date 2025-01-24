@@ -77,6 +77,7 @@ export class RefactoringService {
   }
 
   async initSmellDescriptions() {
+    
     // @ts-ignore
     await import('./smell_description.json').then((data) => {
       this.smellDescriptions = data.smells;
@@ -144,7 +145,7 @@ export class RefactoringService {
       this.resetData();
       this.startLoading();
 
-      console.log("testingCode: ", testing.injectedCode);
+      //console.log("testingCode: ", testing.injectedCode);
 
       // @ts-ignore
       const exercise = new Exercise(this.exerciseConfiguration.className, this.originalProductionCode, this.originalTestCode, testing.injectedCode);

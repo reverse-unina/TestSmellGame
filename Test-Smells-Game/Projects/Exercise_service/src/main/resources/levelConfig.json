@@ -1,0 +1,9 @@
+{
+  "expValues": [5, 15],
+  "badgeValues": {
+    "10": "badge_bronze.png",
+    "20": "badge_silver.png",
+    "30": "badge_gold.png"
+  },
+  "answerPercentage": 90
+}

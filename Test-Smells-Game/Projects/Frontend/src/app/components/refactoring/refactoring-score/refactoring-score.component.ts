@@ -16,4 +16,14 @@ export class RefactoringScoreComponent {
   @Input() smellNumberWarning: boolean = false;
   @Input() exerciseConfiguration!: RefactoringGameExerciseConfiguration;
 
+
+  reset(): void {
+    this.score = -1;
+    this.smellNumber = 0;
+    this.refactoringResult = '';
+    this.originalCoverage = -1;
+    this.refactoredCoverage = -1;
+    this.smellNumberWarning = false;
+  }
+  
 }

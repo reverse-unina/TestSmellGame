@@ -11,6 +11,9 @@ import {CheckGameExListRoute} from './routes/check-smell-game/check-smell-exerci
 import {CheckGameCoreRouteComponent} from "./routes/check-smell-game/check-game-core/check-game-core-route.component";
 import {LeaderboardRouteComponent} from "./routes/leaderboard-route/leaderboard-route.component";
 import {SettingsRouteComponent} from "./routes/settings-route/settings-route.component";
+import {TestGameComponent} from './routes/test-game/test-game.component';
+import { TestSummaryComponent } from './routes/test-summary/test-summary.component';
+import { TestHistoryComponent } from './routes/test-history/test-history.component';
 import {HomeRouteComponent} from "./routes/home-route/home-route.component";
 import {AssignmentsListRoute} from "./routes/assignments-route/assignments-list/assignments-list-route";
 import {AssignmentsCoreRouteComponent} from "./routes/assignments-route/assignments-core/assignments-core-route.component";
@@ -29,6 +32,9 @@ const appRoutes: Routes = [
   { path: 'assignments/leaderboard/:exercise', component: LeaderboardRouteComponent},
   { path: 'assignments', component: AssignmentsListRoute},
   { path: 'assignments/:nome/:exercise', component: AssignmentsCoreRouteComponent},
+  { path: 'test-game', component: TestGameComponent },
+  { path: 'test-summary', component: TestSummaryComponent},
+  { path: 'test-history', component: TestHistoryComponent},
   { path: 'settings', component: SettingsRouteComponent},
   { path: 'profile', component: ProfileRouteComponent},
   { path: 'missions', component: MissionsListRouteComponent },

@@ -11,8 +11,8 @@ import { CodeeditorService } from '../../services/codeeditor/codeeditor.service'
 
 export class CodeEditorComponent implements OnInit {
   name = 'Angular ' + VERSION.major;
-  @Input() injectedCode = "";
-  @Input() editable = true;
+  @Input() injectedCode: string = "";
+  @Input() editable: boolean = true;
   @ViewChild('editor') editorRef: ElementRef | any;
   @ViewChild('codemirror') codeMirror: CodemirrorComponent | any;
   resettable : boolean = false;
@@ -48,7 +48,12 @@ export class CodeEditorComponent implements OnInit {
     setTimeout(() => {
           this.originalInjectedCode = this.injectedCode;
           this.resettable = true;
-          const routeSplit = this.location.path().split('/');
+          const path = this.location.path();
+if (!path) {
+  console.error('Percorso non disponibile.');
+  return;
+}
+          const routeSplit = path.split('/');
           const exerciseName = routeSplit[routeSplit.length - 1];
           let keyPrefix = '';
 

@@ -31,13 +31,24 @@ export class CheckSmellService {
     private leaderboardService: LeaderboardService
   ) { }
 
-  async initQuestions(exerciseName: string): Promise<string | undefined> {
+  async initQuestions(exerciseName: string, isSingleQuestion: boolean = false): Promise<string | undefined> {
     try {
       this.exerciseRetrievalType = Number(localStorage.getItem("exerciseRetrieval"));
 
       const data = await firstValueFrom(this.exerciseService.getCheckGameConfigFile(exerciseName));
       this.exerciseConfiguration = data;
-      this.questions = data.checkGameConfiguration.questions;
+
+      if (isSingleQuestion && data.checkGameConfiguration?.questions?.length > 0) {
+        this.questions = [data.checkGameConfiguration.questions[0]];
+        console.log('Domanda caricata (modalità singola):', this.questions);
+      } else {
+        // Altrimenti carica tutte le domande
+        this.questions = data.checkGameConfiguration.questions;
+        console.log('Domande caricate (modalità normale):', this.questions);
+      }
+
+
+      //this.questions = data.checkGameConfiguration.questions;
 
       this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
       return undefined;
