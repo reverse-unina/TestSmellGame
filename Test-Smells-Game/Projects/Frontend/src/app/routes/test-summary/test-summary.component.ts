@@ -147,10 +147,8 @@ export class TestSummaryComponent implements OnInit{
          totalScore: (this.totalScoreCheck + this.totalScoreRef)
      };
  
-     // Salva i risultati in localStorage
      this.testService.saveTestLocally(testResult);
  
-     // Salva i risultati sul server
      this.testService.saveTestToServer(testResult).subscribe({
        next: (response) => console.log('Test salvato sul server:', response),
        error: (error) => console.error('Errore durante il salvataggio sul server:', error)

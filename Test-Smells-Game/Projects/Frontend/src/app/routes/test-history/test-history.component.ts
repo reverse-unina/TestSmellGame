@@ -61,8 +61,8 @@ export class TestHistoryComponent implements OnInit {
           .pipe(
             tap((testHistory : TestHistory[]) => {
               this.testHistory = [...testHistory];
-              this.testScores = testHistory.map(test => test.totalScore); // Usa il punteggio totale di ogni test
-              this.testDates = testHistory.map(test => new Date(test.date).toLocaleDateString()); // Usa la data del test
+              this.testScores = testHistory.map(test => test.totalScore); 
+              this.testDates = testHistory.map(test => new Date(test.date).toLocaleDateString());
 
               console.log('testh', this.testHistory);
               //this.renderScoreChart();
