@@ -25,6 +25,8 @@ export class CheckGameCoreRouteComponent implements OnInit {
   @Input() exerciseNameTest!: string;
   @Input() isMultiLevelGame: boolean = false;
   @Output() exerciseCompleted = new EventEmitter<any>();
+  @Input() savedAnswers: { [questionCode: string]: string } = {};
+
   
   isCompleteDisabled: boolean = false;
 
@@ -50,8 +52,25 @@ export class CheckGameCoreRouteComponent implements OnInit {
       
       if (this.isMultiLevelGame){
         this.exerciseName = this.exerciseNameTest;
-        this.checkSmellService.initQuestions(this.exerciseName, true);
-      } else {
+        this.checkSmellService.initQuestions(this.exerciseName, true).then(() => {
+
+          if (this.savedAnswers) {
+            this.checkSmellService.questions.forEach((question) => {
+              if (this.savedAnswers[question.questionCode]) {
+                const selectedAnswer = this.savedAnswers[question.questionCode];
+                const answer = question.answers.find(
+                  (ans: any) => ans.answerText === selectedAnswer
+                );
+  
+                if (answer)
+                  answer.isChecked = true;
+              }
+            });
+          }    
+
+        });
+      } 
+      else {
         this.exerciseName = params['exercise'];
         this.checkSmellService.initQuestions(this.exerciseName);
       }
@@ -68,7 +87,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
         questions: this.checkSmellService.questions.map((q: any) => {
           const correctAnswer = q.answers.find((ans: any) => ans.correct)?.answerText || null;
           const selectedAnswer = q.answers.find((ans: any) => ans.isChecked)?.answerText || null;
-  
+
           return {
             questionCode: q.questionCode,
             answers: q.answers.map((ans: any) => ({
@@ -162,7 +181,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
       }))
     };
   
-    console.log('Dati dell\'esercizio di check-game completato:', data);
+    //console.log('Dati dell\'esercizio di check-game completato:', data);
     this.exerciseCompleted.emit(data);
   }
   

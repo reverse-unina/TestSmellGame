@@ -16,6 +16,7 @@
         *ngIf="exercises[currentExerciseIndex]?.data?.exerciseId" 
         [exerciseNameTest]="exercises[currentExerciseIndex]?.data?.exerciseId"
         [isMultiLevelGame]="true"
+        [savedAnswers]="getSelectedAnswersForCurrentExercise()"
         (exerciseCompleted)="handleCompletedCheckGame($event)">
         </app-check-game-core>
       </div>

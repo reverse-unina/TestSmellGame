@@ -39,17 +39,16 @@ export class TestSummaryComponent implements OnInit{
       this.exerciseName = summary.exerciseName || '';
       this.correctAnswersList = summary.correctAnswersList || [];
       this.wrongAnswersList = summary.wrongAnswersList || [];
-      //this.completedExercisesList = summary.completedExercisesList;
 
       this.completedCheckExercisesList = summary.completedCheckExercisesList || [];
-    this.completedRefactoringExercisesList = summary.completedRefactoringExercisesList || [];
+      this.completedRefactoringExercisesList = summary.completedRefactoringExercisesList || [];
     
       this.time = summary.completionTime || null;
       this.type = summary.type;
       //console.log('Dati ricevuti nel sommario:', summary);
 
       console.log('Check exercises:', this.completedCheckExercisesList);
-    console.log('Refactoring exercises:', this.completedRefactoringExercisesList);
+      console.log('Refactoring exercises:', this.completedRefactoringExercisesList);
 
 
       this.totalScoreCheck = this.calculateScore() + this.calculateBonus();
@@ -74,9 +73,8 @@ export class TestSummaryComponent implements OnInit{
  
  
  
-   calculateRefactoringScore(exercises: any[]): number {
-     /*return exercises.reduce((total, exercise) => {
-       if (exercise.type === 'refactoring-game') {
+   /*calculateRefactoringScore(exercises: any[]): number {
+     return exercises.reduce((total, exercise) => {
          const data = exercise.data;
    
          if (!data.refactoringResult) {
@@ -90,20 +88,53 @@ export class TestSummaryComponent implements OnInit{
          if (data.refactoredCoverage > data.originalCoverage) {
            score += 5;
          } else if (data.refactoredCoverage === data.originalCoverage) {
-           score += 5;
+           score += 2;
          } else {
            score += Math.max(0, 5 - Math.floor(coverageDifference / 20));
          }
    
-         const smellsReduced = data.smellsAllowed - data.smellNumber;
-         score += smellsReduced > 0 ? smellsReduced : 0;
+         //const smellsReduced = data.smellsAllowed - data.smellNumber;
+         //score += smellsReduced > 0 ? smellsReduced : 0;
    
+         // Calcolo del punteggio per gli odori rimossi
+    const smellsReduced = data.smellNumber;
+    if (smellsReduced > 0) {
+      score += smellsReduced > 5 ? 5 : smellsReduced; // Limita il punteggio a un massimo di 5
+    }
          return total + score;
-       }
-       return total;
-     }, 0);*/
-     return 1;
-   }
+        }, 0);
+   }*/
+
+        calculateRefactoringScore(exercises: any[]): number {
+          return exercises.reduce((total, exercise) => {
+            // Controlla che l'esercizio contenga i dati richiesti
+            if (!exercise || !exercise.refactoringResult || exercise.originalCoverage === undefined || exercise.refactoredCoverage === undefined) {
+              console.warn(`Esercizio non valido o incompleto:`, exercise);
+              return total;
+            }
+        
+            let score = 0;
+        
+            // Calcola il punteggio basato sulla copertura
+            const coverageDifference = exercise.originalCoverage - exercise.refactoredCoverage;
+            if (exercise.refactoredCoverage > exercise.originalCoverage) {
+              score += 5;
+            } else if (exercise.refactoredCoverage === exercise.originalCoverage) {
+              score += 3; // Modifica in base alla tua logica
+            } else {
+              score += Math.max(0, 5 - Math.floor(coverageDifference / 20));
+            }
+        
+            // Calcola il punteggio per gli odori ridotti
+            const smellsReduced = exercise.smellNumber || 0;
+            score += smellsReduced > 5 ? 5 : smellsReduced; // Massimo 5 punti per gli odori ridotti
+        
+            console.log(`Punteggio calcolato per ${exercise.exerciseId}:`, score);
+        
+            return total + score;
+          }, 0);
+        }
+        
    
    
  

@@ -32,7 +32,7 @@ export class TestGameComponent implements OnInit{
   correctAnswersList: { exerciseId: string, questionText: string; selectedAnswer: string; correctAnswer: string, level: number }[] = [];
   wrongAnswersList: { exerciseId: string, questionText: string; selectedAnswer: string; correctAnswer: string, level:number }[] = [];
 
-  completedExercisesList: Array<{
+  /*completedExercisesList: Array<{
     exerciseId: string;
     type: 'check-game' | 'refactoring-game';
     level: number;
@@ -43,7 +43,7 @@ export class TestGameComponent implements OnInit{
         smellsAllowed?: number;
         smellNumber?: number;
     };
-  }> = [];
+  }> = [];*/
 
 
   //NUOVO
@@ -63,6 +63,8 @@ export class TestGameComponent implements OnInit{
   timeLeft: number = 600; // Tempo rimanente
   timer!: any;
 
+  selectedAnswersByExercise: { [exerciseName: string]: { [questionCode: string]: string } } = {};
+
 
   constructor(
     private exerciseService: ExerciseService,
@@ -73,9 +75,8 @@ export class TestGameComponent implements OnInit{
     private snackBar: MatSnackBar
   ){}
 
+
   ngOnInit(): void {
-    console.log('test iniziato');
-   
     this.startTime = new Date();
     const savedState = localStorage.getItem('multiGameTestState');
     if (savedState) {
@@ -98,26 +99,30 @@ export class TestGameComponent implements OnInit{
  
 
   loadSavedState(testState: any): void {
-    this.currentExerciseIndex = testState.currentExerciseIndex;
-    this.currentLevel = testState.currentLevel;
-    this.correctAnswersList = testState.correctAnswersList;
-    this.wrongAnswersList = testState.wrongAnswersList;
-    this.completedExercisesList = testState.completedExercises;
-    this.exercises = testState.exercises;
+    this.currentExerciseIndex = testState.currentExerciseIndex || 0;
+    this.currentLevel = testState.currentLevel || 1;
+    this.selectedAnswer = testState.selectedAnswer || null;
+    this.correctAnswersList = testState.correctAnswersList || [];
+    this.wrongAnswersList = testState.wrongAnswersList || [];
+    this.completedCheckGameExercises = testState.completedCheckExercises || [];
+    this.completedRefactoringExercises = testState.completedRefactoringExercises || [];
+    this.exercises = testState.exercises || [];
     this.timeLeft = testState.timeLeft || 600;
 
-    console.log('Test ripreso con stato:', testState);
+    //console.log('Test ripreso con stato:', testState);
   }
 
   
   startNewTest(): void {
     localStorage.removeItem('multiGameTestState');
     this.currentLevel = 1;
+    this.selectedAnswer = null;
     this.correctAnswersList = [];
     this.wrongAnswersList = [];
-    this.completedExercisesList = [];
+    this.completedCheckGameExercises = [];
+    this.completedRefactoringExercises = [];
+    this.exercises = [];
     this.loadExercisesByLevel(this.currentLevel);
-    console.log('Nuovo test avviato.');
   }
   
 
@@ -134,8 +139,6 @@ export class TestGameComponent implements OnInit{
           }
 
           this.exercises = data;
-          //console.log("esercizi ricevuti", this.exercises);
-          //console.log("config", this.exercises)
           this.filterExercisesByTypeRandom(2, 2);
           this.currentExerciseIndex = 0;
 
@@ -160,11 +163,9 @@ export class TestGameComponent implements OnInit{
   filterExercisesByTypeRandom(checkCount: number, refactoringCount: number): void {
     const shuffledExercises = this.exercises.sort(() => Math.random() - 0.5);
 
-
     const checkGameExercises = shuffledExercises.filter((exercise) => exercise.checkGameConfiguration != undefined && exercise.checkGameConfiguration != null);
     const refactoringGameExercises = shuffledExercises.filter((exercise) => exercise.refactoringGameConfiguration !== undefined && exercise.refactoringGameConfiguration !== null);
 
-    //console.log('all', this.exercises)
     console.log("check-game", checkGameExercises);
     console.log("refactor", refactoringGameExercises);
 
@@ -178,18 +179,17 @@ export class TestGameComponent implements OnInit{
       data: exercise
     }));
 
-    //console.log("selected check-game", selectedCheckGameExercises);
-    //console.log("selected ref-game", selectedRefactoringExercises);
-
-
+    
     this.exercises = [...selectedCheckGameExercises, ...selectedRefactoringExercises];
     this.exercises = this.exercises.sort(() => Math.random() - 0.5);
     this.currentExerciseIndex = 0;
   }
 
 
+
   
-   nextExercise(): void {
+  
+  nextExercise(): void {
     this.saveCurrentState();
 
     if (this.currentExerciseIndex < this.exercises.length - 1){
@@ -214,7 +214,6 @@ export class TestGameComponent implements OnInit{
           this.submitTest();
         } else {
             this.currentLevel++;
-            console.log('livello', this.currentLevel);
             this.loadExercisesByLevel(this.currentLevel);
         }
     }
@@ -230,17 +229,15 @@ export class TestGameComponent implements OnInit{
 
       const previousState = this.exerciseStates[this.currentExerciseIndex];
       if (previousState ) {
-        this.selectedAnswer = previousState.selectedAnswer || null; // Ripristina la risposta
+        this.selectedAnswer = previousState.selectedAnswer || null;
         this.completedCurrentExercise = previousState.completeCurrentExercise || false;
-        if(this.exercises[this.currentExerciseIndex]?.type === 'refactoring-game'){
-          //this.refactoringGameCore.loadCode();
-        }
       }    
     } else {
       console.log('Nessun esercizio precedente.');
     }
   }
   
+
 
   submitTest(): void {
     this.showNotification('Test consegnato! Grazie per aver completato il Multi-Level Game.');
@@ -255,10 +252,9 @@ export class TestGameComponent implements OnInit{
       exerciseName: this.exercises[this.currentExerciseIndex].data.exerciseId || '',
       correctAnswersList: this.correctAnswersList,
       wrongAnswersList: this.wrongAnswersList,
-      //completedExercisesList: this.completedExercisesList,
 
       completedCheckExercisesList: this.completedCheckGameExercises,
-    completedRefactoringExercisesList: this.completedRefactoringExercises,
+      completedRefactoringExercisesList: this.completedRefactoringExercises,
 
       completionTime: this.formatTime(elapsedTime),
       type: this.exercises[this.currentExerciseIndex].type
@@ -272,58 +268,67 @@ export class TestGameComponent implements OnInit{
   
 
 
-    saveCurrentState(): void {
-      const currentExercise = this.exercises[this.currentExerciseIndex];
-    console.log('tipo', currentExercise.type);
+  saveCurrentState(): void {
+    const currentExercise = this.exercises[this.currentExerciseIndex];
+
+    const selectedAnswers = this.completedCheckGameExercises.map((exercise: any) => {
+      return {
+        exerciseName: exercise.exerciseName,
+        selectedAnswers: exercise.questions.map((question: any) => ({
+          questionCode: question.questionCode,
+          selectedAnswer: question.selectedAnswer,
+        })) || [],
+      };
+    }) || [];
           
-      const testState = {
-        currentExerciseIndex: this.currentExerciseIndex,
+    const testState = {
+      currentExerciseIndex: this.currentExerciseIndex,
       currentLevel: this.currentLevel,
+      selectedAnswers: selectedAnswers,
       correctAnswersList: this.correctAnswersList,
       wrongAnswersList: this.wrongAnswersList,
-      //completedExercisesList: this.completedExercisesList,
       completedCheckGameExercisesList: this.completedCheckGameExercises,
       completedRefactoringExercisesList: this.completedRefactoringExercises,
-      //exercises: this.exercises,
+      exercises : this.exercises,
       timeLeft: this.timeLeft,
       startTime: this.startTime.toISOString()
-      };
+    };
     
-      localStorage.setItem('multiGameTestState', JSON.stringify(testState));
-      console.log('Stato del test salvato:', testState);
-    }
-
-
-
-    
-startTimer(): void {
-  this.timer = setInterval(() => {
-    if (this.timeLeft > 0) {
-      this.timeLeft--;
-    } else {
-      clearInterval(this.timer);
-      this.timeExpired();
-    }
-  }, 1000);
-}
-
-
-timeExpired(): void {
-  alert('Tempo scaduto! Il test verrà inviato automaticamente.');
-  this.submitTest();
-}
-
-formatTime(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-  return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-}
-
-ngOnDestroy(): void {
-  if (this.timer) {
-    clearInterval(this.timer);
+    localStorage.setItem('multiGameTestState', JSON.stringify(testState));
+    console.log('Stato del test salvato:', testState);
   }
-}
+
+
+
+    
+  startTimer(): void {
+    this.timer = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        clearInterval(this.timer);
+        this.timeExpired();
+      }
+    }, 1000);
+  }
+
+
+  timeExpired(): void {
+    alert('Tempo scaduto! Il test verrà inviato automaticamente.');
+    this.submitTest();
+  }
+
+  formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  ngOnDestroy(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
 
 
 
@@ -344,40 +349,48 @@ ngOnDestroy(): void {
     );
   
     if (existingIndex !== -1) {
-      // Aggiorna l'esercizio esistente.
       this.completedCheckGameExercises[existingIndex] = data;
     } else { 
       this.completedCheckGameExercises.push(data);
 
-    // Itera attraverso le domande ricevute e popola le liste
-  data.questions.forEach((question: any) => {
-    const { questionCode, correctAnswer, selectedAnswer } = question;
-
-    if (correctAnswer && selectedAnswer) {
-      if (correctAnswer === selectedAnswer) {
-        this.correctAnswersList.push({
-          exerciseId: this.normalizeExerciseId(data.exerciseName),
-          questionText: questionCode,
-          selectedAnswer: selectedAnswer,
-          correctAnswer: correctAnswer,
-          level: this.currentLevel,
-        });
-      } else {
-        this.wrongAnswersList.push({
-          exerciseId: this.normalizeExerciseId(data.exerciseName),
-          questionText: questionCode,
-          selectedAnswer: selectedAnswer,
-          correctAnswer: correctAnswer,
-          level: this.currentLevel,
-        });
-      }
-    } else {
-      console.error(
-        `Errore: Domanda o risposta mancante per ${questionCode}.`
+      this.selectedAnswersByExercise[data.exerciseName] = data.questions.reduce(
+        (acc: { [questionCode: string]: string }, question: any) => {
+          if (question.selectedAnswer) {
+            acc[question.questionCode] = question.selectedAnswer;
+          }
+          return acc;
+        },
+        {}
       );
-    }
-  });
-}  
+
+      data.questions.forEach((question: any) => {
+        const { questionCode, correctAnswer, selectedAnswer } = question;
+
+        if (correctAnswer && selectedAnswer) { 
+          if (correctAnswer === selectedAnswer) {
+            this.correctAnswersList.push({
+              exerciseId: this.normalizeExerciseId(data.exerciseName),
+              questionText: questionCode,
+              selectedAnswer: selectedAnswer,
+              correctAnswer: correctAnswer,
+              level: this.currentLevel,
+            });
+          } else {
+            this.wrongAnswersList.push({
+              exerciseId: this.normalizeExerciseId(data.exerciseName),
+              questionText: questionCode,
+              selectedAnswer: selectedAnswer,
+              correctAnswer: correctAnswer,
+              level: this.currentLevel,
+            });
+          }
+      } else {
+        console.error(
+          `Errore: Domanda o risposta mancante per ${questionCode}.`
+        );
+      }
+    });
+  }  
 
     this.saveCurrentState();
   }
@@ -389,13 +402,30 @@ ngOnDestroy(): void {
     );
   
     if (existingIndex !== -1) {
-      // Aggiorna l'esercizio esistente.
       this.completedRefactoringExercises[existingIndex] = data;
     } else { 
       this.completedRefactoringExercises.push(data);
     
       this.saveCurrentState();
     }
+  }
+  
+
+
+  getSelectedAnswersForCurrentExercise(): { [questionCode: string]: string } {
+    const currentExercise = this.exercises[this.currentExerciseIndex]?.data?.exerciseId;
+  
+    const exerciseAnswers = this.completedCheckGameExercises.find(
+      (exercise: any) => exercise.exerciseName === currentExercise
+    );
+  
+    if (!exerciseAnswers) {
+      return {};
+    }
+      return exerciseAnswers.questions.reduce((acc: any, question: any) => {
+      acc[question.questionCode] = question.selectedAnswer;
+      return acc;
+    }, {});
   }
   
 
