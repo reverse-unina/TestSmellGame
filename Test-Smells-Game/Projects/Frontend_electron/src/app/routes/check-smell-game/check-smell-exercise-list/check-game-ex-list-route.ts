@@ -17,7 +17,7 @@ import {firstValueFrom} from "rxjs";
   styleUrls: ['./check-game-ex-list-route.component.css']
 })
 export class CheckGameExListRoute implements OnInit {
-  config!: levelConfig;
+  config!: ToolConfig;
   exercises: CheckGameExerciseConfig[] = [];
   exercisesFromLocal: CheckGameExerciseConfig[] = [];
   serverError: string | undefined;
@@ -67,7 +67,7 @@ export class CheckGameExListRoute implements OnInit {
       // GET EXERCISES LIST FROM GIT
       this.waitingForServer = true;
       this.exerciseService.getCheckGameExercises().subscribe({
-        next: (response: CheckGameExerciseConfig[]) => {
+        next: (response: CheckGameExerciseConfiguration[]) => {
           this.waitingForServer = false;
           this.serverError = undefined;
           this.exercises = response.sort(

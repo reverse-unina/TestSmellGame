@@ -13,13 +13,18 @@ import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} from "../
 })
 export class LeaderboardRouteComponent implements OnInit {
 
-  solutions!: Solution[]
+  refactoringSolutions!: RefactoringSolution[];
+  checkSmellStatistics!: CheckSmellStatistics[];
+  refactoringExerciseConfiguration!: RefactoringGameExerciseConfiguration;
+  checkSmellExerciseConfiguration!: CheckGameExerciseConfiguration;
+
   exerciseCode!: string;
   testingCode!: string;
   exerciseName = this.route.snapshot.params['exercise'];
   isAutoValutative!: boolean;
-  exerciseConfiguration!: RefactoringGameExerciseConfiguration;
+
   isAssignmentsRoute!: boolean;
+  isCheckSmellRoute!: boolean
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -30,35 +35,35 @@ export class LeaderboardRouteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Leaderboard page");
     this.isAssignmentsRoute = this.router.url.includes('assignments');
-    this.getConfiguration();
+    this.isCheckSmellRoute = this.router.url.includes('check-game');
 
-    if(!this.isAutoValutative)
-      this.retrieveCode();
+    if (this.isCheckSmellRoute) {
+      this.leaderboardService.getCheckSmellSolutionsByExerciseName(this.exerciseName).subscribe(
+        data => {
+          this.checkSmellStatistics = data;
+        }
+      );
 
-  }
+    } else {
+      this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(
+        data=>{
+          this.refactoringExerciseConfiguration = data;
+          this.isAutoValutative = this.refactoringExerciseConfiguration.autoValutative;
+          this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(data=>{
+            this.refactoringSolutions = data;
+          })
+        })
 
-  retrieveCode(){
-    this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
-      this.exerciseCode = data;
-    });
-    this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
-      this.testingCode = data
-    })
-  }
+      if(!this.isAutoValutative) {
+        this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
+          this.exerciseCode = data;
+        });
+        this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
+          this.testingCode = data
+        })
+      }
 
-  setupConfigFiles(data:any){
-    this.exerciseConfiguration = data;
-    this.isAutoValutative = this.exerciseConfiguration.autoValutative;
-    this.leaderboardService.getSolutionsByExerciseName(this.exerciseConfiguration.exerciseId).subscribe(data=>{
-      this.solutions = data;
-      console.log("Data: ", data);
-    })
-
-  }
-
-  getConfiguration() {
-    this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data=>{this.setupConfigFiles(data)})
+    }
   }
 }

@@ -3,7 +3,7 @@ import {MissionService} from "../../../services/missions/mission.service";
 import {MissionConfiguration, MissionStatus} from "../../../model/missions/mission.model";
 import {UserService} from "../../../services/user/user.service";
 import {firstValueFrom} from "rxjs";
-import {CheckGameExerciseConfig} from "../../../model/exercise/ExerciseConfiguration.model";
+import {CheckGameExerciseConfiguration} from "../../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-missions-list-route',

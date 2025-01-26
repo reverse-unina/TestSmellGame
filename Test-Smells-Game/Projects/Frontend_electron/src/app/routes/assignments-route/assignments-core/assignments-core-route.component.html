@@ -47,8 +47,8 @@
             <mat-divider></mat-divider>
 
             <div style="margin-top: 20px">
-              <button style="margin: 10px" type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
-              <button style="margin: 10px" type="button" class="btn btn-primary" [disabled]="submitIsDisabled()" (click)="submitRefactoringAssignment()">{{ 'Finish' | translate }}</button>
+              <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
+              <button type="button" class="btn btn-primary" [disabled]="submitIsDisabled()" (click)="submitRefactoringAssignment()">{{ 'Finish' | translate }}</button>
             </div>
 
             <mat-divider></mat-divider>
@@ -107,20 +107,6 @@
             </div>
           </div>
         </div>
-
-        <ng-template #showResult>
-          <h1>{{ 'Score' | translate }}: {{Math.round((checkSmellService.score * 100) / checkSmellService.assignmentScore) + '/100'}}</h1>
-          <div *ngFor="let question of checkSmellService.questions" class="card">
-
-            <app-check-smell-question [injectedCode]="question.questionCode">
-            </app-check-smell-question>
-
-            <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers"
-                                         [showBackground]="true">
-            </app-check-smell-answer-list>
-          </div>
-        </ng-template>
-
       </div>
     </div>
   </div>

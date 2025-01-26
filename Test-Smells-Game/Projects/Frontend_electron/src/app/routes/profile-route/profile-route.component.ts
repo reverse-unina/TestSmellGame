@@ -17,7 +17,7 @@ import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
 })
 export class ProfileRouteComponent implements OnInit {
 
-  config!: levelConfig;
+  config!: ToolConfig;
   user!: User;
   userLevel!: string;
   missionConfigurations!: MissionConfiguration[];
@@ -41,7 +41,7 @@ export class ProfileRouteComponent implements OnInit {
       this.user = user;
     });
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+    this.config = await firstValueFrom(this.exerciseService.getToolConfig());
     this.setUserLevel();
     console.log('LevelConfig:', this.config);
 

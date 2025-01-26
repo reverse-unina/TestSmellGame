@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
 import {Subscription} from "rxjs";
 import {UserService} from "../../services/user/user.service";
 import {ExerciseService} from "../../services/exercise/exercise.service";
 import {User} from "../../model/user/user.model";
 import {HttpClient} from '@angular/common/http';
-import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import {ToolConfig} from "src/app/model/toolConfig/tool.config.model"
 
 @Component({
   selector: 'app-topbar',
   templateUrl: './topbar.component.html',
   styleUrls: ['./topbar.component.css']
 })
-export class TopbarComponent implements OnInit {
-  config!: levelConfig;
+export class TopbarComponent implements OnInit, OnDestroy {
+  config!: ToolConfig;
   isAuthenticated = false;
   currentUser: User | null = null;
 
@@ -33,8 +33,8 @@ export class TopbarComponent implements OnInit {
       this.currentUser = user;
     });
     console.log("Component created");
-    this.exerciseService.getLevelConfig().subscribe(
-                              (data: levelConfig) => {
+    this.exerciseService.getToolConfig().subscribe(
+                              (data: ToolConfig) => {
                                   this.config = data;
                                   console.log('LevelConfig:', this.config);
                               },

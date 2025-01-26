@@ -22,7 +22,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
               private zone: NgZone,
               private fb: FormBuilder) { }
 
-  config!: levelConfig;
+  protected config!: ToolConfig;
   exercises: RefactoringGameExerciseConfiguration[] = [];
   exercisesFromLocal: RefactoringGameExerciseConfiguration[] = [];
   serverError: string | undefined;
@@ -97,8 +97,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
 
     }
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
-  }
+    this.config = await firstValueFrom(this.exerciseService.getToolConfig());  }
 
   isExerciseEnabled(level: number): boolean {
     const userExp = this.userService.user.value.exp;

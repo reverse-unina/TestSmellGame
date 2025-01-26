@@ -1,24 +1,41 @@
-<div *ngIf="solutions">
-  <div *ngIf="solutions.length === 0">
-    <br><br><br><br><br><br><br><br>
-    <h1 style="font-size: 20px; text-align: center;">
-      {{ 'There are currently no solutions for this exercise' | translate }}
-    </h1>
-  </div>
+<div *ngIf="isCheckSmellRoute; else refactoringSolution">
+  <div *ngIf="checkSmellStatistics">
+    <div *ngIf="checkSmellStatistics.length === 0">
+      <br><br><br><br><br><br><br><br>
+      <h1 style="font-size: 20px; text-align: center;">
+        {{ 'There are currently no solutions for this exercise' | translate }}
+      </h1>
+    </div>
 
-  <div *ngFor="let solution of solutions; let i = index">
-    <app-solution playerName="{{solution.playerName}}"
-                  [comments]="solution.commentList"
-                  exerciseCode="{{testingCode}}"
-                  editedCode="{{solution.refactoredCode}}"
-                  [solutionId]=solution.solutionId
-                  creationTimestamp="{{solution.creationTimestamp}}"
-                  [upVotes]=solution.upVotes
-                  [downVotes]=solution.downVotes
-                  [score]="solution.score"
-                  [refactoringResult]="solution.refactoringResult"
-                  [smells] = "solution.smells"
-                  [isAutoValutative] = "this.isAutoValutative">
-    </app-solution>
+    <app-check-smell-solution [checkSmellStatistics]="checkSmellStatistics">
+
+    </app-check-smell-solution>
   </div>
 </div>
+
+<ng-template #refactoringSolution>
+  <div *ngIf="refactoringSolutions">
+    <div *ngIf="refactoringSolutions.length === 0">
+      <br><br><br><br><br><br><br><br>
+      <h1 style="font-size: 20px; text-align: center;">
+        {{ 'There are currently no solutions for this exercise' | translate }}
+      </h1>
+    </div>
+
+    <div *ngFor="let refactoringSolution of refactoringSolutions; let i = index">
+      <app-solution playerName="{{refactoringSolution.playerName}}"
+                    [comments]="refactoringSolution.commentList"
+                    exerciseCode="{{testingCode}}"
+                    editedCode="{{refactoringSolution.refactoredCode}}"
+                    [solutionId]=refactoringSolution.solutionId
+                    creationTimestamp="{{refactoringSolution.creationTimestamp}}"
+                    [upVotes]=refactoringSolution.upVotes
+                    [downVotes]=refactoringSolution.downVotes
+                    [score]="refactoringSolution.score"
+                    [refactoringResult]="refactoringSolution.refactoringResult"
+                    [smells] = "refactoringSolution.smells"
+                    [isAutoValutative] = "this.isAutoValutative">
+      </app-solution>
+    </div>
+  </div>
+</ng-template>

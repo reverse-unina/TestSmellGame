@@ -122,12 +122,15 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
   }
 
   compile(): void {
-    this.refactoringService.compileExercise(this.testing.editorComponent, this.compileType).then(
+    this.refactoringService.compileExercise("Refactoring game", this.testing.editorComponent).then(
       () => {
+        /*
         if (this.refactoringService.isExercisePassed())
           this.successAlert.show();
         else
           this.failAlert.show();
+
+         */
       }
     );
   }
@@ -138,7 +141,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
     const score: number = Math.abs(this.refactoringService.smellNumber - this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed);
 
     if(this.refactoringService.exerciseIsCompiledSuccessfully && this.refactoringService.isExercisePassed()){
-      this.leaderboardService.saveSolution(this.refactoringService.compiledExercise,
+      this.leaderboardService.saveRefactoringSolution(this.refactoringService.compiledExercise,
         this.refactoringService.exerciseConfiguration,
         score,
         Boolean(this.refactoringService.refactoringResult),
@@ -157,16 +160,41 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
               const currentScore = result;
               this.leaderboardService.updateBestRefactoringScore(this.userService.user.value.userName, this.exerciseName, score).subscribe(
                 (updatedScore) => {
+                  this.exerciseService.logEvent("Refactoring game", this.userService.user.value.userName, "archived " + score + " points in refactoring exercise " + this.exerciseName).subscribe(
+                    next => {
+                      console.log(JSON.stringify(next));
+                  });
+
                   console.log("Current score: ", currentScore);
                   console.log("Updated score: ", updatedScore);
                   if (updatedScore.refactoringScore > currentScore.refactoringScore) {
                     this.userService.increaseUserExp(updatedScore.refactoringScore - currentScore.refactoringScore).then(
                       success => {
-                        if (this.userService.hasUserLevelledUp())
-                          this.achievementAlert.show("Level Up!", "Congratulation, you have levelled up!");
+                        this.exerciseService.logEvent("Refactoring game", this.userService.user.value.userName, "increased refactoring game mode points by " + (updatedScore.refactoringScore - currentScore.refactoringScore)).subscribe(
+                          next => {
+                            console.log(JSON.stringify(next));
+                        });
 
-                        if (this.userService.hasUserUnlockedBadge())
+                        this.exerciseService.logEvent("Refactoring game", this.userService.user.value.userName, "increased experience points by " + (updatedScore.refactoringScore - currentScore.refactoringScore)).subscribe(
+                          next => {
+                            console.log(JSON.stringify(next));
+                        });
+
+                        if (this.userService.hasUserLevelledUp()) {
+                          this.achievementAlert.show("Level Up!", "Congratulation, you have levelled up!");
+                          this.exerciseService.logEvent("Refactoring game", this.userService.user.value.userName, "has levelled up").subscribe(
+                            next => {
+                              console.log(JSON.stringify(next));
+                          });
+                        }
+
+                        if (this.userService.hasUserUnlockedBadge()) {
                           this.achievementAlert.show("Badge Unblocked!", "You have unlocked a new badge, view it on your profile page!");
+                          this.exerciseService.logEvent("Refactoring game", this.userService.user.value.userName, "has unlocked a new badge").subscribe(
+                            next => {
+                              console.log(JSON.stringify(next));
+                          });
+                        }
                       }
                     );
                   }
@@ -175,15 +203,17 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
             }
           );
 
-          this.exerciseService.logEvent(this.userService.user.value.userName, 'Completed ' + this.exerciseName + ' in refactoring game mode').subscribe({
-            next: response => console.log('Log event response:', response),
-            error: error => console.error('Error submitting log:', error)
-          });
+          this.exerciseService.logEvent("Refactoring game", this.userService.user.value.userName,
+            `submitted refactoring exercise ${this.exerciseName} in refactoring game mode with score ${score}`)
+            .subscribe({
+              next: response => console.log('Log event response:', response),
+              error: error => console.error('Error submitting log:', error)
+            });
         },error => {
           this.refactoringService.showPopUp("Server has a problem");
           this.refactoringService.stopLoading()
         });
-    }else{
+    } else {
       this.refactoringService.showPopUp("To save your solution in solutions repository you have to complete the exercise");
       this.refactoringService.stopLoading()
     }

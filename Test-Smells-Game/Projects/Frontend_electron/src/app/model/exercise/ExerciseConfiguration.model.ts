@@ -43,7 +43,7 @@ class RefactoringGameConfiguration {
   }
 }
 
-export class CheckGameExerciseConfig {
+export class CheckGameExerciseConfiguration {
   exerciseId!: string;
   checkGameConfiguration!: {
     'questions': Question[],
