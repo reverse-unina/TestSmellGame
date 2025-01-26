@@ -134,7 +134,7 @@ public class ExerciseController {
         }
     }
 
-    @PostMapping("/refactoring/submit/")
+    @PostMapping("/refactoring/submit")
     public ResponseEntity<Object> submitRefactoringAssignment(
             @RequestParam("gameMode") String gameMode,
             @RequestParam("studentName") String studentName,
@@ -181,7 +181,7 @@ public class ExerciseController {
         }
     }
 
-    @PostMapping("/checksmell/submit/")
+    @PostMapping("/checksmell/submit")
     public ResponseEntity<Object> submitCheckSmellAssignment(
             @RequestParam("gameMode") String assignmentId,
             @RequestParam("studentName") String studentName,
