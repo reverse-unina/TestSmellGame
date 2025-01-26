@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface RefactoringSolutionRepository extends JpaRepository<RefactoringSolution,Long> {
-  @Query(value = "SELECT * FROM solution S WHERE S.exercise_id = ?1 ORDER BY S.score DESC", nativeQuery = true)
+  @Query(value = "SELECT * FROM refactoring_solution S WHERE S.exercise_id = ?1 ORDER BY S.score DESC", nativeQuery = true)
   List<RefactoringSolution> findSolutionsByExerciseId(String exerciseId);
 
 }

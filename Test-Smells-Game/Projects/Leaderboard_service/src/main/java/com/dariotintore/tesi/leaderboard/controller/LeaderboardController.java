@@ -44,8 +44,8 @@ public class LeaderboardController {
     }
 
     @PostMapping("/refactoring")
-    public void saveRefactoringSolutionByExercise(@RequestBody RefactoringSolutionDTO solution){
-      solutionService.saveSolutionForExerciseName(solution);
+    public ResponseEntity<RefactoringSolution> saveRefactoringSolutionByExercise(@RequestBody RefactoringSolutionDTO solution){
+      return ResponseEntity.ok(solutionService.saveSolutionForExerciseName(solution));
     }
 
     @PostMapping("/checksmell")
