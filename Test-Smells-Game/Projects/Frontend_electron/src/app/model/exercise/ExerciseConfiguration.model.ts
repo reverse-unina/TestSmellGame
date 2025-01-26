@@ -51,8 +51,8 @@ export class CheckGameExerciseConfiguration {
   };
   autoValutative!: boolean;
 
-  static fromJson(json: any): CheckGameExerciseConfig {
-    const config = new CheckGameExerciseConfig();
+  static fromJson(json: any): CheckGameExerciseConfiguration {
+    const config = new CheckGameExerciseConfiguration();
 
     config.exerciseId = json.exerciseId;
     config.checkGameConfiguration = json.check_game_configuration;

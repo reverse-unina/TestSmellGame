@@ -53,7 +53,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
     if (this.checkSmellService.isExercisePassed()) {
       this.successAlert.show();
 
-      this.leaderboardService.saveCheckSmellSolution(this.exerciseName, this.checkSmellService.score, stat[0], stat[1], stat[2]).subscribe(
+      this.leaderboardService.saveCheckSmellSolution(this.exerciseName, Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore), stat[0], stat[1], stat[2]).subscribe(
         data => {
           console.log("Updated solution", data);
         }

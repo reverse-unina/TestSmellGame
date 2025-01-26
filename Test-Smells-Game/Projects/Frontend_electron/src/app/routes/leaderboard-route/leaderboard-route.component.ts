@@ -2,9 +2,12 @@ import {Component, NgZone, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
-import {Solution} from "../../model/solution/solution";
+import {CheckSmellStatistics, RefactoringSolution} from "../../model/solution/solution";
 import {ExerciseService} from "../../services/exercise/exercise.service";
-import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} from "../../model/exercise/ExerciseConfiguration.model";
+import {
+  RefactoringGameExerciseConfiguration,
+  CheckGameExerciseConfiguration
+} from "../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-leaderboard-route',
@@ -52,6 +55,7 @@ export class LeaderboardRouteComponent implements OnInit {
           this.isAutoValutative = this.refactoringExerciseConfiguration.autoValutative;
           this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(data=>{
             this.refactoringSolutions = data;
+            console.log("Refactoring solutions received: ", data);
           })
         })
 

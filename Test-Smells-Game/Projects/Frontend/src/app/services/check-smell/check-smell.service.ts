@@ -65,6 +65,8 @@ export class CheckSmellService {
 
     this.assignmentScore = 0;
     let score = 0;
+
+    console.log("questions: ", this.questions);
     this.questions.forEach(question => {
       let currentCorrectAnswers = 0;
       let givenAnswersScore = 0;
@@ -111,48 +113,48 @@ export class CheckSmellService {
   }
 
   generateCheckSmellReport(): string {
-      const studentScore = Math.round((this.score * 100) / this.assignmentScore);
-      const assignmentScore = this.assignmentScore;
-      const questions = this.questions;
+    const studentScore = Math.round((this.score * 100) / this.assignmentScore);
+    const assignmentScore = this.assignmentScore;
+    const questions = this.questions;
 
-      let content = `Student score: ${studentScore}\n`;
-      content += `Assignment total score: ${assignmentScore}\n\n`;
+    let content = `Student score: ${studentScore}\n`;
+    content += `Assignment total score: ${assignmentScore}\n\n`;
 
-      questions.forEach(question => {
-        let questionPoints: number = 0;
-        let givenPoints: number = 0;
-        let lostPoints: number = 0;
+    questions.forEach(question => {
+      let questionPoints: number = 0;
+      let givenPoints: number = 0;
+      let lostPoints: number = 0;
 
-        content += `Question ${questions.indexOf(question)}:\n`;
+      content += `Question ${questions.indexOf(question)}:\n`;
 
-        content += "\tGiven answers: [";
-        question.answers.forEach(ans => {
-          if (ans.isChecked) {
-            content += `${ans.answerText}, `;
-            if (ans.correct)
-              givenPoints += 1;
-            else
-              lostPoints += 0.5;
-          }
-        });
-        content = content.substring(0, content.length-2);
-        content += "]\n";
-
-        content += "\tCorrect answers: [";
-        question.answers.forEach(ans => {
-          ans.correct? content += `${ans.answerText}, ` : "";
-          questionPoints++;
-        });
-        content = content.substring(0, content.length-2);
-        content += "]\n";
-
-        content += `\tQuestion points: ${questionPoints}\n`;
-        content += `\tPoint from correct answers: ${givenPoints}\n`;
-        content += `\tPoints lost from incorrect answers: ${lostPoints}\n`
-        content += `\tTotal points given: ${Math.min(0, givenPoints - lostPoints)}\n\n`;
+      content += "\tGiven answers: [";
+      question.answers.forEach(ans => {
+        if (ans.isChecked) {
+          content += `${ans.answerText}, `;
+          if (ans.correct)
+            givenPoints += 1;
+          else
+            lostPoints += 0.5;
+        }
       });
+      content = content.substring(0, content.length-2);
+      content += "]\n";
 
-      return content;
-    }
+      content += "\tCorrect answers: [";
+      question.answers.forEach(ans => {
+        ans.correct? content += `${ans.answerText}, ` : "";
+        ans.correct? questionPoints++ : 0;
+      });
+      content = content.substring(0, content.length-2);
+      content += "]\n";
+
+      content += `\tQuestion points: ${questionPoints}\n`;
+      content += `\tPoint from correct answers: ${givenPoints}\n`;
+      content += `\tPoints lost from incorrect answers: ${lostPoints}\n`
+      content += `\tTotal points given: ${Math.max(0, givenPoints - lostPoints)}\n\n`;
+    });
+
+    return content;
+  }
 
 }

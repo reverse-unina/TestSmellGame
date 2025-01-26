@@ -49,7 +49,7 @@ export class LeaderboardService {
       "smells": smells
     };
 
-    return this.http.post(environment.leaderboardServiceUrl + +'/leaderboard/refactoring', body, { headers: this.getHttpHeaders() });
+    return this.http.post(environment.leaderboardServiceUrl + '/leaderboard/refactoring', body, { headers: this.getHttpHeaders() });
   }
 
   saveCheckSmellSolution(exerciseId: string,

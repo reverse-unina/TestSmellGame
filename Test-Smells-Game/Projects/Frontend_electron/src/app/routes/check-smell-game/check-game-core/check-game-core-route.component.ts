@@ -63,14 +63,19 @@ export class CheckGameCoreRouteComponent implements OnInit, OnDestroy {
     this.exerciseCompleted = true;
     const stat = this.checkSmellService.calculateScore();
 
+    console.log("Log tries: ", this.checkSmellService.config.logTries);
     if (this.checkSmellService.config.logTries) {
-      this.exerciseService.submitCheckSmellExercise("Check game", this.userService.user.value.userName, this.exerciseName, this.checkSmellService.generateCheckSmellReport());
+      this.exerciseService.submitCheckSmellExercise("Check game", this.userService.user.value.userName, this.exerciseName, this.checkSmellService.generateCheckSmellReport()).subscribe(
+        data => {
+          console.log("logged files: ", data);
+        }
+      );
     }
 
     if (this.checkSmellService.isExercisePassed()) {
       this.successAlert.show();
 
-      this.leaderboardService.saveCheckSmellSolution(this.exerciseName, this.checkSmellService.score, stat[0], stat[1], stat[2]).subscribe(
+      this.leaderboardService.saveCheckSmellSolution(this.exerciseName,  Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore), stat[0], stat[1], stat[2]).subscribe(
         data => {
           console.log("Updated solution", data);
         }

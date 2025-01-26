@@ -269,7 +269,7 @@ export class MissionsCoreRouteComponent implements OnInit {
   }
 
   compileRefactoringExercise(): void {
-    this.refactoringService.compileExercise(`Mission ${this.missionId} - step ${this.currentStep}`, this.testing.editorComponent).then(
+    this.refactoringService.compileExercise(`Mission ${this.missionId} - step ${this.currentStep}`, this.testing.editorComponent, this.compileType).then(
       () => {
         if (this.isExercisePassed()) {
           // this.successAlert.show('You have completed successfully the mission step.');

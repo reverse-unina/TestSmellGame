@@ -4,9 +4,9 @@ import {ElectronService} from "ngx-electron";
 import {FormBuilder, NgForm} from "@angular/forms";
 import {RefactoringGameExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
-import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 import {GithubRetrieverComponent} from "../../../components/github-retriever/github-retriever.component";
 import {firstValueFrom} from "rxjs";
+import {ToolConfig} from "../../../model/toolConfig/tool.config.model";
 
 
 @Component({
@@ -22,7 +22,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
               private zone: NgZone,
               private fb: FormBuilder) { }
 
-  protected config!: ToolConfig;
+  config!: ToolConfig;
   exercises: RefactoringGameExerciseConfiguration[] = [];
   exercisesFromLocal: RefactoringGameExerciseConfiguration[] = [];
   serverError: string | undefined;

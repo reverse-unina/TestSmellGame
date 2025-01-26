@@ -55,7 +55,7 @@ export class ExerciseService {
     const headers = new HttpHeaders({
       'ngrok-skip-browser-warning': 'true'
     });
-    return this.http.get<CheckGameExerciseConfig[]>(environment.exerciseServiceUrl + '/exercises/checksmell', { headers: headers })
+    return this.http.get<CheckGameExerciseConfiguration[]>(environment.exerciseServiceUrl + '/exercises/checksmell', { headers: headers })
   }
 
   getMainClass(exerciseId: string) {
@@ -102,7 +102,7 @@ export class ExerciseService {
       headers: headers,
       responseType: 'json'
     };
-    return this.http.get<CheckGameExerciseConfig>(environment.exerciseServiceUrl + '/exercises/checksmell/' + exerciseId, HTTPOptions);
+    return this.http.get<CheckGameExerciseConfiguration>(environment.exerciseServiceUrl + '/exercises/checksmell/' + exerciseId, HTTPOptions);
   }
 
   getLeaningContentById(learningId: string): Observable<LearningContent> {
@@ -125,11 +125,12 @@ export class ExerciseService {
   }
 
 
-  logEvent(player: string, eventDescription: string): Observable<any> {
+  logEvent(gameMode: string, player: string, eventDescription: string): Observable<any> {
     const headers = new HttpHeaders({
       'ngrok-skip-browser-warning': 'true'
     });
     const eventLog = {
+      gameMode,
       player,
       eventDescription,
       timestamp: new Date().toISOString()
@@ -144,7 +145,7 @@ export class ExerciseService {
     formData.append('exerciseId', exerciseId);
     formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
 
-    return this.http.post(environment.exerciseServiceUrl + '/exercises/checksmell/submit/', formData);
+    return this.http.post(environment.exerciseServiceUrl + '/exercises/checksmell/submit', formData);
   }
 
   submitRefactoringExercise(gameMode: string, studentName: string, exerciseId: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
@@ -159,6 +160,6 @@ export class ExerciseService {
 
     console.log("submitting");
 
-    return this.http.post(environment.exerciseServiceUrl + '/exercises/refactoring/submit/', formData);
+    return this.http.post(environment.exerciseServiceUrl + '/exercises/refactoring/submit', formData);
   }
 }

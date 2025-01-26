@@ -15,10 +15,9 @@
           <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
           <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
         </div>
-
-        <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
       </div>
 
+      <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Exercise statistics' | translate }}</button>
     </div>
   </div>
 
@@ -28,16 +27,19 @@
 
   <ng-template #showResult>
     <h1>{{ 'Score' | translate }}: {{Math.round((checkSmellService.score * 100) / checkSmellService.assignmentScore) + '/100'}}</h1>
-    <div *ngFor="let question of checkSmellService.questions" class="card">
+    <div class="card">
+      <div *ngFor="let question of checkSmellService.questions" class="card">
 
-      <app-check-smell-question [injectedCode]="question.questionCode">
-      </app-check-smell-question>
+        <app-check-smell-question [injectedCode]="question.questionCode">
+        </app-check-smell-question>
 
-      <app-check-smell-answer-list [questionAnswers]="question.answers"
-                                   [showBackground]="true" [disabled]="true">
-      </app-check-smell-answer-list>
+        <app-check-smell-answer-list [questionAnswers]="question.answers"
+                                     [showBackground]="true" [disabled]="true">
+        </app-check-smell-answer-list>
 
-      <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
+      </div>
+
+      <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Exercise statistics' | translate }}</button>
     </div>
   </ng-template>
 

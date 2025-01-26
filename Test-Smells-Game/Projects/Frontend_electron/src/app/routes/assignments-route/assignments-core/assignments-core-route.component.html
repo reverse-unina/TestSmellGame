@@ -90,7 +90,7 @@
         <h1>{{exerciseName}}</h1>
         <div *ngIf="serverError === undefined; else error">
           <div *ngIf="checkSmellService.exerciseConfiguration">
-            <div *ngIf="!checkSmellService.exerciseCompleted else showResult" class="card">
+            <div *ngIf="!checkSmellService.exerciseCompleted" class="card">
 
               <app-check-smell-question #testing [editorHeader]="exerciseName+'.java'" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
               </app-check-smell-question>

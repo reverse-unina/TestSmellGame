@@ -5,11 +5,10 @@ import {Router} from "@angular/router";
 import {ElectronService} from "ngx-electron";
 import { HttpClient } from '@angular/common/http';
 import {FormBuilder, NgForm} from "@angular/forms";
-import {CheckGameExerciseConfig} from 'src/app/model/exercise/ExerciseConfiguration.model';
+import {CheckGameExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import {GithubRetrieverComponent} from "../../../components/github-retriever/github-retriever.component";
-import {environment} from "../../../../environments/environment.prod";
-import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
 import {firstValueFrom} from "rxjs";
+import {ToolConfig} from "../../../model/toolConfig/tool.config.model";
 
 @Component({
   selector: 'app-check-smell-game-exercise-list',
@@ -18,8 +17,8 @@ import {firstValueFrom} from "rxjs";
 })
 export class CheckGameExListRoute implements OnInit {
   config!: ToolConfig;
-  exercises: CheckGameExerciseConfig[] = [];
-  exercisesFromLocal: CheckGameExerciseConfig[] = [];
+  exercises: CheckGameExerciseConfiguration[] = [];
+  exercisesFromLocal: CheckGameExerciseConfiguration[] = [];
   serverError: string | undefined;
   waitingForServer!: boolean;
   enableGit = false;
@@ -45,7 +44,7 @@ export class CheckGameExListRoute implements OnInit {
     if (this.exerciseType == 2){
       this.waitingForServer = true;
       this.exerciseService.getCheckGameExercises().subscribe({
-        next: (response: CheckGameExerciseConfig[]) => {
+        next: (response: CheckGameExerciseConfiguration[]) => {
           this.waitingForServer = false;
           this.serverError = undefined;
           this.exercises = response.sort(
@@ -86,7 +85,7 @@ export class CheckGameExListRoute implements OnInit {
         }
       });
       this.enableGetExercisesFromGit()
-      this._electronService.ipcRenderer.on('getCheckSmellExercisesFromLocal', (event, data: CheckGameExerciseConfig[])=>{
+      this._electronService.ipcRenderer.on('getCheckSmellExercisesFromLocal', (event, data: CheckGameExerciseConfiguration[])=>{
         this.zone.run(()=>{
           if (data instanceof Map) {
             this.waitingForServer = false;
@@ -94,7 +93,7 @@ export class CheckGameExListRoute implements OnInit {
             this.serverError = data.get("message") || 'An unexpected error occurred';
             this.child.stopLoading();
           } else {
-            data.forEach(d => this.exercisesFromLocal.push(CheckGameExerciseConfig.fromJson(d)));
+            data.forEach(d => this.exercisesFromLocal.push(CheckGameExerciseConfiguration.fromJson(d)));
             this.child.stopLoading()
             console.log("Exercises received: ", this.exercisesFromLocal)
           }
@@ -102,7 +101,7 @@ export class CheckGameExListRoute implements OnInit {
       });
     }
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+    this.config = await firstValueFrom(this.exerciseService.getToolConfig());
   }
 
   private enableGetExercisesFromGit() {

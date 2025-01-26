@@ -39,7 +39,7 @@ export class CheckSmellService {
       this.exerciseConfiguration = data;
       this.questions = data.checkGameConfiguration.questions;
 
-      this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+      this.config = await firstValueFrom(this.exerciseService.getToolConfig());
       return undefined;
     } catch (error) {
       // @ts-ignore
@@ -50,7 +50,7 @@ export class CheckSmellService {
   async initQuestionsFromLocal(exerciseName: string): Promise<string | undefined> {
     try {
       this.exerciseService.initCheckSmellExerciseConfigFromLocal(exerciseName);
-      this._electronService.ipcRenderer.on('receiveCheckGameConfigFromLocal', (event, data: CheckGameExerciseConfig)=>{
+      this._electronService.ipcRenderer.on('receiveCheckGameConfigFromLocal', (event, data: CheckGameExerciseConfiguration)=>{
         this.zone.run(()=>{
           this.exerciseConfiguration = CheckGameExerciseConfiguration.fromJson(data);
           this.questions = this.exerciseConfiguration.checkGameConfiguration.questions;
@@ -86,26 +86,31 @@ export class CheckSmellService {
 
     this.assignmentScore = 0;
     let score = 0;
+
+    console.log("Questions: ", this.questions);
     this.questions.forEach(question => {
       let currentCorrectAnswers = 0;
       let givenAnswersScore = 0;
 
       question.answers.forEach(ans => {
-        ans.isCorrect? currentCorrectAnswers++ : 0;
+        ans.correct? currentCorrectAnswers += 1 : 0;
         if (ans.isChecked) {
-          if (ans.isCorrect) {
-            givenAnswersScore++;
+          if (ans.correct) {
+            givenAnswersScore += 1;
             correctAnswers += 1;
           } else {
             givenAnswersScore -= 0.5;
             wrongAnswers += 1;
           }
-        } else if (!ans.isChecked && ans.isCorrect) {
+        } else if (!ans.isChecked && ans.correct) {
           missedAnswers += 1;
         }
       });
       this.assignmentScore += currentCorrectAnswers;
       score += givenAnswersScore;
+
+      console.log("assignmentScore: ", this.assignmentScore);
+      console.log("score: ", score)
     });
 
     if (score < 0)
@@ -150,7 +155,7 @@ export class CheckSmellService {
         question.answers.forEach(ans => {
           if (ans.isChecked) {
             content += `${ans.answerText}, `;
-            if (ans.isCorrect)
+            if (ans.correct)
               givenPoints += 1;
             else
               lostPoints += 0.5;
@@ -161,8 +166,8 @@ export class CheckSmellService {
 
         content += "\tCorrect answers: [";
         question.answers.forEach(ans => {
-          ans.isCorrect? content += `${ans.answerText}, ` : "";
-          questionPoints++;
+          ans.correct? content += `${ans.answerText}, ` : "";
+          ans.correct? questionPoints++ : 0;
         });
         content = content.substring(0, content.length-2);
         content += "]\n";
@@ -170,7 +175,7 @@ export class CheckSmellService {
         content += `\tQuestion points: ${questionPoints}\n`;
         content += `\tPoint from correct answers: ${givenPoints}\n`;
         content += `\tPoints lost from incorrect answers: ${lostPoints}\n`
-        content += `\tTotal points given: ${Math.min(0, givenPoints - lostPoints)}\n\n`;
+        content += `\tTotal points given: ${Math.max(0, givenPoints - lostPoints)}\n\n`;
       });
 
       return content;

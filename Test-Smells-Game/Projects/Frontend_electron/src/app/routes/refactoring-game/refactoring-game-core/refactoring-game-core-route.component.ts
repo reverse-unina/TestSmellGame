@@ -122,7 +122,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
   }
 
   compile(): void {
-    this.refactoringService.compileExercise("Refactoring game", this.testing.editorComponent).then(
+    this.refactoringService.compileExercise("Refactoring game", this.testing.editorComponent, this.compileType).then(
       () => {
         /*
         if (this.refactoringService.isExercisePassed())
@@ -149,6 +149,7 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
         this.refactoringService.refactoredCoverage,
         this.refactoringService.smells).subscribe(
         result => {
+          console.log("Saved solution: ", result);
           this.refactoringService.showPopUp("Solution saved");
           this.refactoringService.stopLoading();
           this.userService.getCurrentUser().subscribe((user: User | any) => {
