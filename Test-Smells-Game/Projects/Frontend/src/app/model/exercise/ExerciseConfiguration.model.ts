@@ -12,7 +12,7 @@ export class RefactoringGameExerciseConfiguration {
     autoValutative!: boolean;
 }
 
-export class CheckGameExerciseConfig {
+export class CheckGameExerciseConfiguration {
   exerciseId!: string;
   checkGameConfiguration!: {
     'questions': Question[],

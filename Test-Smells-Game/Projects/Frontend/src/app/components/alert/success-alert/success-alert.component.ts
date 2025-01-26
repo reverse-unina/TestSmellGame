@@ -6,10 +6,13 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   styleUrls: ['./success-alert.component.css']
 })
 export class SuccessAlertComponent {
-  @Input() message: string = "You have completed successfully the exercise.";
+  message: string = "You have completed successfully the exercise.";
   showModal: boolean = false;
 
-  show(): void {
+  show(message?: string): void {
+    if (message) {
+      this.message = message;
+    }
     this.showModal = true;
   }
 

@@ -23,7 +23,7 @@ import {CheckGameExListRoute} from './routes/check-smell-game/check-smell-exerci
 import {CheckGameCoreRouteComponent} from './routes/check-smell-game/check-game-core/check-game-core-route.component';
 import {AssignmentsListRoute} from './routes/assignments-route/assignments-list/assignments-list-route';
 import {AssignmentsCoreRouteComponent} from './routes/assignments-route/assignments-core/assignments-core-route.component';
-import {SolutionComponent} from './components/solution/solution.component';
+import {SolutionComponent} from './components/leaderboard/refactoring-solution/solution.component';
 import {LeaderboardRouteComponent} from './routes/leaderboard-route/leaderboard-route.component';
 import {LoaderComponent} from './components/loader/loader.component';
 import {SettingsRouteComponent} from './routes/settings-route/settings-route.component';
@@ -62,6 +62,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { PodiumComponent } from './components/podium/podium.component';
 import { RankComponent } from './components/rank/rank.component';
 import {RouterModule} from "@angular/router";
+import { CheckSmellStatisticsComponent } from './components/leaderboard/check-smell-statistics/check-smell-statistics.component';
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http);
@@ -105,7 +106,8 @@ export function HttpLoaderFactory(http:HttpClient) {
     MissionProgressComponent,
     ErrorComponent,
     PodiumComponent,
-    RankComponent
+    RankComponent,
+    CheckSmellStatisticsComponent
   ],
   imports: [
     BrowserModule,

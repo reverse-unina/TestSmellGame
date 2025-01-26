@@ -1,6 +1,5 @@
 #!/bin/bash
 
-SOURCE_DIR="./Exercise_service/ExerciseDB"
 CONTAINER_NAME="exercise-service"
 DEST_DIR="/ExerciseDB"
 

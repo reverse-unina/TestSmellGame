@@ -7,7 +7,7 @@ echo Building Docker image for assets...
 cd ./Server-Setup
 docker build -f Dockerfile.assets -t assets-image .
 echo Populating Docker volume with assets files...
-docker run --rm -v assets:/mnt assets-image sh -c "mkdir -p /mnt/assignments && cp /assignments/*.json /mnt/assignments/ && mkdir -p /mnt/levelconfig && cp /levelconfig/levelConfig.json /mnt/levelconfig/ && mkdir -p /mnt/badges && cp /badges/*.png /mnt/badges/ && mkdir -p /mnt/missions && cp /missions/*.json /mnt/missions/"
+docker run --rm -v assets:/mnt assets-image sh -c "mkdir -p /mnt/assignments && cp /assignments/*.json /mnt/assignments/ && mkdir -p /mnt/toolconfig && cp /toolconfig/*.json /mnt/toolconfig/ && mkdir -p /mnt/badges && cp /badges/*.png /mnt/badges/ && mkdir -p /mnt/missions && cp /missions/*.json /mnt/missions/"
 
 
 REM Docker Compose

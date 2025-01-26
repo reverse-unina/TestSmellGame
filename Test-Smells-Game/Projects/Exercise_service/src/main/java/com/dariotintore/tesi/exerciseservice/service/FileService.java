@@ -9,7 +9,7 @@ import java.util.*;
 import com.dariotintore.tesi.exerciseservice.entity.learningcontent.LearningContent;
 import com.dariotintore.tesi.exerciseservice.entity.assignment.Assignment;
 import com.dariotintore.tesi.exerciseservice.entity.exercise.checksmell.CheckSmellExercise;
-import com.dariotintore.tesi.exerciseservice.entity.levelconfig.LevelConfig;
+import com.dariotintore.tesi.exerciseservice.entity.levelconfig.ToolConfig;
 import com.dariotintore.tesi.exerciseservice.entity.mission.Mission;
 import com.dariotintore.tesi.exerciseservice.entity.exercise.refactoring.RefactoringExercise;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +54,7 @@ public class FileService {
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
 			}
 
-			if (JsonFileService.assignmentsHaveDuplicateNames((List<Assignment>) jsonFiles)) {
+			if (JsonCheckService.assignmentsHaveDuplicateNames((List<Assignment>) jsonFiles)) {
 				String error = "Duplicate assignment names found";
 				logger.error(error);
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -66,7 +66,7 @@ public class FileService {
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
 			}
 
-			if (JsonFileService.missionsHaveDuplicateIds((List<Mission>) jsonFiles)) {
+			if (JsonCheckService.missionsHaveDuplicateIds((List<Mission>) jsonFiles)) {
 				String error = "Duplicate missions identifiers found";
 				logger.error(error);
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -78,7 +78,7 @@ public class FileService {
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
 			}
 
-			if (JsonFileService.refactoringExerciseHaveDuplicateIds((List<RefactoringExercise>) jsonFiles)) {
+			if (JsonCheckService.refactoringExerciseHaveDuplicateIds((List<RefactoringExercise>) jsonFiles)) {
 				String error = "Duplicate exercise identifiers found";
 				logger.error(error);
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -90,13 +90,13 @@ public class FileService {
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
 			}
 
-			if (JsonFileService.checkSmellExerciseHaveDuplicateIds((List<CheckSmellExercise>) jsonFiles)) {
+			if (JsonCheckService.checkSmellExerciseHaveDuplicateIds((List<CheckSmellExercise>) jsonFiles)) {
 				String error = "Duplicate exercise identifiers found";
 				logger.error(error);
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
 			}
-		} else if (className.getName().equals(LevelConfig.class.getName())) {
-			if (!(jsonFiles.get(0) instanceof LevelConfig)) {
+		} else if (className.getName().equals(ToolConfig.class.getName())) {
+			if (!(jsonFiles.get(0) instanceof ToolConfig)) {
 				String error = "The first item in the list is not of the expected type 'LevelConfig'. Please ensure that the data is correctly formatted.";
 				logger.error(error);
 				return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
@@ -273,11 +273,11 @@ public class FileService {
 		try {
             return objectMapper.readValue(path.toFile(), className);
 		} catch (UnrecognizedPropertyException e) {
-			String error = "Unrecognized field \"" + JsonFileService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + path.getFileName();
+			String error = "Unrecognized field \"" + JsonCheckService.extractUnrecognizedField(e.getMessage()) + "\" not marked as ignorable found in file " + path.getFileName();
 			logger.error("{}: {}", error, e.getMessage());
 			return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
 		} catch (MismatchedInputException e) {
-			String error = "Missing required property \"" + JsonFileService.extractMissingRequiredField(e.getMessage()) + "\" in file " + path.getFileName();
+			String error = "Missing required property \"" + JsonCheckService.extractMissingRequiredField(e.getMessage()) + "\" in file " + path.getFileName();
 			logger.error("{}: {}", error, e.getMessage());
 			return Map.of(HttpStatus.INTERNAL_SERVER_ERROR, error);
 		} catch (IOException e) {

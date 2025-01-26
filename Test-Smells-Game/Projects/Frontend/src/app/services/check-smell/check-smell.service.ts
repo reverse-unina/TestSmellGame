@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {firstValueFrom, Observable} from "rxjs";
-import {levelConfig} from "../../model/levelConfiguration/level.configuration.model";
+import {ToolConfig} from "../../model/toolConfig/tool.config.model";
 import {User} from "../../model/user/user.model";
 import {Question} from "../../model/question/question.model";
-import {CheckGameExerciseConfig} from "../../model/exercise/ExerciseConfiguration.model";
+import {CheckGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
 import {ExerciseService} from "../exercise/exercise.service";
 import {ActivatedRoute} from "@angular/router";
 import {UserService} from "../user/user.service";
@@ -13,15 +13,14 @@ import {FailAlertComponent} from "../../components/alert/fail-alert/fail-alert.c
 import {LeaderboardService} from "../leaderboard/leaderboard.service";
 
 export class CheckSmellService {
-  config!: levelConfig;
+  config!: ToolConfig;
   user!: User;
   exerciseRetrievalType!: number;
   actualQuestionNumber: number = 0;
 
   questions!: Question[];
-  exerciseConfiguration!: CheckGameExerciseConfig;
+  exerciseConfiguration!: CheckGameExerciseConfiguration;
 
-  exerciseCompleted: boolean = false;
   score: number = 0;
   assignmentScore: number = 0;
 
@@ -39,14 +38,13 @@ export class CheckSmellService {
       this.exerciseConfiguration = data;
       this.questions = data.checkGameConfiguration.questions;
 
-      this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+      this.config = await firstValueFrom(this.exerciseService.getToolConfig());
       return undefined;
     } catch (error) {
       // @ts-ignore
       return error.error.message;
     }
   }
-
 
   goBackward() {
     if (this.actualQuestionNumber > 0) {
@@ -60,21 +58,11 @@ export class CheckSmellService {
     }
   }
 
-  async logResult(exerciseName: string, gameType: string): Promise<void> {
-    this.exerciseCompleted = true;
+  calculateScore(): [number, number, number] {
+    let correctAnswers = 0;
+    let wrongAnswers = 0;
+    let missedAnswers = 0;
 
-    if (this.isExercisePassed()) {
-      this.userService.getCurrentUser().subscribe((user: User | any) => {
-        this.user = user;
-      });
-      this.exerciseService.logEvent(this.user.userName, 'Completed ' + exerciseName + ' in ' + gameType + ' mode' ).subscribe({
-        next: response => console.log('Log event response:', response),
-        error: error => console.error('Error submitting log:', error)
-      });
-    }
-  }
-
-  calculateScore() {
     this.assignmentScore = 0;
     let score = 0;
     this.questions.forEach(question => {
@@ -84,10 +72,15 @@ export class CheckSmellService {
       question.answers.forEach(ans => {
         ans.correct? currentCorrectAnswers++ : 0;
         if (ans.isChecked) {
-          if (ans.correct)
+          if (ans.correct) {
             givenAnswersScore++;
-          else
+            correctAnswers += 1;
+          } else {
             givenAnswersScore -= 0.5;
+            wrongAnswers += 1;
+          }
+        } else if (!ans.isChecked && ans.correct) {
+          missedAnswers += 1;
         }
       });
       this.assignmentScore += currentCorrectAnswers;
@@ -98,6 +91,7 @@ export class CheckSmellService {
       score = 0;
 
     this.score = score;
+    return [correctAnswers, wrongAnswers, missedAnswers];
   }
 
   renderResultsButton():boolean {
@@ -115,5 +109,50 @@ export class CheckSmellService {
   isExercisePassed(): boolean {
     return Math.round((this.score * 100) / this.assignmentScore) >= this.config.answerPercentage;
   }
+
+  generateCheckSmellReport(): string {
+      const studentScore = Math.round((this.score * 100) / this.assignmentScore);
+      const assignmentScore = this.assignmentScore;
+      const questions = this.questions;
+
+      let content = `Student score: ${studentScore}\n`;
+      content += `Assignment total score: ${assignmentScore}\n\n`;
+
+      questions.forEach(question => {
+        let questionPoints: number = 0;
+        let givenPoints: number = 0;
+        let lostPoints: number = 0;
+
+        content += `Question ${questions.indexOf(question)}:\n`;
+
+        content += "\tGiven answers: [";
+        question.answers.forEach(ans => {
+          if (ans.isChecked) {
+            content += `${ans.answerText}, `;
+            if (ans.correct)
+              givenPoints += 1;
+            else
+              lostPoints += 0.5;
+          }
+        });
+        content = content.substring(0, content.length-2);
+        content += "]\n";
+
+        content += "\tCorrect answers: [";
+        question.answers.forEach(ans => {
+          ans.correct? content += `${ans.answerText}, ` : "";
+          questionPoints++;
+        });
+        content = content.substring(0, content.length-2);
+        content += "]\n";
+
+        content += `\tQuestion points: ${questionPoints}\n`;
+        content += `\tPoint from correct answers: ${givenPoints}\n`;
+        content += `\tPoints lost from incorrect answers: ${lostPoints}\n`
+        content += `\tTotal points given: ${Math.min(0, givenPoints - lostPoints)}\n\n`;
+      });
+
+      return content;
+    }
 
 }

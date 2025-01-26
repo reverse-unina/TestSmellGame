@@ -139,30 +139,90 @@ export class RefactoringService {
     });
   }
 
-  compileExercise(testing: any): Promise<boolean> {
+  compileExercise(gameMode: string, testing: any): Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.resetData();
       this.startLoading();
 
-      console.log("testingCode: ", testing.injectedCode);
+      this.exerciseService.logEvent(gameMode, this.userService.user.value.userName, "start compiling refactoring exercise " + this.exerciseConfiguration.className).subscribe(
+        next => {
+          console.log(JSON.stringify(next));
+        }
+      );
 
       // @ts-ignore
       const exercise = new Exercise(this.exerciseConfiguration.className, this.originalProductionCode, this.originalTestCode, testing.injectedCode);
       this.compiledExercise = exercise;
 
+      console.log("Exercise: ", exercise);
+
       this.codeService.compile(exercise, this.exerciseConfiguration).subscribe(
         (data) => {
+          console.log("Compiled");
           this.elaborateCompilerAnswer(data);
           this.stopLoading();
+          this.exerciseService.logEvent(gameMode, this.userService.user.value.userName,
+            "compiled refactoring exercise " + this.exerciseConfiguration.className + " with result: \n" + JSON.stringify(data, null, 2)
+          ).subscribe(
+            next => {
+              console.log(JSON.stringify(next));
+            });
+
+          const productionCode = this.userCode;
+          const testCode = testing.injectedCode;
+          const shellCode = this.shellCode;
+          const results = this.generateResultsContent();
+
+          this.exerciseService.getToolConfig().subscribe(
+            next => {
+              if (next.logTries) {
+                this.exerciseService.submitRefactoringExercise(gameMode, this.userService.user.value.userName, this.exerciseConfiguration.exerciseId, productionCode, testCode, shellCode, results).subscribe(
+                  result => {
+                    console.log(JSON.stringify(result));
+                  }
+                );
+              }
+            }
+          );
+
           resolve(true);
         },
         (error) => {
           this.showPopUp('Cloud server has a problem');
           this.stopLoading();
+          this.exerciseService.logEvent(gameMode, this.userService.user.value.userName, "compiling refactoring exercise " + this.exerciseConfiguration.className + " encountered an error: " + error);
           resolve(false);
         }
       );
     });
+  }
+
+  generateResultsContent(): string {
+    const score = this.isExercisePassed() ? Math.abs(this.smellNumber - this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed) : -1;
+    let content = `Score: ${score}\n\n`;
+
+    if (this.refactoringResult !== undefined) {
+      content += `Refactoring result: ${this.refactoringResult}\n`;
+      content += `Original coverage: ${this.originalCoverage}\n`;
+      content += `Refactored coverage: ${this.refactoredCoverage}\n\n`;
+    }
+
+    if (this.smellNumberWarning) {
+      content += `Smells allowed: ${this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed}\n`;
+      content += `Your refactored code has more smells (${this.smellNumber}) than the minimum accepted\n\n`;
+    }
+
+    content += "Smells:\n";
+    for (let i = 0; i < this.smellList.length; i++) {
+      content += `${this.smellList[i]}: ${this.methodList[i].length}\n`;
+      content += `${this.smellDescriptions[this.getSmellNumber(this.smellList[i])].smellDescription}\n`;
+      for (let j = 0; j < this.methodList[i].length; j++) {
+        content += `${this.methodList[i][j]}\n`;
+      }
+      content += "\n";
+    }
+
+    return content;
   }
 
   isExercisePassed(): boolean {
@@ -197,5 +257,50 @@ export class RefactoringService {
       this.refactoringWarning = true;
     if (this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed < this.smellNumber)
       this.smellNumberWarning = true;
+  }
+
+  getSmellNumber(smell: string) {
+    switch (smell) {
+      case 'Assertion Roulette':
+        return 0;
+      case 'Conditional Test Logic':
+        return 1;
+      case 'Constructor Initialization':
+        return 2;
+      case 'Default Test':
+        return 3;
+      case 'Duplicate Assert':
+        return 4;
+      case 'Eager Test':
+        return 5;
+      case 'Empty Test':
+        return 6;
+      case 'Exception Handling':
+        return 7;
+      case 'General Fixture':
+        return 8;
+      case 'Ignored Test':
+        return 9;
+      case 'Lazy Test':
+        return 10;
+      case 'Magic Number Test':
+        return 11;
+      case 'Mystery Guest':
+        return 12;
+      case 'Print Statement':
+        return 13;
+      case 'Redundant Assertion':
+        return 14;
+      case 'Resource Optimism':
+        return 15;
+      case 'Sensitive Equality':
+        return 16;
+      case 'Sleepy Test':
+        return 17;
+      case 'Unknown Test':
+        return 18;
+      default:
+        return 19;
+    }
   }
 }

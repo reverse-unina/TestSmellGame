@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {RefactoringGameExerciseConfiguration} from "../../../model/exercise/ExerciseConfiguration.model";
-import {Exercise} from "../../../model/exercise/refactor-exercise.model";
 
 @Component({
   selector: 'app-refactoring-score',

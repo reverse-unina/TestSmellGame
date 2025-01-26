@@ -161,17 +161,16 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   // Check smell assignment type
   async submitExercise(): Promise<void> {
     this.checkSmellService.calculateScore();
-    await this.checkSmellService.logResult(this.exerciseName, "assignment");
+    //await this.checkSmellService.logResult(this.exerciseName, "assignment");
 
-    this.submitCheckSmellAssignment(Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore), this.checkSmellService.assignmentScore, this.checkSmellService.questions);
+    this.submitCheckSmellAssignment();
   }
 
-  submitCheckSmellAssignment: ((studentScore: number, assignmentScore: number, questions: Question[]) => void) =
-    (studentScore: number, assignmentScore: number, questions: Question[]): void => {
+  submitCheckSmellAssignment(): void {
     const studentName = this.currentStudent?.name;
     const assignmentName = this.assignment!.assignmentId;
     const exerciseId = this.exerciseName!;
-    const results: string = this.generateCheckSmellReport(studentScore, assignmentScore, questions);
+    const results: string = this.checkSmellService.generateCheckSmellReport();
 
     if (assignmentName && studentName) {
       this.assignmentsService.submitCheckSmellAssignment(assignmentName, studentName, exerciseId, results).subscribe({
@@ -190,48 +189,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
     this.downloadFile(`${studentName}_${assignmentName}_results.txt`, results);
     this.currentStudent.consegnato = true;
-  }
-
-  generateCheckSmellReport: ((studentScore: number, assignmentScore: number, questions: Question[]) => string) =
-    (studentScore: number, assignmentScore: number, questions: Question[]): string => {
-    let content = `Student score: ${studentScore}\n`;
-    content += `Assignment total score: ${assignmentScore}\n\n`;
-
-    questions.forEach(question => {
-      let questionPoints: number = 0;
-      let givenPoints: number = 0;
-      let lostPoints: number = 0;
-
-      content += `Question ${questions.indexOf(question)}:\n`;
-
-      content += "\tGiven answers: [";
-      question.answers.forEach(ans => {
-        if (ans.isChecked) {
-          content += `${ans.answerText}, `;
-          if (ans.correct)
-            givenPoints += 1;
-          else
-            lostPoints += 0.5;
-        }
-      });
-      content = content.substring(0, content.length-2);
-      content += "]\n";
-
-      content += "\tCorrect answers: [";
-      question.answers.forEach(ans => {
-        ans.correct? content += `${ans.answerText}, ` : "";
-        questionPoints++;
-      });
-      content = content.substring(0, content.length-2);
-      content += "]\n";
-
-      content += `\tQuestion points: ${questionPoints}\n`;
-      content += `\tPoint from correct answers: ${givenPoints}\n`;
-      content += `\tPoints lost from incorrect answers: ${lostPoints}\n`
-      content += `\tTotal points given: ${Math.min(0, givenPoints - lostPoints)}\n\n`;
-    });
-
-    return content;
   }
 
   protected readonly Math = Math;
@@ -253,7 +210,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   }
 
   async compile(): Promise<void> {
-    if (await this.refactoringService.compileExercise(this.testing.editorComponent)){
+    if (await this.refactoringService.compileExercise(`Assignment ${this.assignmentName}`, this.testing.editorComponent)){
       console.log("Compile compiled");
       this.isCompiledSuccessfully = true;
       this.codeModified = false;
@@ -272,7 +229,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this._snackBar.open('Esercizio non completato', 'Close', {
                                 duration: 3000
       });
-    this.refactoringService.stopLoading();
+      this.refactoringService.stopLoading();
       return;
     }
 
@@ -283,9 +240,9 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       const productionCode = this.refactoringService.userCode;
       const testCode = this.testing.editorComponent.injectedCode;
       const shellCode = this.refactoringService.shellCode;
-      const results = this.generateResultsContent();
+      const results = this.refactoringService.generateResultsContent();
 
-      this.exerciseService.logEvent(this.currentUser.userName, 'Completed the assignment ' + (this.assignmentName || '')).subscribe({
+      this.exerciseService.logEvent(`Assignment ${this.assignmentName}`, this.currentUser.userName, 'submitted the assignment ' + (this.assignmentName || '')).subscribe({
             next: response => console.log('Log event response:', response),
             error: error => console.error('Error submitting log:', error)
        });
@@ -339,7 +296,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   publishSolutionToLeaderboard(){
     this.refactoringService.startLoading()
     if(this.refactoringService.exerciseIsCompiledSuccessfully){
-      this.leaderboardService.saveSolution(this.refactoringService.compiledExercise,
+      this.leaderboardService.saveRefactoringSolution(this.refactoringService.compiledExercise,
                                            this.refactoringService.exerciseConfiguration,
                                            this.refactoringService.smellNumber,
                                            Boolean(this.refactoringService.refactoringResult),
@@ -356,38 +313,11 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     }
   }
 
-  generateResultsContent(): string {
-    let content = `Score: ${this.refactoringService.smellNumber}\n\n`;
-
-    if (this.refactoringService.refactoringResult !== undefined) {
-      content += `Refactoring result: ${this.refactoringService.refactoringResult}\n`;
-      content += `Original coverage: ${this.refactoringService.originalCoverage}\n`;
-      content += `Refactored coverage: ${this.refactoringService.refactoredCoverage}\n\n`;
-    }
-
-    if (this.refactoringService.smellNumberWarning) {
-      content += `Smells allowed: ${this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed}\n`;
-      content += `Your refactored code has more smells (${this.refactoringService.smellNumber}) than the minimum accepted\n\n`;
-    }
-
-    content += "Smells:\n";
-    for (let i = 0; i < this.refactoringService.smellList.length; i++) {
-      content += `${this.refactoringService.smellList[i]}: ${this.refactoringService.methodList[i].length}\n`;
-      content += `${this.refactoringService.smellDescriptions[this.getSmellNumber(this.refactoringService.smellList[i])].smellDescription}\n`;
-      for (let j = 0; j < this.refactoringService.methodList[i].length; j++) {
-        content += `${this.refactoringService.methodList[i][j]}\n`;
-      }
-      content += "\n";
-    }
-
-    return content;
-  }
-
   saveResultsFile() {
     if (this.refactoringService.exerciseIsCompiledSuccessfully) {
       const studentName = this.currentStudent ? this.currentStudent.name : "";
       const filename = `${studentName}_results.txt`;
-      const content = this.generateResultsContent();
+      const content = this.refactoringService.generateResultsContent();
 
       const blob = new Blob([content], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
@@ -396,51 +326,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       link.download = filename;
       link.click();
       window.URL.revokeObjectURL(url);
-    }
-  }
-
-  getSmellNumber(smell: string) {
-    switch (smell){
-      case 'Assertion Roulette':
-        return 0;
-      case 'Conditional Test Logic':
-        return 1;
-      case 'Constructor Initialization':
-        return 2;
-      case 'Default Test':
-        return 3;
-      case 'Duplicate Assert':
-        return 4;
-      case 'Eager Test':
-        return 5;
-      case 'Empty Test':
-        return 6;
-      case 'Exception Handling':
-        return 7;
-      case 'General Fixture':
-        return 8;
-      case 'Ignored Test':
-        return 9;
-      case 'Lazy Test':
-        return 10;
-      case 'Magic Number Test':
-        return 11;
-      case 'Mystery Guest':
-        return 12;
-      case 'Print Statement':
-        return 13;
-      case 'Redundant Assertion':
-        return 14;
-      case 'Resource Optimism':
-        return 15;
-      case 'Sensitive Equality':
-        return 16;
-      case 'Sleepy Test':
-        return 17;
-      case 'Unknown Test':
-        return 18;
-      default:
-        return 19;
     }
   }
 
