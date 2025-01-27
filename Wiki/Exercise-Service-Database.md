@@ -6,7 +6,7 @@ Ciascun gruppo è associato ad una precisa directory, la cui lista è riportata 
 - `ExerciseDB/LearningContent/`: directory per il contenuto delle pagine di apprendimento;
 - `/usr/src/app/assets/assignments/`: directory contenente gli assignment;
 - `/usr/src/app/assets/missions/`: directory contenente le missioni;
-- `/usr/src/app/assets/levelConfig/`: directory contenente il file `levelConfig.json`;
+- `/usr/src/app/assets/toolConfig/`: directory contenente il file `toolConfig.json`;
 - `/usr/src/app/assets/badges/`: directory contenente i badge in formato `.png`.
 
 ## Esercizi di refactoring
@@ -36,6 +36,7 @@ Il file di configurazione deve essere strutturato come segue:
       string
     ]
   },
+  "availableForGame": boolean
   "auto_valutative": boolean
 }
 ```
@@ -45,10 +46,12 @@ dove:
 - `class_name` rappresenta il nome della classe Java oggetto dell'esercizio e deve essere identica al nome della classe riportata nel file `{nomeFile1}.java`;
 - `refactoring_game_configuration` contiene la configurazione dell'esercizio;
 - `dependencies` rappresenta le dipendenze necessarie al Compiler Service per compilare l'esercizio;
-- `refactoring_limit` rappresenta il limite di copertura del codice;
+- `refactoring_limit` rappresenta la riduzione massima della code coverage accettata nel refactoring del codice di test;
 - `smells_allowed` rappresenta il numero massimo di smell ancora presenti nel codice accettabili per considerare superato l'esercizio;
- - `level` rappresenta il livello minimo che l'accout dell'utente deve possedere per poter affrontare l'esercizio;
- - `ignored_smells` rappresenta gli smell ignorati.
+- `level` rappresenta il livello minimo che l'accout dell'utente deve possedere per poter affrontare l'esercizio;
+- `ignored_smells` rappresenta gli smell ignorati;
+- `available_for_game` indica se l'esercizio è disponibile nella modalità gioco libero;
+- `auto_valutative` indica se l'utente può visualizzare (`false`) o meno (`true`) le soluzioni dell'esercizio caricate dagli altri utenti sulla leaderboard.
 
 ## Esercizi di check-game
 
@@ -76,6 +79,7 @@ Il file di configurazione deve essere strutturato come segue:
     ],
     "level": 1
   },
+  "available_for_game": boolean
   "auto_valutative": boolean
 }
 ```
@@ -90,6 +94,7 @@ dove:
 - `answerText` rappresenta il testo della risposta;
 - `isCorrect` rappresenta la correttezza della risposta.
 - `level` rappresenta il livello minimo che l'accout dell'utente deve possedere per poter affrontare l'esercizio;
+- `available_for_game` indica se l'esercizio è disponibile nella modalità gioco libero;
 
 ## Pagine educative
 Ogni pagina educativa (il suo contenuto) si compone di 1 solo file:
@@ -135,7 +140,7 @@ Il file di configurazione deve essere strutturato come segue:
       "submitted": boolean
     }
   ],
-  "type": ["competitivo", "collaborativo"]
+  "type": ["competitive", "collaborative"]
 }
 ```
 
@@ -149,7 +154,8 @@ dove:
 - `startDate` rappresenta la data di inizio dell'assignment, a partire dalla quale l'utente può parteciparvi. Deve essere rappresentata nella forma `dd-mm-yy`;
 - `endTime` rappresenta l'ora di fine dell'assignment, dopo la quale l'utente non potrà più parteciparvi. Deve essere rappresentata nella forma `hh-mm`;
 - `endDate` rappresenta la data di fine dell'assignment, dopo la quale l'utente non potrà più parteciparvi. Deve essere rappresentata nella forma `dd-mm-yy`;
-- `submitted` indica se l'utente ha consegnato o meno l'esercizio. Una volta che l'utente ha consegnato l'esercizio, non potra più accedere all'assignment.
+- `submitted` indica se l'utente ha consegnato o meno l'esercizio. Una volta che l'utente ha consegnato l'esercizio, non potra più accedere all'assignment;
+- `type` indica se la soluzione dell'esercizio deve essere pubblicata sul repository delle soluzioni ed essere vesibile agli utenti ("collaborative") o meno ("competitive").
 
 ## Missioni
 Ogni missione si compone di 1 solo file:
@@ -182,8 +188,8 @@ dove:
 - `type` rappresenta il tipo di passo, che può corrispondere a un esercizio di tipo refacotring, a un esercizio di tipo check-smell o alla visione di una pagina educativa. I valori che può assumere sono rispettivamente `refactoring`, `check-smell` e `learning`;
 - `id` rappresenta l'identificativo del file associato al passo. Deve quindi corrispondere all'`exerciseId` di un esercizio in `ExerciseDB/RefactoringGame/`, all'`exerciseId` di un esercizione in `ExerciseDB/ChechSmellGame/` o al campo `learningId` di un file in `ExerciseDB/LearningContent/`, in base al valore associato a `type`; 
 
-## LevelConfig
-Il file levelConfig.json rappresetna il file di configurazione per il levelling dell'utente e per impostazioni più generiche degli esercizi. Deve essere strutturato come segue:
+## ToolConfig
+Il file toolConfig.json rappresenta il file di configurazione per il tool, relativo alle impostazioni per il levelling dell'utente e le impostazioni più generiche degli esercizi. Deve essere strutturato come segue:
 ```json
 {
   "expValues": [number],
@@ -196,7 +202,8 @@ Il file levelConfig.json rappresetna il file di configurazione per il levelling 
       "filename": string
     }
   ],
-  "answerPercentage": number
+  "answerPercentage": number,
+  "logTries": boolean
 }
 ```
 
@@ -207,4 +214,5 @@ dove:
 - `description` rappresenta la descrizione del badge.
 - `points` rappresenta il numero di punti esperienza necessari all'utente per sbloccare il badge associato. Per continuità con la verisone precedente, è stato mantenuto di tipo string;
 - `filename` rappresenta il nome del file `.png` che rappresenta il badge, situato nella directory `/usr/src/app/assets/badges/`;
-- `answerPercentage` rappresenta, in percentuale, il punteggio menimo che un utente deve raggiungere in un esercizio di check-smell affinchè questo venga cosiderato superato.
+- `answerPercentage` rappresenta, in percentuale, il punteggio menimo che un utente deve raggiungere in un esercizio di check-smell affinchè questo venga cosiderato superato;
+- `logTries` indica se il sistema deve loggare o meno tutte le prove di risoluzione degli esercizi da parte degli utenti. Per gli esercizi di refactoring verranno loggate tutte le compilazioni dell'utente, mentre per gli esercizi di check-smell tutti i tentativi di risoluzione dell'utente. I log riguarderanno le missioni e la modalità gioco libero. 
