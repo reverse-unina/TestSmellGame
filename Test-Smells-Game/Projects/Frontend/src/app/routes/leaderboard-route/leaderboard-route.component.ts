@@ -48,12 +48,12 @@ export class LeaderboardRouteComponent implements OnInit {
         data=>{
           this.refactoringExerciseConfiguration = data;
           this.isAutoValutative = this.refactoringExerciseConfiguration.autoValutative;
-        });
 
-      this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(
-        solutions=>{
-          this.refactoringSolutions = solutions;
-          console.log("Refactoring solutions received: ", solutions);
+          this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(
+            solutions=>{
+              this.refactoringSolutions = solutions;
+              console.log("Refactoring solutions received: ", solutions);
+            });
         });
 
       if(!this.isAutoValutative) {
