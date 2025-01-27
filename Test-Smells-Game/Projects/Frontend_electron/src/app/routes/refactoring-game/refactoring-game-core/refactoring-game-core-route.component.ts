@@ -60,6 +60,30 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
     this._electronService.ipcRenderer.on('refactoring-exercise-response', (event, data)=>{
       this.zone.run(()=>{
         this.refactoringService.elaborateCompilerAnswer(data);
+
+        this.exerciseService.logEvent("Refactoring game", this.userService.user.value.userName,
+          "compiled refactoring exercise " + this.refactoringService.exerciseConfiguration.className + " with result: \n" + JSON.stringify(data, null, 2)
+        ).subscribe(
+          next => {
+            console.log(JSON.stringify(next));
+          });
+
+        const productionCode = this.refactoringService.userCode;
+        const testCode = this.testing.injectedCode;
+        const shellCode = this.refactoringService.shellCode;
+        const results = this.refactoringService.generateResultsContent();
+
+        this.exerciseService.getToolConfig().subscribe(
+          next => {
+            if (next.logTries) {
+              this.exerciseService.submitRefactoringExercise("Refactoring game", this.userService.user.value.userName, this.refactoringService.exerciseConfiguration.exerciseId, productionCode, testCode, shellCode, results).subscribe(
+                result => {
+                  console.log(JSON.stringify(result));
+                }
+              );
+            }
+          }
+        );
       })
     });
 

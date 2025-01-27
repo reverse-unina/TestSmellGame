@@ -33,10 +33,8 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   checkInterval: any;
   currentUser: User | any;
   currentStudent: Student | any;
-  isCompiledSuccessfully: boolean = false;
 
   // MESSAGES
-  codeModified: boolean = false;
   private codeModifiedSubscription!: Subscription;
   serverError: string | undefined;
 
@@ -82,36 +80,11 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
         this.refactoringService.elaborateCompilerAnswer(data);
       })
     });
-
-    // GET PRODUCTION CLASS FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveProductionClassFromLocal',(event,data)=>{
-      console.log("Test Code from Local: ", data);
-
-      this.zone.run( ()=> {
-        this.refactoringService.userCode = data
-        this.refactoringService.originalProductionCode = data
-      })
-    });
-
-    // GET TESTING CLASS FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveTestingClassFromLocal',(event,data: string)=>{
-      console.log("Test Code from Local: ", data);
-      this.zone.run( () => {
-        this.refactoringService.testingCode = data
-        this.refactoringService.originalTestCode = data
-      })
-    });
-
-    // GET CONFIG FILE FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveRefactoringGameConfigFromLocal',(event,data: RefactoringGameExerciseConfiguration)=>{
-      console.log("Test Code from Local: ", data);
-      this.zone.run( () => {
-        this.refactoringService.exerciseConfiguration = RefactoringGameExerciseConfiguration.fromJson(data);
-      })
-    });
   }
 
   async ngOnInit(): Promise<void> {
+    this.compileType = Number(localStorage.getItem("compileMode"));
+
     this.currentUser = await firstValueFrom(this.userService.getCurrentUser());
 
     this.currentStudent = await firstValueFrom(
@@ -129,37 +102,27 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       if (this.assignment!.gameType === "refactoring") {
         this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
           isModified => {
-            this.codeModified = isModified;
+            this.refactoringService.codeModified = isModified;
           }
         );
 
         this.refactoringService.initSmellDescriptions();
 
-        if (this.exerciseType == 1) {
-          console.log("Exercise name: ", this.exerciseName)
-          this.serverError = await this.refactoringService.initCodeFromLocal(this.exerciseName);
-        } else if (this.exerciseType == 2) {
-          this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
-        }
+        this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
 
         this.refactoringService.restoreCode("assignment-refactoring", this.exerciseName);
 
-        if (this.code.editorComponent && this.code.editorComponent.editor) {
+        console.log(this.testing)
+        if (this.testing.editorComponent && this.code.editorComponent) {
           this.code.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
           this.testing.editorComponent.editor.onDidChangeModelContent(() => this.onCodeChange());
         }
 
       } else if (this.assignment!.gameType === "check-smell") {
-        if (this.exerciseType == 1) {
-          this.serverError = await this.checkSmellService.initQuestionsFromLocal(this.exerciseName);
-        } else if (this.exerciseType == 2) {
-          this.serverError = await this.checkSmellService.initQuestionsFromCloud(this.exerciseName);
-        }
-
+        this.serverError = await this.checkSmellService.initQuestionsFromCloud(this.exerciseName);
       }
     }
 
-    console.log("Production Code from Local: ", this.refactoringService.userCode);
   }
 
 
@@ -251,7 +214,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   // Refactoring assignments type methods
   submitIsDisabled(): boolean {
-    return this.refactoringService.progressBarMode == 'query' || !this.isCompiledSuccessfully || this.codeModified || !this.refactoringService.isExercisePassed();
+    return this.refactoringService.progressBarMode == 'query' || !this.refactoringService.isExercisePassed();
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -265,18 +228,16 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     this.saveResultsFile();
   }
 
-  async compile(): Promise<void> {
-    if (await this.refactoringService.compileExercise(`Assignment ${this.assignmentName}`, this.testing.editorComponent, this.compileType)) {
-      console.log("Compile compiled");
-      this.isCompiledSuccessfully = true;
-      this.codeModified = false;
-    }
-    console.log("outside compiled");
+  compile(): void {
+    this.refactoringService.compileExercise(`Assignment ${this.assignmentName}`, this.testing.editorComponent, this.compileType).then(
+      () => {
+
+      }
+    );
   }
 
   onCodeChange() {
-    this.isCompiledSuccessfully = false;
-    this.codeModified = true;
+    this.refactoringService.codeModified = true;
   }
 
   submitAssignment() {

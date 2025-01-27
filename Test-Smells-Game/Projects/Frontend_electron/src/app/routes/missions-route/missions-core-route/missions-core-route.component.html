@@ -1,4 +1,4 @@
-<div *ngIf="!isLoading">
+<div *ngIf="mission && mission.steps">
   <div *ngIf="currentStep < mission.steps.length; else missionComplete">
     <ng-container [ngSwitch]="mission.steps[currentStep].type">
 

@@ -44,6 +44,7 @@ export class RefactoringService {
   smellDescriptions: SmellDescription[] = [];
   originalCoverage: number = -1;
   refactoredCoverage: number = -1;
+  codeModified: boolean = true;
 
   constructor(
     private codeService: CodeeditorService,
@@ -152,6 +153,8 @@ export class RefactoringService {
   }
 
   compileExercise(gameMode: string, testing: any, compileType: number): Promise<boolean> {
+    this.codeModified = false;
+    console.log("Code modified: ", this.codeModified);
     return new Promise((resolve, reject) => {
       this.resetData();
       this.startLoading();
@@ -269,6 +272,7 @@ export class RefactoringService {
   }
 
   checkConfiguration(): void {
+    console.log("exercise configuration: ", this.exerciseConfiguration);
     if (this.refactoringResult.toString() === 'false')
       this.refactoringWarning = true;
     if (this.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed < this.smellNumber)

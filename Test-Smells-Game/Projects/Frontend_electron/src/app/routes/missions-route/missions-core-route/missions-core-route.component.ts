@@ -83,39 +83,39 @@ export class MissionsCoreRouteComponent implements OnInit {
     this._electronService.ipcRenderer.on('refactoring-exercise-response', (event, data)=>{
       this.zone.run(()=>{
         this.refactoringService.elaborateCompilerAnswer(data);
+
+        this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName,
+          "compiled refactoring exercise " + this.refactoringService.exerciseConfiguration.className + " with result: \n" + JSON.stringify(data, null, 2)
+        ).subscribe(
+          next => {
+            console.log(JSON.stringify(next));
+          });
+
+        const productionCode = this.refactoringService.userCode;
+        const testCode = this.testing.injectedCode;
+        const shellCode = this.refactoringService.shellCode;
+        const results = this.refactoringService.generateResultsContent();
+
+        this.exerciseService.getToolConfig().subscribe(
+          next => {
+            if (next.logTries) {
+              this.exerciseService.submitRefactoringExercise(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, this.refactoringService.exerciseConfiguration.exerciseId, productionCode, testCode, shellCode, results).subscribe(
+                result => {
+                  console.log(JSON.stringify(result));
+                }
+              );
+            }
+          }
+        );
       })
     });
 
-    // GET PRODUCTION CLASS FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveProductionClassFromLocal',(event,data)=>{
-      console.log("Test Code from Local: ", data);
-
-      this.zone.run( ()=> {
-        this.refactoringService.userCode = data
-        this.refactoringService.originalProductionCode = data
-      })
-    });
-
-    // GET TESTING CLASS FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveTestingClassFromLocal',(event,data: string)=>{
-      console.log("Test Code from Local: ", data);
-      this.zone.run( () => {
-        this.refactoringService.testingCode = data
-        this.refactoringService.originalTestCode = data
-      })
-    });
-
-    // GET CONFIG FILE FROM ELECTRON
-    this._electronService.ipcRenderer.on('receiveRefactoringGameConfigFromLocal',(event,data: RefactoringGameExerciseConfiguration)=>{
-      console.log("Test Code from Local: ", data);
-      this.zone.run( () => {
-        this.refactoringService.exerciseConfiguration = RefactoringGameExerciseConfiguration.fromJson(data);
-      })
-    });
   }
 
   async ngOnInit(): Promise<void> {
     try {
+      this.compileType = Number(localStorage.getItem("compileMode"));
+
       this.mission = await firstValueFrom(this.missionService.getMissionById(this.missionId));
       console.log("Mission: ", this.mission);
 
@@ -133,7 +133,7 @@ export class MissionsCoreRouteComponent implements OnInit {
         this.currentStep = 0;
       }
 
-      this.updateServices();
+      await this.updateServices();
 
       this.isLoading = false;
       this.serverError = undefined;
@@ -207,11 +207,7 @@ export class MissionsCoreRouteComponent implements OnInit {
         );
 
         this.refactoringService.initSmellDescriptions();
-        if (this.exerciseType == 1) {
-          this.serverError = await this.refactoringService.initCodeFromLocal(this.mission.steps[this.currentStep].id);
-        } else if (this.exerciseType == 2) {
-          this.serverError = await this.refactoringService.initCodeFromCloud(this.mission.steps[this.currentStep].id);
-        }
+        this.serverError = await this.refactoringService.initCodeFromCloud(this.mission.steps[this.currentStep].id);
 
         break;
       case "check-smell":
@@ -222,12 +218,8 @@ export class MissionsCoreRouteComponent implements OnInit {
           this.zone
         );
 
-        if (this.exerciseType == 1) {
-          this.serverError = await this.checkSmellService.initQuestionsFromLocal(this.mission.steps[this.currentStep].id);
-        } else if (this.exerciseType == 2) {
-          this.serverError = await this.checkSmellService.initQuestionsFromCloud(this.mission.steps[this.currentStep].id);
-        }
-        console.log("checkService: ", this.checkSmellService.actualQuestionNumber);
+        this.serverError = await this.checkSmellService.initQuestionsFromCloud(this.mission.steps[this.currentStep].id);
+        break;
     }
   }
 
