@@ -14,15 +14,19 @@ public class CheckSmellExercise {
     private String exerciseId;
     private CheckGameConfiguration checkGameConfiguration;
     private boolean autoValutative;
+    private boolean availableForGame;
 
     @JsonCreator
     public CheckSmellExercise(
             @JsonProperty(value = "exerciseId", required = true) @NonNull String exerciseId,
             @JsonProperty(value = "check_game_configuration", required = true) CheckGameConfiguration checkGameConfiguration,
-            @JsonProperty(value = "auto_valutative", required = true) boolean autoValutative) {
+            @JsonProperty(value = "auto_valutative", required = true) boolean autoValutative,
+            @JsonProperty(value = "available_for_game", required = true) boolean availableForGame
+    ) {
         this.exerciseId = exerciseId;
         this.checkGameConfiguration = checkGameConfiguration;
         this.autoValutative = autoValutative;
+        this.availableForGame = availableForGame;
     }
 
     @Getter

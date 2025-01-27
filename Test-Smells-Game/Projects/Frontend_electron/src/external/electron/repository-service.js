@@ -34,6 +34,7 @@ const refactoringConfigSchema = {
       },
       "required": ["dependencies", "refactoring_limit", "smells_allowed", "level", "ignored_smells"]
     },
+    "available_for_game": { "type": "boolean" },
     "auto_valutative": { "type": "boolean" }
   },
   "required": ["exerciseId", "class_name", "refactoring_game_configuration", "auto_valutative"]
@@ -72,7 +73,8 @@ const checkSmellSchema = {
       },
       "required": ["questions", "level"]
     },
-    "auto_valutative": { "type": "boolean" }
+    "auto_valutative": { "type": "boolean" },
+    "available_for_game": { "type": "boolean" }
   },
   "required": ["exerciseId", "check_game_configuration", "auto_valutative"]
 };

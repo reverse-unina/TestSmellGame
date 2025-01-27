@@ -48,7 +48,8 @@ export class RefactoringGameExListRouteComponent implements OnInit {
                 return byLevel;
 
               return a.exerciseId > b.exerciseId ? 1 : -1;
-            });
+            }).filter(exercise => exercise.availableForGame);
+
           console.log(this.exercises);
         },
         error: (err) => {
@@ -89,6 +90,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
           } else {
             // @ts-ignore
             data.forEach(d => this.exercisesFromLocal.push(RefactoringGameExerciseConfiguration.fromJson(d)));
+            this.exercisesFromLocal = this.exercisesFromLocal.filter(exercise => exercise.availableForGame === undefined || exercise.availableForGame);
             this.child.stopLoading();
             console.log("Exercises received: ", this.exercisesFromLocal)
           }

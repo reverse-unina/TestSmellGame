@@ -9,7 +9,8 @@ export class RefactoringGameExerciseConfiguration {
       'smellsAllowed': number,
       'level': number
     };
-    autoValutative!: boolean;
+  autoValutative!: boolean;
+  availableForGame!: boolean;
 }
 
 export class CheckGameExerciseConfiguration {
@@ -19,4 +20,5 @@ export class CheckGameExerciseConfiguration {
     'level': number
   };
   autoValutative!: boolean;
+  availableForGame!: boolean;
 }

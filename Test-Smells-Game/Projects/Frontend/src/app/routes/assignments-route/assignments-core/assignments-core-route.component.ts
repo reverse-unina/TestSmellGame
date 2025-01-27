@@ -31,7 +31,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   checkInterval: any;
   currentUser: User | any;
   currentStudent: Student | any;
-  isCompiledSuccessfully: boolean = false;
 
   // MESSAGES
   codeModified: boolean = false;
@@ -195,7 +194,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   // Refactoring assignments type methods
   submitIsDisabled(): boolean {
-    return this.refactoringService.progressBarMode == 'query' || !this.isCompiledSuccessfully || this.codeModified || !this.refactoringService.isExercisePassed();
+    return this.refactoringService.progressBarMode == 'query' || this.codeModified || !this.refactoringService.isExercisePassed();
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -212,14 +211,12 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   async compile(): Promise<void> {
     if (await this.refactoringService.compileExercise(`Assignment ${this.assignmentName}`, this.testing.editorComponent)){
       //console.log("Compile compiled");
-      this.isCompiledSuccessfully = true;
       this.codeModified = false;
     }
     //console.log("outside compiled");
   }
 
   onCodeChange() {
-    this.isCompiledSuccessfully = false;
     this.codeModified = true;
   }
 

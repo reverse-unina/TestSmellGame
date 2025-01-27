@@ -15,18 +15,21 @@ public class RefactoringExercise {
     private String className;
     private RefactoringGameConfiguration refactoringGameConfiguration;
     private boolean autoValutative;
+    private boolean availableForGame;
 
     @JsonCreator
     public RefactoringExercise(
             @JsonProperty(value = "exerciseId", required = true) @NonNull String exerciseId,
             @JsonProperty(value = "class_name", required = true) @NonNull String className,
             @JsonProperty(value = "refactoring_game_configuration", required = true) @NonNull RefactoringGameConfiguration refactoringGameConfiguration,
-            @JsonProperty(value = "auto_valutative", required = true) boolean autoValutative
+            @JsonProperty(value = "auto_valutative", required = true) boolean autoValutative,
+            @JsonProperty(value = "available_for_game", required = true) boolean availableForGame
     ) {
         this.exerciseId = exerciseId;
         this.className = className;
         this.refactoringGameConfiguration = refactoringGameConfiguration;
         this.autoValutative = autoValutative;
+        this.availableForGame = availableForGame;
     }
 
     @Getter

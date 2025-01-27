@@ -36,7 +36,7 @@ export class CheckGameExListRoute implements OnInit {
               return byLevel;
 
             return a.exerciseId > b.exerciseId ? 1 : -1;
-        });
+        }).filter(exercise => exercise.availableForGame);
 
         //console.log(response);
       },

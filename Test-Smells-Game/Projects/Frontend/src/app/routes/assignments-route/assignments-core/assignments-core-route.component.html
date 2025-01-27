@@ -37,7 +37,7 @@
 
             <div style="margin-top: 20px">
               <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
-              <button type="button" class="btn btn-primary" [disabled]="submitIsDisabled()" (click)="submitRefactoringAssignment()">{{ 'Finish' | translate }}</button>
+              <button type="button" style="margin-left: 20px;" class="btn btn-primary" [disabled]="submitIsDisabled()" (click)="submitRefactoringAssignment()">{{ 'Finish' | translate }}</button>
             </div>
 
             <mat-divider></mat-divider>
@@ -68,7 +68,7 @@
               ></app-refactoring-smell-list>
             </div>
 
-            <button type="button" class="btn btn-primary" routerLink="/assignment/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
+            <button *ngIf="assignment.type === 'collaborativo'" type="button" class="btn btn-primary" routerLink="/assignment/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
           </div>
         </div>
       </div>

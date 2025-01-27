@@ -54,7 +54,7 @@ export class CheckGameExListRoute implements OnInit {
                 return byLevel;
 
               return a.exerciseId > b.exerciseId ? 1 : -1;
-            });
+            }).filter(exercise => exercise.availableForGame);
           //console.log(response);
         },
         error: (err) => {
@@ -94,6 +94,7 @@ export class CheckGameExListRoute implements OnInit {
             this.child.stopLoading();
           } else {
             data.forEach(d => this.exercisesFromLocal.push(CheckGameExerciseConfiguration.fromJson(d)));
+            this.exercisesFromLocal = this.exercisesFromLocal.filter(exercise => exercise.availableForGame === undefined || exercise.availableForGame);
             this.child.stopLoading()
             console.log("Exercises received: ", this.exercisesFromLocal)
           }
