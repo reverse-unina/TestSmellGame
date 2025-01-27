@@ -149,7 +149,16 @@ public class ExerciseController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
             String currentDateTime = LocalDateTime.now().format(formatter);
 
-            String studentDirectoryPath = logDB + gameMode + "/" + exerciseId + "/" + studentName + "/" + currentDateTime + "/";
+            // Log mission's files by step
+            String[] split = gameMode.split(" - ");
+            
+            String studentDirectoryPath;
+            if (split.length == 2) {
+                studentDirectoryPath = logDB + split[0] + "/" + split[1] + "/" + exerciseId + "/" + studentName + "/" + currentDateTime + "/";
+            } else {
+                studentDirectoryPath = logDB + gameMode + "/" + exerciseId + "/" + studentName + "/" + currentDateTime + "/";
+            }
+
             try {
                 // Create directory if it doesn't exist
                 File studentDirectory = new File(studentDirectoryPath);
@@ -183,7 +192,7 @@ public class ExerciseController {
 
     @PostMapping("/checksmell/submit")
     public ResponseEntity<Object> submitCheckSmellAssignment(
-            @RequestParam("gameMode") String assignmentId,
+            @RequestParam("gameMode") String gameMode,
             @RequestParam("studentName") String studentName,
             @RequestParam("exerciseId") String exerciseId,
             @RequestParam("results") MultipartFile results) {
@@ -193,7 +202,16 @@ public class ExerciseController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
             String currentDateTime = LocalDateTime.now().format(formatter);
 
-            String studentDirectoryPath = logDB + assignmentId + "/" + exerciseId + "/" + studentName + "/" + currentDateTime + "/";
+            // Log mission's files by step
+            String[] split = gameMode.split(" - ");
+
+            String studentDirectoryPath;
+            if (split.length == 2) {
+                studentDirectoryPath = logDB + split[0] + "/" + split[1] + "/" + exerciseId + "/" + studentName + "/" + currentDateTime + "/";
+            } else {
+                studentDirectoryPath = logDB + gameMode + "/" + exerciseId + "/" + studentName + "/" + currentDateTime + "/";
+            }
+
             try {
                 // Create directory if it doesn't exist
                 File studentDirectory = new File(studentDirectoryPath);

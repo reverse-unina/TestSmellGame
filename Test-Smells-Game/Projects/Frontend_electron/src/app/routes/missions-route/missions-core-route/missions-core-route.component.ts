@@ -242,7 +242,11 @@ export class MissionsCoreRouteComponent implements OnInit {
     this.checkSmellService.calculateScore();
 
     if (this.checkSmellService.config.logTries) {
-      this.exerciseService.submitCheckSmellExercise(`Mission ${this.missionId}`, this.userService.user.value.userName, this.mission.steps[this.currentStep].id, this.checkSmellService.generateCheckSmellReport());
+      this.exerciseService.submitCheckSmellExercise(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, this.mission.steps[this.currentStep].id, this.checkSmellService.generateCheckSmellReport()).subscribe(
+        result => {
+          console.log("Updated solution", result);
+        }
+      );
     }
 
     this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "completed check-smell exercise " + this.mission.steps[this.currentStep].id + " with score " + Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore) + '/100').subscribe(

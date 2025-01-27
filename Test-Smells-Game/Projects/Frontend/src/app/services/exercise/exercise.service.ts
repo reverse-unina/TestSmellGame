@@ -98,7 +98,7 @@ export class ExerciseService {
     formData.append('exerciseId', exerciseId);
     formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
 
-    return this.http.post(environment.exerciseServiceUrl + '/exercises/checksmell/submit/', formData);
+    return this.http.post(environment.exerciseServiceUrl + '/exercises/checksmell/submit', formData);
   }
 
   submitRefactoringExercise(gameMode: string, studentName: string, exerciseId: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
@@ -113,7 +113,7 @@ export class ExerciseService {
 
     //console.log("submitting");
 
-    return this.http.post(environment.exerciseServiceUrl + '/exercises/refactoring/submit/', formData);
+    return this.http.post(environment.exerciseServiceUrl + '/exercises/refactoring/submit', formData);
   }
 
 

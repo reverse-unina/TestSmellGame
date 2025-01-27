@@ -47,7 +47,11 @@ export class CheckGameCoreRouteComponent implements OnInit {
     const stat = this.checkSmellService.calculateScore();
 
     if (this.checkSmellService.config.logTries) {
-      this.exerciseService.submitCheckSmellExercise("Check game", this.userService.user.value.userName, this.exerciseName, this.checkSmellService.generateCheckSmellReport());
+      this.exerciseService.submitCheckSmellExercise("Check game", this.userService.user.value.userName, this.exerciseName, this.checkSmellService.generateCheckSmellReport()).subscribe(
+        result => {
+          console.log("Updated solution", result);
+        }
+      );
     }
 
     if (this.checkSmellService.isExercisePassed()) {
