@@ -52,7 +52,7 @@ export class LeaderboardRouteComponent implements OnInit {
           this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(
             solutions=>{
               this.refactoringSolutions = solutions;
-              console.log("Refactoring solutions received: ", solutions);
+              //console.log("Refactoring solutions received: ", solutions);
             });
         });
 

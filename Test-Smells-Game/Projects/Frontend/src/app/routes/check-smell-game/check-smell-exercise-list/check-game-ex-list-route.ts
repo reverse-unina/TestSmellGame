@@ -37,7 +37,8 @@ export class CheckGameExListRoute implements OnInit {
 
             return a.exerciseId > b.exerciseId ? 1 : -1;
         });
-        console.log(response);
+
+        //console.log(response);
       },
       error: (err) => {
         this.waitingForServer = false;

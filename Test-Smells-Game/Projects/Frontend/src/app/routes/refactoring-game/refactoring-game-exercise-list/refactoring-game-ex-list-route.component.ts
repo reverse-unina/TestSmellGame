@@ -38,7 +38,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
 
             return a.exerciseId > b.exerciseId ? 1 : -1;
           });
-        console.log(this.exercises);
+        //console.log(this.exercises);
       },
       error: (err) => {
         this.waitingForServer = false;

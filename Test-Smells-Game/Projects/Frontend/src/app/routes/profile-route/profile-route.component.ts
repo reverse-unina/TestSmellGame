@@ -43,14 +43,14 @@ export class ProfileRouteComponent implements OnInit {
 
     this.config = await firstValueFrom(this.exerciseService.getToolConfig());
     this.setUserLevel();
-    console.log('LevelConfig:', this.config);
+    //console.log('toolConfig:', this.config);
 
     try {
       this.missionConfigurations = await firstValueFrom(this.missionService.getMissions());
       this.userMissionsStatus = await firstValueFrom(this.userService.getUserMissionsStatus());
       this.serverError = undefined;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       // @ts-ignore
       this.serverError = error.error.message || 'An unexpected error occurred';
     }
@@ -61,8 +61,8 @@ export class ProfileRouteComponent implements OnInit {
     this.topGameModeUsers = await firstValueFrom(this.leaderboardService.getGameModePodium(3));
     this.topRefactoringUsers = await firstValueFrom(this.leaderboardService.getRefactoringExercisePodium(3));
 
-    console.log('userRank:', this.userRank);
-    console.log('topGameModeUsers', this.topGameModeUsers);
+    //console.log('userRank:', this.userRank);
+    //console.log('topGameModeUsers', this.topGameModeUsers);
   }
 
   isMissionCompleted(missionConfiguration: MissionConfiguration): boolean {

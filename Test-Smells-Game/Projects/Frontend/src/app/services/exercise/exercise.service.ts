@@ -87,7 +87,7 @@ export class ExerciseService {
       eventDescription,
       timestamp: new Date().toISOString()
     };
-    console.log("body: ", eventLog);
+    //console.log("body: ", eventLog);
     return this.http.post(environment.exerciseServiceUrl + '/files/logger', eventLog, { responseType: 'json' });
   }
 
@@ -111,7 +111,7 @@ export class ExerciseService {
     formData.append('shellCode', new Blob([shellCode], { type: 'text/plain' }), `${studentName}_ShellCode.java`);
     formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
 
-    console.log("submitting");
+    //console.log("submitting");
 
     return this.http.post(environment.exerciseServiceUrl + '/exercises/refactoring/submit/', formData);
   }

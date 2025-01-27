@@ -66,7 +66,7 @@ export class CheckSmellService {
     this.assignmentScore = 0;
     let score = 0;
 
-    console.log("questions: ", this.questions);
+    //console.log("questions: ", this.questions);
     this.questions.forEach(question => {
       let currentCorrectAnswers = 0;
       let givenAnswersScore = 0;

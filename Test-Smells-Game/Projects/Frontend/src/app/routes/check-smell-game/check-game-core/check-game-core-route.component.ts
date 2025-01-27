@@ -65,8 +65,8 @@ export class CheckGameCoreRouteComponent implements OnInit {
           this.leaderboardService.updateBestCheckSmellScore(this.userService.user.value.userName, this.exerciseName, 1).subscribe(
             (updatedScore) => {
 
-              console.log("Current score: ", currentScore);
-              console.log("Updated score: ", updatedScore);
+              //console.log("Current score: ", currentScore);
+              //console.log("Updated score: ", updatedScore);
               if (updatedScore.checkSmellScore !== currentScore.checkSmellScore) {
                 this.exerciseService.logEvent("Check game", this.userService.user.value.userName, "increased check-smell game mode points by 1").subscribe(
                   next => {

@@ -154,11 +154,11 @@ export class RefactoringService {
       const exercise = new Exercise(this.exerciseConfiguration.className, this.originalProductionCode, this.originalTestCode, testing.injectedCode);
       this.compiledExercise = exercise;
 
-      console.log("Exercise: ", exercise);
+      //console.log("Exercise: ", exercise);
 
       this.codeService.compile(exercise, this.exerciseConfiguration).subscribe(
         (data) => {
-          console.log("Compiled");
+          //console.log("Compiled");
           this.elaborateCompilerAnswer(data);
           this.stopLoading();
           this.exerciseService.logEvent(gameMode, this.userService.user.value.userName,

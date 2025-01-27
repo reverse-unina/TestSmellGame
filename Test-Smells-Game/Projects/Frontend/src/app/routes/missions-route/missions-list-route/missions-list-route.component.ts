@@ -29,13 +29,13 @@ export class MissionsListRouteComponent implements OnInit {
           this.missions = response;
         },
         error: (err) => {
-          console.log(err.error.message || 'An unexpected error occurred');
+          //console.log(err.error.message || 'An unexpected error occurred');
           this.serverError = err.error.message || 'An unexpected error occurred';
         }
       });
 
       this.userMissionsStatus = await firstValueFrom(this.userService.getUserMissionsStatus());
-      console.log("userMissionsStatus: ", this.userMissionsStatus);
+      //console.log("userMissionsStatus: ", this.userMissionsStatus);
     } catch (error) {
       console.error('Error occurred while fetching missions:', error);
     }

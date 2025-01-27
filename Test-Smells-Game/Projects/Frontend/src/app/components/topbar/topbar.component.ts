@@ -32,11 +32,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
       this.isAuthenticated = !!user;
       this.currentUser = user;
     });
-    console.log("Component created");
+    //console.log("Component created");
     this.exerciseService.getToolConfig().subscribe(
                               (data: ToolConfig) => {
                                   this.config = data;
-                                  console.log('LevelConfig:', this.config);
+                                  //console.log('toolConfig:', this.config);
                               },
                               error => {
                                   console.error('Error fetching level config:', error);
@@ -47,7 +47,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     if (this.userSub) {
       this.userSub.unsubscribe();
     }
-    console.log("Component destroyed");
+    //console.log("Component destroyed");
   }
 
   onLogout() {
