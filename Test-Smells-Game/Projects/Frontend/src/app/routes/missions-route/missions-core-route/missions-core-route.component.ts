@@ -74,10 +74,10 @@ export class MissionsCoreRouteComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.mission = await firstValueFrom(this.missionService.getMissionById(this.missionId));
-      console.log("Mission: ", this.mission);
+      //console.log("Mission: ", this.mission);
 
       const userMissionsStatus: MissionStatus[] = await firstValueFrom(this.userService.getUserMissionsStatus());
-      console.log("Mission status: ", userMissionsStatus);
+      //console.log("Mission status: ", userMissionsStatus);
 
       if (userMissionsStatus) {
         const missionStatus = userMissionsStatus.find(mission => mission.missionId === this.mission.id);
@@ -121,11 +121,11 @@ export class MissionsCoreRouteComponent implements OnInit {
         console.log(JSON.stringify(next));
       });
 
-    console.log("points", score);
+    //console.log("points", score);
 
     this.leaderboardService.updateMissionsScore(this.userService.user.value.userName, score).subscribe(
       data => {
-        console.log("Updated score: ", data);
+        //console.log("Updated score: ", data);
         this.exerciseService.logEvent(`Mission ${this.missionId}`, this.userService.user.value.userName, `increased missions game mode points by ${score}`).subscribe(
           next => {
             console.log(JSON.stringify(next));
@@ -186,7 +186,11 @@ export class MissionsCoreRouteComponent implements OnInit {
     this.checkSmellService.calculateScore();
 
     if (this.checkSmellService.config.logTries) {
-      this.exerciseService.submitCheckSmellExercise(`Mission ${this.missionId}`, this.userService.user.value.userName, this.mission.steps[this.currentStep].id, this.checkSmellService.generateCheckSmellReport());
+      this.exerciseService.submitCheckSmellExercise(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, this.mission.steps[this.currentStep].id, this.checkSmellService.generateCheckSmellReport()).subscribe(
+        result => {
+          console.log("Updated solution", result);
+        }
+      );
     }
 
     this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "completed check-smell exercise " + this.mission.steps[this.currentStep].id + " with score " + Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore) + '/100').subscribe(

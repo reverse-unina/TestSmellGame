@@ -33,5 +33,6 @@
       }
     ]
   },
+  "available_for_game": true,
   "auto_valutative": false
 }

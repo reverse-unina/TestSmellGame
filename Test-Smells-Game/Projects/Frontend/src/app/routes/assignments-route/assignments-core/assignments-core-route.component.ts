@@ -31,7 +31,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
   checkInterval: any;
   currentUser: User | any;
   currentStudent: Student | any;
-  isCompiledSuccessfully: boolean = false;
 
   // MESSAGES
   codeModified: boolean = false;
@@ -77,14 +76,14 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this.assignmentsService.getCurrentStudentForAssignment(this.assignmentName, this.currentUser.userName)
     );
 
-    console.log(this.assignmentName);
+    //console.log(this.assignmentName);
 
     this.assignment = await firstValueFrom(this.assignmentsService.getAssignmentByName(this.assignmentName));
 
-    console.log(this.assignment);
+    //console.log(this.assignment);
     if (this.assignment) {
       this.startCheckInterval();
-      console.log("assignemnt");
+      //console.log("assignemnt");
       if (this.assignment!.gameType === "refactoring") {
         this.codeModifiedSubscription = this.codeEditorService.codeModified$.subscribe(
           isModified => {
@@ -127,7 +126,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     }
 
     const endTime = this.getAssignmentEndTime(currentStudent.endDate, currentStudent.endTime);
-    console.log('End time for assignment:', endTime);
+    //console.log('End time for assignment:', endTime);
     this.checkInterval = setInterval(() => {
       const currentTime = new Date();
       if (currentTime >= endTime) {
@@ -195,7 +194,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   // Refactoring assignments type methods
   submitIsDisabled(): boolean {
-    return this.refactoringService.progressBarMode == 'query' || !this.isCompiledSuccessfully || this.codeModified || !this.refactoringService.isExercisePassed();
+    return this.refactoringService.progressBarMode == 'query' || this.codeModified || !this.refactoringService.isExercisePassed();
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -211,15 +210,13 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
 
   async compile(): Promise<void> {
     if (await this.refactoringService.compileExercise(`Assignment ${this.assignmentName}`, this.testing.editorComponent)){
-      console.log("Compile compiled");
-      this.isCompiledSuccessfully = true;
+      //console.log("Compile compiled");
       this.codeModified = false;
     }
-    console.log("outside compiled");
+    //console.log("outside compiled");
   }
 
   onCodeChange() {
-    this.isCompiledSuccessfully = false;
     this.codeModified = true;
   }
 

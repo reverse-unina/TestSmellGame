@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
 import { Observable } from 'rxjs';
-import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import { ToolConfig } from "src/app/model/toolConfig/tool.config.model"
 import {LearningContent} from "../../model/learningContent/learning-content";
 import { ElectronService } from "ngx-electron";
 import {Repository} from "../../model/repository/repository.model";
 import {
-  CheckGameExerciseConfig,
+  CheckGameExerciseConfiguration,
   RefactoringGameExerciseConfiguration
 } from "../../model/exercise/ExerciseConfiguration.model";
 
@@ -55,7 +55,7 @@ export class ExerciseService {
     const headers = new HttpHeaders({
       'ngrok-skip-browser-warning': 'true'
     });
-    return this.http.get<CheckGameExerciseConfig[]>(environment.exerciseServiceUrl + '/exercises/checksmell', { headers: headers })
+    return this.http.get<CheckGameExerciseConfiguration[]>(environment.exerciseServiceUrl + '/exercises/checksmell', { headers: headers })
   }
 
   getMainClass(exerciseId: string) {
@@ -102,7 +102,7 @@ export class ExerciseService {
       headers: headers,
       responseType: 'json'
     };
-    return this.http.get<CheckGameExerciseConfig>(environment.exerciseServiceUrl + '/exercises/checksmell/' + exerciseId, HTTPOptions);
+    return this.http.get<CheckGameExerciseConfiguration>(environment.exerciseServiceUrl + '/exercises/checksmell/' + exerciseId, HTTPOptions);
   }
 
   getLeaningContentById(learningId: string): Observable<LearningContent> {
@@ -112,7 +112,7 @@ export class ExerciseService {
     return this.http.get<LearningContent>(environment.exerciseServiceUrl + `/exercises/learning/${learningId}`, {headers});
   }
 
-  getLevelConfig(): Observable<levelConfig> {
+  getToolConfig(): Observable<ToolConfig> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'ngrok-skip-browser-warning': 'true'
@@ -121,19 +121,45 @@ export class ExerciseService {
       headers: headers,
       responseType: 'json' as 'json'
     };
-    return this.http.get<levelConfig>(environment.exerciseServiceUrl + '/levelconfig/', HTTPOptions);
+    return this.http.get<ToolConfig>(environment.exerciseServiceUrl + '/toolconfig/', HTTPOptions);
   }
 
 
-  logEvent(player: string, eventDescription: string): Observable<any> {
+  logEvent(gameMode: string, player: string, eventDescription: string): Observable<any> {
     const headers = new HttpHeaders({
       'ngrok-skip-browser-warning': 'true'
     });
     const eventLog = {
+      gameMode,
       player,
       eventDescription,
       timestamp: new Date().toISOString()
     };
     return this.http.post(environment.exerciseServiceUrl + '/files/logger', eventLog, { headers, responseType: 'json' });
+  }
+
+  submitCheckSmellExercise(gameMode: string, studentName: string, exerciseId: string, results: string) {
+    const formData = new FormData();
+    formData.append('gameMode', gameMode);
+    formData.append('studentName', studentName);
+    formData.append('exerciseId', exerciseId);
+    formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
+
+    return this.http.post(environment.exerciseServiceUrl + '/exercises/checksmell/submit', formData);
+  }
+
+  submitRefactoringExercise(gameMode: string, studentName: string, exerciseId: string, productionCode: string, testCode: string, shellCode: string, results: string): Observable<any> {
+    const formData = new FormData();
+    formData.append('gameMode', gameMode);
+    formData.append('studentName', studentName);
+    formData.append('exerciseId', exerciseId);
+    formData.append('productionCode', new Blob([productionCode], { type: 'text/plain' }), `${studentName}_ClassCode.java`);
+    formData.append('testCode', new Blob([testCode], { type: 'text/plain' }), `${studentName}_TestCode.java`);
+    formData.append('shellCode', new Blob([shellCode], { type: 'text/plain' }), `${studentName}_ShellCode.java`);
+    formData.append('results', new Blob([results], { type: 'text/plain' }), `${studentName}_results.txt`);
+
+    console.log("submitting");
+
+    return this.http.post(environment.exerciseServiceUrl + '/exercises/refactoring/submit', formData);
   }
 }

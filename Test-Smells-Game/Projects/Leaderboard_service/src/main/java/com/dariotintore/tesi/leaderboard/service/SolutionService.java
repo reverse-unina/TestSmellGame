@@ -33,7 +33,7 @@ public class SolutionService {
         this.voteRepository = voteRepository;
     }
 
-    public void saveSolutionForExerciseName(RefactoringSolutionDTO solutionDTO) {
+    public RefactoringSolution saveSolutionForExerciseName(RefactoringSolutionDTO solutionDTO) {
         RefactoringSolution refactoringSolution = RefactoringSolution.builder()
                 .playerName(solutionDTO.getPlayerName())
                 .exerciseId(solutionDTO.getExerciseId())
@@ -44,7 +44,7 @@ public class SolutionService {
                 .refactoredCoverage(solutionDTO.getRefactoredCoverage())
                 .smells(solutionDTO.getSmells())
                 .build();
-        refactoringSolutionRepository.save(refactoringSolution);
+        return refactoringSolutionRepository.save(refactoringSolution);
     }
 
     public CheckSmellSolution saveCheckSmellSolution(CheckSmellSolutionDTO solutionDTO) {

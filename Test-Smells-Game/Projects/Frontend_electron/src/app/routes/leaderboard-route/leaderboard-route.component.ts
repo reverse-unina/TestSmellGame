@@ -2,9 +2,12 @@ import {Component, NgZone, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
-import {Solution} from "../../model/solution/solution";
+import {CheckSmellStatistics, RefactoringSolution} from "../../model/solution/solution";
 import {ExerciseService} from "../../services/exercise/exercise.service";
-import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} from "../../model/exercise/ExerciseConfiguration.model";
+import {
+  RefactoringGameExerciseConfiguration,
+  CheckGameExerciseConfiguration
+} from "../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-leaderboard-route',
@@ -13,13 +16,18 @@ import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} from "../
 })
 export class LeaderboardRouteComponent implements OnInit {
 
-  solutions!: Solution[]
+  refactoringSolutions!: RefactoringSolution[];
+  checkSmellStatistics!: CheckSmellStatistics[];
+  refactoringExerciseConfiguration!: RefactoringGameExerciseConfiguration;
+  checkSmellExerciseConfiguration!: CheckGameExerciseConfiguration;
+
   exerciseCode!: string;
   testingCode!: string;
   exerciseName = this.route.snapshot.params['exercise'];
   isAutoValutative!: boolean;
-  exerciseConfiguration!: RefactoringGameExerciseConfiguration;
+
   isAssignmentsRoute!: boolean;
+  isCheckSmellRoute!: boolean
 
   constructor(private http: HttpClient,
               private router: Router,
@@ -30,35 +38,36 @@ export class LeaderboardRouteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Leaderboard page");
     this.isAssignmentsRoute = this.router.url.includes('assignments');
-    this.getConfiguration();
+    this.isCheckSmellRoute = this.router.url.includes('check-game');
 
-    if(!this.isAutoValutative)
-      this.retrieveCode();
+    if (this.isCheckSmellRoute) {
+      this.leaderboardService.getCheckSmellSolutionsByExerciseName(this.exerciseName).subscribe(
+        data => {
+          this.checkSmellStatistics = data;
+        }
+      );
 
-  }
+    } else {
+      this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(
+        data=>{
+          this.refactoringExerciseConfiguration = data;
+          this.isAutoValutative = this.refactoringExerciseConfiguration.autoValutative;
+          this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(data=>{
+            this.refactoringSolutions = data;
+            console.log("Refactoring solutions received: ", data);
+          })
+        })
 
-  retrieveCode(){
-    this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
-      this.exerciseCode = data;
-    });
-    this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
-      this.testingCode = data
-    })
-  }
+      if(!this.isAutoValutative) {
+        this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
+          this.exerciseCode = data;
+        });
+        this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
+          this.testingCode = data
+        })
+      }
 
-  setupConfigFiles(data:any){
-    this.exerciseConfiguration = data;
-    this.isAutoValutative = this.exerciseConfiguration.autoValutative;
-    this.leaderboardService.getSolutionsByExerciseName(this.exerciseConfiguration.exerciseId).subscribe(data=>{
-      this.solutions = data;
-      console.log("Data: ", data);
-    })
-
-  }
-
-  getConfiguration() {
-    this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data=>{this.setupConfigFiles(data)})
+    }
   }
 }

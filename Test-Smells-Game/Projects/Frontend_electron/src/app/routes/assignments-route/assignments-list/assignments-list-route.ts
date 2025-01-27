@@ -4,7 +4,6 @@ import { AssignmentsService } from "../../../services/assignments/assignments.se
 import { UserService } from "../../../services/user/user.service";
 import { User } from '../../../model/user/user.model';
 import { AssignmentConfiguration, Student } from '../../../model/assignment/assignment.model';
-import {CheckGameExerciseConfig} from "../../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-assignments-list',

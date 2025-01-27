@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   }
 
   setupNewEnvironmentFromForm(environmentForm: any) {
-    console.log(environmentForm)
+    //console.log(environmentForm)
     environment.userServiceUrl = environmentForm.value.user_service
     environment.compilerServiceUrl = environmentForm.value.compiler_service
     environment.leaderboardServiceUrl = environmentForm.value.leaderboard_service

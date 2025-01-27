@@ -1,7 +1,7 @@
 <div class="container">
   <h1>{{exerciseName}}</h1>
   <div>
-    <div *ngIf="!checkSmellService.exerciseCompleted else showResult" class="card">
+    <div *ngIf="!exerciseCompleted else showResult" class="card">
 
       <div *ngIf="checkSmellService.exerciseConfiguration && checkSmellService.questions && checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode">
         <app-check-smell-question #testing [editorHeader]="exerciseName+'.java'" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
@@ -17,6 +17,8 @@
         </div>
       </div>
 
+      <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Exercise statistics' | translate }}</button>
+
     </div>
   </div>
 
@@ -26,14 +28,20 @@
 
   <ng-template #showResult>
     <h1>{{ 'Score' | translate }}: {{Math.round((checkSmellService.score * 100) / checkSmellService.assignmentScore) + '/100'}}</h1>
-    <div *ngFor="let question of checkSmellService.questions" class="card">
 
-      <app-check-smell-question [injectedCode]="question.questionCode">
-      </app-check-smell-question>
+    <div class="card">
+      <div *ngFor="let question of checkSmellService.questions" class="card">
 
-      <app-check-smell-answer-list [questionAnswers]="question.answers"
-                                   [showBackground]="true" [disabled]="true">
-      </app-check-smell-answer-list>
+        <app-check-smell-question [injectedCode]="question.questionCode">
+        </app-check-smell-question>
+
+        <app-check-smell-answer-list [questionAnswers]="question.answers"
+                                     [showBackground]="true" [disabled]="true">
+        </app-check-smell-answer-list>
+
+      </div>
+
+      <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Exercise statistics' | translate }}</button>
     </div>
   </ng-template>
 

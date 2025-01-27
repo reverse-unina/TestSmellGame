@@ -16,7 +16,6 @@ export class LeaderboardRouteComponent implements OnInit {
   refactoringSolutions!: RefactoringSolution[];
   checkSmellStatistics!: CheckSmellStatistics[];
   refactoringExerciseConfiguration!: RefactoringGameExerciseConfiguration;
-  checkSmellExerciseConfiguration!: CheckGameExerciseConfiguration;
 
   exerciseCode!: string;
   testingCode!: string;
@@ -33,6 +32,7 @@ export class LeaderboardRouteComponent implements OnInit {
   { }
 
   ngOnInit(): void {
+
     this.isAssignmentsRoute = this.router.url.includes('assignments');
     this.isCheckSmellRoute = this.router.url.includes('check-game');
 
@@ -48,10 +48,13 @@ export class LeaderboardRouteComponent implements OnInit {
         data=>{
           this.refactoringExerciseConfiguration = data;
           this.isAutoValutative = this.refactoringExerciseConfiguration.autoValutative;
-          this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(data=>{
-            this.refactoringSolutions = data;
-          })
-        })
+
+          this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(
+            solutions=>{
+              this.refactoringSolutions = solutions;
+              //console.log("Refactoring solutions received: ", solutions);
+            });
+        });
 
       if(!this.isAutoValutative) {
         this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {

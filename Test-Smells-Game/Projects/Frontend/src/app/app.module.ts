@@ -109,36 +109,38 @@ export function HttpLoaderFactory(http:HttpClient) {
     RankComponent,
     CheckSmellStatisticsComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    CommonModule,
-    CodemirrorModule,
-    ReactiveFormsModule,
-    CommonModule,
-    BrowserAnimationsModule,
-    MatSnackBarModule,
-    MatExpansionModule,
-    MatListModule,
-    MatIconModule,
-    MatTabsModule,
-    MatCardModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    MatCheckboxModule,
-    TranslateModule.forRoot({
-      defaultLanguage: 'en',
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      }
-    }),
-    RouterModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule,
+        CommonModule,
+        CodemirrorModule,
+        ReactiveFormsModule,
+        CommonModule,
+        BrowserAnimationsModule,
+        MatSnackBarModule,
+        MatExpansionModule,
+        MatListModule,
+        MatIconModule,
+        MatTabsModule,
+        MatCardModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        MatCheckboxModule,
+        TranslateModule.forRoot({
+            defaultLanguage: 'en',
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient],
+            }
+        }),
+        RouterModule,
+        CommonModule,
+        TranslateModule
+    ],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })

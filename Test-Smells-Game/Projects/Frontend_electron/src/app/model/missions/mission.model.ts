@@ -17,5 +17,8 @@ export class MissionStatus {
   missionId!: string;
   steps!: number;
 
-  constructor(missionId: string, steps: number) {}
+  constructor(missionId: string, steps: number) {
+    this.missionId = missionId;
+    this.steps = steps;
+  }
 }

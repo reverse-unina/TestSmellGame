@@ -9,11 +9,21 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from './components/home/home.component';
 import {AuthService} from "./services/auth/auth.service";
-import {CommonModule, NgIf} from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {CodeEditorComponent} from './components/codeeditor/code-editor.component';
+import {
+  RefactoringGameCoreRouteComponent
+} from './routes/refactoring-game/refactoring-game-core/refactoring-game-core-route.component';
 import {ProfileRouteComponent} from './routes/profile-route/profile-route.component';
 import {CodemirrorModule} from '@ctrl/ngx-codemirror';
-import {SolutionComponent} from './components/solution/solution.component';
+import {
+  RefactoringGameExListRouteComponent
+} from './routes/refactoring-game/refactoring-game-exercise-list/refactoring-game-ex-list-route.component';
+import {CheckGameExListRoute} from './routes/check-smell-game/check-smell-exercise-list/check-game-ex-list-route';
+import {CheckGameCoreRouteComponent} from './routes/check-smell-game/check-game-core/check-game-core-route.component';
+import {AssignmentsListRoute} from './routes/assignments-route/assignments-list/assignments-list-route';
+import {AssignmentsCoreRouteComponent} from './routes/assignments-route/assignments-core/assignments-core-route.component';
+import {SolutionComponent} from './components/leaderboard/refactoring-solution/solution.component';
 import {LeaderboardRouteComponent} from './routes/leaderboard-route/leaderboard-route.component';
 import {LoaderComponent} from './components/loader/loader.component';
 import {SettingsRouteComponent} from './routes/settings-route/settings-route.component';
@@ -45,26 +55,15 @@ import { RefactoringEditorCardComponent } from './components/refactoring/refacto
 import { CheckSmellAnswerListComponent } from './components/check-smell/check-smell-answer-list/check-smell-answer-list.component';
 import { CheckSmellQuestionComponent } from './components/check-smell/check-smell-question/check-smell-question.component';
 import { LearningPageRouteComponent } from './routes/learning-page-route/learning-page-route.component';
+import { MissionsListRouteComponent } from './routes/missions-route/missions-list-route/missions-list-route.component';
+import { MissionsCoreRouteComponent } from './routes/missions-route/missions-core-route/missions-core-route.component';
 import { MissionProgressComponent } from './components/mission-progress/mission-progress.component';
 import { ErrorComponent } from './components/error/error.component';
 import { PodiumComponent } from './components/podium/podium.component';
 import { RankComponent } from './components/rank/rank.component';
+import {RouterLink, RouterModule} from "@angular/router";
+import { CheckSmellStatisticsComponent } from './components/leaderboard/check-smell-statistics/check-smell-statistics.component';
 import { ElectronService } from 'ngx-electron';
-import {CheckGameExListRoute} from "./routes/check-smell-game/check-smell-exercise-list/check-game-ex-list-route";
-import {CheckGameCoreRouteComponent} from "./routes/check-smell-game/check-game-core/check-game-core-route.component";
-import {
-  AssignmentsCoreRouteComponent
-} from "./routes/assignments-route/assignments-core/assignments-core-route.component";
-import {
-  RefactoringGameCoreRouteComponent
-} from "./routes/refactoring-game/refactoring-game-core/refactoring-game-core-route.component";
-import {
-  RefactoringGameExListRouteComponent
-} from "./routes/refactoring-game/refactoring-game-exercise-list/refactoring-game-ex-list-route.component";
-import {MissionsListRouteComponent} from "./routes/missions-route/missions-list-route/missions-list-route.component";
-import {MissionsCoreRouteComponent} from "./routes/missions-route/missions-core-route/missions-core-route.component";
-import {AssignmentsListRoute} from "./routes/assignments-route/assignments-list/assignments-list-route";
-
 
 export function HttpLoaderFactory(http:HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -92,6 +91,8 @@ export function HttpLoaderFactory(http:HttpClient) {
     LogknownissuesComponent,
     LogviewerComponent,
     LogelementComponent,
+    AssignmentsListRoute,
+    AssignmentsCoreRouteComponent,
     SuccessAlertComponent,
     FailAlertComponent,
     AchievementAlertComponent,
@@ -108,8 +109,7 @@ export function HttpLoaderFactory(http:HttpClient) {
     ErrorComponent,
     PodiumComponent,
     RankComponent,
-    AssignmentsListRoute,
-    AssignmentsCoreRouteComponent,
+    CheckSmellStatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -119,6 +119,7 @@ export function HttpLoaderFactory(http:HttpClient) {
     CommonModule,
     CodemirrorModule,
     ReactiveFormsModule,
+    CommonModule,
     BrowserAnimationsModule,
     MatSnackBarModule,
     MatExpansionModule,
@@ -137,7 +138,9 @@ export function HttpLoaderFactory(http:HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       }
-    })
+    }),
+    RouterModule,
+    TranslateModule
   ],
   providers: [AuthService, ElectronService],
   bootstrap: [AppComponent]

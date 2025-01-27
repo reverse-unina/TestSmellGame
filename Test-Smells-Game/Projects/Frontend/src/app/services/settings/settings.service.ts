@@ -50,7 +50,7 @@ export class SettingsService {
   switchLanguage(language:string){
     this.selectedLanguage = language;
     this.translate.use(language);
-    console.log("Settings.service.switchLanguage: ", this.translate.currentLang);
+    //console.log("Settings.service.switchLanguage: ", this.translate.currentLang);
     localStorage.setItem('selectedLanguage', language);
   }
 

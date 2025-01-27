@@ -115,7 +115,7 @@ export class UserService {
           mission.missionId === missionId ? new MissionStatus(missionId, steps) : mission;
         });
       } else {
-        console.log("Current user: ", currentUser)
+        //console.log("Current user: ", currentUser)
         currentUser.missionsStatus.push({missionId: missionId, steps: steps});
       }
     } else {

@@ -47,13 +47,17 @@ export class CheckGameCoreRouteComponent implements OnInit {
     const stat = this.checkSmellService.calculateScore();
 
     if (this.checkSmellService.config.logTries) {
-      this.exerciseService.submitCheckSmellExercise("Check game", this.userService.user.value.userName, this.exerciseName, this.checkSmellService.generateCheckSmellReport());
+      this.exerciseService.submitCheckSmellExercise("Check game", this.userService.user.value.userName, this.exerciseName, this.checkSmellService.generateCheckSmellReport()).subscribe(
+        result => {
+          console.log("Updated solution", result);
+        }
+      );
     }
 
     if (this.checkSmellService.isExercisePassed()) {
       this.successAlert.show();
 
-      this.leaderboardService.saveCheckSmellSolution(this.exerciseName, this.checkSmellService.score, stat[0], stat[1], stat[2]).subscribe(
+      this.leaderboardService.saveCheckSmellSolution(this.exerciseName, Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore), stat[0], stat[1], stat[2]).subscribe(
         data => {
           console.log("Updated solution", data);
         }
@@ -65,8 +69,8 @@ export class CheckGameCoreRouteComponent implements OnInit {
           this.leaderboardService.updateBestCheckSmellScore(this.userService.user.value.userName, this.exerciseName, 1).subscribe(
             (updatedScore) => {
 
-              console.log("Current score: ", currentScore);
-              console.log("Updated score: ", updatedScore);
+              //console.log("Current score: ", currentScore);
+              //console.log("Updated score: ", updatedScore);
               if (updatedScore.checkSmellScore !== currentScore.checkSmellScore) {
                 this.exerciseService.logEvent("Check game", this.userService.user.value.userName, "increased check-smell game mode points by 1").subscribe(
                   next => {

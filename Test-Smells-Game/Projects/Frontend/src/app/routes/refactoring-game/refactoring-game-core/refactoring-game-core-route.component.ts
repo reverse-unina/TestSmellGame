@@ -113,8 +113,8 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
                       console.log(JSON.stringify(next));
                   });
 
-                  console.log("Current score: ", currentScore);
-                  console.log("Updated score: ", updatedScore);
+                  //console.log("Current score: ", currentScore);
+                  //console.log("Updated score: ", updatedScore);
                   if (updatedScore.refactoringScore > currentScore.refactoringScore) {
                     this.userService.increaseUserExp(updatedScore.refactoringScore - currentScore.refactoringScore).then(
                       success => {

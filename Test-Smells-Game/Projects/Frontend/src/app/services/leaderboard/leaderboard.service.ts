@@ -69,7 +69,7 @@ export class LeaderboardService {
       "wrongAnswers": wrongAnswers
     }
 
-    console.log(body);
+    //console.log(body);
     return this.http.post(environment.leaderboardServiceUrl+'/leaderboard/checksmell', body, HTTPOptions)
   }
 

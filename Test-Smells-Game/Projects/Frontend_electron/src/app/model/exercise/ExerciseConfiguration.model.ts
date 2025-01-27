@@ -9,7 +9,8 @@ export class RefactoringGameExerciseConfiguration {
       'smellsAllowed': number,
       'level': number
     };
-    autoValutative!: boolean;
+  autoValutative!: boolean;
+  availableForGame!: boolean;
 
   static fromJson(json: any): RefactoringGameExerciseConfiguration {
     const config = new RefactoringGameExerciseConfiguration();
@@ -18,6 +19,7 @@ export class RefactoringGameExerciseConfiguration {
     config.className = json.class_name;
     config.refactoringGameConfiguration = RefactoringGameConfiguration.fromJson(json.refactoring_game_configuration);
     config.autoValutative = json.auto_valutative;
+    config.availableForGame = json.available_for_game;
 
     return config;
   }
@@ -43,20 +45,22 @@ class RefactoringGameConfiguration {
   }
 }
 
-export class CheckGameExerciseConfig {
+export class CheckGameExerciseConfiguration {
   exerciseId!: string;
   checkGameConfiguration!: {
     'questions': Question[],
     'level': number
   };
+  availableForGame!: boolean;
   autoValutative!: boolean;
 
-  static fromJson(json: any): CheckGameExerciseConfig {
-    const config = new CheckGameExerciseConfig();
+  static fromJson(json: any): CheckGameExerciseConfiguration {
+    const config = new CheckGameExerciseConfiguration();
 
     config.exerciseId = json.exerciseId;
     config.checkGameConfiguration = json.check_game_configuration;
     config.autoValutative = json.auto_valutative;
+    config.availableForGame = json.available_for_game;
 
     return config;
   }

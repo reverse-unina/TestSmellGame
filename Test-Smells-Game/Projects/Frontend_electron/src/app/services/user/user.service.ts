@@ -3,7 +3,7 @@ import {BehaviorSubject, firstValueFrom, lastValueFrom, Observable} from "rxjs";
 import { User } from "../../model/user/user.model";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from "../../../environments/environment.prod";
-import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model";
+import { ToolConfig } from "src/app/model/toolConfig/tool.config.model";
 import { ExerciseService } from "src/app/services/exercise/exercise.service"
 import {MissionStatus} from "../../model/missions/mission.model";
 
@@ -16,7 +16,7 @@ interface Config {
   providedIn: 'root'
 })
 export class UserService {
-  private config!: levelConfig;
+  private config!: ToolConfig;
   private userHasLevelledUp: boolean = false;
   private userHasUnlockedBadge: boolean = false;
 
@@ -46,7 +46,7 @@ export class UserService {
     this.userHasUnlockedBadge = false;
 
     const currentUser = this.user.value;
-    this.config = await lastValueFrom(this.exerciseService.getLevelConfig());
+    this.config = await lastValueFrom(this.exerciseService.getToolConfig());
 
     if (!currentUser) {
       console.error('No user found!');

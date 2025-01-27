@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../model/user/user.model';
-import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 import { ExerciseService } from '../../services/exercise/exercise.service'
 import {firstValueFrom} from "rxjs";
 import {MissionService} from "../../services/missions/mission.service";
@@ -9,6 +8,7 @@ import {MissionConfiguration, MissionStatus} from "../../model/missions/mission.
 import {environment} from "../../../environments/environment.prod";
 import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
 import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
+import {ToolConfig} from "../../model/toolConfig/tool.config.model";
 
 @Component({
   selector: 'app-profile-route',
@@ -17,7 +17,7 @@ import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
 })
 export class ProfileRouteComponent implements OnInit {
 
-  config!: levelConfig;
+  config!: ToolConfig;
   user!: User;
   userLevel!: string;
   missionConfigurations!: MissionConfiguration[];
@@ -41,7 +41,7 @@ export class ProfileRouteComponent implements OnInit {
       this.user = user;
     });
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+    this.config = await firstValueFrom(this.exerciseService.getToolConfig());
     this.setUserLevel();
     console.log('LevelConfig:', this.config);
 
