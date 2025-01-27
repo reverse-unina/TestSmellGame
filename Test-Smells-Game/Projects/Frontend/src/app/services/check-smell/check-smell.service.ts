@@ -113,12 +113,14 @@ export class CheckSmellService {
   }
 
   generateCheckSmellReport(): string {
-    const studentScore = Math.round((this.score * 100) / this.assignmentScore);
+    const studentResult = Math.round((this.score * 100) / this.assignmentScore);
+    const studentScore = this.score * 100;
     const assignmentScore = this.assignmentScore;
     const questions = this.questions;
 
     let content = `Student score: ${studentScore}\n`;
-    content += `Assignment total score: ${assignmentScore}\n\n`;
+    content += `Assignment total score: ${assignmentScore}\n`;
+    content += `Student result: ${studentResult}/100\n\n`;
 
     questions.forEach(question => {
       let questionPoints: number = 0;
