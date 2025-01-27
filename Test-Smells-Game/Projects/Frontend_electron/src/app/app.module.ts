@@ -9,7 +9,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from './components/home/home.component';
 import {AuthService} from "./services/auth/auth.service";
-import {CommonModule} from "@angular/common";
+import {CommonModule, NgForOf, NgIf} from "@angular/common";
 import {CodeEditorComponent} from './components/codeeditor/code-editor.component';
 import {
   RefactoringGameCoreRouteComponent
@@ -140,6 +140,11 @@ export function HttpLoaderFactory(http:HttpClient) {
       }
     }),
     RouterModule,
+    TranslateModule,
+    NgForOf,
+    NgIf,
+    TranslateModule,
+    TranslateModule,
     TranslateModule
   ],
   providers: [AuthService, ElectronService],

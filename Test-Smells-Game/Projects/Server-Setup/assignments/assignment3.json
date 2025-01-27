@@ -7,7 +7,7 @@
       "startTime": "00:00",
       "startDate": "2024-12-20",
       "endTime": "23:59",
-      "endDate": "2025-01-20",
+      "endDate": "2025-01-30",
       "submitted": false
     },
     {
@@ -29,6 +29,6 @@
       "submitted": false
     }
   ],
-  "type": "competitivo",
+  "type": "collaborative",
   "gameType": "check-smell"
 }

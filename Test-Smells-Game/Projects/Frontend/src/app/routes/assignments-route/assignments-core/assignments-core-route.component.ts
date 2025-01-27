@@ -136,7 +136,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           });
           if (!this.currentStudent.consegnato)
             this.submitAssignment();
-          if (this.assignment!.type === 'collaborativo')
+          if (this.assignment!.type === 'collaborative')
             this.router.navigate(['/assignments/leaderboard/' + this.exerciseName]);
           else
             this.router.navigate(['/home']);

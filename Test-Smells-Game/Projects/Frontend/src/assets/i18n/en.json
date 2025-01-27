@@ -43,8 +43,8 @@
   "Errore di compilazione": "Compilation Failure",
   "Punteggio": "Score",
   "Qual è lo smell presente nel seguente metodo?": "Which is the smell present in the following method?",
-  "Copertura codice originale": "Original coverage:",
-  "Copertura codice rifattorizzato": "Refactored coverage:",
+  "Copertura codice originale": "Original Coverage:",
+  "Copertura codice rifattorizzato": "Refactored Coverage:",
   "Smells permessi:": "Smells allowed:",
   "Commenti": "Comments",
   "Scrivi un commento": "Write a comment",
@@ -178,7 +178,24 @@
   "Hai completato con successo lo step della missione": "You have completed successfully the mission step.",
   "Hai fallito l'esecizio. Non arrenderti, prova ancora!": "You failed the exercise. Don’t give up, try again!",
 
-  "Statistiche esercizio": "Exercise statistics"
+  "Statistiche esercizio": "Exercise statistics",
+  "Statistiche Esercizio": "Exercise Statistics",
+  "Modalità di Gioco Check Smell": "Check Smell Game Mode",
+  "Modalità di Gioco Refactoring": "Refactoring Game Mode",
+  "Riepilogo Compilazione Esercizio": "Exercise Compilation Summary",
+  "Questo campo indica quanto il codice refattorizzato è simile all'originale. Un cambiamento drastico potrebbe causare differenze di comportamento. Limite consentito:": "This field indicates how similar the refactored code is to the original. A drastic change may lead to behavioral differences. Allowed limit:",
+  "Questo campo rappresenta il numero massimo di code smell consentiti nel codice di test affinché l'esercizio sia considerato superato con successo.": "This field represents the maximum number of code smells permitted in the test code for the exercise to be considered successful.",
+  "smell rimanenti - troppi per passare! Il limite è:": "smells remaining — too many to pass! The limit is",
+  "smell rimanenti, che rientrano nel limite di": "smells remaining, staying within the allowed limit of",
+  "Il tuo codice rifattorizzato ha": "Your refactored code has",
+  "Punteggio:": "Score:",
+  "Punteggio migliore": "Best Score",
+  "Risposte corrette": "Correct Answers",
+  "Risposte errate": "Wrong Answers",
+  "Risposte corrette non date": "Missed Answers",
+  "Smell Rimanenti": "Remaining Smells",
+  "Risultato Refactoring:": "Refactoring Result:",
+  "Smell Consentiti:": "Smells Allowed:"
 }
 
 

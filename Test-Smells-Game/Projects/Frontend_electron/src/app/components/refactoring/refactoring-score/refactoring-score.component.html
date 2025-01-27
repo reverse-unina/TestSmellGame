@@ -1,12 +1,12 @@
 <div class="card">
   <div class="card-header">
-    {{ 'Exercise Validation Summary' | translate }} <!-- TODO: translate -->
+    {{ 'Exercise Compilation Summary' | translate }}
   </div>
   <div class="card-body">
     <div class="result-section">
       <div class="factor-check-section" [ngClass]="{'success': refactoringResult, 'failure': !refactoringResult}">
-        <label>Refactoring Result: <span>{{ refactoringResult }}</span></label>
-        <mat-icon matTooltip="This field indicates how similar the refactored code is to the original. A drastic change may lead to behavioral differences. Allowed limit: {{ exerciseConfiguration.refactoringGameConfiguration.refactoringLimit }}">
+        <label>{{ 'Refactoring Result:' | translate }} <span>{{ refactoringResult }}</span></label>
+        <mat-icon matTooltip="{{'This field indicates how similar the refactored code is to the original. A drastic change may lead to behavioral differences. Allowed limit:' | translate}} {{ exerciseConfiguration.refactoringGameConfiguration.refactoringLimit }}">
           info
         </mat-icon>
       </div>
@@ -20,14 +20,14 @@
     <div class="result-section">
       <div class="factor-check-section" [ngClass]="{'success': !smellNumberWarning, 'failure': smellNumberWarning}" >
         <label>{{ 'Smells Allowed:' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}</label>
-        <mat-icon matTooltip="This field represents the maximum number of code smells permitted in the test code for the exercise to be considered successful.">
+        <mat-icon matTooltip="{{'This field represents the maximum number of code smells permitted in the test code for the exercise to be considered successful.' | translate }}">
           info
         </mat-icon>
       </div>
 
       <div class="info-box">
-        <p class="info-text" *ngIf="smellNumberWarning">{{ 'Your refactored code has' }} <span class="error-text">{{ smellNumber }}</span> {{'smells remaining — too many to pass! The limit is'}} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}</p>
-        <p class="info-text" *ngIf="!smellNumberWarning">{{ 'Your refactored code has' }} <span class="success-text">{{ smellNumber }}</span> {{'smells remaining, staying within the allowed limit of'}} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}.</p>
+        <p class="info-text" *ngIf="smellNumberWarning">{{ 'Your refactored code has' | translate }} <span class="error-text">{{ smellNumber }}</span> {{'smells remaining — too many to pass! The limit is' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}</p>
+        <p class="info-text" *ngIf="!smellNumberWarning">{{ 'Your refactored code has' | translate }} <span class="success-text">{{ smellNumber }}</span> {{'smells remaining, staying within the allowed limit of' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}.</p>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@
 
   <div class="card-footer">
     <div class="score-container">
-      <h4>Score: <label [ngClass]="{'success-text': score > 0, 'error-text': score < 0}">{{ score }}</label></h4>
+      <h4>{{ 'Score:' | translate }} <label [ngClass]="{'success-text': score > 0, 'error-text': score < 0}">{{ score }}</label></h4>
     </div>
   </div>
 </div>
