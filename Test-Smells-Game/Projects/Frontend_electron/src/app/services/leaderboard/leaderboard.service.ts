@@ -23,11 +23,11 @@ export class LeaderboardService {
   }
 
   getRefactoringSolutionByExerciseId(exercise: string){
-    return this.http.get<RefactoringSolution[]>(environment.leaderboardServiceUrl + '/leaderboard/refactoring/' + exercise);
+    return this.http.get<RefactoringSolution[]>(environment.leaderboardServiceUrl + '/leaderboard/refactoring/' + exercise, { headers: this.getHttpHeaders() });
   }
 
   getCheckSmellSolutionsByExerciseName(exercise: string){
-    return this.http.get<CheckSmellStatistics[]>(environment.leaderboardServiceUrl + '/leaderboard/checksmell/' + exercise);
+    return this.http.get<CheckSmellStatistics[]>(environment.leaderboardServiceUrl + '/leaderboard/checksmell/' + exercise, { headers: this.getHttpHeaders() });
   }
 
   saveRefactoringSolution(exercise: Exercise,

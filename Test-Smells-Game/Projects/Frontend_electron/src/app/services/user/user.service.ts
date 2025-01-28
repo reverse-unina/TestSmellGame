@@ -109,7 +109,7 @@ export class UserService {
   }
 
   getUserMissionsStatus(): Observable<MissionStatus[]> {
-    return this.http.get<MissionStatus[]>(`${environment.userServiceUrl}/users/${this.user.value.userId}/missions`);
+    return this.http.get<MissionStatus[]>(`${environment.userServiceUrl}/users/${this.user.value.userId}/missions`,  { headers: this.getHttpHeaders() });
   }
 
   updateUserMissionStatus(missionId: string, steps: number): Observable<any> {
