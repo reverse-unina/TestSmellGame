@@ -206,6 +206,12 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           this._snackBar.open('Assignment submitted successfully', 'Close', {
             duration: 3000
           });
+
+          this.exerciseService.logEvent(`Assignment ${this.assignmentName}`, this.currentUser.userName, 'submitted the assignment ' + (this.assignmentName || '')).subscribe({
+            next: response => console.log('Log event response:', response),
+            error: error => console.error('Error submitting log:', error)
+          });
+
           if (this.assignment?.type === 'collaborative') {
             this.leaderboardService.saveCheckSmellSolution(this.exerciseName, Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore), stat[0], stat[1], stat[2]).subscribe(
               data => {
