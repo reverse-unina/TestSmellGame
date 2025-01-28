@@ -140,11 +140,6 @@ export function HttpLoaderFactory(http:HttpClient) {
       }
     }),
     RouterModule,
-    TranslateModule,
-    NgForOf,
-    NgIf,
-    TranslateModule,
-    TranslateModule,
     TranslateModule
   ],
   providers: [AuthService, ElectronService],
