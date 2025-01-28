@@ -155,9 +155,17 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
             duration: 5000,
           });
           if (!this.currentStudent.consegnato)
-            this.submitAssignment();
+            if (!this.currentStudent.consegnato)
+              if (this.assignment!.gameType === "refactoring") {
+                this.submitAssignment();
+              } else {
+                this.submitCheckSmellAssignment();
+              }
           if (this.assignment!.type === 'collaborative')
-            this.router.navigate(['/assignments/leaderboard/' + this.exerciseName]);
+            if (this.assignment!.gameType === "refactoring")
+              this.router.navigate(['/refactor-game/leaderboard/' + this.exerciseName]);
+            else
+              this.router.navigate(['/check-game/leaderboard/' + this.exerciseName]);
           else
             this.router.navigate(['/home']);
         });
@@ -190,6 +198,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
     const assignmentName = this.assignment!.assignmentId;
     const exerciseId = this.exerciseName!;
     const results: string = this.checkSmellService.generateCheckSmellReport();
+    const stat = this.checkSmellService.calculateScore();
 
     if (assignmentName && studentName) {
       this.assignmentsService.submitCheckSmellAssignment(assignmentName, studentName, exerciseId, results).subscribe({
@@ -197,7 +206,16 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
           this._snackBar.open('Assignment submitted successfully', 'Close', {
             duration: 3000
           });
-          this.router.navigate(['/']);
+          if (this.assignment?.type === 'collaborative') {
+            this.leaderboardService.saveCheckSmellSolution(this.exerciseName, Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore), stat[0], stat[1], stat[2]).subscribe(
+              data => {
+                console.log("Updated solution", data);
+                this.router.navigate(['/check-game/leaderboard/' + this.exerciseName]);
+              }
+            );
+          } else {
+            this.router.navigate(['/']);
+          }
         },
         error: (err) => {
           console.error('Error submitting assignment:', err);
@@ -271,7 +289,6 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
                   duration: 3000
               });
               this.refactoringService.stopLoading();
-              this.router.navigate(['/']);
           },
           error: (err) => {
               this.refactoringService.stopLoading();
@@ -286,11 +303,12 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       this.downloadFile(`${studentName}_ShellCode.java`, this.refactoringService.shellCode);
       this.currentStudent.consegnato = true;
 
-      if (this.assignment!.type === 'collaborativo')
-       this.publishSolutionToLeaderboard();
-      else
+      if (this.assignment!.type === 'collaborative') {
+        this.publishSolutionToLeaderboard();
+        this.router.navigate(['/refactor-game/leaderboard/' + this.exerciseName]);
+      } else {
         this.router.navigate(['/']);
-
+      }
     } else {
         this.refactoringService.showPopUp("To submit your solution you have to complete the exercise");
         this.refactoringService.stopLoading();

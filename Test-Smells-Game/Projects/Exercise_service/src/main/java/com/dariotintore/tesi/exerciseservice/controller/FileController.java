@@ -34,6 +34,7 @@ public class FileController {
     private static final String ASSIGNMENT_LOG_FILE_PATH = "/usr/src/app/assets/assignments/";
     private static final String GAME_LOG_FILE_PATH = "/usr/src/app/assets/logs/";
 
+
     @GetMapping("/badges/{filename}")
     public ResponseEntity<Object> getBadgeImageByFilename(@PathVariable("filename") String filename) {
         byte[] image;
@@ -66,7 +67,7 @@ public class FileController {
                 Files.createDirectories(Paths.get(GAME_LOG_FILE_PATH));
 
             String logFileName = "events.log";
-            String logFilePath = eventLog.gameMode.equals("Assignment") ? ASSIGNMENT_LOG_FILE_PATH : GAME_LOG_FILE_PATH;
+            String logFilePath = eventLog.gameMode.contains("Assignment") ? ASSIGNMENT_LOG_FILE_PATH : GAME_LOG_FILE_PATH;
             logFilePath += logFileName;
 
             LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Europe/Rome"));

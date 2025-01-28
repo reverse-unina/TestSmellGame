@@ -38,7 +38,6 @@ export class LeaderboardRouteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isAssignmentsRoute = this.router.url.includes('assignments');
     this.isCheckSmellRoute = this.router.url.includes('check-game');
 
     if (this.isCheckSmellRoute) {
