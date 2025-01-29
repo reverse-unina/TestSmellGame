@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.io.FileWriter;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -86,6 +88,22 @@ public class FileController {
       }
     }
 
+
+
+    @GetMapping("/multi-level/{level}")
+    public ResponseEntity<Object> getExercisesByLevel(@PathVariable int level) {
+        List<Object> exercises = storageService.getExercisesByLevel(level);
+
+        if (exercises.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "No exercises found for level " + level));
+        }
+
+        return ResponseEntity.ok(exercises);
+    }
+
+
+
+
     public static class EventLog {
       private String player;
       private String eventDescription;
@@ -115,5 +133,7 @@ public class FileController {
           this.timestamp = timestamp;
       }
     }
+
+
 }
 

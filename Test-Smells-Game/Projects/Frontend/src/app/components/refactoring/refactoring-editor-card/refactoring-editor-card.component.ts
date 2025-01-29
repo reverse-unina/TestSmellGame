@@ -13,4 +13,11 @@ export class RefactoringEditorCardComponent {
   @Input() progressBarMode: ProgressBarMode = "determinate";
 
   @ViewChild('editorComponent') editorComponent: any;
+
+  reset(): void {
+    if (this.editorComponent){
+      this.editorComponent.codeMirror.setValue('');
+    }
+  }
+  
 }

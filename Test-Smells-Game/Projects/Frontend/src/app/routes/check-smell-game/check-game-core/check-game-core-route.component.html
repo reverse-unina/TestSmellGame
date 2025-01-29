@@ -11,9 +11,11 @@
         </app-check-smell-answer-list>
 
         <div>
-          <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
-          <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
-          <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+          <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0 && !isMultiLevelGame" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+          <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1 && !isMultiLevelGame" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+          <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton() && !isMultiLevelGame" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+          <button class="btn btn-primary" *ngIf="isMultiLevelGame"  [disabled]="isCompleteDisabled"
+           (click)="this.submitExercise()">{{ 'Complete' | translate }}</button>
         </div>
       </div>
 

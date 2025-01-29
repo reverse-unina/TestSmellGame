@@ -57,4 +57,12 @@ export class RefactoringSmellListComponent {
   }
 
 
+
+  reset(): void {
+    this.smellList = [];
+    this.smellDescriptions = [];
+    this.methodList = [];
+  }
+
+
 }

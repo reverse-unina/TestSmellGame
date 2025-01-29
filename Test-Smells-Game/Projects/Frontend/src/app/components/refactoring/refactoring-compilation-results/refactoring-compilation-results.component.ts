@@ -13,4 +13,13 @@ export class RefactoringCompilationResultsComponent {
   @Input() smellNumberWarning: boolean = false;
   @Input() exerciseSuccess: boolean = false;
 
+
+  reset(): void {
+    this.exerciseSuccess = false;
+    this.refactoringWarning = false;
+    this.smellNumberWarning = false;
+    this.shellCode = '';
+    this.progressBarMode = 'query';
+  }
+  
 }

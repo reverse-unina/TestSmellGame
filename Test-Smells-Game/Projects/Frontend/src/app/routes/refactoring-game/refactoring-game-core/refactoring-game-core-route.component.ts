@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, ViewChild, OnDestroy, ChangeDetectorRef} from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild, OnDestroy, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Event, Router} from '@angular/router';
 import {RefactoringService} from "../../../services/refactoring/refactoring.service";
 import {CodeeditorService} from "../../../services/codeeditor/codeeditor.service";
@@ -10,6 +10,8 @@ import {User} from "../../../model/user/user.model";
 import {AchievementAlertComponent} from "../../../components/alert/achivement-alert/achievement-alert.component";
 import {FailAlertComponent} from "../../../components/alert/fail-alert/fail-alert.component";
 import {SuccessAlertComponent} from "../../../components/alert/success-alert/success-alert.component";
+import { TranslateService } from '@ngx-translate/core';
+
 
 @Component({
   selector: 'app-refactoring-game-core',
@@ -21,13 +23,21 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
   @ViewChild('testing') testing: any;
   @ViewChild('output') output: any;
 
+  
+  
   @ViewChild('achievementAlert') achievementAlert!: AchievementAlertComponent;
   @ViewChild('failAlert') failAlert!: FailAlertComponent;
   @ViewChild('successAlert') successAlert!: SuccessAlertComponent;
 
-  exerciseName!: string;
+  @Input() exerciseNameTest!: string;
+  @Input() isMultiLevelGame: boolean = false;
+  @Output() exerciseCompleted = new EventEmitter<any>();
+
+
+  exerciseName: string = '';
   protected refactoringService!: RefactoringService;
   serverError: string | undefined;
+  isCompleteDisabled: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +45,8 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
     private exerciseService: ExerciseService,
     private leaderboardService: LeaderboardService,
     private snackBar: MatSnackBar,
-    private userService: UserService
+    private userService: UserService,
+    private translate: TranslateService
   ) {
     this.refactoringService = new RefactoringService(
       this.codeService,
@@ -44,10 +55,16 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
       this.snackBar,
       this.userService
     );
-    this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
+    //this.exerciseName = this.exerciseNameTest || decodeURIComponent(this.route.snapshot.params['exercise']);
+
   }
 
   async ngOnInit(): Promise<void> {
+    if (this.isMultiLevelGame) {
+      this.exerciseName = this.exerciseNameTest;
+    } else {
+      this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
+    }
     this.refactoringService.initSmellDescriptions();
     this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
     this.refactoringService.restoreCode("refactoring-game", this.exerciseName);
@@ -139,4 +156,66 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
 
 
   protected readonly Math = Math;
+
+
+  completeExercise(): void {
+    console.log('Refactoring Game completato con i seguenti dati:');
+    this.isCompleteDisabled = true;
+
+    const exerciseData = {
+      exerciseId: this.exerciseName,
+      score: Math.abs(this.refactoringService.smellNumber - this.refactoringService.exerciseConfiguration.refactoringGameConfiguration.smellsAllowed),
+      smellNumber: this.refactoringService.smellNumber,
+      refactoringResult: this.refactoringService.refactoringResult,
+      originalCoverage: this.refactoringService.originalCoverage,
+      refactoredCoverage: this.refactoringService.refactoredCoverage,
+      smells: this.refactoringService.smellList,
+      smellDescriptions: this.refactoringService.smellDescriptions,
+      passed: this.refactoringService.isExercisePassed(),
+    };
+  
+    this.exerciseCompleted.emit(exerciseData);
+
+    const message = this.translate.currentLang == 'it' ? 'Esercizio inviato' : 'Exercise submitted';
+    this.refactoringService.showPopUp(message);
+  }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['exerciseNameTest'] && !changes['exerciseNameTest'].firstChange) {
+      console.log('Cambio rilevato per exerciseNameTest:', changes['exerciseNameTest']);
+      this.reloadExercise();
+    }
+  }
+
+
+  async reloadExercise(): Promise<void>{
+
+    console.log('Ricaricamento esercizio iniziato.');
+    this.resetState();
+    if (this.isMultiLevelGame) {
+      this.exerciseName = this.exerciseNameTest;
+      this.isCompleteDisabled = false;
+
+    } else {
+      this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
+    }
+
+    console.log('esercizio in refactoring', this.exerciseName);
+
+    this.refactoringService.initSmellDescriptions();
+    this.serverError = await this.refactoringService.initCodeFromCloud(this.exerciseName);
+  }
+
+
+
+
+  private resetState(): void {
+      this.serverError = undefined;
+      this.exerciseName = '';
+      this.refactoringService.resetData();    
+  }
+    
+  
+
 }

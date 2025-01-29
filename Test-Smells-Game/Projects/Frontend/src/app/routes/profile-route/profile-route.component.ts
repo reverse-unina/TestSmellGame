@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../model/user/user.model';
 import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 import { ExerciseService } from '../../services/exercise/exercise.service'
-import {firstValueFrom} from "rxjs";
-import {MissionService} from "../../services/missions/mission.service";
-import {MissionConfiguration, MissionStatus} from "../../model/missions/mission.model";
-import {environment} from "../../../environments/environment.prod";
-import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
-import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
+import { firstValueFrom, Subject, takeUntil, tap } from "rxjs";
+import { MissionService } from "../../services/missions/mission.service";
+import { MissionConfiguration, MissionStatus } from "../../model/missions/mission.model";
+import { environment } from "../../../environments/environment.prod";
+import { LeaderboardService } from "../../services/leaderboard/leaderboard.service";
+import { PodiumRanking, Score, UserRanking } from "../../model/rank/score";
+import { TestService } from 'src/app/services/test/test.service';
+import Chart from 'chart.js/auto';
+import { TestHistory } from 'src/app/model/test-history';
 
 @Component({
   selector: 'app-profile-route',
   templateUrl: './profile-route.component.html',
   styleUrls: ['./profile-route.component.css']
 })
-export class ProfileRouteComponent implements OnInit {
+export class ProfileRouteComponent implements OnInit, OnDestroy {
 
   config!: levelConfig;
   user!: User;
@@ -28,18 +31,33 @@ export class ProfileRouteComponent implements OnInit {
   topRefactoringUsers!: PodiumRanking;
   serverError: string | undefined;
 
+  private destroy$ = new Subject<void>();
+
+  public testScores: number[] = [];
+  public testDates: string[] = [];
+  private chartInstance: Chart | null = null;
+
 
   constructor(
     private userService: UserService,
     private exerciseService: ExerciseService,
     private missionService: MissionService,
-    private leaderboardService: LeaderboardService
+    private leaderboardService: LeaderboardService,
+    private testService: TestService
   ) { }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete
+  }
+
   async ngOnInit(): Promise<void> {
-    this.userService.getCurrentUser().subscribe(user => {
-      this.user = user;
-    });
+    this.userService.getCurrentUser().pipe(
+      tap((user): void => {
+        this.user = user;
+      }, 
+      takeUntil(this.destroy$))
+    ).subscribe();
 
     this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
     this.setUserLevel();
@@ -63,6 +81,8 @@ export class ProfileRouteComponent implements OnInit {
 
     console.log('userRank:', this.userRank);
     console.log('topGameModeUsers', this.topGameModeUsers);
+
+    this.fetchTestHistory();
   }
 
   isMissionCompleted(missionConfiguration: MissionConfiguration): boolean {
@@ -128,4 +148,79 @@ export class ProfileRouteComponent implements OnInit {
 
   protected readonly environment = environment;
   protected readonly Object = Object;
+
+
+  ngAfterViewInit(): void {
+    this.renderChart();
+  }
+
+  private fetchTestHistory(): void {
+    this.testService.loadTestHistoryFromServer(this.user.userId)
+      .pipe(
+        tap(e => {
+
+          const history: TestHistory[] = e;
+          this.testScores = history.map(test => test.totalScore); // Usa il punteggio totale di ogni test
+          this.testDates = history.map(test => new Date(test.date).toLocaleDateString()); // Usa la data del test
+          //this.renderChart();
+
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe()
+
+  }
+
+
+  private renderChart(): void {
+    const canvas = document.getElementById('scoreChart') as HTMLCanvasElement;
+
+    if (this.chartInstance) {
+      this.chartInstance.destroy(); // Distruggi il grafico precedente per evitare duplicati
+    }
+
+    this.chartInstance = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.testDates,
+        datasets: [
+          {
+            label: 'Test Scores',
+            data: this.testScores,
+            borderColor: '#4caf50',
+            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Date'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Score'
+            },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
 }
+
+
+

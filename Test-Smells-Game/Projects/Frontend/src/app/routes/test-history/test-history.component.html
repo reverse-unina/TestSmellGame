@@ -1,0 +1,14 @@
+<div class="history-container">
+    <h2>{{ 'Test History' | translate}}</h2>
+    <app-grafico 
+    [visualizzaGriglia]="true"
+    [testScores]="testScores"
+    [testDates]="testDates">
+  </app-grafico>
+    
+
+  <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px; width: auto;">
+    <button class="btn btn-danger" (click)="deleteHistory()">{{'Delete Server History' | translate}}</button>
+  </div>
+
+  

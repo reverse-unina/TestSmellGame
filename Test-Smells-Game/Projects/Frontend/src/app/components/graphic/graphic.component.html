@@ -1,0 +1,29 @@
+<div *ngIf="visualizzaGriglia">
+    <table class="test-table">
+        <thead>
+            <tr>
+                <th>{{ 'Date' | translate }}</th>
+                <th>{{ 'Score' | translate}} Refactoring-Game</th>
+                <th>{{ 'Score' | translate}} Check-Game</th>
+                <th>{{ 'Correct Answers' | translate}}</th>
+                <th>{{ 'Wrong Answers' | translate}}</th>
+                <th>Tempo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let test of this.testHistory">
+                <td>{{ test.date | date:'short' }}</td>
+                <td>{{ test.refactoringScore }}</td>
+                <td>{{ test.checkScore }}</td>
+                <td>{{ test.correctAnswers }}</td>
+                <td>{{ test.wrongAnswers }}</td>
+                <td>{{ test.completionTime }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+    <div class="chart-container">
+        <h3>{{'User Progress' | translate}}</h3>
+        <canvas id="scoreChart"></canvas>
+    </div>
