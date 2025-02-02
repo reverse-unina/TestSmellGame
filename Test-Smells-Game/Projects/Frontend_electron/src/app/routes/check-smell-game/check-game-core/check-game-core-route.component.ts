@@ -72,6 +72,12 @@ export class CheckGameCoreRouteComponent implements OnInit, OnDestroy {
       );
     }
 
+    this.leaderboardService.saveNewUserSubmitHistory(this.userService.user.value.userId, "check-smell", this.checkSmellService.isExercisePassed() ? 1 : 0, this.exerciseName).subscribe(
+      result => {
+        console.log("Saved user history: ", result);
+      }
+    )
+
     if (this.checkSmellService.isExercisePassed()) {
       this.successAlert.show();
 

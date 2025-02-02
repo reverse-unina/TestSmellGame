@@ -149,8 +149,8 @@ export class ProfileRouteComponent implements OnInit {
     if (this.chartInstanceCheckGame) {
       this.chartInstanceCheckGame.destroy(); // Distruggi il grafico precedente per evitare duplicati
     }
-    if (this.chartInstanceCheckGame) {
-      this.chartInstanceCheckGame.destroy(); // Distruggi il grafico precedente per evitare duplicati
+    if (this.chartInstanceRefactoringGame) {
+      this.chartInstanceRefactoringGame.destroy(); // Distruggi il grafico precedente per evitare duplicati
     }
 
     const checkGameHistory = this.userSubmitHistory.filter(history => history.exerciseType === "check-smell");
