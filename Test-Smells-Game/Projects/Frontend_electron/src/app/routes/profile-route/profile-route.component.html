@@ -105,6 +105,18 @@
     </div>
   </div>
 
+  <div class="main-container">
+    <div class="chart-container">
+      <h3>{{'Check Game History' | translate}}</h3>
+      <canvas id="checkGameScoreChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <h3>{{'Refactoring Game History' | translate}}</h3>
+      <canvas id="refactoringGameScoreChart"></canvas>
+    </div>
+  </div>
+
   <div class="podium-container">
     <!-- Podium Section -->
     <div *ngIf="topGameModeUsers">

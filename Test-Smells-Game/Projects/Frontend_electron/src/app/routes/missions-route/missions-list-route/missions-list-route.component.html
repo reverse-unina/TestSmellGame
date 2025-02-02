@@ -17,21 +17,56 @@
   </ng-template>
 
   <ng-template #renderList>
-    <div *ngFor="let mission of missions" class="mission-card">
-      <div class="mission-info">
-        <h2>{{ mission.name }}</h2>
-        <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>
-        <app-mission-progress [progress]="getMissionProgress(mission)"></app-mission-progress>
+    <div *ngIf="missions && userMissionsStatus">
+      <div *ngFor="let tag of getMissionTags()" class="mission-tag-group">
+        <h2>{{ tag }}</h2>
+        <div *ngFor="let mission of getMissionsByTag(tag)" class="mission-card" [ngClass]="{ 'mission-locked': !isMissionUnlocked(mission), 'mission-unlocked': isMissionUnlocked(mission), 'mission-completed': isMissionCompleted(mission) }">
+          <div class="mission-info">
+            <h2>{{ mission.name }}</h2>
+            <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>
+            <app-mission-progress [progress]="getMissionProgress(mission)"></app-mission-progress>
+            <div *ngIf="!isMissionUnlocked(mission)" class="unlock-requirements">
+              <p>{{ "Unlock after completing" | translate }}:</p>
+              <ul>
+                <li *ngFor="let requiredMission of mission.unlockAfter">{{ getMissionNameById(requiredMission) }}</li>
+              </ul>
+            </div>
+          </div>
+          <button
+            class="btn-start"
+            [ngClass]="{ 'btn-disabled': !isMissionUnlocked(mission) || isMissionCompleted(mission), 'btn-active': isMissionUnlocked(mission) && !isMissionCompleted(mission) }"
+            [disabled]="!isMissionUnlocked(mission) || isMissionCompleted(mission)"
+            [routerLink]="isMissionUnlocked(mission) && !isMissionCompleted(mission) ? ['/missions', mission.id] : null"
+          >
+            {{ isMissionCompleted(mission) ? "Completed" : "Go to mission" | translate }}
+          </button>
+        </div>
       </div>
-      <button
-        class="btn-start"
-        [ngClass]="{ 'btn-disabled': isMissionCompleted(mission) }"
-        [disabled]="isMissionCompleted(mission)"
-        [routerLink]="isMissionCompleted(mission) ? null : ['/missions', mission.id]"
-      >
-        {{ "Go to mission" | translate }}
-      </button>
+
+      <div *ngIf="getMissionsWithoutTag().length > 0" class="mission-tag-group">
+        <h2>{{ 'Other Missions' | translate }}</h2>
+        <div *ngFor="let mission of getMissionsWithoutTag()" class="mission-card" [ngClass]="{ 'mission-locked': !isMissionUnlocked(mission), 'mission-unlocked': isMissionUnlocked(mission), 'mission-completed': isMissionCompleted(mission) }">
+          <div class="mission-info">
+            <h2>{{ mission.name }}</h2>
+            <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>
+            <app-mission-progress [progress]="getMissionProgress(mission)"></app-mission-progress>
+            <div *ngIf="!isMissionUnlocked(mission)" class="unlock-requirements">
+              <p>{{ "Unlock after completing" | translate }}:</p>
+              <ul>
+                <li *ngFor="let requiredMission of mission.unlockAfter">{{ getMissionNameById(requiredMission) }}</li>
+              </ul>
+            </div>
+          </div>
+          <button
+            class="btn-start"
+            [ngClass]="{ 'btn-disabled': !isMissionUnlocked(mission) || isMissionCompleted(mission), 'btn-active': isMissionUnlocked(mission) && !isMissionCompleted(mission) }"
+            [disabled]="!isMissionUnlocked(mission) || isMissionCompleted(mission)"
+            [routerLink]="isMissionUnlocked(mission) && !isMissionCompleted(mission) ? ['/missions', mission.id] : null"
+          >
+            {{ isMissionCompleted(mission) ? "Completed" : "Go to mission" | translate }}
+          </button>
+        </div>
+      </div>
     </div>
   </ng-template>
 </div>
-
