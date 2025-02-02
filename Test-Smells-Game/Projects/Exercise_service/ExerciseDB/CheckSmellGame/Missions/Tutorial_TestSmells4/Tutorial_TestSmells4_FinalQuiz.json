@@ -1,0 +1,53 @@
+{
+  "exerciseId": "Test Smells (pt. 4) -  Quiz",
+  "check_game_configuration": {
+    "level": 3,
+    "questions": [
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testFileOperations() throws IOException {\n\tString fileName = \"testfile.txt\";\n\tString content = \"Hello, this is a test.\";\n\tPath path = Paths.get(fileName);\n\tif (!Files.exists(path)) {\n\t\tFiles.createFile(path);\n\t}\n\n\t// Scrittura nel file\n\tFiles.write(path, content.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);\n\n\t// Lettura dal file\n\tString readContent = new String(Files.readAllBytes(path));\n\tassertEquals(content, readContent);\n\n\t// Eliminazione del file dopo il test\n\tFiles.deleteIfExists(path);\n}",
+        "answers": [
+          {
+            "answerText": "Mystery Guest",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          }
+        ]
+      },
+
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testFileReading() {\n    FileReader reader = new FileReader(\"test.txt\");\n    reader.read();\n    assertTrue(reader.isOpen());\n}",
+        "answers": [
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testEquality() {\n\tMyObject obj = new MyObject(\"expected\");\n\tString result = obj.toString();\n\tassertEquals(\"expected\", result);\n}",
+        "answers": [
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Mystery Guest",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  "available_for_game": false,
+  "auto_valutative": false
+}

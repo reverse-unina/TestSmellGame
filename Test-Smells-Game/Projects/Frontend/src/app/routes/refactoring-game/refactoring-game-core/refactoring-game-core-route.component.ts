@@ -103,6 +103,12 @@ export class RefactoringGameCoreRouteComponent implements OnInit, OnDestroy {
             this.refactoringService.user = user;
           });
 
+          this.leaderboardService.saveNewUserSubmitHistory(this.userService.user.value.userId, "refactoring", score, this.exerciseName).subscribe(
+            result => {
+              console.log("Saved user history: ", result);
+            }
+          );
+
           this.leaderboardService.getScore(this.userService.user.value.userName).subscribe(
             result => {
               const currentScore = result;

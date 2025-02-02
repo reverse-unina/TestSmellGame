@@ -1,0 +1,6 @@
+{
+  "learningId": "EagerTest",
+  "title": "Eager Test",
+  "content": "Occurs when a test method invokes several methods of the production object. This smell results in difficulties in test comprehension and maintenance.\n\nDetection: A test method that contains more than one assertion statement with the same parameters.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#EagerTest"
+}

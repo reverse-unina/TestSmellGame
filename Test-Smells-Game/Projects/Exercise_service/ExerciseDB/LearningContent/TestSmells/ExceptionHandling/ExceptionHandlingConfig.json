@@ -1,0 +1,6 @@
+{
+  "learningId": "ExceptionHandling",
+  "title": "Exception Handling",
+  "content": "This smell occurs when a test method explicitly a passing or failing of a test method is dependent on the production method throwing an exception. Developers should utilize JUnit's exception handling to automatically pass/fail the test instead of writing custom exception handling code or throwing an exception.\n\nDetection: A test method that contains either a throw statement or a catch clause.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#ExceptionHandling"
+}

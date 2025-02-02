@@ -9,6 +9,11 @@ import {MissionConfiguration, MissionStatus} from "../../model/missions/mission.
 import {environment} from "../../../environments/environment.prod";
 import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
 import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
+import Chart from 'chart.js/auto';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {UserSubmitHistory} from "../../model/userSubmitHistory/user-submit-history";
+
+
 
 @Component({
   selector: 'app-profile-route',
@@ -27,7 +32,10 @@ export class ProfileRouteComponent implements OnInit {
   topGameModeUsers!: PodiumRanking;
   topRefactoringUsers!: PodiumRanking;
   serverError: string | undefined;
+  userSubmitHistory!: UserSubmitHistory[];
 
+  private chartInstanceCheckGame: Chart | null = null;
+  private chartInstanceRefactoringGame: Chart | null = null;
 
   constructor(
     private userService: UserService,
@@ -60,6 +68,16 @@ export class ProfileRouteComponent implements OnInit {
 
     this.topGameModeUsers = await firstValueFrom(this.leaderboardService.getGameModePodium(3));
     this.topRefactoringUsers = await firstValueFrom(this.leaderboardService.getRefactoringExercisePodium(3));
+
+    this.leaderboardService.getAllUserSubmitHistoryByUserId(this.user.userId).subscribe(
+      result => {
+        this.userSubmitHistory = result;
+        console.log("History: ", this.userSubmitHistory);
+        if (this.userSubmitHistory.length > 0) {
+          this.renderGameCharts();
+        }
+      }
+    );
 
     //console.log('userRank:', this.userRank);
     //console.log('topGameModeUsers', this.topGameModeUsers);
@@ -124,8 +142,94 @@ export class ProfileRouteComponent implements OnInit {
     return Math.min(Math.max(progress, 0), 100);
   }
 
+  private renderGameCharts(): void {
+    const canvasCheckGame = document.getElementById('checkGameScoreChart') as HTMLCanvasElement;
+    const canvasRefactoringGame = document.getElementById('refactoringGameScoreChart') as HTMLCanvasElement;
 
+    if (this.chartInstanceCheckGame) {
+      this.chartInstanceCheckGame.destroy(); // Distruggi il grafico precedente per evitare duplicati
+    }
+    if (this.chartInstanceCheckGame) {
+      this.chartInstanceCheckGame.destroy(); // Distruggi il grafico precedente per evitare duplicati
+    }
+
+    const checkGameHistory = this.userSubmitHistory.filter(history => history.exerciseType === "check-smell");
+    const refactoringGameHistory = this.userSubmitHistory.filter(history => history.exerciseType === "refactoring");
+    Chart.register(ChartDataLabels);
+
+    this.renderChart(checkGameHistory, canvasCheckGame);
+    this.renderChart(refactoringGameHistory, canvasRefactoringGame);
+  }
+
+  private renderChart(history: UserSubmitHistory[], canvas: HTMLCanvasElement): void {
+    console.log("checkGameHistory", history);
+    this.chartInstanceCheckGame = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: history.map(history =>
+          new Date(history.dateTime[0], history.dateTime[1] - 1, history.dateTime[2], history.dateTime[3], history.dateTime[4]).toLocaleDateString()
+        ),
+        datasets: [
+          {
+            label: '', // Rimuoviamo "Exercises Scores"
+            data: history.map(history => history.exerciseScore),
+            borderColor: '#4caf50',
+            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+            borderWidth: 2,
+            pointBackgroundColor: '#4caf50',
+            pointRadius: 5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false // Nascondiamo la legenda dato che non serve più
+          },
+          tooltip: {
+            enabled: true,
+            callbacks: {
+              title: (tooltipItems) => {
+                const index = tooltipItems[0].dataIndex;
+                return history[index].exerciseName; // Mostra il nome dell'esercizio nel tooltip
+              },
+              label: (tooltipItem) => `Score: ${tooltipItem.formattedValue}` // Mostra il punteggio
+            }
+          },
+          datalabels: {
+            align: 'top',
+            anchor: 'end',
+            formatter: (value, context) => {
+              return history[context.dataIndex].exerciseName; // Nome esercizio sopra i punti
+            },
+            font: {
+              weight: 'bold'
+            },
+            color: '#000'
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Date'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Score'
+            },
+            beginAtZero: true
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+  }
 
   protected readonly environment = environment;
   protected readonly Object = Object;
+
 }

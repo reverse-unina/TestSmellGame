@@ -2,6 +2,19 @@
   padding: 20px;
   font-family: Arial, sans-serif;
 }
+
+
+.mission-tag-group {
+  margin-bottom: 30px;
+}
+.mission-tag-group h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
+}
+
 .mission-card {
   display: flex;
   justify-content: space-between;
@@ -13,11 +26,39 @@
   background-color: #f9f9f9;
   width: 100%;
 }
+
+.mission-unlocked {
+  opacity: 1;
+  background-color: #e6ffe6;
+  border-left: 5px solid #28a745;
+}
+.mission-locked {
+  opacity: 0.5;
+  background-color: #ffe6e6;
+  border-left: 5px solid #dc3545;
+}
+
+.mission-completed {
+  background-color: #d4edda;
+  border-left: 5px solid #155724;
+  opacity: 1;
+}
 .mission-info h2 {
   margin: 0 0 10px 0;
 }
 .mission-info {
   width: 50%;
+}
+.unlock-requirements {
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+.unlock-requirements ul {
+  padding-left: 20px;
+  margin: 5px 0 0;
+  color: red;
 }
 .btn-start {
   padding: 10px 15px;
@@ -36,4 +77,9 @@
   color: #666666;
   cursor: not-allowed;
 }
-
+.btn-active {
+  background-color: #28a745;
+}
+.btn-active:hover {
+  background-color: #218838;
+}

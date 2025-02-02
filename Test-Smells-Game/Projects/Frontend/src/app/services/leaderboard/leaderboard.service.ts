@@ -7,6 +7,7 @@ import {UserService} from "../user/user.service";
 import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
 import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
 import {Observable} from "rxjs";
+import {UserSubmitHistory} from "../../model/userSubmitHistory/user-submit-history";
 
 @Injectable({
   providedIn: 'root'
@@ -154,6 +155,26 @@ export class LeaderboardService {
       .set('podiumDimension', podiumDimension);
 
     return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/refactoring`, { params });
+  }
+
+  saveNewUserSubmitHistory(userId: number,
+                           exerciseType: string,
+                           exerciseScore: number,
+                           exerciseName: string
+  ): Observable<UserSubmitHistory> {
+    const body = {
+      userId,
+      exerciseType,
+      exerciseScore,
+      exerciseName
+    }
+
+    console.log("body: ", body);
+    return this.http.post<UserSubmitHistory>(environment.leaderboardServiceUrl + '/history/save', body);
+  }
+
+  getAllUserSubmitHistoryByUserId(userId: number): Observable<UserSubmitHistory[]> {
+    return this.http.get<UserSubmitHistory[]>(environment.leaderboardServiceUrl + `/history/${userId}`)
   }
 
 }

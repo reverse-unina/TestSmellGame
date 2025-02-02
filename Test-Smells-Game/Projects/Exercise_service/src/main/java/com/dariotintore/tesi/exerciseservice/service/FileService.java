@@ -182,7 +182,7 @@ public class FileService {
 
 
 		List<Path> configFilePaths = (List<Path>) result;
-		logger.info("Paths: " + configFilePaths);
+		logger.info("Paths in {}: {}", directory, configFilePaths);
 		Optional<T> jsonExercise = configFilePaths.stream()
 				.map(path -> (T) this.deserializeJson(path, className))
 				.filter(exercise -> {
@@ -253,6 +253,7 @@ public class FileService {
 					return FileVisitResult.CONTINUE;
 				}
 			});
+
 		} catch (IOException e) {
 			String error = "Error occurred while reading json files";
 			logger.error("{}: {}", error, e.getMessage());

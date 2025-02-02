@@ -28,7 +28,7 @@ export class CheckGameCoreRouteComponent implements OnInit {
     private exerciseService: ExerciseService,
     private userService: UserService,
     private route: ActivatedRoute,
-    private leaderboardService: LeaderboardService
+    private leaderboardService: LeaderboardService,
   ) {
     this.exerciseName = decodeURIComponent(this.route.snapshot.params['exercise']);
     this.checkSmellService = new CheckSmellService(
@@ -53,6 +53,12 @@ export class CheckGameCoreRouteComponent implements OnInit {
         }
       );
     }
+
+    this.leaderboardService.saveNewUserSubmitHistory(this.userService.user.value.userId, "check-smell", this.checkSmellService.isExercisePassed() ? 1 : 0, this.exerciseName).subscribe(
+      result => {
+        console.log("Saved user history: ", result);
+      }
+    )
 
     if (this.checkSmellService.isExercisePassed()) {
       this.successAlert.show();

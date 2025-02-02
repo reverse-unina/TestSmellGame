@@ -1,0 +1,18 @@
+{
+  "missionId": "Tutorial_RefactoringInAction2",
+  "name": "Refactoring in Action (pt. 2)",
+  "tag": "Tutorial",
+  "badge": "Quiz master",
+  "badge_filename": "quiz_master",
+  "unlock_after": ["Tutorial_TestSmells1", "Tutorial_TestSmells2", "Tutorial_RefactoringInAction1","Tutorial_TestSmells3"],
+  "steps": [
+    {
+      "id": "Tutorial_RefactoringInAction2_Introduction",
+      "type": "learning"
+    },
+    {
+      "id": "FontInfoTrunked",
+      "type": "refactoring"
+    }
+  ]
+}

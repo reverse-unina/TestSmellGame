@@ -1,0 +1,120 @@
+{
+  "exerciseId": "Test Smells (pt. 2) - Quiz",
+  "check_game_configuration": {
+    "level": 2,
+    "questions": [
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "\t@Test\n\tpublic void testCalculateDiscount() {\n\t\tdouble price = 100;\n\t\tdouble discount = 0.1;\n\t\tdouble expectedPrice = 90;\n\t\tdouble result = price - (price * discount);\n\t\tassertEquals(expectedPrice, result, 0.01);\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "General Fixture",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "\t@Test\n\tpublic void testUserLogin() {\n\t\tUser user = new User();\n\t\tuser.setUsername(\"testuser\");\n\t\tuser.setPassword(\"password123\");\n\t\tassertTrue(user.isValidUsername());\n\t\tassertTrue(user.isValidPassword());\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "General Fixture",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "\t@Test\n\tpublic void testOrderProcessing() {\n\t\tOrder order = new Order();\n\t\torder.addItem(new Item(\"Laptop\", 1000));\n\t\torder.addItem(new Item(\"Mouse\", 50));\n\t\torder.addItem(new Item(\"Keyboard\", 75));\n\t\tdouble total = order.calculateTotal();\n\t\tassertEquals(1125, total, 0.01);\n\t\torder.addItem(new Item(\"Keyboard\", 15));\n\t\ttotal = order.calculateTotal();\n\t\tassertEquals(1140, total, 0.01);\n\t}\n",
+        "answers": [
+          {
+            "answerText": "General Fixture",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "\t@Test\n\tpublic void testAccountBalance() {\n\t\tAccount account = new Account();\n\t\taccount.deposit(500);\n\t\tdouble balance = account.getBalance();\n\t\tassertEquals(500, balance, 0.01);\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "General Fixture",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "\t@Test\n\tpublic void testUserRegistration() {\n\t\tUser user = new User();\n\t\tuser.setUsername(\"newuser\");\n\t\tuser.setPassword(\"newpassword\");\n\t\tuser.setEmail(\"newuser@example.com\");\n\t\tassertTrue(user.isValidUsername());\n\t\tassertTrue(user.isValidPassword());\n\t\tassertTrue(user.isValidEmail());\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "General Fixture",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  "available_for_game": false,
+  "auto_valutative": false
+}

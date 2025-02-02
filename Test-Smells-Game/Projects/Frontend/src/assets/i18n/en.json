@@ -49,7 +49,7 @@
   "Commenti": "Comments",
   "Scrivi un commento": "Write a comment",
   "Invia": "Submit",
-  "Risultati Refactoring": "Refactoring result",
+  "Perdita di Coverage Accettabile:": "Coverage Loss Acceptable:",
   "Novità": "News",
   "Registrazione": "Sign Up",
   "Passa a": "Switch to",
@@ -195,7 +195,13 @@
   "Risposte corrette non date": "Missed Answers",
   "Smell Rimanenti": "Remaining Smells",
   "Risultato Refactoring:": "Refactoring Result:",
-  "Smell Consentiti:": "Smells Allowed:"
+  "Smell Consentiti:": "Smells Allowed:",
+
+  "Si sblocca dopo aver completato": "Unlock after completing",
+  "Altre Missioni": "Other Missions",
+  "Missione Completata!": "Mission Complete!",
+  "Progresso Check Game": "Check Game History",
+  "Progresso Refactoring Game": "Refactoring Game History"
 }
 
 
