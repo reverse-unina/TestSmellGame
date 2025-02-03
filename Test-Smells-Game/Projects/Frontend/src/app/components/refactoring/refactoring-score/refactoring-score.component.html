@@ -5,7 +5,7 @@
   <div class="card-body">
     <div class="result-section">
       <div class="factor-check-section" [ngClass]="{'success': refactoringResult, 'failure': !refactoringResult}">
-        <label>{{ 'Refactoring Result:' | translate }} <span>{{ refactoringResult }}</span></label>
+        <label>{{ 'Coverage Loss Acceptable:' | translate }} <span>{{ refactoringResult }}</span></label>
         <mat-icon matTooltip="{{'This field indicates how similar the refactored code is to the original. A drastic change may lead to behavioral differences. Allowed limit:' | translate}} {{ exerciseConfiguration.refactoringGameConfiguration.refactoringLimit }}">
           info
         </mat-icon>
