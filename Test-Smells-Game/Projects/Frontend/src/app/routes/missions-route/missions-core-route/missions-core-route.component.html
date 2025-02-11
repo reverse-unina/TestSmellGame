@@ -85,33 +85,20 @@
             <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers">
             </app-check-smell-answer-list>
 
-            <div style="margin-top: 20px; display: flex; justify-content: space-between; width: 100%;">
-              <div style="display: flex;">
-                <button style="margin: 10px" class="btn btn-primary"
-                        *ngIf="checkSmellService.actualQuestionNumber !== 0"
-                        (click)="checkSmellService.goBackward()">
-                  {{ 'Back' | translate }}
-                </button>
-
-                <button style="margin: 10px" class="btn btn-primary"
-                        *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1"
-                        (click)="checkSmellService.goForward()">
+            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+              <div>
+                <button style="margin: 10px" class="btn btn-primary" [disabled]="checkSmellService.actualQuestionNumber === 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+                <button style="margin: 10px" class="btn btn-primary" [disabled]="checkSmellService.actualQuestionNumber >= checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+              </div>
+              <div>
+                <button style="margin: 10px" [disabled]="!checkSmellService.enableSubmitButton()" class="btn btn-primary" (click)="this.submitCheckSmellExercise()">{{ 'Submit' | translate }}</button>
+                <button style="margin: 10px"
+                        [disabled]="!isExercisePassed()"
+                        class="btn btn-primary"
+                        (click)="this.nextStep()">
                   {{ 'Next' | translate }}
                 </button>
-
-                <button style="margin: 10px" [style.visibility]="!checkSmellService.enableSubmitButton() || isExercisePassed() ? 'hidden' : 'visible'"
-                        class="btn btn-primary"
-                        (click)="this.submitCheckSmellExercise()">
-                  {{ 'Submit' | translate }}
-                </button>
               </div>
-
-              <button style="margin: 10px"
-                      [style.visibility]="!isExercisePassed() ? 'hidden' : 'visible'"
-                      class="btn btn-primary"
-                      (click)="this.nextStep()">
-                {{ 'Next' | translate }}
-              </button>
             </div>
           </div>
         </div>
