@@ -12,6 +12,11 @@
   font-weight: bold;
 }
 
+.result-section {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
 .factor-check-section {
   display: flex;
   align-items: center;
@@ -51,4 +56,16 @@ mat-icon {
   font-size: 18px;
   color: #6c757d;
   cursor: pointer;
+}
+
+img {
+  width: auto;
+  height: 300px;
+}
+
+.column-container {
+  display: grid;
+  grid-template-columns: 6fr 1fr;
+  gap: 30px;
+  align-items: stretch;
 }

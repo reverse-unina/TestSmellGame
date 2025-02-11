@@ -20,7 +20,7 @@
     <div *ngIf="missions && userMissionsStatus">
       <div *ngFor="let tag of getMissionTags()" class="mission-tag-group">
         <h2>{{ tag }}</h2>
-        <div *ngFor="let mission of getMissionsByTag(tag)" class="mission-card" [ngClass]="{ 'mission-locked': !isMissionUnlocked(mission), 'mission-unlocked': isMissionUnlocked(mission), 'mission-completed': isMissionCompleted(mission) }">
+        <div *ngFor="let mission of getMissionsByTag(tag)" class="mission-card background" [ngClass]="{ 'mission-locked': !isMissionUnlocked(mission), 'mission-unlocked': isMissionUnlocked(mission), 'mission-completed': isMissionCompleted(mission) }">
           <div class="mission-info">
             <h2>{{ mission.name }}</h2>
             <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>
