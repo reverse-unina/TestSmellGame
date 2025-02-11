@@ -166,10 +166,12 @@ Non è richiesto che il file di contenuto sia posizionato in una sottodirectory 
 Il file di configurazione deve essere strutturato come segue:
 ```json
 {
-  "missionId": string",
+  "missionId": string,
   "name": string,
+  "tag": string,
   "badge": string,
   "badge_filename": string,
+  "unlock_after": [string]
   "steps": [
     {
       "type": string,
@@ -182,8 +184,10 @@ Il file di configurazione deve essere strutturato come segue:
 dove:
 - `missionId` rappresenta l'identificativo della missione. Questo deve essere unico all'interno della directory `/usr/src/app/assets/missions/`;
 - `name` rappresenta il nome della missione. Non è richiesto che sia identico a `missionId`;
+- `tag` viene usato per raggrauppare più missioni tra loro (es: "Tutorial"). Si tratta di un campo **opzionale**. Se la missione non contiene `tag`, verrà associata al gruppo "Other Missions";
 - `badge` rappresenta il nome o la descrizione del badge che verrà sbloccato dall'utente al completamento della missione;
 - `badge_filename` rappresenta il nome del file `.png` che rappresenta il badge, situato nella directory `/usr/src/app/assets/badges/`;
+- `unlock_after` rappresenta la lista di missioni che l'utenten deve aver completato per sbloccare la missione in oggetto. Viene specificato come una lista di `missionId` delle missioni dacompletare. Si tratta di un campo **opzionale**. Se la missione non contiene `unlock_after`, sarà sbloccata in automatico per tutti gli utenti;
 - `steps` rappresenta descrive la lista di passi da completare per superare la missione.
 - `type` rappresenta il tipo di passo, che può corrispondere a un esercizio di tipo refacotring, a un esercizio di tipo check-smell o alla visione di una pagina educativa. I valori che può assumere sono rispettivamente `refactoring`, `check-smell` e `learning`;
 - `id` rappresenta l'identificativo del file associato al passo. Deve quindi corrispondere all'`exerciseId` di un esercizio in `ExerciseDB/RefactoringGame/`, all'`exerciseId` di un esercizione in `ExerciseDB/ChechSmellGame/` o al campo `learningId` di un file in `ExerciseDB/LearningContent/`, in base al valore associato a `type`; 
@@ -216,3 +220,4 @@ dove:
 - `filename` rappresenta il nome del file `.png` che rappresenta il badge, situato nella directory `/usr/src/app/assets/badges/`;
 - `answerPercentage` rappresenta, in percentuale, il punteggio menimo che un utente deve raggiungere in un esercizio di check-smell affinchè questo venga cosiderato superato;
 - `logTries` indica se il sistema deve loggare o meno tutte le prove di risoluzione degli esercizi da parte degli utenti. Per gli esercizi di refactoring verranno loggate tutte le compilazioni dell'utente, mentre per gli esercizi di check-smell tutti i tentativi di risoluzione dell'utente. I log riguarderanno le missioni e la modalità gioco libero. 
+
