@@ -1,0 +1,15 @@
+.list-group-item {
+  /*background-color: rgba(255, 255, 255, 0.7);*/
+}
+
+.refactoring-list-background {
+  background-size: contain;       /* L'immagine copre tutta l'area */
+  background-repeat: no-repeat;
+  background-position: right;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+
+

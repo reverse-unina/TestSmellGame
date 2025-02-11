@@ -3,32 +3,37 @@
     {{ 'Exercise Compilation Summary' | translate }}
   </div>
   <div class="card-body">
-    <div class="result-section">
-      <div class="factor-check-section" [ngClass]="{'success': refactoringResult, 'failure': !refactoringResult}">
-        <label>{{ 'Refactoring Result:' | translate }} <span>{{ refactoringResult }}</span></label>
-        <mat-icon matTooltip="{{'This field indicates how similar the refactored code is to the original. A drastic change may lead to behavioral differences. Allowed limit:' | translate}} {{ exerciseConfiguration.refactoringGameConfiguration.refactoringLimit }}">
-          info
-        </mat-icon>
-      </div>
+    <div [ngClass]="{'column-container': imageSrc !== undefined, '': imageSrc === undefined}">
+      <div>
+        <div class="result-section">
+          <div class="factor-check-section" [ngClass]="{'success': refactoringResult, 'failure': !refactoringResult}">
+            <label>{{ 'Coverage Loss Acceptable:' | translate }} <span>{{ refactoringResult }}</span></label>
+            <mat-icon matTooltip="{{'This field indicates how similar the refactored code is to the original. A drastic change may lead to behavioral differences. Allowed limit:' | translate}} {{ exerciseConfiguration.refactoringGameConfiguration.refactoringLimit }}">
+              info
+            </mat-icon>
+          </div>
 
-      <div class="info-box">
-        <p class="info-text">{{ 'Original Coverage:' | translate }} <strong>{{ originalCoverage }}</strong></p>
-        <p class="info-text">{{ 'Refactored Coverage:' | translate }} <strong [ngClass]="{'error-text': refactoredCoverage < originalCoverage, 'success-text': refactoredCoverage >= originalCoverage}">{{ refactoredCoverage }}</strong></p>
-      </div>
-    </div>
+          <div class="info-box">
+            <p class="info-text">{{ 'Original Coverage:' | translate }} <strong>{{ originalCoverage }}</strong></p>
+            <p class="info-text">{{ 'Refactored Coverage:' | translate }} <strong [ngClass]="{'error-text': refactoredCoverage < originalCoverage, 'success-text': refactoredCoverage >= originalCoverage}">{{ refactoredCoverage }}</strong></p>
+          </div>
+        </div>
 
-    <div class="result-section">
-      <div class="factor-check-section" [ngClass]="{'success': !smellNumberWarning, 'failure': smellNumberWarning}" >
-        <label>{{ 'Smells Allowed:' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}</label>
-        <mat-icon matTooltip="{{'This field represents the maximum number of code smells permitted in the test code for the exercise to be considered successful.' | translate }}">
-          info
-        </mat-icon>
-      </div>
+        <div class="result-section">
+          <div class="factor-check-section" [ngClass]="{'success': !smellNumberWarning, 'failure': smellNumberWarning}" >
+            <label>{{ 'Smells Allowed:' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}</label>
+            <mat-icon matTooltip="{{'This field represents the maximum number of code smells permitted in the test code for the exercise to be considered successful.' | translate }}">
+              info
+            </mat-icon>
+          </div>
 
-      <div class="info-box">
-        <p class="info-text" *ngIf="smellNumberWarning">{{ 'Your refactored code has' | translate }} <span class="error-text">{{ smellNumber }}</span> {{'smells remaining — too many to pass! The limit is' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}</p>
-        <p class="info-text" *ngIf="!smellNumberWarning">{{ 'Your refactored code has' | translate }} <span class="success-text">{{ smellNumber }}</span> {{'smells remaining, staying within the allowed limit of' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}.</p>
+          <div class="info-box">
+            <p class="info-text" *ngIf="smellNumberWarning">{{ 'Your refactored code has' | translate }} <span class="error-text">{{ smellNumber }}</span> {{'smells remaining — too many to pass! The limit is' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}</p>
+            <p class="info-text" *ngIf="!smellNumberWarning">{{ 'Your refactored code has' | translate }} <span class="success-text">{{ smellNumber }}</span> {{'smells remaining, staying within the allowed limit of' | translate }} {{ exerciseConfiguration.refactoringGameConfiguration.smellsAllowed }}.</p>
+          </div>
+        </div>
       </div>
+      <img *ngIf="imageSrc!=undefined" src="{{ imageSrc }}" alt="Exercise image" />
     </div>
   </div>
 
