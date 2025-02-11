@@ -155,7 +155,7 @@ export class ProfileRouteComponent implements OnInit {
 
     const checkGameHistory = this.userSubmitHistory.filter(history => history.exerciseType === "check-smell");
     const refactoringGameHistory = this.userSubmitHistory.filter(history => history.exerciseType === "refactoring");
-    Chart.register(ChartDataLabels);
+    //Chart.register(ChartDataLabels);
 
     this.renderChart(checkGameHistory, canvasCheckGame);
     this.renderChart(refactoringGameHistory, canvasRefactoringGame);
@@ -171,7 +171,7 @@ export class ProfileRouteComponent implements OnInit {
         ),
         datasets: [
           {
-            label: '', // Rimuoviamo "Exercises Scores"
+            label: '',
             data: history.map(history => history.exerciseScore),
             borderColor: '#4caf50',
             backgroundColor: 'rgba(76, 175, 80, 0.2)',
@@ -185,29 +185,36 @@ export class ProfileRouteComponent implements OnInit {
         responsive: true,
         plugins: {
           legend: {
-            display: false // Nascondiamo la legenda dato che non serve più
+            display: false
           },
           tooltip: {
             enabled: true,
             callbacks: {
               title: (tooltipItems) => {
                 const index = tooltipItems[0].dataIndex;
-                return history[index].exerciseName; // Mostra il nome dell'esercizio nel tooltip
+                return history[index].exerciseName;
               },
-              label: (tooltipItem) => `Score: ${tooltipItem.formattedValue}` // Mostra il punteggio
+              label: (tooltipItem) => `Score: ${tooltipItem.formattedValue}`
             }
           },
+          /*
           datalabels: {
             align: 'top',
             anchor: 'end',
+
             formatter: (value, context) => {
-              return history[context.dataIndex].exerciseName; // Nome esercizio sopra i punti
+              return history[context.dataIndex].exerciseName;
             },
+
+
             font: {
               weight: 'bold'
             },
             color: '#000'
           }
+
+           */
+
         },
         scales: {
           x: {
@@ -225,7 +232,7 @@ export class ProfileRouteComponent implements OnInit {
           }
         }
       },
-      plugins: [ChartDataLabels]
+      //plugins: [ChartDataLabels]
     });
   }
 

@@ -1,27 +1,29 @@
-<h1>{{ 'Refactoring Game Mode' | translate }}</h1>
+<div>
+  <h1>{{ 'Refactoring Game Mode' | translate }}</h1>
 
-<mat-spinner *ngIf="waitingForServer"></mat-spinner>
+  <mat-spinner *ngIf="waitingForServer"></mat-spinner>
 
-<div class="alert alert-success" role="alert">
-  {{ 'You are actually using Cloud Retrieve mode' | translate }}
-</div>
-
-<div *ngIf="serverError !== undefined; else renderList">
-  <app-error  [title]="'Error loading refactoring exercises'" [error]="serverError"></app-error>
-</div>
-
-<ng-template #renderList>
-  <div *ngIf="exercises && userService.user.value && config">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of exercises; let i = index">
-        <a [routerLink]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? '/refactor-game/' + item.exerciseId : null"
-           [style.textDecoration]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'none' : 'line-through'"
-           [style.pointerEvents]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'auto' : 'none'"
-           [style.color]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'blue' : 'red'">
-          {{ item.exerciseId }}
-          <span>{{'⭐'.repeat(item.refactoringGameConfiguration.level)}}</span>
-        </a>
-      </li>
-    </ul>
+  <div class="alert alert-success" role="alert">
+    {{ 'You are actually using Cloud Retrieve mode' | translate }}
   </div>
-</ng-template>
+
+  <div *ngIf="serverError !== undefined; else renderList">
+    <app-error  [title]="'Error loading refactoring exercises'" [error]="serverError"></app-error>
+  </div>
+
+  <ng-template #renderList>
+    <div *ngIf="exercises && userService.user.value && config">
+      <ul class="list-group refactoring-list-background">
+        <li class="list-group-item" *ngFor="let item of exercises; let i = index">
+          <a [routerLink]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? '/refactor-game/' + item.exerciseId : null"
+             [style.textDecoration]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'none' : 'line-through'"
+             [style.pointerEvents]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'auto' : 'none'"
+             [style.color]="isExerciseEnabled(item.refactoringGameConfiguration.level) ? 'blue' : 'red'">
+            {{ item.exerciseId }}
+            <span>{{'⭐'.repeat(item.refactoringGameConfiguration.level)}}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</div>

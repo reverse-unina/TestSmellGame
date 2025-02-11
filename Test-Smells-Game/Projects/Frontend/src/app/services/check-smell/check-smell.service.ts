@@ -96,7 +96,7 @@ export class CheckSmellService {
     return [correctAnswers, wrongAnswers, missedAnswers];
   }
 
-  renderResultsButton():boolean {
+  enableSubmitButton():boolean {
     if (this.actualQuestionNumber !== this.questions.length - 1)
       return false;
 

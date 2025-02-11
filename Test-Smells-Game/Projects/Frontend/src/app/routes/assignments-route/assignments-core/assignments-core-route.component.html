@@ -90,7 +90,7 @@
               <div>
                 <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
                 <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
-                <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+                <button style="margin: 10px" *ngIf="checkSmellService.enableSubmitButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
               </div>
 
             </div>

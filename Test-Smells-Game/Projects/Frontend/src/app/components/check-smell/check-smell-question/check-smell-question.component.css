@@ -1,0 +1,11 @@
+img {
+  width: auto;
+  height: 300px;
+}
+
+.column-container {
+  display: grid;
+  grid-template-columns: 6fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}

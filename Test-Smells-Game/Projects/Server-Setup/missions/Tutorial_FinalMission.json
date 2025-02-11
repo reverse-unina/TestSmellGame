@@ -2,7 +2,7 @@
   "missionId": "Tutorial_FinalMission",
   "name": "Prove your knowledge",
   "tag": "Tutorial",
-  "badge": "Climbing",
+  "badge": "Tutorial final mission",
   "badge_filename": "climbing",
   "unlock_after": ["Tutorial_TestSmells1", "Tutorial_TestSmells2", "Tutorial_RefactoringInAction1", "Tutorial_TestSmells3", "Tutorial_TestSmells4", "Tutorial_RefactoringInAction2"],
   "steps": [

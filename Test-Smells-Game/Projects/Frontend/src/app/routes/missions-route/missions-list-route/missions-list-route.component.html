@@ -1,5 +1,16 @@
 <div class="mission-list">
   <h1>{{ "Available Missions" | translate }}</h1>
+  <!--
+  <div class="mission-description background">
+    <p>A mission is a structured sequence of activities designed to guide you through theoretical concepts and practical exercises. In a mission, you will encounter:</p>
+    <ul>
+      <li>✨ Explanatory screens that introduce key concepts such as test smells;</li>
+      <li>🛠 Refactoring tasks to apply what you've learned;</li>
+      <li>🔍 Detection tasks to test your understanding.</li>
+    </ul>
+    <p>You can complete each mission only once, but don't worry—every step can be retried until you master it. Your progress is saved, so you can pause and resume anytime from where you left off. Think of it as a journey where you unlock knowledge step by step while earning rewards!</p>
+  </div>
+  -->
 
   <div *ngIf="serverError !== undefined; else checkIfMissions">
     <app-error [title]="'Error loading missions'" [error]="serverError"></app-error>
@@ -17,10 +28,11 @@
   </ng-template>
 
   <ng-template #renderList>
+
     <div *ngIf="missions && userMissionsStatus">
       <div *ngFor="let tag of getMissionTags()" class="mission-tag-group">
         <h2>{{ tag }}</h2>
-        <div *ngFor="let mission of getMissionsByTag(tag)" class="mission-card" [ngClass]="{ 'mission-locked': !isMissionUnlocked(mission), 'mission-unlocked': isMissionUnlocked(mission), 'mission-completed': isMissionCompleted(mission) }">
+        <div *ngFor="let mission of getMissionsByTag(tag)" class="mission-card background" [ngClass]="{ 'mission-locked': !isMissionUnlocked(mission), 'mission-unlocked': isMissionUnlocked(mission), 'mission-completed': isMissionCompleted(mission) }">
           <div class="mission-info">
             <h2>{{ mission.name }}</h2>
             <p>{{ "Achievement" | translate }}: <strong>{{ mission.badge }}</strong></p>

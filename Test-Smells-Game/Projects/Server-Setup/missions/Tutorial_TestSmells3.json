@@ -2,8 +2,8 @@
   "missionId": "Tutorial_TestSmells3",
   "name": "Test Smells (pt. 3)",
   "tag": "Tutorial",
-  "badge": "Climbing",
-  "badge_filename": "climbing",
+  "badge": "Tutorial test smells 3",
+  "badge_filename": "tutorial3",
   "unlock_after": ["Tutorial_TestSmells1", "Tutorial_TestSmells2"],
   "steps": [
     {

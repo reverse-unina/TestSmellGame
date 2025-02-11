@@ -102,7 +102,10 @@ export class MissionsCoreRouteComponent implements OnInit {
 
   nextStep() {
     this.currentStep++;
-    this.updateProgress();
+
+    if (this.mission.steps[this.currentStep].type === "learning")
+      this.updateProgress();
+
     this.updateServices();
     this.completeMission();
   }
@@ -211,6 +214,7 @@ export class MissionsCoreRouteComponent implements OnInit {
 
     if (this.isExercisePassed()) {
       this.successAlert.show('You have completed successfully the mission step.');
+      this.updateProgress();
     } else {
       this.failAlert.show('You failed the exercise. Don’t give up, try again!');
     }
@@ -223,6 +227,7 @@ export class MissionsCoreRouteComponent implements OnInit {
           // this.successAlert.show('You have completed successfully the mission step.');
           this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "completed mission step successfully").subscribe(
             next => {
+              this.updateProgress();
               console.log(JSON.stringify(next));
             });
         } else {
@@ -236,7 +241,7 @@ export class MissionsCoreRouteComponent implements OnInit {
     )
   }
 
-  hidCompileButton(): boolean {
+  disableCompileButton(): boolean {
     return this.refactoringService.isExercisePassed();
   }
 

@@ -2,8 +2,8 @@
   "missionId": "Tutorial_RefactoringInAction1",
   "name": "Refactoring in Action (pt. 1)",
   "tag": "Tutorial",
-  "badge": "Quiz master",
-  "badge_filename": "quiz_master",
+  "badge": "Tutorial refactoring 1",
+  "badge_filename": "starting_point",
   "unlock_after": ["Tutorial_TestSmells1", "Tutorial_TestSmells2"],
   "steps": [
     {

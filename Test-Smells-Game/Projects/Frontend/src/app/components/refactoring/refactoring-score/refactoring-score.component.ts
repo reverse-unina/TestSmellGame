@@ -14,5 +14,6 @@ export class RefactoringScoreComponent {
   @Input() refactoredCoverage: number = -1;
   @Input() smellNumberWarning: boolean = false;
   @Input() exerciseConfiguration!: RefactoringGameExerciseConfiguration;
+  @Input() imageSrc!: string;
 
 }

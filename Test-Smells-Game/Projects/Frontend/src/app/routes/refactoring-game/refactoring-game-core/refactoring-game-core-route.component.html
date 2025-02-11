@@ -1,8 +1,6 @@
-<div *ngIf="exerciseName && refactoringService.exerciseConfiguration" class="container">
-  <h1>{{exerciseName}}</h1>
-  <div class="row">
-    <div class="col">
-    </div>
+<div class="container">
+  <div *ngIf="exerciseName && refactoringService.exerciseConfiguration" class="">
+    <h1>{{exerciseName}}</h1>
     <div class="row">
       <div class="col">
         <app-refactoring-editor-card #code [editorHeader]="refactoringService.exerciseConfiguration.className+'.java'" [injectedCode]="refactoringService.userCode" [editable]="false"
@@ -12,9 +10,12 @@
 
       <mat-divider></mat-divider>
 
-      <div class="col" style="padding-top: 20px">
-        <app-refactoring-editor-card #testing [editorHeader]="refactoringService.exerciseConfiguration.className+'Test.java'" [injectedCode]="refactoringService.testingCode"
-                                     [progressBarMode]="refactoringService.progressBarMode">
+      <div class="col" style="padding-top: 20px; position: relative;">
+        <app-refactoring-editor-card
+          #testing
+          [editorHeader]="refactoringService.exerciseConfiguration.className+'Test.java'"
+          [injectedCode]="refactoringService.testingCode"
+          [progressBarMode]="refactoringService.progressBarMode">
         </app-refactoring-editor-card>
       </div>
 
@@ -28,8 +29,11 @@
       <mat-divider></mat-divider>
 
       <div class="col" style="margin-top: 20px">
-        <app-refactoring-editor-card #output [editorHeader]="'Shell'" [injectedCode]="refactoringService.shellCode" [editable]="false"
-                                     [progressBarMode]="refactoringService.progressBarMode">
+        <app-refactoring-editor-card #output [editorHeader]="'Shell'"
+                                     [injectedCode]="refactoringService.shellCode"
+                                     [editable]="false"
+                                     [progressBarMode]="refactoringService.progressBarMode"
+                                     >
         </app-refactoring-editor-card>
       </div>
 
@@ -45,6 +49,7 @@
           [refactoredCoverage]="refactoringService.refactoredCoverage"
           [smellNumberWarning]="refactoringService.smellNumberWarning"
           [exerciseConfiguration]="refactoringService.exerciseConfiguration"
+          [imageSrc]="'/assets/images/refactoring_exercise.png'"
         ></app-refactoring-score>
 
         <app-refactoring-smell-list
@@ -56,10 +61,10 @@
 
       <button type="button" class="btn btn-primary" routerLink="/refactor-game/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
     </div>
+
+    <app-success-alert #successAlert></app-success-alert>
+    <app-fail-alert #failAlert></app-fail-alert>
+    <app-achievement-alert #achievementAlert></app-achievement-alert>
+
   </div>
-
-  <app-success-alert #successAlert></app-success-alert>
-  <app-fail-alert #failAlert></app-fail-alert>
-  <app-achievement-alert #achievementAlert></app-achievement-alert>
-
 </div>

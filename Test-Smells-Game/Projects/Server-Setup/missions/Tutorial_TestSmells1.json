@@ -2,8 +2,8 @@
   "missionId": "Tutorial_TestSmells1",
   "name": "Test Smells (pt. 1)",
   "tag": "Tutorial",
-  "badge": "Neofita",
-  "badge_filename": "starting-point",
+  "badge": "Tutorial test smells 1",
+  "badge_filename": "tutorial1",
   "steps": [
     {
       "id": "Tutorial_TestSmells1_Introduction",
