@@ -3,7 +3,9 @@
     {{editorHeader}}
   </div>
   <div class="card-body">
-    <app-codeeditor #editorComponent [injectedCode]="injectedCode" [editable]="editable"></app-codeeditor>
+    <div>
+      <app-codeeditor #editorComponent [injectedCode]="injectedCode" [editable]="editable"></app-codeeditor>
+    </div>
   </div>
   <mat-progress-bar [mode]="progressBarMode"></mat-progress-bar>
 </div>

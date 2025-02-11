@@ -11,6 +11,7 @@ export class CheckSmellQuestionComponent implements OnDestroy {
   @Input() injectedCode: string = "injectedCode";
   @Input() editable: boolean = true;
   @Input() progressBarMode: ProgressBarMode = "determinate";
+  @Input() imageSrc: string | undefined = undefined;
 
   @ViewChild('editorComponent') editorComponent: any;
 
