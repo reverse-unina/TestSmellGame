@@ -1,19 +1,23 @@
-<h3>Smells : </h3>
-<div *ngFor="let smell of smellList; let i = index">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <label style="margin-left:10px">{{smell}} : {{this.methodList[i].length}}</label>
-        <mat-icon style="margin-left: 10px; font-size: 12px" matTooltip="{{smellDescriptions[getSmellNumber(smell)].smellDescription}}">info</mat-icon>
-      </mat-panel-title>
-      <mat-panel-description>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
+<div class="smell-container card">
+  <div class="card-header">
+    {{'Remaining Smells' | translate }}
+  </div>
+  <div class="card-body">
+    <div *ngFor="let smell of smellList; let i = index">
+      <mat-expansion-panel class="smell-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="smell-header">
+            <label class="smell-label">{{ smell }} : {{ this.methodList[i].length }}</label>
+            <mat-icon class="info-icon" matTooltip="{{ smellDescriptions[getSmellNumber(smell)].smellDescription }}">
+              info
+            </mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <ul class="list-group">
-      <li *ngFor="let method of methodList[i]" style="margin-left:40px" class="list-group-item">{{method}}</li>
-    </ul>
-
-  </mat-expansion-panel>
-
+        <ul class="method-list">
+          <li *ngFor="let method of methodList[i]" class="method-item">{{ method }}</li>
+        </ul>
+      </mat-expansion-panel>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,6 @@
+{
+  "learningId": "LazyTest",
+  "title": "Lazy Test",
+  "content": "Occurs when multiple test methods invoke the same method of the production object.\n\n Detection: Multiple test methods calling the same production method.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#LazyTest"
+}

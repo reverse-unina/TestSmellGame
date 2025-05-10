@@ -1,0 +1,34 @@
+{
+  "missionId": "Tutorial_TestSmells4",
+  "name": "Test Smells (pt. 4)",
+  "tag": "Tutorial",
+  "badge": "Tutorial test smells 4",
+  "badge_filename": "climbing",
+  "unlock_after": ["Tutorial_TestSmells1", "Tutorial_TestSmells2", "Tutorial_RefactoringInAction1","Tutorial_TestSmells3"],
+  "steps": [
+    {
+      "id": "Tutorial_TestSmells4_Introduction",
+      "type": "learning"
+    },
+    {
+      "id": "MysteryGuest",
+      "type": "learning"
+    },
+    {
+      "id": "ResourceOptimism",
+      "type": "learning"
+    },
+    {
+      "id": "SensitiveEquality",
+      "type": "learning"
+    },
+    {
+      "id": "SleepyTest",
+      "type": "learning"
+    },
+    {
+      "id": "Test Smells (pt. 4) -  Quiz",
+      "type": "check-smell"
+    }
+  ]
+}

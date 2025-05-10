@@ -9,14 +9,16 @@ export class RefactoringGameExerciseConfiguration {
       'smellsAllowed': number,
       'level': number
     };
-    autoValutative!: boolean;
+  autoValutative!: boolean;
+  availableForGame!: boolean;
 }
 
-export class CheckGameExerciseConfig {
+export class CheckGameExerciseConfiguration {
   exerciseId!: string;
   checkGameConfiguration!: {
     'questions': Question[],
     'level': number
   };
   autoValutative!: boolean;
+  availableForGame!: boolean;
 }

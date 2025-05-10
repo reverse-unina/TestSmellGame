@@ -1,0 +1,45 @@
+{
+  "missionId": "Tutorial_TestSmells1",
+  "name": "Test Smells (pt. 1)",
+  "tag": "Tutorial",
+  "badge": "Tutorial test smells 1",
+  "badge_filename": "tutorial1",
+  "steps": [
+    {
+      "id": "Tutorial_TestSmells1_Introduction",
+      "type": "learning"
+    },
+    {
+      "id": "Tutorial_TestSmells1_TestSmellDefinition",
+      "type": "learning"
+    },
+    {
+      "id": "Tutorial_TestSmells1_TestSmellResources",
+      "type": "learning"
+    },
+    {
+      "id": "Tutorial_TestSmells1_FirstSmells",
+      "type": "learning"
+    },
+    {
+      "id": "EmptyTest",
+      "type": "learning"
+    },
+    {
+      "id": "IgnoredTest",
+      "type": "learning"
+    },
+    {
+      "id": "RedundantPrint",
+      "type": "learning"
+    },
+    {
+      "id": "RedundantAssertion",
+      "type": "learning"
+    },
+    {
+      "id": "Test Smells (pt. 1) - Quiz",
+      "type": "check-smell"
+    }
+  ]
+}

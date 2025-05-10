@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import { RefactoringGameExerciseConfiguration } from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
-import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
+import { ToolConfig } from "src/app/model/toolConfig/tool.config.model"
 import {firstValueFrom} from "rxjs";
 
 @Component({
@@ -18,7 +18,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
               protected userService: UserService,
               ) { }
 
-  protected config!: levelConfig;
+  protected config!: ToolConfig;
   exercises: RefactoringGameExerciseConfiguration[] = [];
   serverError: string | undefined;
   waitingForServer!: boolean;
@@ -37,8 +37,8 @@ export class RefactoringGameExListRouteComponent implements OnInit {
               return byLevel;
 
             return a.exerciseId > b.exerciseId ? 1 : -1;
-          });
-        console.log(this.exercises);
+          }).filter(exercise => exercise.availableForGame);
+        //console.log(this.exercises);
       },
       error: (err) => {
         this.waitingForServer = false;
@@ -46,7 +46,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
       }
     });
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+    this.config = await firstValueFrom(this.exerciseService.getToolConfig());
   }
 
   isExerciseEnabled(level: number): boolean {

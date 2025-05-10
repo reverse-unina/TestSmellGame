@@ -4,13 +4,13 @@
       <mat-selection-list [multiple]="true">
 
         <li *ngFor="let option of questionAnswers" class="list-group-item">
-          <div [ngStyle]="{'background-color': showBackground ? (option.correct ? 'green' : 'red') : ''}">
-            <mat-checkbox #checkbox
+          <div [ngStyle]="{'background-color': showBackground ? (option.correct ? 'rgba(50, 205, 50, 0.8)' : 'rgba(255, 99, 71, 0.8)') : ''}">
+          <mat-checkbox #checkbox
                           (click)="selectAnswer(option)"
                           (change)="changeCheckbox(checkbox)"
                           [checked]="this.option.isChecked"
                           [disabled]="disabled">
-              {{option.answerText}}
+              <span [ngStyle]="{'color': 'black'}">{{option.answerText}}</span>
             </mat-checkbox>
           </div>
         </li>

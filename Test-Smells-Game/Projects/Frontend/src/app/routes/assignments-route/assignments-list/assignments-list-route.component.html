@@ -20,12 +20,12 @@
     <ul style="list-style-type: none; padding: 0;">
       <ng-container *ngFor="let student of assignment.students">
         <ng-container *ngIf="student.name === currentUser?.userName">
-          <ng-container *ngIf="assignment.type === 'competitivo' && student.submitted">
+          <ng-container *ngIf="assignment.type === 'competitive' && student.submitted">
             <li style="margin-bottom: 8px;">
               <span style="color: red;">{{ 'You have already completed the assignment' | translate }}</span>
             </li>
           </ng-container>
-          <ng-container *ngIf="!(assignment.type === 'competitivo' && student.submitted)">
+          <ng-container *ngIf="!(assignment.type === 'competitive' && student.submitted)">
             <li *ngIf="isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
               <a [routerLink]="['/assignments', assignment.assignmentId, student.exerciseId]" style="text-decoration: none; color: #007bff;">
                 {{ student.exerciseId }}
@@ -54,12 +54,12 @@
     <ul style="list-style-type: none; padding: 0;">
       <ng-container *ngFor="let student of assignment.students">
         <ng-container *ngIf="student.name === currentUser?.userName">
-          <ng-container *ngIf="assignment.type === 'competitivo' && student.submitted === true">
+          <ng-container *ngIf="assignment.type === 'competitive' && student.submitted === true">
             <li style="margin-bottom: 8px;">
               <span style="color: red;">{{ 'You have already completed the assignment' | translate }}</span>
             </li>
           </ng-container>
-          <ng-container *ngIf="!(assignment.type === 'competitivo' && student.submitted === true)">
+          <ng-container *ngIf="!(assignment.type === 'competitive' && student.submitted === true)">
             <li *ngIf="isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
               <a [routerLink]="['/assignments', assignment.assignmentId, student.exerciseId]" style="text-decoration: none; color: #007bff;">
                 {{ student.exerciseId }}

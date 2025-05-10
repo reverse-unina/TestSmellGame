@@ -8,7 +8,7 @@ RUN mkdir -p /missions
 
 COPY /assignments/*.json /assignments/
 
-COPY /levelconfig/levelConfig.json /levelconfig/
+COPY /toolconfig/*.json /toolconfig/
 
 COPY /badges/*.png /badges/
 

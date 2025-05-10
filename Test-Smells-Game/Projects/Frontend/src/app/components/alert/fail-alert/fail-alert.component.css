@@ -64,3 +64,27 @@
     transform: scale(1);
   }
 }
+
+.background {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.background::before {
+  content: "";
+  position: absolute; /* no scroll */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../../../assets/images/failure_background.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: local;
+  opacity: 0.25;
+  z-index: -1;
+  overflow: hidden;
+}
+

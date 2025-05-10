@@ -2,9 +2,9 @@ import {Component, NgZone, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LeaderboardService} from "../../services/leaderboard/leaderboard.service";
-import {Solution} from "../../model/solution/solution";
+import {CheckSmellStatistics, RefactoringSolution} from "../../model/solution/solution";
 import {ExerciseService} from "../../services/exercise/exercise.service";
-import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} from "../../model/exercise/ExerciseConfiguration.model";
+import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
 
 @Component({
   selector: 'app-leaderboard-route',
@@ -13,49 +13,57 @@ import {RefactoringGameExerciseConfiguration, CheckGameExerciseConfig} from "../
 })
 export class LeaderboardRouteComponent implements OnInit {
 
-  solutions!: Solution[]
+  refactoringSolutions!: RefactoringSolution[];
+  checkSmellStatistics!: CheckSmellStatistics[];
+  refactoringExerciseConfiguration!: RefactoringGameExerciseConfiguration;
+
   exerciseCode!: string;
   testingCode!: string;
   exerciseName = this.route.snapshot.params['exercise'];
   isAutoValutative!: boolean;
-  exerciseConfiguration!: RefactoringGameExerciseConfiguration;
-  isAssignmentsRoute!: boolean;
 
-  constructor(private http: HttpClient,
-              private router: Router,
+  isAssignmentsRoute!: boolean;
+  isCheckSmellRoute!: boolean
+
+  constructor(private router: Router,
               private leaderboardService: LeaderboardService,
               private exerciseService: ExerciseService,
-              private route:ActivatedRoute) {
-    // GET TESTING CLASS FROM ELECTRON
-  }
+              private route:ActivatedRoute)
+  { }
 
   ngOnInit(): void {
-    this.isAssignmentsRoute = this.router.url.includes('assignments');
-    this.getConfiguration();
 
-    if(!this.isAutoValutative)
-      this.retrieveCode();
+    this.isCheckSmellRoute = this.router.url.includes('check-game');
 
-  }
+    if (this.isCheckSmellRoute) {
+      this.leaderboardService.getCheckSmellSolutionsByExerciseName(this.exerciseName).subscribe(
+        data => {
+          this.checkSmellStatistics = data;
+        }
+      );
 
-  retrieveCode(){
-    this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
-      this.exerciseCode = data;
-    });
-    this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
-      this.testingCode = data
-    })
-  }
-  setupConfigFiles(data:any){
-    this.exerciseConfiguration = data;
-    this.isAutoValutative = this.exerciseConfiguration.autoValutative;
-    this.leaderboardService.getSolutionsByExerciseName(this.exerciseConfiguration.exerciseId).subscribe(data=>{
-      this.solutions = data;
-    })
+    } else {
+      this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(
+        data=>{
+          this.refactoringExerciseConfiguration = data;
+          this.isAutoValutative = this.refactoringExerciseConfiguration.autoValutative;
 
-  }
+          this.leaderboardService.getRefactoringSolutionByExerciseId(this.refactoringExerciseConfiguration.exerciseId).subscribe(
+            solutions=>{
+              this.refactoringSolutions = solutions;
+              //console.log("Refactoring solutions received: ", solutions);
+            });
+        });
 
-  getConfiguration() {
-    this.exerciseService.getRefactoringGameConfigFile(this.exerciseName).subscribe(data=>{this.setupConfigFiles(data)})
+      if(!this.isAutoValutative) {
+        this.exerciseService.getMainClass(this.exerciseName).subscribe( data=> {
+          this.exerciseCode = data;
+        });
+        this.exerciseService.getTestClass(this.exerciseName).subscribe( data => {
+          this.testingCode = data
+        })
+      }
+
+    }
   }
 }

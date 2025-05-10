@@ -36,8 +36,8 @@
             <mat-divider></mat-divider>
 
             <div style="margin-top: 20px">
-              <button style="margin: 10px" type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
-              <button style="margin: 10px" type="button" class="btn btn-primary" [disabled]="submitIsDisabled()" (click)="submitRefactoringAssignment()">{{ 'Finish' | translate }}</button>
+              <button type="button" class="btn btn-primary" (click)="compile()" [disabled]="refactoringService.progressBarMode == 'query'">{{ 'Compile' | translate }}</button>
+              <button type="button" style="margin-left: 20px;" class="btn btn-primary" [disabled]="submitIsDisabled()" (click)="submitRefactoringAssignment()">{{ 'Finish' | translate }}</button>
             </div>
 
             <mat-divider></mat-divider>
@@ -68,7 +68,7 @@
               ></app-refactoring-smell-list>
             </div>
 
-            <button type="button" class="btn btn-primary" routerLink="/assignment/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
+            <button *ngIf="assignment.type === 'collaborativo'" type="button" class="btn btn-primary" routerLink="/assignment/leaderboard/{{exerciseName}}">{{ 'Solution Repository' | translate }}</button>
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@
         <h1>{{exerciseName}}</h1>
         <div *ngIf="serverError === undefined; else error">
           <div *ngIf="checkSmellService.exerciseConfiguration">
-            <div *ngIf="!checkSmellService.exerciseCompleted else showResult" class="card">
+            <div class="card">
 
               <app-check-smell-question #testing [editorHeader]="exerciseName+'.java'" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
               </app-check-smell-question>
@@ -87,29 +87,18 @@
               <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers">
               </app-check-smell-answer-list>
 
-              <div>
-                <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
-                <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
-                <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+              <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                <div>
+                  <button style="margin: 10px" class="btn btn-primary" [disabled]="checkSmellService.actualQuestionNumber === 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+                  <button style="margin: 10px" class="btn btn-primary" [disabled]="checkSmellService.actualQuestionNumber >= checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+                </div>
+                <div>
+                  <button style="margin: 10px" [disabled]="!checkSmellService.enableSubmitButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+                </div>
               </div>
-
             </div>
           </div>
         </div>
-
-        <ng-template #showResult>
-          <h1>{{ 'Score' | translate }}: {{Math.round((checkSmellService.score * 100) / checkSmellService.assignmentScore) + '/100'}}</h1>
-          <div *ngFor="let question of checkSmellService.questions" class="card">
-
-            <app-check-smell-question [injectedCode]="question.questionCode">
-            </app-check-smell-question>
-
-            <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers"
-                                         [showBackground]="true">
-            </app-check-smell-answer-list>
-          </div>
-        </ng-template>
-
       </div>
     </div>
   </div>

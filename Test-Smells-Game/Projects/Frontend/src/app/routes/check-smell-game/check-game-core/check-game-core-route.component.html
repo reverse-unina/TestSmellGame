@@ -1,19 +1,28 @@
-<div class="container">
+<div class="">
   <h1>{{exerciseName}}</h1>
   <div>
-    <div *ngIf="!checkSmellService.exerciseCompleted else showResult" class="card">
+    <div *ngIf="!exerciseCompleted else showResult" class="card">
 
       <div *ngIf="checkSmellService.exerciseConfiguration">
-        <app-check-smell-question #testing [editorHeader]="exerciseName+'.java'" [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode" [editable]="false">
+        <app-check-smell-question #testing
+                                  [editorHeader]="exerciseName+'.java'"
+                                  [injectedCode]="checkSmellService.questions[checkSmellService.actualQuestionNumber].questionCode"
+                                  [editable]="false"
+                                  [imageSrc]="'assets/images/checksmell_exercise.png'">
         </app-check-smell-question>
 
         <app-check-smell-answer-list [questionAnswers]="checkSmellService.questions[checkSmellService.actualQuestionNumber].answers">
         </app-check-smell-answer-list>
 
-        <div>
-          <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber !== 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
-          <button style="margin: 10px" class="btn btn-primary" *ngIf="checkSmellService.actualQuestionNumber < checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
-          <button style="margin: 10px" *ngIf="checkSmellService.renderResultsButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+        <div style="display: flex; flex-direction: row; justify-content: space-between;">
+          <div>
+            <button style="margin: 10px" class="btn btn-primary" [disabled]="checkSmellService.actualQuestionNumber === 0" (click)="checkSmellService.goBackward()">{{ 'Back' | translate }}</button>
+            <button style="margin: 10px" class="btn btn-primary" [disabled]="checkSmellService.actualQuestionNumber >= checkSmellService.questions.length - 1" (click)="checkSmellService.goForward()">{{ 'Next' | translate }}</button>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Exercise statistics' | translate }}</button>
+            <button style="margin: 10px" [disabled]="!checkSmellService.enableSubmitButton()" class="btn btn-primary" (click)="this.submitExercise()">{{ 'Submit' | translate }}</button>
+          </div>
         </div>
       </div>
 
@@ -26,14 +35,18 @@
 
   <ng-template #showResult>
     <h1>{{ 'Score' | translate }}: {{Math.round((checkSmellService.score * 100) / checkSmellService.assignmentScore) + '/100'}}</h1>
-    <div *ngFor="let question of checkSmellService.questions" class="card">
+    <div class="card">
+      <div *ngFor="let question of checkSmellService.questions" class="card">
 
-      <app-check-smell-question [injectedCode]="question.questionCode">
-      </app-check-smell-question>
+        <app-check-smell-question [injectedCode]="question.questionCode">
+        </app-check-smell-question>
 
-      <app-check-smell-answer-list [questionAnswers]="question.answers"
-                                   [showBackground]="true" [disabled]="true">
-      </app-check-smell-answer-list>
+        <app-check-smell-answer-list [questionAnswers]="question.answers"
+                                     [showBackground]="true" [disabled]="true">
+        </app-check-smell-answer-list>
+
+      </div>
+      <button type="button" class="btn btn-primary" routerLink="/check-game/leaderboard/{{exerciseName}}">{{ 'Exercise statistics' | translate }}</button>
     </div>
   </ng-template>
 

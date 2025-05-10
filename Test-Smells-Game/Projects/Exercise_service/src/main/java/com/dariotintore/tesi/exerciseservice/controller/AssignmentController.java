@@ -114,7 +114,7 @@ public class AssignmentController {
                 // Write update to file
                 objectMapper.writeValue(assignmentFile, assignment);
                 logger.info("Processing completed for student '{}'", studentName);
-                return ResponseEntity.ok("Files uploaded and assignment updated successfully");
+                return ResponseEntity.ok(Map.of("message", "Files uploaded and assignment updated successfully"));
 
             } catch (IOException e) {
                 logger.error("Error uploading files or updating assignment", e);
@@ -192,7 +192,7 @@ public class AssignmentController {
                 // Write update to file
                 objectMapper.writeValue(assignmentFile, assignment);
                 logger.info("Processing completed for student '{}'", studentName);
-                return ResponseEntity.ok("Files uploaded and assignment updated successfully");
+                return ResponseEntity.ok(Map.of("message", "Files uploaded and assignment updated successfully"));
 
             } catch (IOException e) {
                 logger.error("Error uploading files or updating assignment", e);

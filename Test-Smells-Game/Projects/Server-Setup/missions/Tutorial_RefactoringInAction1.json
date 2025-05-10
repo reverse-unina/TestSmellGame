@@ -1,0 +1,22 @@
+{
+  "missionId": "Tutorial_RefactoringInAction1",
+  "name": "Refactoring in Action (pt. 1)",
+  "tag": "Tutorial",
+  "badge": "Tutorial refactoring 1",
+  "badge_filename": "starting_point",
+  "unlock_after": ["Tutorial_TestSmells1", "Tutorial_TestSmells2"],
+  "steps": [
+    {
+      "id": "Tutorial_RefactoringInAction1_Introduction",
+      "type": "learning"
+    },
+    {
+      "id": "Calculator",
+      "type": "refactoring"
+    },
+    {
+      "id": "JunitExample",
+      "type": "refactoring"
+    }
+  ]
+}

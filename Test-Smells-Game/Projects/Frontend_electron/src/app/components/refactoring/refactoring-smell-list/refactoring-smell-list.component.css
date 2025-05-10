@@ -1,0 +1,44 @@
+.smell-container {
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.smell-panel {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.smell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.smell-label {
+  margin-left: 10px;
+  color: #dc3545;
+}
+
+.info-icon {
+  margin-left: 10px;
+  font-size: 16px;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.method-list {
+  list-style: none;
+  padding: 10px;
+}
+
+.method-item {
+  margin-left: 20px;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+}

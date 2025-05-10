@@ -6,10 +6,13 @@ import {Component, Input, OnDestroy} from '@angular/core';
   styleUrls: ['./fail-alert.component.css']
 })
 export class FailAlertComponent implements OnDestroy {
-  @Input() message: string = 'Unfortunately, you failed the exercise. Don’t give up, try again!';
+  message: string = 'Unfortunately, you failed the exercise. Don’t give up, try again!';
   showModal: boolean = false;
 
-  show(): void {
+  show(message?: string): void {
+    if (message) {
+      this.message = message;
+    }
     this.showModal = true;
   }
 

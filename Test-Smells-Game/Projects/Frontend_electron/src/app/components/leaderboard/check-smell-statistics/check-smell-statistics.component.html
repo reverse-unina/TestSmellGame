@@ -1,0 +1,26 @@
+<div *ngIf="checkSmellStatistics && checkSmellStatistics.length" class="card">
+  <div class="card-body">
+    <h2>{{ 'Exercise Statistics' | translate }}</h2>
+    <table class="table text-center">
+      <thead>
+      <tr>
+        <th class="row text-left">{{ 'Player' | translate }}</th>
+        <th>{{ 'Best Score' | translate }}</th>
+        <th>{{ 'Correct Answers' | translate }}</th>
+        <th>{{ 'Wrong Answers' | translate }}</th>
+        <th>{{ 'Missed Answers' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let solution of checkSmellStatistics">
+        <td class="row text-left">{{ solution.playerName }}</td>
+        <td>{{ solution.score }}/100</td>
+        <td>{{ solution.correctAnswers }}</td>
+        <td>{{ solution.wrongAnswers }}</td>
+        <td>{{ solution.missedAnswers }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

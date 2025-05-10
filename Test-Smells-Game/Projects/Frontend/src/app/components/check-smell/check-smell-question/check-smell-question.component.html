@@ -4,6 +4,9 @@
   </div>
   <div class="card-body">
     <h2>{{ 'Which is the smell present in the following method?' | translate }}</h2>
-    <app-codeeditor #editorComponent [injectedCode]="injectedCode" [editable]="editable"></app-codeeditor>
+    <div [ngClass]="{'column-container': imageSrc !== undefined, '': imageSrc === undefined}">
+      <app-codeeditor #editorComponent [injectedCode]="injectedCode" [editable]="editable"></app-codeeditor>
+      <img *ngIf="imageSrc!=undefined" class="knight-image" src="{{ imageSrc }}" alt="Exercise" />
+    </div>
   </div>
 </div>

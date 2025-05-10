@@ -1,0 +1,6 @@
+{
+  "learningId": "SleepyTest",
+  "title": "Sleepy Test",
+  "content": "Explicitly causing a thread to sleep can lead to unexpected results as the processing time for a task can differ on different devices. Developers introduce this smell when they need to pause execution of statements in a test method for a certain duration (i.e. simulate an external event) and then continuing with execution.\n\nDetection: A test method that invokes the Thread.sleep() method.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#SleepyTest"
+}

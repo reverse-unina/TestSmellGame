@@ -1,13 +1,15 @@
 package com.dariotintore.tesi.leaderboard.controller;
 
-import com.dariotintore.tesi.leaderboard.dto.SolutionSaveRequestDTO;
+import com.dariotintore.tesi.leaderboard.dto.CheckSmellSolutionDTO;
+import com.dariotintore.tesi.leaderboard.dto.RefactoringSolutionDTO;
+import com.dariotintore.tesi.leaderboard.entity.CheckSmellSolution;
 import com.dariotintore.tesi.leaderboard.entity.Comment;
-import com.dariotintore.tesi.leaderboard.entity.Solution;
+import com.dariotintore.tesi.leaderboard.entity.RefactoringSolution;
 import com.dariotintore.tesi.leaderboard.entity.VoteType;
 import com.dariotintore.tesi.leaderboard.service.CommentService;
 import com.dariotintore.tesi.leaderboard.service.SolutionService;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,15 +19,23 @@ import java.util.List;
 @RequestMapping("/leaderboard")
 public class LeaderboardController {
 
-    @Autowired
-    SolutionService solutionService;
+    private final SolutionService solutionService;
+    private final CommentService commentService;
 
-    @Autowired
-    CommentService commentService;
+    // Constructor Injection nel controller
+    public LeaderboardController(SolutionService solutionService, CommentService commentService) {
+        this.solutionService = solutionService;
+        this.commentService = commentService;
+    }
 
-    @GetMapping("/{exerciseId}")
-    public List<Solution> getSolutionsByExercise(@PathVariable("exerciseId") String exerciseId){
-      return solutionService.getSolutionsByExerciseName(exerciseId);
+    @GetMapping("/refactoring/{exerciseId}")
+    public List<RefactoringSolution> getRefactoringSolutionsByExerciseId(@PathVariable("exerciseId") String exerciseId){
+      return solutionService.getRefactoringSolution(exerciseId);
+    }
+
+    @GetMapping("/checksmell/{exerciseId}")
+    public List<CheckSmellSolution> getCheckSmellSolutionsByExerciseId(@PathVariable("exerciseId") String exerciseId){
+        return solutionService.getCheckSmellSolution(exerciseId);
     }
 
     @PostMapping("solution/postComment")
@@ -33,9 +43,14 @@ public class LeaderboardController {
       commentService.saveCommentForExerciseName(comment);
     }
 
-    @PostMapping("/")
-    public void saveSolutionByExercise(@RequestBody SolutionSaveRequestDTO solution){
-      solutionService.saveSolutionForExerciseName(solution);
+    @PostMapping("/refactoring")
+    public ResponseEntity<RefactoringSolution> saveRefactoringSolutionByExercise(@RequestBody RefactoringSolutionDTO solution){
+      return ResponseEntity.ok(solutionService.saveSolutionForExerciseName(solution));
+    }
+
+    @PostMapping("/checksmell")
+    public ResponseEntity<CheckSmellSolution> saveCheckSmellSolutionByExerciseId(@RequestBody CheckSmellSolutionDTO solution){
+        return ResponseEntity.ok(solutionService.saveCheckSmellSolution(solution));
     }
 
     @PostMapping("solution/{solutionId}")

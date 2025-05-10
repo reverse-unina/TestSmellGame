@@ -26,7 +26,7 @@ const appRoutes: Routes = [
   { path: 'refactor-game/:exercise', component: RefactoringGameCoreRouteComponent },
   { path: 'check-game/:exercise', component: CheckGameCoreRouteComponent },
   { path: 'refactor-game/leaderboard/:exercise', component: LeaderboardRouteComponent},
-  { path: 'assignments/leaderboard/:exercise', component: LeaderboardRouteComponent},
+  { path: 'check-game/leaderboard/:exercise', component: LeaderboardRouteComponent},
   { path: 'assignments', component: AssignmentsListRoute},
   { path: 'assignments/:nome/:exercise', component: AssignmentsCoreRouteComponent},
   { path: 'settings', component: SettingsRouteComponent},

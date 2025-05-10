@@ -17,7 +17,7 @@ export class AppComponent implements OnInit{
               private router: Router) { }
 
   ngOnInit(): void {
-    console.log(environment.userServiceUrl);
+    // console.log(environment.userServiceUrl);
     this.settingsService.initializeTranslationService();
     this.settingsService.initializeEnvironmentUrls();
     this.authService.autoLogin();

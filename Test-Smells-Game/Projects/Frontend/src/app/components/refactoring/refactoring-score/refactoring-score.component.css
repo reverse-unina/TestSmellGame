@@ -1,0 +1,71 @@
+.card {
+  margin-top: 20px;
+}
+
+.score-container {
+  text-align: center;
+}
+
+.score-container h4 {
+  margin-bottom: 0;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.result-section {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.factor-check-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.success { color: #28a745; background: #e6f9ed; }
+.failure { color: #dc3545; background: #fdecea; }
+
+.error-text {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.success-text {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.info-box {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+
+.info-text {
+  font-size: 1.1em;
+  margin: 5px 0;
+}
+
+mat-icon {
+  font-size: 18px;
+  color: #6c757d;
+  cursor: pointer;
+}
+
+img {
+  width: auto;
+  height: 300px;
+}
+
+.column-container {
+  display: grid;
+  grid-template-columns: 6fr 1fr;
+  gap: 30px;
+  align-items: stretch;
+}

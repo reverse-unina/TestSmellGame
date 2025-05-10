@@ -1,0 +1,38 @@
+{
+  "missionId": "Tutorial_TestSmells3",
+  "name": "Test Smells (pt. 3)",
+  "tag": "Tutorial",
+  "badge": "Tutorial test smells 3",
+  "badge_filename": "tutorial3",
+  "unlock_after": ["Tutorial_TestSmells1", "Tutorial_TestSmells2"],
+  "steps": [
+    {
+      "id": "Tutorial_TestSmells3_Introduction",
+      "type": "learning"
+    },
+    {
+      "id": "ConditionalTestLogic",
+      "type": "learning"
+    },
+    {
+      "id": "ConstructorInitialization",
+      "type": "learning"
+    },
+    {
+      "id": "EagerTest",
+      "type": "learning"
+    },
+    {
+      "id": "ExceptionHandling",
+      "type": "learning"
+    },
+    {
+      "id": "LazyTest",
+      "type": "learning"
+    },
+    {
+      "id": "Test Smells (pt. 3) - Quiz",
+      "type": "check-smell"
+    }
+  ]
+}

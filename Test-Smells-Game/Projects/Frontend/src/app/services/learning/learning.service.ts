@@ -13,7 +13,7 @@ export class LearningService {
   async initLearningContent(id: string): Promise<string | undefined> {
     try {
       this.learning = await firstValueFrom(this.exerciseService.getLeaningContentById(id));
-      console.log("content: ", this.learning);
+      //console.log("content: ", this.learning);
       return undefined;
     } catch (error) {
       // @ts-ignore

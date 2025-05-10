@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../environments/environment.prod";
-import {Solution} from "../../model/solution/solution";
+import {CheckSmellStatistics, RefactoringSolution} from "../../model/solution/solution";
 import {Exercise} from "../../model/exercise/refactor-exercise.model";
 import {UserService} from "../user/user.service";
 import {RefactoringGameExerciseConfiguration} from "../../model/exercise/ExerciseConfiguration.model";
 import {PodiumRanking, Score, UserRanking} from "../../model/rank/score";
 import {Observable} from "rxjs";
+import {UserSubmitHistory} from "../../model/userSubmitHistory/user-submit-history";
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +16,22 @@ export class LeaderboardService {
 
   constructor(private http: HttpClient, private userService: UserService) { }
 
-  getSolutionsByExerciseName(exercise: string){
-    return this.http.get<Solution[]>(environment.leaderboardServiceUrl + '/leaderboard/' + exercise);
+  getRefactoringSolutionByExerciseId(exercise: string){
+    return this.http.get<RefactoringSolution[]>(environment.leaderboardServiceUrl + '/leaderboard/refactoring/' + exercise);
   }
 
-  saveSolution(exercise: Exercise,
-               exerciseConfiguration: RefactoringGameExerciseConfiguration,
-               score: number,
-               refactoringResult: boolean,
-               originalCoverage: number,
-               refactoredCoverage:number,
-               smells: Object){
-    console.log(environment.leaderboardServiceUrl+'/leaderboard/')
+  getCheckSmellSolutionsByExerciseName(exercise: string){
+    return this.http.get<CheckSmellStatistics[]>(environment.leaderboardServiceUrl + '/leaderboard/checksmell/' + exercise);
+  }
+
+  saveRefactoringSolution(exercise: Exercise,
+                          exerciseConfiguration: RefactoringGameExerciseConfiguration,
+                          score: number,
+                          refactoringResult: boolean,
+                          originalCoverage: number,
+                          refactoredCoverage:number,
+                          smells: Object){
+
     let HTTPOptions:Object = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -42,7 +47,31 @@ export class LeaderboardService {
       "refactoredCoverage": refactoredCoverage,
       "smells": smells
     }
-    return this.http.post(environment.leaderboardServiceUrl+'/leaderboard/', body, HTTPOptions)
+    return this.http.post(environment.leaderboardServiceUrl+'/leaderboard/refactoring', body, HTTPOptions)
+  }
+
+  saveCheckSmellSolution(exerciseId: string,
+                          score: number,
+                          correctAnswers: number,
+                          wrongAnswers: number,
+                          missedAnswers: number
+  ){
+    let HTTPOptions:Object = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+    }
+    const body = {
+      "exerciseId": exerciseId,
+      "playerName": this.userService.user.getValue().userName,
+      "score": score,
+      "missedAnswers": missedAnswers,
+      "correctAnswers": correctAnswers,
+      "wrongAnswers": wrongAnswers
+    }
+
+    //console.log(body);
+    return this.http.post(environment.leaderboardServiceUrl+'/leaderboard/checksmell', body, HTTPOptions)
   }
 
   postComment(comment: string, solutionId: number, commentAuthor: string){
@@ -126,6 +155,26 @@ export class LeaderboardService {
       .set('podiumDimension', podiumDimension);
 
     return this.http.get<PodiumRanking>(`${environment.leaderboardServiceUrl}/rank/podium/refactoring`, { params });
+  }
+
+  saveNewUserSubmitHistory(userId: number,
+                           exerciseType: string,
+                           exerciseScore: number,
+                           exerciseName: string
+  ): Observable<UserSubmitHistory> {
+    const body = {
+      userId,
+      exerciseType,
+      exerciseScore,
+      exerciseName
+    }
+
+    console.log("body: ", body);
+    return this.http.post<UserSubmitHistory>(environment.leaderboardServiceUrl + '/history/save', body);
+  }
+
+  getAllUserSubmitHistoryByUserId(userId: number): Observable<UserSubmitHistory[]> {
+    return this.http.get<UserSubmitHistory[]>(environment.leaderboardServiceUrl + `/history/${userId}`)
   }
 
 }

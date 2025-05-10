@@ -1,0 +1,6 @@
+{
+  "learningId": "ResourceOptimism",
+  "title": "Resource Optimism",
+  "content": "Resource optimism happens when a test depends on the successful execution of some external resources (e.g., a network service or a database). While these resources are not always available or may fail, the test may pass without proper consideration for this scenario.\n\nDetection: A test method utilizes an instance of a File class without calling the exists(), isFile() or notExists() methods of the object. ",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#ResourceOptimism"
+}

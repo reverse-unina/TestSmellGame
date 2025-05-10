@@ -228,3 +228,17 @@ body {
   flex-direction: row;
   gap: 10px;
 }
+
+.chart-container {
+  max-width: 800px;
+  width: 90%;
+  margin: 40px auto;
+  background-color: #ffffff; /* Sfondo bianco */
+  padding: 20px;
+  border-radius: 8px; /* Angoli arrotondati */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+}
+
+
+
+

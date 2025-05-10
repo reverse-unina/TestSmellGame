@@ -19,11 +19,12 @@
   background-color: #f4f8fb;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  padding: 30px 30px 0;
   max-width: 700px;
   width: 100%;
   margin: 20px auto;
   text-align: center;
+
 }
 
 .mission-header {
@@ -38,8 +39,10 @@
   font-weight: bold;
   color: #4caf50;
   margin-right: 15px;
+  margin-left: 15px;
   display: flex;
   align-items: center;
+  line-height: 1.4;
 }
 
 .badge-icon img {
@@ -57,6 +60,11 @@
 .mission-description strong {
   color: #333;
   font-weight: bold;
+}
+
+.knight-image {
+  width: 100%;
+  height: auto;
 }
 
 

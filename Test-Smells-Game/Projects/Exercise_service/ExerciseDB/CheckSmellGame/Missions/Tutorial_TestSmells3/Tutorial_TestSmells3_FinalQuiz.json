@@ -1,0 +1,80 @@
+{
+  "exerciseId": "Test Smells (pt. 3) - Quiz",
+  "check_game_configuration": {
+    "level": 3,
+    "questions": [
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testCalculate() {\n    int value = calculateValue();\n    if (value > 10) {\n        assertEquals(15, value);\n    } else {\n        assertEquals(5, value);\n    }\n}",
+        "answers": [
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "public class TestClass {\n    private final Calculator calculator = new Calculator();\n    @Test\n    public void testAddition() {\n        assertEquals(5, calculator.add(2, 3));\n    }\n}",
+        "answers": [
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Lazy Test",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testMultipleAssertions() {\n    assertEquals(10, calculateA());\n    assertEquals(20, calculateB());\n    assertEquals(30, calculateC());\n}",
+        "answers": [
+          {
+            "answerText": "Eager Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testExceptionHandling() {\n    try {\n        methodThatThrowsException();\n        fail(\"Exception not thrown\");\n    } catch (ExpectedException e) {\n        assertEquals(\"Error message\", e.getMessage());\n    }\n}",
+        "answers": [
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testLazyInitialization() {\n    if (object == null) {\n        object = new Object();\n    }\n    assertNotNull(object);\n}",
+        "answers": [
+          {
+            "answerText": "Lazy Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  "available_for_game": false,
+  "auto_valutative": false
+}

@@ -1,8 +1,8 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {ExerciseService} from 'src/app/services/exercise/exercise.service';
 import {UserService} from 'src/app/services/user/user.service'
-import {CheckGameExerciseConfig,} from 'src/app/model/exercise/ExerciseConfiguration.model';
-import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import {CheckGameExerciseConfiguration,} from 'src/app/model/exercise/ExerciseConfiguration.model';
+import {ToolConfig} from "src/app/model/toolConfig/tool.config.model"
 import {firstValueFrom} from "rxjs";
 
 @Component({
@@ -11,8 +11,8 @@ import {firstValueFrom} from "rxjs";
   styleUrls: ['./check-game-ex-list-route.component.css']
 })
 export class CheckGameExListRoute implements OnInit {
-  config!: levelConfig;
-  exercises: CheckGameExerciseConfig[] = [];
+  config!: ToolConfig;
+  exercises: CheckGameExerciseConfiguration[] = [];
   serverError: string | undefined;
   waitingForServer!: boolean;
 
@@ -23,10 +23,10 @@ export class CheckGameExListRoute implements OnInit {
   async ngOnInit(): Promise<void> {
     this.waitingForServer = true;
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
+    this.config = await firstValueFrom(this.exerciseService.getToolConfig());
 
     this.exerciseService.getCheckGameExercises().subscribe({
-      next: (response: CheckGameExerciseConfig[]) => {
+      next: (response: CheckGameExerciseConfiguration[]) => {
         this.waitingForServer = false;
         this.serverError = undefined;
         this.exercises = response.sort(
@@ -36,8 +36,9 @@ export class CheckGameExListRoute implements OnInit {
               return byLevel;
 
             return a.exerciseId > b.exerciseId ? 1 : -1;
-        });
-        console.log(response);
+        }).filter(exercise => exercise.availableForGame);
+
+        //console.log(response);
       },
       error: (err) => {
         this.waitingForServer = false;

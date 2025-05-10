@@ -74,10 +74,10 @@ export class MissionsCoreRouteComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.mission = await firstValueFrom(this.missionService.getMissionById(this.missionId));
-      console.log("Mission: ", this.mission);
+      //console.log("Mission: ", this.mission);
 
       const userMissionsStatus: MissionStatus[] = await firstValueFrom(this.userService.getUserMissionsStatus());
-      console.log("Mission status: ", userMissionsStatus);
+      //console.log("Mission status: ", userMissionsStatus);
 
       if (userMissionsStatus) {
         const missionStatus = userMissionsStatus.find(mission => mission.missionId === this.mission.id);
@@ -101,8 +101,12 @@ export class MissionsCoreRouteComponent implements OnInit {
   }
 
   nextStep() {
+    if (this.mission.steps[this.currentStep].type === "learning") {
+      this.updateProgress();
+    }
+
     this.currentStep++;
-    this.updateProgress();
+
     this.updateServices();
     this.completeMission();
   }
@@ -111,20 +115,33 @@ export class MissionsCoreRouteComponent implements OnInit {
     if (this.currentStep !== this.mission.steps.length)
       return;
 
-    let points: number = 0;
+    let score: number = 0;
     this.mission.steps.forEach((step) => {
-      step.type === "refactoring" || step.type === "check-smell"? points++ : null;
+      step.type === "refactoring" || step.type === "check-smell"? score++ : null;
     });
 
-    console.log("points", points);
+    this.exerciseService.logEvent(`Mission ${this.missionId}`, this.userService.user.value.userName, "completed the mission successfully").subscribe(
+      next => {
+        console.log(JSON.stringify(next));
+      });
 
-    this.leaderboardService.updateMissionsScore(this.userService.user.value.userName, points).subscribe(
+    //console.log("points", score);
+
+    this.leaderboardService.updateMissionsScore(this.userService.user.value.userName, score).subscribe(
       data => {
-        console.log("Updated score: ", data);
+        //console.log("Updated score: ", data);
+        this.exerciseService.logEvent(`Mission ${this.missionId}`, this.userService.user.value.userName, `increased missions game mode points by ${score}`).subscribe(
+          next => {
+            console.log(JSON.stringify(next));
+          });
       }
     )
 
     this.achievementAlert.show("Holy cow, you have completed the mission", "You can see the new badge in your account page")
+    this.exerciseService.logEvent(`Mission ${this.missionId}`, this.userService.user.value.userName, `unlocked a new badge`).subscribe(
+      next => {
+        console.log(JSON.stringify(next));
+      });
   }
 
   async updateServices(): Promise<void> {
@@ -133,7 +150,6 @@ export class MissionsCoreRouteComponent implements OnInit {
 
     switch (this.mission.steps[this.currentStep].type) {
       case "learning":
-        console.log("learning");
         this.learningService = new LearningService(
           this.exerciseService
         );
@@ -141,7 +157,6 @@ export class MissionsCoreRouteComponent implements OnInit {
         this.serverError = await this.learningService.initLearningContent(this.mission.steps[this.currentStep].id);
         break;
       case "refactoring":
-        console.log("refactoring");
         this.refactoringService = new RefactoringService(
           this.codeService,
           this.exerciseService,
@@ -161,39 +176,76 @@ export class MissionsCoreRouteComponent implements OnInit {
         );
 
         this.serverError = await this.checkSmellService.initQuestions(this.mission.steps[this.currentStep].id);
-        console.log("checkService: ", this.checkSmellService.actualQuestionNumber);
     }
   }
 
   updateProgress() {
-    this.userService.updateUserMissionStatus(this.missionId, this.currentStep).subscribe(
+    this.userService.updateUserMissionStatus(this.missionId, this.currentStep+1).subscribe(
       success => console.log(success),
       error => console.log(error)
     )
   }
 
-  async submitExercise(): Promise<void> {
+  async submitCheckSmellExercise(): Promise<void> {
     this.checkSmellService.calculateScore();
-    this.checkSmellService.logResult(this.mission.steps[this.currentStep].id, "mission").then(
-      () => {
-        if (this.isExercisePassed()) {
-          this.successAlert.show();
-        } else {
-          this.failAlert.show();
+
+    if (this.checkSmellService.config.logTries) {
+      this.exerciseService.submitCheckSmellExercise(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, this.mission.steps[this.currentStep].id, this.checkSmellService.generateCheckSmellReport()).subscribe(
+        result => {
+          console.log("Updated solution", result);
         }
-      }
-    );
+      );
+    }
+
+    this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "completed check-smell exercise " + this.mission.steps[this.currentStep].id + " with score " + Math.round((this.checkSmellService.score * 100) / this.checkSmellService.assignmentScore) + '/100').subscribe(
+      next => {
+        console.log(JSON.stringify(next));
+        if (this.isExercisePassed()) {
+          this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "completed mission step successfully").subscribe(
+            next => {
+              console.log(JSON.stringify(next));
+            });
+        } else {
+          this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "failed mission step").subscribe(
+            next => {
+              console.log(JSON.stringify(next));
+            });
+        }
+      });
+
+    if (this.isExercisePassed()) {
+      this.successAlert.show('You have completed successfully the mission step.');
+      this.updateProgress();
+    } else {
+      this.failAlert.show('You failed the exercise. Don’t give up, try again!');
+    }
   }
 
-  compile(): void {
-    this.refactoringService.compileExercise(this.testing.editorComponent).then(
+  compileRefactoringExercise(): void {
+    this.refactoringService.compileExercise(`Mission ${this.missionId} - step ${this.currentStep}`, this.testing.editorComponent).then(
       () => {
-        if (this.isExercisePassed())
-          this.successAlert.show();
-        else
-          this.failAlert.show();
+        if (this.isExercisePassed()) {
+          this.successAlert.show('You have completed successfully the mission step.');
+          this.updateProgress();
+
+          // this.successAlert.show('You have completed successfully the mission step.');
+          this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "completed mission step successfully").subscribe(
+            next => {
+              console.log(JSON.stringify(next));
+            });
+        } else {
+          // this.failAlert.show('You failed the exercise. Don’t give up, try again!');
+          this.exerciseService.logEvent(`Mission ${this.missionId} - step ${this.currentStep}`, this.userService.user.value.userName, "failed mission step").subscribe(
+            next => {
+              console.log(JSON.stringify(next));
+            });
+        }
       }
     )
+  }
+
+  disableCompileButton(): boolean {
+    return this.refactoringService.isExercisePassed();
   }
 
   isExercisePassed(): boolean {

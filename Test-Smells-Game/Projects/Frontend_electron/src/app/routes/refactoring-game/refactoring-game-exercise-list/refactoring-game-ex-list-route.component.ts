@@ -4,9 +4,9 @@ import {ElectronService} from "ngx-electron";
 import {FormBuilder, NgForm} from "@angular/forms";
 import {RefactoringGameExerciseConfiguration} from 'src/app/model/exercise/ExerciseConfiguration.model';
 import { UserService } from 'src/app/services/user/user.service';
-import { levelConfig } from "src/app/model/levelConfiguration/level.configuration.model"
 import {GithubRetrieverComponent} from "../../../components/github-retriever/github-retriever.component";
 import {firstValueFrom} from "rxjs";
+import {ToolConfig} from "../../../model/toolConfig/tool.config.model";
 
 
 @Component({
@@ -22,7 +22,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
               private zone: NgZone,
               private fb: FormBuilder) { }
 
-  config!: levelConfig;
+  config!: ToolConfig;
   exercises: RefactoringGameExerciseConfiguration[] = [];
   exercisesFromLocal: RefactoringGameExerciseConfiguration[] = [];
   serverError: string | undefined;
@@ -48,7 +48,8 @@ export class RefactoringGameExListRouteComponent implements OnInit {
                 return byLevel;
 
               return a.exerciseId > b.exerciseId ? 1 : -1;
-            });
+            }).filter(exercise => exercise.availableForGame);
+
           console.log(this.exercises);
         },
         error: (err) => {
@@ -89,6 +90,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
           } else {
             // @ts-ignore
             data.forEach(d => this.exercisesFromLocal.push(RefactoringGameExerciseConfiguration.fromJson(d)));
+            this.exercisesFromLocal = this.exercisesFromLocal.filter(exercise => exercise.availableForGame === undefined || exercise.availableForGame);
             this.child.stopLoading();
             console.log("Exercises received: ", this.exercisesFromLocal)
           }
@@ -97,8 +99,7 @@ export class RefactoringGameExListRouteComponent implements OnInit {
 
     }
 
-    this.config = await firstValueFrom(this.exerciseService.getLevelConfig());
-  }
+    this.config = await firstValueFrom(this.exerciseService.getToolConfig());  }
 
   isExerciseEnabled(level: number): boolean {
     const userExp = this.userService.user.value.exp;

@@ -9,7 +9,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.io.FileWriter;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +28,18 @@ import com.dariotintore.tesi.exerciseservice.service.FileService;
 @RequestMapping("/files")
 public class FileController {
 
-    @Autowired
-    private FileService storageService;
+    private final FileService fileService = new FileService();
 
     private static final String README_URL = "https://raw.githubusercontent.com/LZannini/Thesis/main/README.md";
-    private static final String LOG_FILE_PATH = "/usr/src/app/assets/assignments/";
+    private static final String ASSIGNMENT_LOG_FILE_PATH = "/usr/src/app/assets/assignments/";
+    private static final String GAME_LOG_FILE_PATH = "/usr/src/app/assets/logs/";
+
 
     @GetMapping("/badges/{filename}")
     public ResponseEntity<Object> getBadgeImageByFilename(@PathVariable("filename") String filename) {
         byte[] image;
         try {
-            image = this.storageService.getBadgeFile("/usr/src/app/assets/badges/", filename);
+            image = this.fileService.getBadgeFile("/usr/src/app/assets/badges/", filename);
             return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -58,62 +60,45 @@ public class FileController {
 
     @PostMapping("/logger")
     public ResponseEntity<String> logEvent(@RequestBody EventLog eventLog) {
-      try {
-          String logFileName = "events.log";
-          String logFilePath = LOG_FILE_PATH + logFileName;
+        try {
+            if (!Files.exists(Paths.get(ASSIGNMENT_LOG_FILE_PATH)))
+                Files.createDirectories(Paths.get(ASSIGNMENT_LOG_FILE_PATH));
+            if (!Files.exists(Paths.get(GAME_LOG_FILE_PATH)))
+                Files.createDirectories(Paths.get(GAME_LOG_FILE_PATH));
 
-          Files.createDirectories(Paths.get(LOG_FILE_PATH));
-          System.out.println("Directories created or already exist: " + LOG_FILE_PATH);
+            String logFileName = "events.log";
+            String logFilePath = eventLog.gameMode.contains("Assignment") ? ASSIGNMENT_LOG_FILE_PATH : GAME_LOG_FILE_PATH;
+            logFilePath += logFileName;
 
-          LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Europe/Rome"));
-          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-          String formattedDateTime = localDateTime.format(formatter);
+            LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of("Europe/Rome"));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = localDateTime.format(formatter);
 
-          try (PrintWriter out = new PrintWriter(new FileWriter(logFilePath, true))) {
-              String logEntry = String.format("%s %s %s",
+            try (PrintWriter out = new PrintWriter(new FileWriter(logFilePath, true))) {
+              String logEntry = String.format("%s [%s]: \t%s %s",
                       formattedDateTime,
+                      eventLog.getGameMode(),
                       eventLog.getPlayer(),
                       eventLog.getEventDescription());
               out.println(logEntry);
               System.out.println("Log entry written: " + logEntry);
               System.out.println("Log file path: " + logFilePath);
-          }
+            }
 
-          return ResponseEntity.ok("{\"message\": \"Event logged successfully\"}");
-      } catch (IOException e) {
-          e.printStackTrace();
-          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\": \"Error logging event\"}");
-      }
+            return ResponseEntity.ok("{\"message\": \"Event logged successfully\"}");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"error\": \"Error logging event\"}");
+        }
     }
 
+    @Getter
+    @Setter
     public static class EventLog {
-      private String player;
-      private String eventDescription;
-      private String timestamp;
-
-      public String getPlayer() {
-          return player;
-      }
-
-      public void setPlayer(String player) {
-          this.player = player;
-      }
-
-      public String getEventDescription() {
-          return eventDescription;
-      }
-
-      public void setEventDescription(String eventDescription) {
-          this.eventDescription = eventDescription;
-      }
-
-      public String getTimestamp() {
-          return timestamp;
-      }
-
-      public void setTimestamp(String timestamp) {
-          this.timestamp = timestamp;
-      }
+        private String gameMode;
+        private String player;
+        private String eventDescription;
+        private String timestamp;
     }
 }
 

@@ -731,5 +731,6 @@
     ],
     "level": 1
   },
+  "available_for_game": true,
   "auto_valutative": true
 }

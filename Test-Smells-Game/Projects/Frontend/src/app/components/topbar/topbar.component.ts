@@ -5,7 +5,7 @@ import {UserService} from "../../services/user/user.service";
 import {ExerciseService} from "../../services/exercise/exercise.service";
 import {User} from "../../model/user/user.model";
 import {HttpClient} from '@angular/common/http';
-import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.model"
+import {ToolConfig} from "src/app/model/toolConfig/tool.config.model"
 
 @Component({
   selector: 'app-topbar',
@@ -13,7 +13,7 @@ import {levelConfig} from "src/app/model/levelConfiguration/level.configuration.
   styleUrls: ['./topbar.component.css']
 })
 export class TopbarComponent implements OnInit, OnDestroy {
-  config!: levelConfig;
+  config!: ToolConfig;
   isAuthenticated = false;
   currentUser: User | null = null;
 
@@ -32,11 +32,11 @@ export class TopbarComponent implements OnInit, OnDestroy {
       this.isAuthenticated = !!user;
       this.currentUser = user;
     });
-    console.log("Component created");
-    this.exerciseService.getLevelConfig().subscribe(
-                              (data: levelConfig) => {
+    //console.log("Component created");
+    this.exerciseService.getToolConfig().subscribe(
+                              (data: ToolConfig) => {
                                   this.config = data;
-                                  console.log('LevelConfig:', this.config);
+                                  //console.log('toolConfig:', this.config);
                               },
                               error => {
                                   console.error('Error fetching level config:', error);
@@ -47,7 +47,7 @@ export class TopbarComponent implements OnInit, OnDestroy {
     if (this.userSub) {
       this.userSub.unsubscribe();
     }
-    console.log("Component destroyed");
+    //console.log("Component destroyed");
   }
 
   onLogout() {
