@@ -1,48 +1,45 @@
-## Installazione
+## TSGame
 
-TestSmellGame prevede due modalità di installazione:
-- Thin Clien, basato su un Frontend web dove tutti i servizi vengono eseguiri su container docker;
-- Thick Client, dove Frontend e Compiler Service cono embeddati in un applicativo locale generato tramite Electron, mentre i restanti servizi vengono forniti tramite con.
+The presence of test smells related to low-quality test cases is a known factor contributing to problems in maintaining both test suites and production code.  The  TSGame (Test Smell Game) capsule provides a serious game where students can familiarize with test smells by practicing with their detection and removal from JUnit test code. TSGame has been implemented as a Web-based application that allows a teacher to assign students test smell detection and refactoring tasks that they have to accomplish in game sessions. Upon completion of the tasks they have the possibility to gain rewards. 
 
+## Prerequisites
+TSGame is composed of several containers implementing the needed service and several different front-ends.
+The installation of TSGame is based on the deploy of the containers in an updated Docker Container instance. The Web front-end expose the application on the http port 8080
 
-### Installazione Thin Client
-L'installazione Thin Client può essere automatizzata tramite l'utilizzo degli scritp di build e deploy, situati all'interno della directory `Test Smells Game/Projects`. I passi da eseguire se si opta per questa opzione sono i seguenti:
-1. Compilazione e generazione delle immagini docker:
-    - Su Linux:
+## Installing TSGame
+
+TestSmellGame has two installation modes:
+- Thin Client, based on a web Frontend where all services are executed on docker containers;
+- Thick Client, where Frontend and Compiler Service are embedded in a local application generated via Electron, while the remaining services are provided locally. This last mode is more efficient but it requires more resources on the client machine.
+
+### Thin Client Installation
+Thin Client installation can be automated using the build and deploy scripts, located inside the `Test Smells Game/Projects` directory. The steps to follow if you choose this option are the following:
+1. Compiling and generating docker images (only for users that want to modify the source code):
+    - On Linux:
        ```bash
        ./build.sh
        ```
-    - Su Windows:
+    - On Windows:
        ```
        build.bat
        ```
-    Lo script di build si occupa di compilare i servizi che compongono il tool e generare le immagini associate.
-2. Deployment dei container:
-    - Su Linux:
+    The build script is responsible for compiling the services that make up the tool and generating the associated images.
+2. Containers Deployment (for all users) :
+    - On Linux:
        ```bash
        ./deploy.sh
        ```
-    - Su Windows:
+    - On Windows:
        ```
        deploy.bat
        ```
-    Lo scritp di deploy si occupa di generare i container a partire dalle immagini dei servizi e creare la rete locale con cui i container comunicheranno.
+    The deploy script takes care of generating the containers from the service images and creating the local network with which the containers will communicate. In case you skip the first step, the predeined docker container images uploaded on DockerHub will be used.
 
-**Nota bene**: lo script di deploy è eseguibile indipendentemente dallo script di build. Se le immagini non sono presenti localmente, lo script di deploy le scaricherà da dockerhub.
+## Manual build and deploy
 
-2. **Compilare i servizi e generare le immagini Docker**
-   - Su Linux/MacOS:
-     ```bash
-     ./build.sh
-     ```
-   - Su Windows:
-     ```
-     build.bat
-     ```
-   Questo script compila ciascun servizio del tool e genera le relative immagini Docker.
+It is possible to build and deploy manually each of the services (in particular if you want to modify just some of them) :
 
-Se si opta per build e deploy manuali, i passi da eseguire sono i seguenti:
-1. Generazione delle immagini:
+1. docker image generation:
     - Compiler Service
         ```bash
         docker build -t compiler_service .
@@ -79,7 +76,7 @@ Se si opta per build e deploy manuali, i passi da eseguire sono i seguenti:
         docker tag api_gateway mick0974/testsmellsgame:api_gateway
         ```
 
-2. Caricamento dati iniziali:
+2. Loading initial data (exercises):
   ```bash
     docker volume create assets
     docker build -f Dockerfile.assets -t assets-image .
@@ -103,14 +100,15 @@ Se si opta per build e deploy manuali, i passi da eseguire sono i seguenti:
     cp /missions/mission2.json /mnt/missions/
   "
   ```
-3. Generazione dei container e della rete interna:
+3. Container generation and internal net enabling:
   ```bash
   docker-compose up -d
   ```
 
 
-### Installazione Thick Client 
-L'installazione Thick Client richiede la compilazione in locale dell'eseguibile Electron:
+### Thick Client Installation
+Thick Client installation requires compiling the Electron executable:
+
 ```bash
 cd TestSmellGame/Projects/Frontend_electron
 npm install
@@ -119,11 +117,10 @@ npm run electron-build
 electron-packager .
 ```
 
-I restanti servizi possono essere compilati e serviti come descritto nel punto precedente.
+The other services can be generated or deployed as in the Thin Client Installation
 
 
-### Endpoint Servizi
+### Services Endpoints
 
-Grazie all’utilizzo di Nginx e di un API Gateway, è stata implementata una configurazione di reverse proxy, consentendo di accedere a tutti i servizi tramite un unico punto di ingresso sulla porta `8080`. Di seguito, per completezza, sono riportati gli endpoint di tutti i servizi:
-
+Using Nginx and an API Gateway, a reverse proxy configuration was implemented, allowing access to all services through a single entry point on port `8080`. For completeness, the endpoints of all services are listed below:
 ![endpoints](https://github.com/user-attachments/assets/b74ce769-944f-4c83-b84b-abffed51ae91)
