@@ -2,6 +2,20 @@
 
 The presence of test smells related to low-quality test cases is a known factor contributing to problems in maintaining both test suites and production code.  The  TSGame (Test Smell Game) capsule provides a serious game where students can familiarize with test smells by practicing with their detection and removal from JUnit test code. TSGame has been implemented as a Web-based application that allows a teacher to assign students test smell detection and refactoring tasks that they have to accomplish in game sessions. Upon completion of the tasks they have the possibility to gain rewards. 
 
+TSGame is realized in the context of the ENACTEST Erasmus+ project (https://enactest-project.eu/) financed by the European Commission (Project Number 101055874) and by the GATT project financed by the University of Naples Federico II.
+
+## How To Play
+The instructions to play the game are reported in the `TS_Game Instructions` pdf file.
+
+## Initial Configuration
+The initial configuration of the game is reported in the `Initial Configuration.md` file in the wiki folder.
+
+## Game Modes
+The description of the Game Modes with further details about scores and achievements are reported in the `Game modes` file in the wiki folder.
+
+## Editing Exercises
+A teacher can edit the set of available exercises by following the instructions reported in the `Editing Exercises` file in the wiki folder.
+
 ## Prerequisites
 TSGame is composed of several containers implementing the needed service and several different front-ends.
 The installation of TSGame is based on the deploy of the containers in an updated Docker Container instance. The Web front-end expose the application on the http port 8080
