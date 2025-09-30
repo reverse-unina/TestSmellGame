@@ -31,10 +31,16 @@ const execSmellDetector = () => {
 
   console.log(cmd);
   return new Promise((resolve, reject) => {
-    exec(cmd, { maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
+    exec(cmd, { maxBuffer: 10 * 1024 * 1024 }, (error, stdout) => {
       const out = (stdout || '').trim();
       if (error) {
-        return reject(new Error(`Detector failed (code ${error.code}): ${stderr || out}`));
+        if (error.code === 1) {
+          resolve(stdout);
+        } else {
+          reject(error);
+        }
+      } else {
+        resolve(stdout);
       }
       resolve(out);
     });
