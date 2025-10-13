@@ -25,11 +25,14 @@ const execMavenCommand = (cmd) => {
 }
 
 const execSmellDetector = () => {
-  const smell_detector_path = (process.env.ROOT_PATH + process.env.SMELL_PATH).replace("//","/")
-  const test_csv_path = (process.env.ROOT_PATH + process.env.TEST_CSV_PATH).replace("//","/");
-  console.log("java -jar " + smell_detector_path +  " \"" + test_csv_path + "\"")
+  const smell_detector_path = (process.env.ROOT_PATH + process.env.SMELL_PATH).replace("//","/");
+  const test_csv_path      = (process.env.ROOT_PATH + process.env.TEST_CSV_PATH).replace("//","/");
+  const cmd = `java -jar "${smell_detector_path}" -f "${test_csv_path}"`;
+
+  console.log(cmd);
   return new Promise((resolve, reject) => {
-    exec("java -jar " + smell_detector_path +  " \"" + test_csv_path + "\"", (error, stdout, stderr) => {
+    exec(cmd, { maxBuffer: 10 * 1024 * 1024 }, (error, stdout) => {
+      const out = (stdout || '').trim();
       if (error) {
         if (error.code === 1) {
           resolve(stdout);
@@ -39,11 +42,10 @@ const execSmellDetector = () => {
       } else {
         resolve(stdout);
       }
-    console.log(stdout);
-    }
-    )
-  })
-}
+      resolve(out);
+    });
+  });
+};
 
 const execGenericCommand = (cmd) => {
   return new Promise((resolve, reject) => {
