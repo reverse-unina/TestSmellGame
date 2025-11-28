@@ -27,10 +27,6 @@
       "type": "learning"
     },
     {
-      "id": "GeneralFixture",
-      "type": "learning"
-    },
-    {
       "id": "Test Smells (pt. 2) - Quiz",
       "type": "check-smell"
     }
