@@ -1,6 +1,6 @@
 {
   "learningId": "RedundantPrint",
   "title": "Redundant Print",
-  "content": "Print statements in unit tests are redundant as unit tests are executed as part of an automated process with little to no human intervention. Print statements are possibly used by developers for traceability and debugging purposes and then forgotten.\n\nDetection: A test method that contains an assertion statement in which the expected and actual parameters are the same.",
+  "content": "Print statements in unit tests are redundant as unit tests are executed as part of an automated process with little to no human intervention. Print statements are possibly used by developers for traceability and debugging purposes and then forgotten. In addition, their output could be mixed with the output of the application itself.\n\nDetection: A test method that invokes output methods such as print or println or printf or write method of the System class",
   "external_reference": "https://testsmells.org/pages/testsmells.html#RedundantPrint"
 }

@@ -1,6 +1,6 @@
 {
   "learningId": "DuplicateAssert",
   "title": "Duplicate Assert",
-  "content": "This smell occurs when a test method tests for the same condition multiple times within the same test method. If the test method needs to test the same condition using different values, a new test method should be utilized; the name of the test method should be an indication of the test being performed. Possible situations that would give rise to this smell include: (1) developers grouping multiple conditions to test a single method; (2) developers performing debugging activities; and (3) an accidental copy-paste of code.\n\nDetection: A test method that contains more than one assertion statement with the same parameters.",
+  "content": "This smell occurs when a test method tests for the same condition multiple times within the same test method. For example, this smell occurs in presence of duplicated assertion (without any intermediate statement that could change the result of the assertion). If the test method needs to test the same condition using different values, a new test method should be utilized; the name of the test method should be an indication of the test being performed.\n\nDetection: A test method that contains more than one assertion statement with the same parameters.",
   "external_reference": "https://testsmells.org/pages/testsmells.html#DuplicateAssert"
 }

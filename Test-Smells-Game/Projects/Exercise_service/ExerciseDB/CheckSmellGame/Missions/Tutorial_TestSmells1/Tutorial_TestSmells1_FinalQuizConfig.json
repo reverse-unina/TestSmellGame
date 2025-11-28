@@ -59,7 +59,7 @@
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "    @Test\n    public void testDivide() {\n        int a = 10; int b = 2; \n        int expectedResult = 5;\n        assertEquals(expectedResult, objCalcUnderTest.divide(a, b));\n        assertEquals(expectedResult, objCalcUnderTest.divide(a, b));\n    }\n",
+        "questionCode": "    @Test\n    public void testDivide() {\n        int a = 10; int b = 2; \n        int expectedResult = 5;\n        assertEquals(expectedResult, objCalcUnderTest.divide(a, b));\n        assertEquals(expectedResult, expectedResult);\n    }\n",
         "answers": [
           {
             "answerText": "Redundant Assertion",

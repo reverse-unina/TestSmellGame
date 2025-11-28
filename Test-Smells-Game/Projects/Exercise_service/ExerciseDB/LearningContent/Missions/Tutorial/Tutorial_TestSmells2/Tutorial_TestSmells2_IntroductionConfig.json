@@ -1,6 +1,6 @@
 {
   "learningId": "Tutorial_TestSmells2_Introduction",
-  "title": "Advanced Test Smells",
-  "content": "In this mission, you will learn about more advanced test smells and how to identify and resolve them. After covering some basic test smells, it's time to dive deeper into issues that can make tests fragile and harder to maintain.\n\nYou’ll explore test smells like Magic Numbers, Duplicate Asserts, and more. By the end of the mission, you’ll be able to spot and fix these advanced issues that can improve the quality of your tests.\n\nAt the end of the theoretical section, you will take a short quiz to test your knowledge. Don’t worry if you don’t pass on the first try—you can retake it as many times as you like!\n\nAnd remember, you can leave the mission at any time and resume from the last completed step.",
+  "title": "More Test Smells",
+  "content": "In this mission, you will learn about more test smells and how to identify and resolve them. After covering some basic test smells, it's time to dive deeper into issues that can make tests fragile and harder to maintain.\n\nYou’ll explore test smells like Magic Numbers, Duplicate Asserts, and more. By the end of the mission, you’ll be able to spot and fix these advanced issues that can improve the quality of your tests.\n\nAt the end of the theoretical section, you will take a short quiz to test your knowledge. Don’t worry if you don’t pass on the first try—you can retake it as many times as you like!\n\nAnd remember, you can leave the mission at any time and resume from the last completed step.",
   "external_reference": ""
 }
