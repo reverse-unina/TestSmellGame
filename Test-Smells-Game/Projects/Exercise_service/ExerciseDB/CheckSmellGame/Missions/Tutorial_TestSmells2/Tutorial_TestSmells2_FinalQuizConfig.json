@@ -16,7 +16,7 @@
             "isCorrect": true
           },
           {
-            "answerText": "Default Test",
+            "answerText": "Unknown Test",
             "isCorrect": false
           },
           {
@@ -38,12 +38,12 @@
             "isCorrect": true
           },
           {
-            "answerText": "Default Test",
+            "answerText": "Unknown Test",
             "isCorrect": false
           },
           {
             "answerText": "No smell present",
-            "isCorrect": true
+            "isCorrect": false
           }
         ]
       },
@@ -60,7 +60,7 @@
             "isCorrect": false
           },
           {
-            "answerText": "Default Test",
+            "answerText": "Unknown Test",
             "isCorrect": false
           },
           {
@@ -71,18 +71,18 @@
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "\t@Test\n\tpublic void testAccountBalance() {\n\t\tAccount account = new Account();\n\t\taccount.deposit(500);\n\t\tdouble balance = account.getBalance();\n\t\tassertEquals(500, balance, 0.01);\n\t}\n",
+        "questionCode": "\t@Test\n\tpublic void testAccountBalance() {\n\t\tAccount account = new Account();\n\t\taccount.deposit(500);\n\t\tdouble balance = account.getBalance();\n\t}\n",
         "answers": [
           {
             "answerText": "Magic Number Test",
-            "isCorrect": true
+            "isCorrect": false
           },
           {
             "answerText": "Assertion Roulette",
             "isCorrect": false
           },
           {
-            "answerText": "Default Test",
+            "answerText": "Unknown Test",
             "isCorrect": false
           },
           {
@@ -104,7 +104,7 @@
             "isCorrect": false
           },
           {
-            "answerText": "Default Test",
+            "answerText": "Unknown Test",
             "isCorrect": false
           },
           {

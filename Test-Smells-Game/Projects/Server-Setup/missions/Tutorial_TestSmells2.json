@@ -19,13 +19,13 @@
       "type": "learning"
     },
     {
-      "id": "DefaultTest",
-      "type": "learning"
-    },
-    {
       "id": "AssertionRoulette",
       "type": "learning"
     },
+    {
+      "id": "UnknownTest",
+      "type": "learning"
+    },    
     {
       "id": "Test Smells (pt. 2) - Quiz",
       "type": "check-smell"
