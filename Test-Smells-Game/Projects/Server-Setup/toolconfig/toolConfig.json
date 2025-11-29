@@ -4,19 +4,19 @@
   [
     {
       "name": "Bronze badge",
-      "description": "Badge obteined after completing 10 exercises",
+      "description": "Badge obtained after completing 10 exercises",
       "points": "10",
       "filename": "badge_bronze"
     },
     {
       "name": "Silver badge",
-      "description": "Badge obteined after completing 20 exercises",
+      "description": "Badge obtained after completing 20 exercises",
       "points": "20",
       "filename": "badge_silver"
     },
     {
       "name": "Gold badge",
-      "description": "Badge obteined after completing 30 exercises",
+      "description": "Badge obtained after completing 30 exercises",
       "points": "30",
       "filename": "badge_gold"
     }
