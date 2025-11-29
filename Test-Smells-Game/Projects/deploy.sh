@@ -18,6 +18,6 @@ docker run --rm -v assets:/mnt assets-image sh -c "
 
 # Docker Compose
 echo Starting Docker containers with docker-compose...
-docker-compose up -d
+docker compose up -d
 
 echo Deployment complete.
