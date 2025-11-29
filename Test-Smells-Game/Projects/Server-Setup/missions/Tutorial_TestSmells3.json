@@ -11,6 +11,10 @@
       "type": "learning"
     },
     {
+      "id": "DefaultTest",
+      "type": "learning"
+    },
+    {
       "id": "ConditionalTestLogic",
       "type": "learning"
     },
