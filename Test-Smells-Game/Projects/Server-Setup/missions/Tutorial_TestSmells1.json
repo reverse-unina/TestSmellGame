@@ -38,6 +38,10 @@
       "type": "learning"
     },
     {
+      "id": "UnknownTest",
+      "type": "learning"
+    },
+    {
       "id": "Test Smells (pt. 1) - Quiz",
       "type": "check-smell"
     }

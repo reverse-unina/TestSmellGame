@@ -16,6 +16,14 @@
             "isCorrect": false
           },
           {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
             "answerText": "No smell present",
             "isCorrect": true
           }
@@ -23,7 +31,7 @@
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "@Test\n@Ignore\npublic void testSubtract() {\n\tint a = 25; int b = 20;\n\tint expectedResult = 5;\n\tlong result = objCalcUnderTest.subtract(a, b);\n\tassertEquals(expectedResult, result);\n}\n",
+        "questionCode": "@Test\n@Ignore\npublic void testSubtract() {\n\tint a = 25; int b = 20;\n\tint expectedResult = 5;\n\tlong result = objCalcUnderTest.subtract(a, b);\n}\n",
         "answers": [
           {
             "answerText": "Ignored Test",
@@ -32,9 +40,51 @@
           {
             "answerText": "Redundant Print",
             "isCorrect": false
+          },          
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
           },
           {
             "answerText": "Empty Test",
+            "isCorrect": false
+          },
+                    {
+            "answerText": "Unknown Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "@Test\npublic void testSubtract() {\n\t\\\\TODO : Insert a new test here; \n\t\\\\int a = 25; int b = 20;\n\t\\\\int expectedResult = 5;\n\t\\\\long result = objCalcUnderTest.subtract(a, b);\n}\n",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": true
+          },
+                    {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
             "isCorrect": false
           }
         ]
@@ -46,6 +96,10 @@
           {
             "answerText": "Redundant Print",
             "isCorrect": true
+          },          
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
           },
           {
             "answerText": "Empty Test",
@@ -53,6 +107,14 @@
           },
           {
             "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
             "isCorrect": false
           }
         ]
@@ -64,6 +126,10 @@
           {
             "answerText": "Redundant Assertion",
             "isCorrect": true
+          },          
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
           },
           {
             "answerText": "Empty Test",
@@ -71,6 +137,14 @@
           },
           {
             "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
             "isCorrect": false
           }
         ]
