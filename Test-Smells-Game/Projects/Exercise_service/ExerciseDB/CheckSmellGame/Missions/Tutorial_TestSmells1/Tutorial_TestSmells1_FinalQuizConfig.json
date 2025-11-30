@@ -61,7 +61,7 @@
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "@Test\npublic void testSubtract() {\n\t\\\\TODO : Insert a new test here; \n\t\\\\int a = 25; int b = 20;\n\t\\\\int expectedResult = 5;\n\t\\\\long result = objCalcUnderTest.subtract(a, b);\n}\n",
+        "questionCode": "@Test\npublic void testSubtract() {\n\t//TODO : Insert a new test here; \n\t//int a = 25; int b = 20;\n\t//int expectedResult = 5;\n\t//long result = objCalcUnderTest.subtract(a, b);\n}\n",
         "answers": [
           {
             "answerText": "Ignored Test",

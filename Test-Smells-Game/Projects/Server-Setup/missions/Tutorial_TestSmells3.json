@@ -11,10 +11,6 @@
       "type": "learning"
     },
     {
-      "id": "DefaultTest",
-      "type": "learning"
-    },
-    {
       "id": "ConditionalTestLogic",
       "type": "learning"
     },
@@ -28,10 +24,6 @@
     },
     {
       "id": "ExceptionHandling",
-      "type": "learning"
-    },
-    {
-      "id": "LazyTest",
       "type": "learning"
     },
     {

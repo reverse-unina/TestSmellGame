@@ -14,40 +14,72 @@
           {
             "answerText": "Eager Test",
             "isCorrect": false
+          },          
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
           }
         ]
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "public class TestClass {\n    private final Calculator calculator = new Calculator();\n    @Test\n    public void testAddition() {\n        assertEquals(5, calculator.add(2, 3));\n    }\n}",
+        "questionCode": "public class TestClass {\n    private final Calculator calculator;\n\tpublic TestClass(){calculator = new Calculator();}\n    @Test\n    public void testAddition() {\n        assertEquals(5, calculator.add(2, 3));\n    }\n}",
         "answers": [
           {
             "answerText": "Constructor Initialization",
             "isCorrect": true
           },
           {
-            "answerText": "Lazy Test",
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
             "isCorrect": false
           }
         ]
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "@Test\npublic void testMultipleAssertions() {\n    assertEquals(10, calculateA());\n    assertEquals(20, calculateB());\n    assertEquals(30, calculateC());\n}",
+        "questionCode": "@Test\npublic void testOperation() {\n\tint a = 15; int b = 20;\n\tint result;\n\tresult = objCalcUnderTest.add(a, b);\n\tresult = objCalcUnderTest.subtract(result, 10);\n\tresult = objCalcUnderTest.add(result, 3);\n\tint expectedResult = 28;\n\tassertEquals(expectedResult,result);}",
         "answers": [
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
           {
             "answerText": "Eager Test",
             "isCorrect": true
+          },          
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
           },
           {
-            "answerText": "Exception Handling",
+            "answerText": "No smell present",
             "isCorrect": false
           }
         ]
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "@Test\npublic void testExceptionHandling() {\n    try {\n        methodThatThrowsException();\n        fail(\"Exception not thrown\");\n    } catch (ExpectedException e) {\n        assertEquals(\"Error message\", e.getMessage());\n    }\n}",
+        "questionCode": "@Test\npublic void public void testUserProcessing() {\n\ttry {\n\t\tUser user = new User("Mario", "Rossi", 30);\n\t\tUserService service = new UserService();\n\t\tUserResult result = service.process(user);\n\t\tassertNotNull(result);\n\t\tassertTrue(result.isValid());\n\t\tassertEquals("PROCESSED", result.getStatus());\n\t\tassertEquals(200, result.getCode());\n\t\tassertEquals(30, result.getUserAge());\n\t} catch (Exception e) {\n\t\te.printStackTrace();\n\t}\n}\n}\n}",
         "answers": [
           {
             "answerText": "Exception Handling",

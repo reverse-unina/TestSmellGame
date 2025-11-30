@@ -13,10 +13,6 @@
     {
       "id": "Calculator",
       "type": "refactoring"
-    },
-    {
-      "id": "JunitExample",
-      "type": "refactoring"
     }
   ]
 }

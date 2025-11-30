@@ -12,8 +12,8 @@
             "isCorrect": true
           },
           {
-            "answerText": "Duplicate Assert",
-            "isCorrect": true
+            "answerText": "Default Test",
+            "isCorrect": false
           },
           {
             "answerText": "Unknown Test",
@@ -36,6 +36,10 @@
           {
             "answerText": "Assertion Roulette",
             "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
           },
           {
             "answerText": "Unknown Test",
@@ -64,6 +68,10 @@
             "isCorrect": false
           },
           {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
             "answerText": "No smell present",
             "isCorrect": true
           }
@@ -83,6 +91,40 @@
           },
           {
             "answerText": "Unknown Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Is there a test smell present in the following code?",
+        "questionCode": "\t@Test\n\tpublic void ExampleUnitTest() {\n\t\tint s = 32 + 10;\n\t\tassertEquals(s,12);\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
             "isCorrect": false
           },
           {
@@ -105,6 +147,10 @@
           },
           {
             "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
             "isCorrect": false
           },
           {

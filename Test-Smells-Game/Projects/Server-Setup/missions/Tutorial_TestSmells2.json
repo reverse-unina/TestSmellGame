@@ -23,9 +23,9 @@
       "type": "learning"
     },
     {
-      "id": "UnknownTest",
+      "id": "DefaultTest",
       "type": "learning"
-    },    
+    },
     {
       "id": "Test Smells (pt. 2) - Quiz",
       "type": "check-smell"
