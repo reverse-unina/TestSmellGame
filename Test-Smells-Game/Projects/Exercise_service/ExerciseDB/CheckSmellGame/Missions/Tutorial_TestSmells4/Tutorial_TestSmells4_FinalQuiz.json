@@ -12,7 +12,27 @@
             "isCorrect": true
           },
           {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
             "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "No smell present",
             "isCorrect": false
           }
         ]
@@ -23,19 +43,67 @@
         "questionCode": "@Test\npublic void testFileReading() {\n    FileReader reader = new FileReader(\"test.txt\");\n    reader.read();\n    assertTrue(reader.isOpen());\n}",
         "answers": [
           {
+            "answerText": "Mystery Guest",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },          
+          {
             "answerText": "Resource Optimism",
             "isCorrect": true
           },
           {
             "answerText": "Sleepy Test",
             "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
           }
         ]
       },
       {
         "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "@Test\npublic void testEquality() {\n\tMyObject obj = new MyObject(\"expected\");\n\tString result = obj.toString();\n\tassertEquals(\"expected\", result);\n}",
+        "questionCode": "@Test\npublic void test3() {\n\tMyObject obj = new MyObject(\"expected\");\n\tassertEquals(\"expected\", obj.toString());\n}",
         "answers": [
+          {
+            "answerText": "Mystery Guest",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
           {
             "answerText": "Sensitive Equality",
             "isCorrect": true
@@ -43,7 +111,19 @@
           {
             "answerText": "Mystery Guest",
             "isCorrect": false
-          }
+          },                    
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }          
         ]
       }
     ]

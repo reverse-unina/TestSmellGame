@@ -4,7 +4,7 @@
     "level": 3,
     "questions": [
       {
-        "questionTitle": "Is there a test smell present in the following code?",
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
         "questionCode": "@Test\npublic void testCalculate() {\n    int value = calculateValue();\n    if (value > 10) {\n        assertEquals(15, value);\n    } else {\n        assertEquals(5, value);\n    }\n}",
         "answers": [
           {
@@ -20,13 +20,25 @@
             "isCorrect": true
           },
           {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },   
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },           
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },                
+          {
             "answerText": "No smell present",
             "isCorrect": false
           }
         ]
       },
       {
-        "questionTitle": "Is there a test smell present in the following code?",
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
         "questionCode": "public class TestClass {\n    private final Calculator calculator;\n\tpublic TestClass(){calculator = new Calculator();}\n    @Test\n    public void testAddition() {\n        assertEquals(5, calculator.add(2, 3));\n    }\n}",
         "answers": [
           {
@@ -43,8 +55,12 @@
           },          
           {
             "answerText": "Magic Number Test",
-            "isCorrect": false
+            "isCorrect": true
           },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },          
           {
             "answerText": "No smell present",
             "isCorrect": false
@@ -52,7 +68,7 @@
         ]
       },
       {
-        "questionTitle": "Is there a test smell present in the following code?",
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
         "questionCode": "@Test\npublic void testOperation() {\n\tint a = 15; int b = 20;\n\tint result;\n\tresult = objCalcUnderTest.add(a, b);\n\tresult = objCalcUnderTest.subtract(result, 10);\n\tresult = objCalcUnderTest.add(result, 3);\n\tint expectedResult = 28;\n\tassertEquals(expectedResult,result);}",
         "answers": [
           {
@@ -72,35 +88,49 @@
             "isCorrect": false
           },
           {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },           
+          {
             "answerText": "No smell present",
             "isCorrect": false
           }
         ]
       },
       {
-        "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "@Test\npublic void public void testUserProcessing() {\n\ttry {\n\t\tUser user = new User("Mario", "Rossi", 30);\n\t\tUserService service = new UserService();\n\t\tUserResult result = service.process(user);\n\t\tassertNotNull(result);\n\t\tassertTrue(result.isValid());\n\t\tassertEquals("PROCESSED", result.getStatus());\n\t\tassertEquals(200, result.getCode());\n\t\tassertEquals(30, result.getUserAge());\n\t} catch (Exception e) {\n\t\te.printStackTrace();\n\t}\n}\n}\n}",
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "@Test\npublic void public void testUserProcessing() {\n\ttry {\n\t\tUser user = new User(\"Mario\", \"Rossi\", 30);\n\t\tUserService service = new UserService();\n\t\tUserResult result = service.process(user);\n\t\tassertNotNull(result);\n\t\tassertTrue(result.isValid());\n\t\tassertEquals(\"PROCESSED\", result.getStatus());\n\t\tassertEquals(200, result.getCode());\n\t\tassertEquals(30, result.getUserAge());\n\t} catch (Exception e) {\n\t\te.printStackTrace();\n\t}\n}\n}\n}",
         "answers": [
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": true
+          },          
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },          
           {
             "answerText": "Exception Handling",
             "isCorrect": true
-          },
+          },           
           {
-            "answerText": "Sensitive Equality",
-            "isCorrect": false
-          }
-        ]
-      },
-      {
-        "questionTitle": "Is there a test smell present in the following code?",
-        "questionCode": "@Test\npublic void testLazyInitialization() {\n    if (object == null) {\n        object = new Object();\n    }\n    assertNotNull(object);\n}",
-        "answers": [
-          {
-            "answerText": "Lazy Test",
-            "isCorrect": true
-          },
-          {
-            "answerText": "Constructor Initialization",
+            "answerText": "No smell present",
             "isCorrect": false
           }
         ]
