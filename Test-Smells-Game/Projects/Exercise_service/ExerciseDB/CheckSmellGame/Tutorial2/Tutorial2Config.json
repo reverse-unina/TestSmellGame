@@ -1,0 +1,162 @@
+{
+  "exerciseId": "Tutorial2",
+  "check_game_configuration": {
+    "level": 2,
+    "questions": [
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "\t@Test\n\tpublic void testCalculateDiscount() {\n\t\tdouble price = 100;\n\t\tdouble discount = 0.1;\n\t\tdouble expectedPrice = 90;\n\t\tdouble result = price - (price * discount);\n\t\tassertEquals(expectedPrice, result, 0.01);\n\t\tassertEquals(expectedPrice, result, 0.0001);\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "\t@Test\n\tpublic void testUserLogin() {\n\t\tUser user = new User();\n\t\tuser.setUsername(\"testuser\");\n\t\tuser.setPassword(\"password123\");\n\t\tassertTrue(user.isValidUsername());\n\t\tassertTrue(user.isValidPassword());\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "\t@Test\n\tpublic void testOrderProcessing() {\n\t\tOrder order = new Order();\n\t\torder.addItem(new Item(\"Laptop\", 1000));\n\t\torder.addItem(new Item(\"Mouse\", 50));\n\t\torder.addItem(new Item(\"Keyboard\", 75));\n\t\tdouble total = order.calculateTotal();\n\t\tdouble precision=0.01;\n\t\tdouble expectedTotal=1125;\n\t\tassertEquals(expectedTotal, total, precision);\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "\t@Test\n\tpublic void testAccountBalance() {\n\t\tAccount account = new Account();\n\t\taccount.deposit(500);\n\t\tdouble balance = account.getBalance();\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "\t@Test\n\tpublic void ExampleUnitTest() {\n\t\tint s = 32 + 10;\n\t\tassertEquals(s,42);\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "\t@Test\n\tpublic void testUserRegistration() {\n\t\tUser user = new User();\n\t\tuser.setUsername(\"newuser\");\n\t\tuser.setPassword(\"newpassword\");\n\t\tuser.setEmail(\"newuser@example.com\");\n\t\tassertTrue(user.isValidUsername());\n\t\tassertTrue(user.isValidPassword());\n\t\tassertTrue(user.isValidEmail());\n\t}\n",
+        "answers": [
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  "available_for_game": true,
+  "auto_valutative": false
+}

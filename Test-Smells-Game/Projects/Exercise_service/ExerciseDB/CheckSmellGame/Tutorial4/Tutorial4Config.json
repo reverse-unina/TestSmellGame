@@ -1,0 +1,133 @@
+{
+  "exerciseId": "Tutorial4",
+  "check_game_configuration": {
+    "level": 3,
+    "questions": [
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "@Test\npublic void testFileOperations() throws IOException {\n\tString fileName = \"testfile.txt\";\n\tString content = \"Hello, this is a test.\";\n\tPath path = Paths.get(fileName);\n\tif (!Files.exists(path)) {\n\t\tFiles.createFile(path);\n\t}\n\n\t// Scrittura nel file\n\tFiles.write(path, content.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);\n\n\t// Lettura dal file\n\tString readContent = new String(Files.readAllBytes(path));\n\tassertEquals(content, readContent);\n\n\t// Eliminazione del file dopo il test\n\tFiles.deleteIfExists(path);\n}",
+        "answers": [
+          {
+            "answerText": "Mystery Guest",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "@Test\npublic void testFileReading() {\n    FileReader reader = new FileReader(\"test.txt\");\n    reader.read();\n    assertTrue(reader.isOpen());\n}",
+        "answers": [
+          {
+            "answerText": "Mystery Guest",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "@Test\npublic void test3() {\n\tMyObject obj = new MyObject(\"expected\");\n\tassertEquals(\"expected\", obj.toString());\n}",
+        "answers": [
+          {
+            "answerText": "Mystery Guest",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Default Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Mystery Guest",
+            "isCorrect": false
+          },                    
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }          
+        ]
+      }
+    ]
+  },
+  "available_for_game": true,
+  "auto_valutative": false
+}
