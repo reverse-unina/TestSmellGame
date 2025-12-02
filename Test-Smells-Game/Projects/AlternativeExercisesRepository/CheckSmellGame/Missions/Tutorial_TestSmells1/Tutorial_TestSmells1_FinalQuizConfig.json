@@ -1,0 +1,156 @@
+{
+  "exerciseId": "Test Smells (pt. 1) - Quiz",
+  "check_game_configuration": {
+    "level": 1,
+    "questions": [
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "@Test\npublic void testAdd() {\n\tint a = 15; int b = 20;\n\tint expectedResult = 35;\n\t//Act\n\tlong result = objCalcUnderTest.add(a, b);\n\t//Assert\n\tassertEquals(expectedResult, result);\n}\n",
+        "answers": [
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "@Test\n@Ignore\npublic void testSubtract() {\n\tint a = 25; int b = 20;\n\tint expectedResult = 5;\n\tlong result = objCalcUnderTest.subtract(a, b);\n}\n",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+                    {
+            "answerText": "Unknown Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "@Test\npublic void testSubtract() {\n\t//TODO : Insert a new test here; \n\t//int a = 25; int b = 20;\n\t//int expectedResult = 5;\n\t//long result = objCalcUnderTest.subtract(a, b);\n}\n",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },          
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": true
+          },
+                    {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "    @Test\n    public void testMultiply() {\n        int a = 10; int b = 20;\n        int result = objCalcUnderTest.multiply(a, b);\n       System.out.println(\"result: \" + result);\n        assertEquals(200, result);\n    }\n",
+        "answers": [
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": true
+          },          
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Which smells are present in the following code (one or more correct answers)?",
+        "questionCode": "    @Test\n    public void testDivide() {\n        int a = 10; int b = 2; \n        int expectedResult = 5;\n        assertEquals(expectedResult, objCalcUnderTest.divide(a, b));\n        assertEquals(expectedResult, expectedResult);\n    }\n",
+        "answers": [
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": true
+          },          
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Unknown Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "No smell present",
+            "isCorrect": false
+          }
+        ]
+      }
+    ]
+  },
+  "available_for_game": false,
+  "auto_valutative": false
+}

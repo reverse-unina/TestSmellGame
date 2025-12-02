@@ -1,0 +1,6 @@
+{
+  "learningId": "ConstructorInitialization",
+  "title": "Constructor Initialization",
+  "content": "Ideally, the test suite should not have a constructor. Initialization of fields should be in the setUp() method. Developers who are unaware of the purpose of setUp() method would give rise to this smell by defining a constructor for the test suite.\n\nDetection: A test method contains multiple calls to multiple production methods.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#ConstructorInitialization"
+}

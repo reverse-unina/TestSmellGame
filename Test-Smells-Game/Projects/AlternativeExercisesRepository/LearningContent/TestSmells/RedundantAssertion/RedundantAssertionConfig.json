@@ -1,0 +1,7 @@
+{
+  "learningId": "RedundantAssertion",
+  "title": "Redundant Assertion",
+  "content": " This smell occurs when test methods contain assertion statements that are either always true or always false. This smell is introduced by developers for debugging purposes and then forgotten.\n\n Detection: A test method that contains an assertion statement in which the expected and actual parameters are the same, or another tautologic assertion.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#RedundantAssertion"
+}
+

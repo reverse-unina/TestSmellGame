@@ -1,0 +1,17 @@
+{
+  "exerciseId": "FTPFile",
+  "class_name": "FTPFile",
+  "refactoring_game_configuration": {
+    "dependencies": [
+      "<dependency>\n  <groupId>junit</groupId>\n  <artifactId>junit</artifactId>\n  <version>4.13.2</version>\n  <scope>test</scope>\n  </dependency>\n"
+    ],
+    "refactoring_limit": 5,
+    "smells_allowed": 9,
+    "level": 1,
+    "ignored_smells": [
+      "Lazy Test"
+    ]
+  },
+  "available_for_game": true,
+  "auto_valutative": false
+}

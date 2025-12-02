@@ -1,0 +1,6 @@
+{
+  "learningId": "GeneralFixture",
+  "title": "General Fixture",
+  "content": "Occurs when a test case fixture is too general and the test methods only access part of it. A test setup/fixture method that initializes fields that are not accessed by test methods indicates that the fixture is too generalized. A drawback of it being too general is that unnecessary work is being done when a test method is run.\n\n Detection: Not all fields instantiated within the setUp method of a test class are utilized by all test methods in the same test class.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#GeneralFixture"
+}

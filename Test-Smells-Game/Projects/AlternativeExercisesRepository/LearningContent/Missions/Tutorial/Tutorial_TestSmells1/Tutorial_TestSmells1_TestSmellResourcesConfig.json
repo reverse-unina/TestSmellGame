@@ -1,0 +1,8 @@
+{
+  "learningId": "Tutorial_TestSmells1_TestSmellResources",
+  "title": "Resources",
+  "content": "A useful and updated resource for test smells is available at https://testsmells.org/. The site includes definitions and Java examples for common test smells, as well as a tool (tsDetect) for detecting test smells, backed by experimental data. Additionally, it provides a list of recent publications related to test smells.\n\nAll external links will lead to resources available directly on this website.",
+  "external_reference": "https://testsmells.org/index.html"
+}
+
+

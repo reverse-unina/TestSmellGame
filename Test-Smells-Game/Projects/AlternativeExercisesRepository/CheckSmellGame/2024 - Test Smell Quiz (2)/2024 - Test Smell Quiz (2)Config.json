@@ -1,0 +1,736 @@
+{
+  "exerciseId": "2024 - Test Smell Quiz (2)",
+  "check_game_configuration": {
+    "questions": [
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_96_1112() throws Throwable{\n\tVCardBean v = new VCardBean();\n\tv.setFirstNAme(\"A\");\n\tv.setMiddleName(\"B\");\n\tv.setLastName(\"C\");\nv.setEmail(\"lollers\");\nv.setOrganization(\"lol r us\");\n\tassertTrue(v.toString().contains(\"A B C\")));\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test\npublic void test_3_1608() {\n\t//TODO Test goes here...\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "public class VcardBeanTest {\n\t@Test(timeout = 1000)\n\tpublic void test_12_1010() throws Throwable {\n\t\tVcardBean vcb = new VcardBean();\n\t\tvcb.setEmail(\"mhm@dzini.org\");\n\t\tvcb.setFax(\"555-5555\");\n\t\tvcb.setFirstName(\"Michael\");\n\t\tvcb.setMiddleName(\"H\");\n\t\tvcb.setLastName(\"Mouse\");\n\t\tvcb.setFormattedName(\"Mickey Mouse\");\n\t\tvcb.setOrganization(\"Dzini\");\n\t\tvcb.setPhone(\"555-5555\");\n\t\tvcb.setTitle(\"Dr\");\n\n\t\tString vc = \"BEGIN:VCARD\\n\" +\n\t\t\t\"FN:Mickey Mouse\\n\" +\n\t\t\t\"N:Mouse;H;Michael;\\n\" +\n\t\t\t\"TITLE:Dr\\n\" +\n\t\t\t\"ORG:Dzini\\n\" +\n\t\t\t\"EMAIL;TYPE=INTERNET:mhm@dzini.org\\n\" +\n\t\t\t\"TEL;TYPE=VOICE:555-5555\\n\" +\n\t\t\t\"TEL;TYPE=FAX:555-5555\\n\" +\n\t\t\t\"END:VCARD\";\n\t\tassertEquals(vc, vcb.getVCard());\n\n\t\tvc = \"BEGIN:VCARD\\n\" +\n\t\t\t\"FN:Donald Duck\\n\" +\n\t\t\t\"N:Duck;H;Donald;\\n\" +\n\t\t\t\"TITLE:Professor\\n\" +\n\t\t\t\"ORG:Dzini\\n\" +\n\t\t\t\"EMAIL;TYPE=INTERNET:dhd@dzini.org\\n\" +\n\t\t\t\"TEL;TYPE=VOICE:555-5000\\n\" +\n\t\t\t\"TEL;TYPE=FAX:555-5000\\n\" +\n\t\t\t\"END:VCARD\";\n\t\tvcb.setVCard(vc);\n\t\tassertEquals(vc, vcb.getVCard());\n\t}\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test\npublic void test_105_1136() throws Throwable {\n\tVCardBean vb = new VCardBean();\n\tvb.setVCard(\"BEGIN:VCARD\\nTitle:hi\\nFAX: shef \");\n\tString x = vb.getTitle();\n\tassertEquals(\"hi\", x);\n\tString y = vb.toString().replaceAll(\"\\n\", \":D\").replaceAll(\"\\r\", \":P\");\n\tassertEquals(\"hi\", x);\n\tassertEquals(\"BEGIN:VCARD:DTitle:hi:DFAX: shef \", y);\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_9_1006() throws Throwable {\n\tVCardBean v = new VCardBean();\n\tv.setFirstName(\"jose\");\n\tv.setLastName(\"campos\");\n\tv.setEmail(\"jose.campos@email.com\");\n\tv.setOrganization(\"shef\");\n\tassertNotNull(v);\n\n\tString vCard = v.getVCard();\n\tassertNotNull(vCard);\n\tassertNotNull(v);\n\tassertEquals(v, v);\n\tassertEquals(\n\t\t\"BEGIN:VCARD\\nFN:jose campos\\nN:campos;;jose;\",\n\t\tvCard\n\t);\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Ignore(\"TBD\")\n@Test\npublic void test_3_1608() {\n\t// TODO Test goes here...\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_3_1609(){\n\ttry {\n\t\tParameterParser pp = new ParameterParser();\n\t\tif (pp!=null) {\n\t\t\tString s = \"test=123;test2=456\";\n\t\t\tchar delimiter = \";\";\n\t\t\tjava.util.HashMap map = (java.util.HashMap) pp.parse(s, delimiter);\n\t\t\tassertEquals(map.get(\"test\"), \"123\")\n\t\t\tassertEquals(map.get(\"test2\"), \"456\");\n\t\t}\n\t} catch (Exception e) {\n\t\tassertEquals(e.getMessage(), \"null\");\n\t}\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": true
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_9_1615 throws Trowable {\n\tParameterParser pp = new ParameterParser();\n\tchar[] sep = new char[]{};\n\tchar[] sep2 = null;\n\tjava.util.HashMap map = (java.util.HashMap)pp.parse(\"string\", sep);\n\tmap = (java.util.HashMap)pp.parse(\"string\", sep2);\n\tassertEquals(map, nre java.util.HashMap());\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_5_1611() throws Trowable {\n\tParameterParser pp = new ParameterParser();\n\tString s = \"Test=123;Test2=456\";\n\tpp.setLowerCaseNames(false)\n\tchar delimiter = ';';\n\t java.util.HashMap map = (java.util.HashMap) pp.parse(s, delimiter);\n\tint result = Integer.parseInt(,ap.get(\"Test\").toString());\n\tSystem.out.println(map.get(\"Test\"));\n\tassertEquals(result, 123);\n\tassertEquals(map.get(\"Test2\"), \"456\");\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_29_1028 throws Throwable {\n\tVCardBean v = new VCardBean();\n\tv.setFirstName(\"Testy\");\n\tv.setLastName(\"Face\");\n\tv.setMiddleName(\"McTest\");\n\tv.setOrganization(\"Test R Us\");\n\tv.setEmail(\"roflcopter\");\n\n\tassertEquals(v.toString(), v.getCard());\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "questionTitle": "Qual è lo smell presente nel seguente metodo?",
+        "questionCode": "@Test(timeout = 4000)\npublic void test_14_1622() throws Throwable {\n\t//test here!\n\t\t\tParameterParser p = new ParameterParser();\n\tString coma = \"abe, 2se, 356, man\";\n\tchar ch[] = {'a', 'e', 'a', 'c', 'b'};\n\t char ch2 = 'a';\n\tjava.util.Map m = p.parse(ch, 2, ch.length, ch2);;\n\tString results = \"{cb=null}\";\n\tassertEquals(results, m.toString());\n\tassertEquals(1, m.size());\n}",
+        "answers": [
+          {
+            "answerText": "Ignored Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Print",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Duplicate Assert",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Resource Optimism",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Sensitive Equality",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Sleepy Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Magic Number Test",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Constructor Initialization",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Assertion Roulette",
+            "isCorrect": true
+          },
+          {
+            "answerText": "Empty Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Conditional Test Logic",
+            "isCorrect": false
+          },
+          {
+            "answerText": "None of them",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Eager Test",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Exception Handling",
+            "isCorrect": false
+          },
+          {
+            "answerText": "Redundant Assertion",
+            "isCorrect": false
+          }
+        ]
+      }
+    ],
+    "level": 1
+  },
+  "available_for_game": true,
+  "auto_valutative": true
+}
