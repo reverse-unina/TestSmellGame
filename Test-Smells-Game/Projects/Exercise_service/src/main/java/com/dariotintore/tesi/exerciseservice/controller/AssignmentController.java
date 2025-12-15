@@ -100,7 +100,7 @@ public class AssignmentController {
                 boolean studentFound = false;
 
                 for (Student student : assignment.getStudents()) {
-                    if (student.getName().equals(studentName)) {
+                    if (student.getName().equals(studentName) && student.getExerciseId().equals(exerciseId)) {
                         student.setSubmitted(true);
                         studentFound = true;
                         break;
@@ -178,7 +178,7 @@ public class AssignmentController {
                 boolean studentFound = false;
 
                 for (Student student : assignment.getStudents()) {
-                    if (student.getName().equals(studentName)) {
+                    if (student.getName().equals(studentName) && student.getExerciseId().equals(exerciseId)) {
                         student.setSubmitted(true);
                         studentFound = true;
                         break;
