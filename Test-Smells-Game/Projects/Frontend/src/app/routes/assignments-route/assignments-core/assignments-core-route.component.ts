@@ -210,7 +210,7 @@ export class AssignmentsCoreRouteComponent implements OnInit, OnDestroy {
       });
     }
 
-    this.downloadFile(`${studentName}_${assignmentName}_results.txt`, results);
+    // this.downloadFile(`${studentName}_${assignmentName}_results.txt`, results);
     this.currentStudent.consegnato = true;
   }
 

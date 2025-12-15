@@ -55,6 +55,7 @@
       <ng-container *ngFor="let student of assignment.students">
         <ng-container *ngIf="student.name === currentUser?.userName">
           <ng-container *ngIf="assignment.type === 'competitive' && student.submitted === true">
+            <span> {{ student.exerciseId }} </span>
             <li style="margin-bottom: 8px;">
               <span style="color: red;">{{ 'You have already completed the assignment' | translate }}</span>
             </li>
@@ -65,10 +66,11 @@
                 {{ student.exerciseId }}
               </a>
               <p style="margin-top: 12px;"> {{ 'Available from' | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.startTime }} </p>
-              <p> {{ "To be delivered by" | translate }} {{ student.startDate }} {{ "at" | translate}} {{ student.endTime }} </p>
+              <p> {{ "To be delivered by" | translate }} {{ student.endDate }} {{ "at" | translate}} {{ student.endTime }} </p>
             </li>
             <li *ngIf="!isAssignmentActive(student.startDate, student.startTime, student.endDate, student.endTime)" style="margin-bottom: 8px;">
-              <span style="color: red;">{{ 'The assignment is unavailable' | translate }}</span>
+              <span> {{ student.exerciseId }} </span>
+              <span style="color: red;"> {{ 'The assignment is unavailable' | translate }}</span>
             </li>
           </ng-container>
         </ng-container>
