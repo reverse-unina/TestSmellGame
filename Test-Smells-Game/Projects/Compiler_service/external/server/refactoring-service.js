@@ -27,7 +27,10 @@ function doCompile(exercise) {
     // PRIMO BRANCH
     let promise = shell.execMavenCommand("mvn clean verify").then((result) => {
       response.testResult = result
-      if (response.testResult.includes('BUILD SUCCESS') && fileExists(process.env.ROOT_PATH + 'external/compiler/tesi/refactored-module/target/site/jacoco/index.html')) {
+      if (response.testResult.includes('BUILD SUCCESS') &&
+          fileExists(process.env.ROOT_PATH + 'external/compiler/tesi/refactored-module/target/site/jacoco/index.html') &&
+          fileExists(process.env.ROOT_PATH + 'external/compiler/tesi/original-module/target/site/jacoco/index.html') &&
+          fileExists(process.env.ROOT_PATH + 'external/compiler/tesi/aggregate-reports/target/site/jacoco-aggregate/index.html')) {
         let similarity_promise = scraper.checkSimilarity(exercise.exerciseConfiguration).then((result) => {
           response.similarityResponse = result[0];
           response.originalCoverage = result[1];
