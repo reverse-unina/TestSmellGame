@@ -15,6 +15,7 @@ function getPercentages(){
 
   return [first_coverage, second_coverage, total]
 }
+
 async function checkSimilarity(exerciseConfiguration){
   let percentages = getPercentages()
   let first_coverage = Number(percentages[0])
@@ -34,6 +35,7 @@ async function checkSimilarity(exerciseConfiguration){
     return [percentage_difference <= acceptance,first_coverage, second_coverage]
   }
 }
+
 
 module.exports = {
   checkSimilarity

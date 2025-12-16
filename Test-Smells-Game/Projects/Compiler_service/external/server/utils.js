@@ -77,7 +77,17 @@ function removeIgnoredSmells(smells, exerciseConfiguration){
   return JSON.stringify(result)
 }
 
-
+function fileExists(path) {
+  return new Promise(resolve => {
+    fs.stat(path, (err, stats) => {
+      if (err) {
+        // ENOENT = file non esiste
+        return resolve(false);
+      }
+      resolve(stats.isFile());
+    });
+  });
+}
 
 
 module.exports = {
@@ -87,5 +97,6 @@ module.exports = {
   cleanErrorResponse,
   cleanSuccessResponse,
   configEnvironment,
-  removeIgnoredSmells
+  removeIgnoredSmells,
+  fileExists
 }

@@ -2,6 +2,7 @@ const utils = require('./utils')
 const shell = require('./shell')
 const scraper = require('./scraper')
 const dm = require('./dependency-manger')
+const {fileExists} = require("./utils");
 function createUserFiles(exercise){
   utils.writeFile(process.env.ROOT_PATH + process.env.ORIGINAL_PRODUCTION_PATH + exercise.exerciseName + ".java", exercise.originalProductionCode);
   utils.writeFile(process.env.ROOT_PATH + process.env.ORIGINAL_TESTING_PATH + exercise.exerciseName + "Test.java", exercise.originalTestCode);
@@ -26,7 +27,10 @@ function doCompile(exercise) {
     // PRIMO BRANCH
     let promise = shell.execMavenCommand("mvn clean verify").then((result) => {
       response.testResult = result
-      if (response.testResult.includes('BUILD SUCCESS')) {
+      if (response.testResult.includes('BUILD SUCCESS') &&
+          fileExists(process.env.ROOT_PATH + 'external/compiler/tesi/refactored-module/target/site/jacoco/index.html') &&
+          fileExists(process.env.ROOT_PATH + 'external/compiler/tesi/original-module/target/site/jacoco/index.html') &&
+          fileExists(process.env.ROOT_PATH + 'external/compiler/tesi/aggregate-reports/target/site/jacoco-aggregate/index.html')) {
         let similarity_promise = scraper.checkSimilarity(exercise.exerciseConfiguration).then((result) => {
           response.similarityResponse = result[0];
           response.originalCoverage = result[1];
