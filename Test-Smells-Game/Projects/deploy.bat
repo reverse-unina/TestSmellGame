@@ -16,4 +16,6 @@ docker-compose up -d
 
 echo Deployment complete.
 
+cd ..
+
 pause

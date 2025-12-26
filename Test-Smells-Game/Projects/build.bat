@@ -52,4 +52,6 @@ docker tag api_gateway mick0974/testsmellsgame:api_gateway
 
 echo Build process complete.
 
+cd ..
+
 pause
