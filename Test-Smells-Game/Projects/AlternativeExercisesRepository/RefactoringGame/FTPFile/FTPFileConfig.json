@@ -1,6 +1,6 @@
 {
-  "exerciseId": "FontInfo",
-  "class_name": "FontInfo",
+  "exerciseId": "FTPFile",
+  "class_name": "FTPFile",
   "refactoring_game_configuration": {
     "dependencies": [
       "<dependency>\n  <groupId>junit</groupId>\n  <artifactId>junit</artifactId>\n  <version>4.13.2</version>\n  <scope>test</scope>\n  </dependency>\n"

@@ -1,0 +1,6 @@
+{
+  "learningId": "EagerTest",
+  "title": "Eager Test",
+  "content": "Occurs when a test method invokes too much methods of the production object. This smell results in difficulties in test comprehension and maintenance. In addition, the test method may be testing multiple behaviors at once, making it harder to pinpoint the cause of a failure. Warning: in some cases the absence of suitable public methods in the class under test may force the occurrence of multiple calls to the same method of the class under test.\n\nDetection: A test method contains many calls (at least 3 calls) to one or more methods of the class under test.",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#EagerTest"
+}

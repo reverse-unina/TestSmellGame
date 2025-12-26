@@ -1,0 +1,6 @@
+{
+  "learningId": "ConditionalTestLogic",
+  "title": "Conditional Test Logic",
+  "content": "Test methods need to be simple. Conditions within the test method will alter the behavior of the test and its expected output, and would lead to situations where the test fails to detect defects in the method under test since test statements were not executed as a condition was not met. Furthermore, conditional code within a test method negatively impacts the ease of comprehension by developers.\n\nDetection: A test method that contains one or more control statements (i.e if, switch, conditional expression, for, foreach and while statement).",
+  "external_reference": "https://testsmells.org/pages/testsmells.html#ConditionalTestLogic"
+}

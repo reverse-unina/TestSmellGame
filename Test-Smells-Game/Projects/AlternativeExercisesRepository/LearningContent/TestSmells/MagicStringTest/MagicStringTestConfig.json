@@ -1,0 +1,6 @@
+{
+  "learningId": "MagicStringTest",
+  "title": "Magic String Test",
+  "content": "Occurs when assert statements in a test method contain hardcoded strings (i.e., magic strings) as parameters. Magic strings do not indicate the meaning/purpose of the string. Hence, they should be replaced with constants or variables, thereby providing a descriptive name for the input.\n\n Detection: An assertion method that contains a string literal as an argument.",
+  "external_reference": ""
+}

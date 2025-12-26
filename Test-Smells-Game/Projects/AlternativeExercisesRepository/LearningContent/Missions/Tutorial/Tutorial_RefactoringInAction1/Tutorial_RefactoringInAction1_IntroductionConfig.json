@@ -1,0 +1,6 @@
+{
+  "learningId": "Tutorial_RefactoringInAction1_Introduction",
+  "title": "Refactoring in Action",
+  "content": "Welcome to this new mission!\n\nNow that you have learned about common test smells and their impact on test quality, it’s time to put your knowledge into practice. In this mission, you will be given two test classes containing multiple test smells. Your task is to refactor the code to improve it by removing the smells—without significantly reducing test coverage. Let's start!",
+  "external_reference": ""
+}

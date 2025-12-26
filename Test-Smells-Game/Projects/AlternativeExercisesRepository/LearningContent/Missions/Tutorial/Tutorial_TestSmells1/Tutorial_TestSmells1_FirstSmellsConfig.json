@@ -1,0 +1,10 @@
+{
+  "learningId": "Tutorial_TestSmells1_FirstSmells",
+  "title": "First Smells",
+  "content": "Let's now explore the first few test smells that are easy to identify and correct. These test smells are typically evident in the code and require minimal changes to resolve: Empty Test, Ignored Test, Redundant Print and Redundant Assertion.",
+  "external_reference": ""
+}
+
+
+
+

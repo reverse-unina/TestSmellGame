@@ -1,0 +1,8 @@
+{
+  "learningId": "Tutorial_TestSmells1_TestSmellDefinition",
+  "title": "What is a test smell?",
+  "content": "Test smells are defined as bad programming practices in unit test code (such as how test cases are organized, implemented and interact with each other) that indicate potential design problems in the test source code.",
+  "external_reference": ""
+}
+
+
