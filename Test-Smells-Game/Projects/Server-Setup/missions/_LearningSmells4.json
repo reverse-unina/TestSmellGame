@@ -1,0 +1,25 @@
+{
+  "missionId": "LearningSmells4",
+  "name": "Learning Smells (part 4)",
+  "tag": "other Missions",
+  "badge": "Tutorial test smells 1",
+  "badge_filename": "tutorial1",
+  "steps": [
+    {
+      "id": "MysteryGuest",
+      "type": "learning"
+    },
+    {
+      "id": "ResourceOptimism",
+      "type": "learning"
+    },
+    {
+      "id": "SensitiveEquality",
+      "type": "learning"
+    },
+    {
+      "id": "SleepyTest",
+      "type": "learning"
+    }
+  ]
+}

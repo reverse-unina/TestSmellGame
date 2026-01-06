@@ -1,0 +1,29 @@
+{
+  "missionId": "LearningSmells2",
+  "name": "Learning Smells (part 2)",
+  "tag": "other Missions",
+  "badge": "Tutorial test smells 1",
+  "badge_filename": "tutorial1",
+  "steps": [
+    {
+      "id": "MagicNumberTest",
+      "type": "learning"
+    },
+    {
+      "id": "MagicStringTest",
+      "type": "learning"
+    },    
+    {
+      "id": "DuplicateAssert",
+      "type": "learning"
+    },
+    {
+      "id": "AssertionRoulette",
+      "type": "learning"
+    },
+    {
+      "id": "DefaultTest",
+      "type": "learning"
+    }
+  ]
+}

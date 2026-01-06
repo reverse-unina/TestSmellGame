@@ -19,7 +19,7 @@ docker tag exercise_service mick0974/testsmellsgame:exercise_service
 REM Frontend
 echo Building Docker image for frontend...
 cd ../Frontend
-docker build -t frontend .
+docker build --no-cache -t frontend .
 echo Tagging Docker image for frontend...
 docker tag frontend mick0974/testsmellsgame:frontend
 

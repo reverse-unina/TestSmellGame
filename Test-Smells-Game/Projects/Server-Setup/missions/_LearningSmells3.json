@@ -1,0 +1,25 @@
+{
+  "missionId": "LearningSmells3",
+  "name": "Learning Smells (part 3)",
+  "tag": "other Missions",
+  "badge": "Tutorial test smells 1",
+  "badge_filename": "tutorial1",
+  "steps": [
+    {
+      "id": "ConditionalTestLogic",
+      "type": "learning"
+    },
+    {
+      "id": "ConstructorInitialization",
+      "type": "learning"
+    },
+    {
+      "id": "EagerTest",
+      "type": "learning"
+    },
+    {
+      "id": "ExceptionHandling",
+      "type": "learning"
+    }
+  ]
+}
